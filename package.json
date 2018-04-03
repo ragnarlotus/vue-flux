@@ -1,9 +1,23 @@
 {
   "name": "vue-flux",
-  "version": "1.0.0",
-  "description": "A Vue.js project",
-  "author": "ragnar <ragnar@deulos.com>",
-  "private": true,
+  "version": "0.0.1",
+  "description": "Vue image slider",
+  "author": "ragnar lotus",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deulos/vue-flux.git"
+  },
+  "keywords": [
+    "vue",
+    "image",
+    "slider"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deulos/vue-flux/issues"
+  },
+  "homepage": "https://github.com/deulos/vue-flux",
+  "main": "dist/index.html",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",

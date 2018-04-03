@@ -3,54 +3,58 @@
 </template>
 
 <script>
-	import FluxGrid from '../grid.vue';
+	import FluxGrid from '../FluxGrid.vue';
 
 	export default {
+		components: {
+			FluxGrid
+		},
+
 		data: () => ({
-			numRows: 0,
+			numRows: 1,
 			numCols: 0,
-			duration: 600,
+			tileDuration: 600,
+			totalDuration: 0,
 			easing: 'ease-in',
 			tileDelay: 80,
 			size: {},
 			css: undefined
 		}),
 
-		components: {
-			FluxGrid
+		props: {
+			slider: Object,
+			direction: String
 		},
 
-		methods: {
-			run(slider, direction) {
-				this.size = slider.size;
-				this.numRows = 1;
-				this.numCols = parseInt(this.size.width / 70);
-				this.css = Object.assign({}, slider.frontImage.style);
-
-				slider.frontImage.style.visibility = 'hidden';
-
-				this.$nextTick(() => {
-					setTimeout(() => {
-						this.$refs.grid.$refs.tiles.forEach((tile, index) => {
-							Object.assign(tile.style, {
-								transition: 'all '+ this.duration +'ms '+ this.easing +' '+ (this.tileDelay * (direction === 'right'? index : this.numCols - index - 1)) +'ms',
-								opacity: '0.1',
-								transform: 'translateY('+ (index % 2 === 0? '-' : '') + slider.size.height +'px)'
-							});
-						});
-					}, 20);
-				});
-
-				return this.tileDelay * this.numCols + this.duration;
-			},
-
-			reset(slider) {
-				slider.rearImage.style.visibility = 'visible';
+		computed: {
+			grid: function() {
+				return this.$refs.grid;
 			}
+		},
+
+		created() {
+			this.size = this.slider.size;
+			this.numCols = parseInt(this.size.width / 70);
+			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
+			this.css = Object.assign({}, this.slider.currentImage.style);
+		},
+
+		mounted() {
+			this.slider.currentImage.hide();
+
+			this.grid.transform((tile, index) => {
+				let delay = this.tileDelay * (this.direction === 'right'? index : this.numCols - index - 1);
+
+				tile.transform({
+					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ delay +'ms',
+					opacity: '0.1',
+					transform: 'translateY('+ (index % 2 === 0? '-' : '') + this.size.height +'px)'
+				});
+			});
+		},
+
+		destroyed() {
+			this.slider.nextImage.show();
 		}
 	};
 </script>
-
-<style lang="scss" scoped>
-
-</style>
