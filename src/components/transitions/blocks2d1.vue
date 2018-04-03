@@ -11,12 +11,12 @@
 		},
 
 		data: () => ({
-			numRows: 1,
+			numRows: 0,
 			numCols: 0,
-			tileDuration: 600,
+			tileDuration: 300,
 			totalDuration: 0,
-			easing: 'ease-in',
-			tileDelay: 80,
+			easing: 'linear',
+			tileDelay: 1000,
 			size: {},
 			css: undefined
 		}),
@@ -34,8 +34,9 @@
 
 		created() {
 			this.size = this.slider.size;
-			this.numCols = parseInt(this.size.width / 70);
-			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
+			this.numRows = parseInt(this.size.height / 90);
+			this.numCols = parseInt(this.size.width / 90);
+			this.totalDuration = this.tileDelay + this.tileDuration;
 			this.css = Object.assign({}, this.slider.currentImage.style);
 		},
 
@@ -43,12 +44,12 @@
 			this.slider.currentImage.hide();
 
 			this.grid.transform((tile, index) => {
-				let delay = this.tileDelay * (this.direction === 'right'? index : this.numCols - index - 1);
+				let delay = Math.floor((Math.random() * this.tileDelay));
 
 				tile.transform({
 					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ delay +'ms',
-					opacity: '0.1',
-					transform: 'translateY('+ this.size.height +'px)'
+					opacity: '0',
+					transform: 'scale(0.4, 0.4)'
 				});
 			});
 		},

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import VueFlux from './components/vue-flux.vue';
+import VueFlux from './components/VueFlux.vue';
 
 export default {
 	name: 'app',

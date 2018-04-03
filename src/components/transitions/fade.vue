@@ -3,30 +3,26 @@
 <script>
 	export default {
 		data: () => ({
-			duration: 1200,
+			totalDuration: 1200,
 			easing: 'ease-in'
 		}),
 
-		methods: {
-			run(slider) {
-				Object.assign(slider.frontImage.style, {
-					transition: 'opacity '+ this.duration +'ms '+ this.easing,
-					opacity: 0
-				});
+		props: {
+			slider: Object
+		},
 
-				return this.duration;
-			},
+		mounted() {
+			this.slider.currentImage.css({
+				transition: 'opacity '+ this.totalDuration +'ms '+ this.easing,
+				opacity: 0
+			});
+		},
 
-			reset(slider) {
-				Object.assign(slider.rearImage.style, {
-					transition: 'none',
-					opacity: 1
-				});
-			}
+		destroyed() {
+			this.slider.nextImage.css({
+				transition: 'none',
+				opacity: 1
+			});
 		}
 	};
 </script>
-
-<style lang="scss" scoped>
-
-</style>

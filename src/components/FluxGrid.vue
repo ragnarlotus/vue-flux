@@ -1,17 +1,17 @@
 <template>
 	<div class="grid">
-		<tile v-for="i in numTiles" :key="i" :row="getRow(i)" :col="getCol(i)" :css="getCss(i)" ref="tiles"></tile>
+		<flux-grid-tile v-for="i in numTiles" :key="i" :row="getRow(i)" :col="getCol(i)" :css="getCss(i)" ref="tiles"></flux-grid-tile>
 	</div>
 </template>
 
 <script>
-	import tile from './tile.vue';
+	import FluxGridTile from './FluxGridTile.vue';
 
 	export default {
 		name: 'VueFluxGrid',
 
 		components: {
-			tile
+			FluxGridTile
 		},
 
 		data: () => ({
@@ -31,6 +31,12 @@
 			numRows: Number,
 			numCols: Number,
 			css: Object
+		},
+
+		computed: {
+			tiles: function() {
+				return this.$refs.tiles;
+			}
 		},
 
 		created() {
@@ -78,6 +84,12 @@
 					width: width +'px',
 					height: height +'px',
 					'background-position': (this.css.left - left) +'px '+ (this.css.top - top) +'px'
+				});
+			},
+
+			transform(func) {
+				this.$nextTick(() => {
+					this.tiles.forEach((tile, index) => func(tile, index));
 				});
 			}
 		}

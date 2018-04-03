@@ -1,5 +1,5 @@
 <template>
-	<div :style="style"></div>
+	<div :style="style" ref="tile"></div>
 </template>
 
 <script>
@@ -16,10 +16,16 @@
 
 		created() {
 			this.style = Object.assign({}, this.css);
+		},
+
+		methods: {
+			transform(css) {
+				this.$refs.tile.clientHeight;
+
+				this.$nextTick(() => {
+					this.style = Object.assign({}, this.style, css);
+				});
+			}
 		}
 	};
 </script>
-
-<style lang="scss" scoped>
-	
-</style>

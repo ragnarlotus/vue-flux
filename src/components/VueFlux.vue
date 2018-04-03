@@ -2,9 +2,9 @@
 	<div class="vue-flux" ref="container">
 		<img v-for="(src, index) in preload" :key="src" :src="path + src" alt="" @load="addImage(index)" ref="images">
 		<div class="mask" :style="sizePx" ref="mask">
-			<component v-if="transition.current" :is="transition.current" ref="transition"></component>
-			<div ref="image1" :style="image1.style"></div>
-			<div ref="image2" :style="image2.style"></div>
+			<component v-if="transition.current" :is="transition.current" ref="transition" :slider="slider" :direction="direction"></component>
+			<flux-image ref="image1" :slider="slider"></flux-image>
+			<flux-image ref="image2" :slider="slider"></flux-image>
 		</div>
 
 		<button @click="showImage('next')">NEXT</button>
@@ -12,12 +12,14 @@
 </template>
 
 <script>
+	import FluxImage from './FluxImage.vue';
 	import Transitions from './transitions';
 
 	export default {
 		name: 'VueFlux',
 
 		components: {
+			FluxImage,
 			...Transitions
 		},
 
@@ -41,14 +43,6 @@
 				color: '',
 				image: ''
 			},
-			image1: {
-				index: 0,
-				style: {}
-			},
-			image2: {
-				index: 1,
-				style: {}
-			},
 			timer: undefined,
 			transition: {
 				current: undefined,
@@ -65,7 +59,7 @@
 			},
 			transitions: {
 				type: Array,
-				default: () => ['blinds2d']
+				default: () => ['zip']
 			},
 			path: {
 				type: String,
@@ -78,6 +72,10 @@
 		},
 
 		computed: {
+			slider: function() {
+				return this;
+			},
+
 			sizePx: function() {
 				return {
 					width: this.size.width +'px',
@@ -85,12 +83,16 @@
 				};
 			},
 
-			frontImage: function() {
-				return this.image1.style.zIndex === 11? this.image1 : this.image2;
+			currentImage: function() {
+				return this.$refs.image1.style.zIndex === 11? this.$refs.image1 : this.$refs.image2;
 			},
 
-			rearImage: function() {
-				return this.image1.style.zIndex === 10? this.image1 : this.image2;
+			nextImage: function() {
+				return this.$refs.image1.style.zIndex === 10? this.$refs.image1 : this.$refs.image2;
+			},
+
+			direction: function() {
+				return this.currentImage.index < this.nextImage.index? 'right' : 'left';
 			}
 		},
 
@@ -142,65 +144,6 @@
 				}
 			},
 
-			getImageStyle(index, style) {
-				style = Object.assign({
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					width: '100%',
-					height: '100%',
-					overflow: 'hidden',
-					transition: 'none',
-					opacity: 1,
-					visibility: 'visible',
-					perspective: 'none',
-					transform: 'none'
-				}, style);
-
-				// Calc background image size
-				let image = {
-					top: 0,
-					left: 0,
-					width: this.properties[index].width,
-					height: this.properties[index].height,
-					src: this.background.image +'url("'+ this.properties[index].src +'")'
-				};
-
-				if (image.width / image.height > this.size.width / this.size.height) {
-					if (image.width > this.size.width) {
-						image.width = this.size.width;
-						image.height = Math.ceil(this.size.width / this.properties[index].width * image.height);
-
-					} else {
-						image.left = Math.floor((this.size.width - image.width) / 2);
-					}
-
-					image.top = Math.floor((this.size.height - image.height) / 2);
-
-				} else {
-					if (image.height > this.size.height) {
-						image.height = this.size.height;
-						image.width = Math.ceil(this.size.height / this.properties[index].height * image.width);
-
-					} else {
-						image.top = Math.floor((this.size.height - image.height) / 2);
-					}
-
-					image.left = Math.floor((this.size.width - image.width) / 2);
-				}
-
-				image.top -= parseInt(style.top);
-				image.left -= parseInt(style.left);
-
-				return Object.assign({}, style, {
-					'background-color': this.background.color,
-					'background-image': image.src,
-					'background-size': image.width +'px '+ image.height +'px',
-					'background-position': image.left +'px '+ image.top +'px',
-					'background-repeat': 'no-repeat'
-				});
-			},
-
 			init() {
 				// Find width
 				if (this.config.width.indexOf('px') != -1) {
@@ -235,23 +178,26 @@
 					this.size.height = this.$refs.mask.offsetHeight;
 				}
 
-				this.image1.style = this.getImageStyle(0, { zIndex: 11 });
-				this.image2.style = this.getImageStyle(1, { zIndex: 10 });
+				this.$refs.image1.index = 0
+				this.$refs.image1.css({ zIndex: 11 });
+
+				this.$refs.image2.index = 1;
+				this.$refs.image2.css({ zIndex: 10 });
 
 				if (this.config.autoplay === true)
 					this.play();
 			},
 
 			play(index) {
-				this.options.autoplay = true;
+				this.config.autoplay = true;
 
 				this.timer = setTimeout(() => {
-					this.showImage(index === undefined? 'next' : index);
-				}, this.options.delay);
+					this.showImage(index);
+				}, this.config.delay);
 			},
 
 			stop() {
-				this.options.autoplay = false;
+				this.config.autoplay = false;
 
 				clearTimeout(this.timer);
 			},
@@ -260,7 +206,7 @@
 				if (typeof index === 'number')
 					return index;
 
-				let currentIndex = this.frontImage.index;
+				let currentIndex = this.currentImage.index;
 
 				if (index === 'previous')
 					return currentIndex > 0? currentIndex - 1 : this.images.length - 1;
@@ -276,33 +222,28 @@
 				// Get image index if next or previous
 				index = this.getIndex(index);
 
-				let direction = this.frontImage.index < index? 'right' : 'left';
-
 				// Prepare images
-				let frontImage = this.frontImage;
-				let rearImage = this.rearImage;
+				let currentImage = this.currentImage;
+				let nextImage = this.nextImage;
 
-				rearImage.index = index;
-				Object.assign(rearImage.style, this.getImageStyle(index));
+				nextImage.index = index;
 
 				// Get transition
 				if (transition === undefined && this.transitions.length > 0) {
 					this.transition.last = this.transition.last + 1 >= this.transitions.length? 0 : this.transition.last + 1;
+
 					transition = this.transitions[this.transition.last];
+					this.transition.current = 'transition-'+ transition;
 				}
 
-				this.transition.current = 'transition-'+ transition;
-
 				this.$nextTick(() => {
-					let timeout = transition !== undefined? this.$refs.transition.run(this, direction) + 20 : 0;
+					let timeout = transition !== undefined? this.$refs.transition.totalDuration + 20 : 0;
 
 					setTimeout(() => {
-						frontImage.style.zIndex = 10;
-						rearImage.style.zIndex = 11;
+						currentImage.css({ zIndex: 10 });
+						nextImage.css({ zIndex: 11 });
 
-						// Reset rear image style
-						if (transition !== undefined)
-							this.$refs.transition.reset(this);
+						this.transition.current = undefined;
 
 						// Play next if autoplay is true
 						if (this.config.autoplay === true) {
@@ -310,8 +251,6 @@
 								this.showImage('next');
 							}, this.config.delay);
 						}
-
-						this.transition.current = undefined;
 					}, timeout);
 				});
 			}
