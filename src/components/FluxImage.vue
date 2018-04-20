@@ -1,28 +1,38 @@
 <template>
-	<div :style="style"></div>
+	<div :style="style" ref="image"></div>
 </template>
 
 <script>
 	export default {
 		data: () => ({
-			index: undefined,
 			style: {
 				position: 'absolute',
 				top: 0,
 				left: 0,
 				width: '100%',
 				height: '100%',
-				overflow: 'hidden',
-				transition: 'none',
-				opacity: 1,
-				visibility: 'visible',
-				perspective: 'none',
-				transform: 'none'
+				overflow: 'hidden'
 			}
 		}),
 
 		props: {
-			slider: Object
+			slider: {
+				type: Object,
+				required: true
+			},
+			index: {
+				type: [Number, String],
+				required: true
+			},
+			css: {
+				type: Object,
+				default: () => {
+					return {
+						top: 0,
+						left: 0
+					};
+				}
+			}
 		},
 
 		computed: {
@@ -37,8 +47,28 @@
 			}
 		},
 
+		created() {
+			this.init();
+		},
+
 		methods: {
 			init() {
+				this.setCss(this.css);
+
+				if (typeof this.index === 'number')
+					this.initImage();
+
+				else if (/^#/.test(this.index))
+					this.initColor();
+			},
+
+			initColor() {
+				this.setCss({
+					backgroundColor: this.index
+				});
+			},
+
+			initImage() {
 				let image = {
 					top: 0,
 					left: 0,
@@ -70,28 +100,42 @@
 					image.left = Math.floor((this.slider.size.width - image.width) / 2);
 				}
 
-				image.top -= parseInt(this.style.top);
-				image.left -= parseInt(this.style.left);
+				image.top -= parseInt(this.css.top);
+				image.left -= parseInt(this.css.left);
 
-				this.style = Object.assign({}, this.style, {
-					'background-color': this.slider.background.color,
-					'background-image': image.src,
-					'background-size': image.width +'px '+ image.height +'px',
-					'background-position': image.left +'px '+ image.top +'px',
-					'background-repeat': 'no-repeat'
+				this.setCss({
+					top: 0,
+					left: 0,
+					backgroundColor: this.slider.background.color,
+					backgroundImage: image.src,
+					backgroundSize: image.width +'px '+ image.height +'px',
+					backgroundPosition: image.left +'px '+ image.top +'px',
+					backgroundRepeat: 'no-repeat'
 				});
 			},
 
-			css(css) {
+			setCss(css) {
 				this.style = Object.assign({}, this.style, css);
 			},
 
+			transform(css) {
+				this.$refs.image.clientHeight;
+
+				this.$nextTick(() => {
+					this.setCss(css);
+				});
+			},
+
 			show() {
-				this.style.visibility = 'visible';
+				this.setCss({
+					visibility: 'visible'
+				});
 			},
 
 			hide() {
-				this.style.visibility = 'hidden';
+				this.setCss({
+					visibility: 'hidden'
+				});
 			}
 		}
 	};

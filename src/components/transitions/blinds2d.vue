@@ -1,5 +1,5 @@
 <template>
-	<flux-grid v-if="css" :num-rows="numRows" :num-cols="numCols" :size="size" :css="css" ref="grid"></flux-grid>
+	<flux-grid :slider="slider" :num-rows="numRows" :num-cols="numCols" :index="index" ref="grid"></flux-grid>
 </template>
 
 <script>
@@ -11,14 +11,13 @@
 		},
 
 		data: () => ({
+			index: {},
 			numRows: 1,
 			numCols: 0,
 			tileDuration: 800,
 			totalDuration: 0,
 			easing: 'linear',
-			tileDelay: 100,
-			size: {},
-			css: undefined
+			tileDelay: 100
 		}),
 
 		props: {
@@ -33,17 +32,18 @@
 		},
 
 		created() {
-			this.size = this.slider.size;
-			this.numCols = parseInt(this.size.width / 70);
+			this.index = {
+				front: this.slider.currentImage.index
+			};
+			this.numCols = parseInt(this.slider.size.width / 70);
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
-			this.css = Object.assign({}, this.slider.currentImage.style);
 		},
 
 		mounted() {
 			this.slider.currentImage.hide();
 
-			this.grid.transform((tile, index) => {
-				let delay = this.tileDelay * (this.direction === 'right'? index : this.numCols - index - 1);
+			this.grid.transform((tile, i) => {
+				let delay = this.tileDelay * (this.direction === 'right'? i : this.numCols - i - 1);
 
 				tile.transform({
 					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ delay +'ms',

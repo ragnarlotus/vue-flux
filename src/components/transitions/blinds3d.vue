@@ -14,10 +14,10 @@
 			index: {},
 			numRows: 1,
 			numCols: 0,
-			tileDuration: 600,
+			tileDuration: 800,
 			totalDuration: 0,
-			easing: 'ease-in',
-			tileDelay: 80,
+			easing: 'ease-out',
+			tileDelay: 150,
 		}),
 
 		props: {
@@ -33,31 +33,36 @@
 
 		created() {
 			this.index = {
-				front: this.slider.currentImage.index
+				front: this.slider.currentImage.index,
+				back: this.slider.nextImage.index
 			};
-			this.numCols = parseInt(this.slider.size.width / 70);
+
+			this.numCols = parseInt(this.slider.size.width / 120);
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
 		},
 
 		mounted() {
 			this.slider.currentImage.hide();
+			this.slider.nextImage.hide();
 
 			this.grid.setCss({
-				overflow: 'hidden'
+				perspective: '800px'
 			});
 
 			this.grid.transform((tile, i) => {
 				let delay = this.tileDelay * (this.direction === 'right'? i : this.numCols - i - 1);
 
+				let deg = this.direction === 'right'? '180' : '-180';
+
 				tile.transform({
 					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ delay +'ms',
-					opacity: '0.1',
-					transform: 'translateY('+ this.slider.size.height +'px)'
+					transform: 'rotateY('+ deg +'deg)'
 				});
 			});
 		},
 
 		destroyed() {
+			this.slider.currentImage.show();
 			this.slider.nextImage.show();
 		}
 	};

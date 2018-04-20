@@ -3,8 +3,8 @@
 		<img v-for="(src, index) in preload" :key="src" :src="path + src" alt="" @load="addImage(index)" ref="images">
 		<div class="mask" :style="sizePx" ref="mask">
 			<component v-if="transition.current" :is="transition.current" ref="transition" :slider="slider" :direction="direction"></component>
-			<flux-image ref="image1" :slider="slider"></flux-image>
-			<flux-image ref="image2" :slider="slider"></flux-image>
+			<flux-image v-if="imagesLoaded" :slider="slider" :index="image1Index" ref="image1"></flux-image>
+			<flux-image v-if="imagesLoaded" :slider="slider" :index="image2Index" ref="image2"></flux-image>
 		</div>
 
 		<button @click="showImage('next')">NEXT</button>
@@ -48,6 +48,9 @@
 				current: undefined,
 				last: undefined
 			},
+			image1Index: 0,
+			image2Index: 1,
+			imagesLoaded: false,
 			preload: [],
 			properties: []
 		}),
@@ -55,11 +58,11 @@
 		props: {
 			options: {
 				type: Object,
-				default: () => ({})
+				default: () => {}
 			},
 			transitions: {
 				type: Array,
-				default: () => ['zip']
+				default: () => ['blocks2d2']
 			},
 			path: {
 				type: String,
@@ -138,6 +141,7 @@
 				};
 
 				if (this.properties.length === this.preload.length) {
+					this.imagesLoaded = true;
 					this.preload = [];
 
 					this.init();
@@ -178,14 +182,16 @@
 					this.size.height = this.$refs.mask.offsetHeight;
 				}
 
-				this.$refs.image1.index = 0
-				this.$refs.image1.css({ zIndex: 11 });
+				this.$nextTick(() => {
+					this.$refs.image1.reference = 'image1Index';
+					this.$refs.image2.reference = 'image2Index';
 
-				this.$refs.image2.index = 1;
-				this.$refs.image2.css({ zIndex: 10 });
+					this.$refs.image1.setCss({ zIndex: 11 });
+					this.$refs.image2.setCss({ zIndex: 10 });
 
-				if (this.config.autoplay === true)
-					this.play();
+					if (this.config.autoplay === true)
+						this.play();
+				});
 			},
 
 			play(index) {
@@ -226,32 +232,34 @@
 				let currentImage = this.currentImage;
 				let nextImage = this.nextImage;
 
-				nextImage.index = index;
-
-				// Get transition
-				if (transition === undefined && this.transitions.length > 0) {
-					this.transition.last = this.transition.last + 1 >= this.transitions.length? 0 : this.transition.last + 1;
-
-					transition = this.transitions[this.transition.last];
-					this.transition.current = 'transition-'+ transition;
-				}
+				this[nextImage.reference] = index;
 
 				this.$nextTick(() => {
-					let timeout = transition !== undefined? this.$refs.transition.totalDuration + 20 : 0;
+					// Get transition
+					if (transition === undefined && this.transitions.length > 0) {
+						this.transition.last = this.transition.last + 1 >= this.transitions.length? 0 : this.transition.last + 1;
 
-					setTimeout(() => {
-						currentImage.css({ zIndex: 10 });
-						nextImage.css({ zIndex: 11 });
+						transition = this.transitions[this.transition.last];
+						this.transition.current = 'transition-'+ transition;
+					}
 
-						this.transition.current = undefined;
+					this.$nextTick(() => {
+						let timeout = transition !== undefined? this.$refs.transition.totalDuration + 20 : 0;
 
-						// Play next if autoplay is true
-						if (this.config.autoplay === true) {
-							this.timer = setTimeout(() => {
-								this.showImage('next');
-							}, this.config.delay);
-						}
-					}, timeout);
+						setTimeout(() => {
+							currentImage.setCss({ zIndex: 10 });
+							nextImage.setCss({ zIndex: 11 });
+
+							this.transition.current = undefined;
+
+							// Play next if autoplay is true
+							if (this.config.autoplay === true) {
+								this.timer = setTimeout(() => {
+									this.showImage('next');
+								}, this.config.delay);
+							}
+						}, timeout);
+					});
 				});
 			}
 		}
@@ -268,7 +276,7 @@
 
 	.mask {
 		position: relative;
-		overflow: hidden;
+		overflow: visible;
 	}
 
 #gallery.fullscreen {
