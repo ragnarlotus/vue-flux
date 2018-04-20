@@ -1,17 +1,24 @@
 <template>
-	<div class="grid">
-		<flux-grid-tile v-for="i in numTiles" :key="i" :row="getRow(i)" :col="getCol(i)" :css="getCss(i)" ref="tiles"></flux-grid-tile>
+	<div :style="style">
+		<flux-cube
+			v-for="i in numTiles"
+			:key="i"
+			:slider="slider"
+			:index="index"
+			:css="getTileCss(i)"
+			ref="tiles">
+		</flux-cube>
 	</div>
 </template>
 
 <script>
-	import FluxGridTile from './FluxGridTile.vue';
+	import FluxCube from './FluxCube.vue';
 
 	export default {
 		name: 'VueFluxGrid',
 
 		components: {
-			FluxGridTile
+			FluxCube
 		},
 
 		data: () => ({
@@ -23,14 +30,21 @@
 					width: 0,
 					height: 0
 				}
+			},
+			style: {
+				position: 'absolute',
+				width: '100%',
+				height: '100%',
+				zIndex: '12'
 			}
 		}),
 
 		props: {
-			size: Object,
-			numRows: Number,
-			numCols: Number,
-			css: Object
+			slider: { type: Object, required: true },
+			numRows: { type: Number, required: true },
+			numCols: { type: Number, required: true },
+			index: { type: Object, required: true },
+			css: { type: Object, default: () => {} }
 		},
 
 		computed: {
@@ -42,11 +56,11 @@
 		created() {
 			this.numTiles = this.numRows * this.numCols;
 
-			this.tile.width = Math.floor(this.size.width / this.numCols);
-			this.tile.height = Math.floor(this.size.height / this.numRows);
+			this.tile.width = Math.floor(this.slider.size.width / this.numCols);
+			this.tile.height = Math.floor(this.slider.size.height / this.numRows);
 
-			this.tile.remainder.width = this.size.width % this.numCols;
-			this.tile.remainder.height = this.size.height % this.numRows;
+			this.tile.remainder.width = this.slider.size.width % this.numCols;
+			this.tile.remainder.height = this.slider.size.height % this.numRows;
 		},
 
 		methods: {
@@ -68,7 +82,7 @@
 				return col - 1;
 			},
 
-			getCss(i) {
+			getTileCss(i) {
 				let row = this.getRow(i);
 				let col = this.getCol(i);
 
@@ -78,29 +92,26 @@
 				let top = row * this.tile.height + (row < this.tile.remainder.height? row : this.tile.remainder.height);
 				let left = col * this.tile.width + (col < this.tile.remainder.width? col : this.tile.remainder.width);
 
+				let zIndex = i < this.numCols / 2? 13 + i : 13 + this.numCols - i;
+
 				return Object.assign({}, this.css, {
-					top: top +'px',
-					left: left +'px',
 					width: width +'px',
 					height: height +'px',
-					'background-position': (this.css.left - left) +'px '+ (this.css.top - top) +'px'
+					top: top +'px',
+					left: left +'px',
+					zIndex: zIndex
 				});
+			},
+
+			setCss(css) {
+				this.style = Object.assign({}, this.style, css);
 			},
 
 			transform(func) {
 				this.$nextTick(() => {
-					this.tiles.forEach((tile, index) => func(tile, index));
+					this.tiles.forEach((tile, i) => func(tile, i));
 				});
 			}
 		}
 	};
 </script>
-
-<style lang="scss" scoped>
-	.grid {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		z-index: 12;
-	}
-</style>

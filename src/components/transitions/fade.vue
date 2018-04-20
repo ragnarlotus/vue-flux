@@ -12,14 +12,14 @@
 		},
 
 		mounted() {
-			this.slider.currentImage.css({
+			this.slider.currentImage.setCss({
 				transition: 'opacity '+ this.totalDuration +'ms '+ this.easing,
 				opacity: 0
 			});
 		},
 
 		destroyed() {
-			this.slider.nextImage.css({
+			this.slider.nextImage.setCss({
 				transition: 'none',
 				opacity: 1
 			});

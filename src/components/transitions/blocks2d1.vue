@@ -1,5 +1,5 @@
 <template>
-	<flux-grid v-if="css" :num-rows="numRows" :num-cols="numCols" :size="size" :css="css" ref="grid"></flux-grid>
+	<flux-grid :slider="slider" :num-rows="numRows" :num-cols="numCols" :index="index" ref="grid"></flux-grid>
 </template>
 
 <script>
@@ -11,14 +11,13 @@
 		},
 
 		data: () => ({
+			index: {},
 			numRows: 0,
 			numCols: 0,
 			tileDuration: 300,
 			totalDuration: 0,
 			easing: 'linear',
-			tileDelay: 1000,
-			size: {},
-			css: undefined
+			tileDelay: 1000
 		}),
 
 		props: {
@@ -33,17 +32,18 @@
 		},
 
 		created() {
-			this.size = this.slider.size;
-			this.numRows = parseInt(this.size.height / 90);
-			this.numCols = parseInt(this.size.width / 90);
+			this.index = {
+				front: this.slider.currentImage.index
+			};
+			this.numRows = parseInt(this.slider.size.height / 90);
+			this.numCols = parseInt(this.slider.size.width / 90);
 			this.totalDuration = this.tileDelay + this.tileDuration;
-			this.css = Object.assign({}, this.slider.currentImage.style);
 		},
 
 		mounted() {
 			this.slider.currentImage.hide();
 
-			this.grid.transform((tile, index) => {
+			this.grid.transform((tile, i) => {
 				let delay = Math.floor((Math.random() * this.tileDelay));
 
 				tile.transform({
