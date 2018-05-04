@@ -1,6 +1,6 @@
 {
   "name": "vue-flux",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Vue image slider",
   "author": "ragnar lotus",
   "repository": {
@@ -17,12 +17,16 @@
     "url": "https://github.com/deulos/vue-flux/issues"
   },
   "homepage": "https://github.com/deulos/vue-flux",
-  "main": "dist/index.html",
+  "main": "dist/vue-flux.js",
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "bundle": "node build/bundle.js"
   },
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "vue": "^2.5.2"
   },
