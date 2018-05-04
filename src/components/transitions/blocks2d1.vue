@@ -35,8 +35,8 @@
 			this.index = {
 				front: this.slider.currentImage.index
 			};
-			this.numRows = parseInt(this.slider.size.height / 90);
-			this.numCols = parseInt(this.slider.size.width / 90);
+			this.numRows = Math.floor(this.slider.size.height / 90);
+			this.numCols = Math.floor(this.slider.size.width / 90);
 			this.totalDuration = this.tileDelay + this.tileDuration;
 		},
 
@@ -44,18 +44,20 @@
 			this.slider.currentImage.hide();
 
 			this.grid.transform((tile, i) => {
-				let delay = Math.floor((Math.random() * this.tileDelay));
-
 				tile.transform({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ delay +'ms',
+					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay() +'ms',
 					opacity: '0',
 					transform: 'scale(0.4, 0.4)'
 				});
 			});
 		},
 
-		destroyed() {
-			this.slider.nextImage.show();
+		methods: {
+			getDelay() {
+				let delay = Math.random() * this.tileDelay;
+
+				return Math.floor(delay);
+			}
 		}
 	};
 </script>

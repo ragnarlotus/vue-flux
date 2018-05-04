@@ -35,7 +35,7 @@
 			this.index = {
 				front: this.slider.currentImage.index
 			};
-			this.numCols = parseInt(this.slider.size.width / 70);
+			this.numCols = Math.floor(this.slider.size.width / 70);
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
 		},
 
@@ -43,18 +43,23 @@
 			this.slider.currentImage.hide();
 
 			this.grid.transform((tile, i) => {
-				let delay = this.tileDelay * (this.direction === 'right'? i : this.numCols - i - 1);
-
 				tile.transform({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ delay +'ms',
+					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
 					opacity: '0.1',
 					transform: 'scaleX(0)'
 				});
 			});
 		},
 
-		destroyed() {
-			this.slider.nextImage.show();
+		methods: {
+			getDelay(i) {
+				let delay = i;
+
+				if (this.direction === 'left')
+					delay = this.numCols - i - 1;
+
+				return delay * this.tileDelay;
+			}
 		}
 	};
 </script>

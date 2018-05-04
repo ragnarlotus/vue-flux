@@ -37,7 +37,7 @@
 				back: this.slider.nextImage.index
 			};
 
-			this.numCols = parseInt(this.slider.size.width / 120);
+			this.numCols = Math.floor(this.slider.size.width / 120);
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
 		},
 
@@ -49,21 +49,34 @@
 				perspective: '800px'
 			});
 
+			let deg = this.getDeg();
+
 			this.grid.transform((tile, i) => {
-				let delay = this.tileDelay * (this.direction === 'right'? i : this.numCols - i - 1);
-
-				let deg = this.direction === 'right'? '180' : '-180';
-
-				tile.transform({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ delay +'ms',
-					transform: 'rotateY('+ deg +'deg)'
+				tile.setCss({
+					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms'
 				});
+
+				tile.turn('back', this.direction);
 			});
 		},
 
 		destroyed() {
 			this.slider.currentImage.show();
-			this.slider.nextImage.show();
+		},
+
+		methods: {
+			getDelay(i) {
+				let delay = i;
+
+				if (this.direction === 'left')
+					delay = this.numCols - i - 1;
+
+				return delay * this.tileDelay;
+			},
+
+			getDeg() {
+				return this.direction === 'right'? '180' : '-180';
+			}
 		}
 	};
 </script>

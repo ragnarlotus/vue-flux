@@ -19,6 +19,8 @@
 		},
 
 		destroyed() {
+			this.slider.nextImage.hide();
+
 			this.slider.nextImage.setCss({
 				transition: 'none',
 				opacity: 1

@@ -74,29 +74,17 @@
 					left: 0,
 					width: this.properties.width,
 					height: this.properties.height,
-					src: this.slider.background.image +'url("'+ this.properties.src +'")'
+					src: 'url("'+ this.properties.src +'")'
 				};
 
-				if (image.width / image.height > this.slider.size.width / this.slider.size.height) {
-					if (image.width > this.slider.size.width) {
-						image.width = this.slider.size.width;
-						image.height = Math.ceil(this.slider.size.width / this.properties.width * image.height);
-
-					} else {
-						image.left = Math.floor((this.slider.size.width - image.width) / 2);
-					}
-
+				if (image.height / image.width >= this.slider.size.height / this.slider.size.width) {
+					image.height = Math.ceil(this.slider.size.width * image.height / image.width);
+					image.width = this.slider.size.width;
 					image.top = Math.floor((this.slider.size.height - image.height) / 2);
 
 				} else {
-					if (image.height > this.slider.size.height) {
-						image.height = this.slider.size.height;
-						image.width = Math.ceil(this.slider.size.height / this.properties.height * image.width);
-
-					} else {
-						image.top = Math.floor((this.slider.size.height - image.height) / 2);
-					}
-
+					image.width = Math.ceil(this.slider.size.height * image.width / image.height);
+					image.height = this.slider.size.height;
 					image.left = Math.floor((this.slider.size.width - image.width) / 2);
 				}
 
@@ -106,7 +94,6 @@
 				this.setCss({
 					top: 0,
 					left: 0,
-					backgroundColor: this.slider.background.color,
 					backgroundImage: image.src,
 					backgroundSize: image.width +'px '+ image.height +'px',
 					backgroundPosition: image.left +'px '+ image.top +'px',

@@ -34,11 +34,48 @@
 		props: {
 			slider: { type: Object, required: true },
 			index: { type: Object, required: true },
-			css: { type: Object, required: true }
+			css: { type: Object, default: () => ({
+				top: 0,
+				left: 0
+			})}
+		},
+
+		computed: {
+			front: function() {
+				return this.$refs.front;
+			},
+
+			top: function() {
+				return this.$refs.top;
+			},
+
+			back: function() {
+				return this.$refs.back;
+			},
+
+			bottom: function() {
+				return this.$refs.bottom;
+			},
+
+			left: function() {
+				return this.$refs.left;
+			},
+
+			right: function() {
+				return this.$refs.right;
+			}
 		},
 
 		created() {
-			this.setCss(this.css);
+			let css = this.css;
+
+			if (!css.width)
+				css.width = this.slider.size.width +'px';
+
+			if (!css.height)
+				css.height = this.slider.size.height +'px';
+
+			this.setCss(css);
 		},
 
 		methods: {
@@ -109,14 +146,19 @@
 			getLeftSideCss() {
 				let css = this.getBasicSideCss('left');
 
-				css.width = this.slider.size.height +'px';
-				css.height = this.slider.size.height +'px';
+				let size = {
+					width: parseInt(typeof this.index.left === 'number'? this.style.width : this.style.height),
+					height: parseInt(this.style.height)
+				};
+
+				css.width = size.width +'px';
+				css.height = size.height +'px';
 
 				let t = {
-					ry: '90',
-					tx: Math.ceil(this.slider.size.height / 2),
+					ry: '-90',
+					tx: -Math.ceil(size.width / 2),
 					ty:'0',
-					tz: '-'+ Math.ceil(this.slider.size.height / 2)
+					tz: Math.ceil(size.width / 2)
 				};
 
 				css.transform = 'rotateY('+ t.ry +'deg) translate3d('+ t.tx +'px, '+ t.ty +'px, '+ t.tz +'px)';
@@ -127,14 +169,19 @@
 			getRightSideCss() {
 				let css = this.getBasicSideCss('right');
 
-				css.width = this.slider.size.height +'px';
-				css.height = this.slider.size.height +'px';
+				let size = {
+					width: parseInt(typeof this.index.right === 'number'? this.style.width : this.style.height),
+					height: parseInt(this.style.height)
+				};
+
+				css.width = size.width +'px';
+				css.height = size.height +'px';
 
 				let t = {
-					ry: '-90',
-					tx: '-'+ Math.ceil(this.slider.size.height / 2),
+					ry: '90',
+					tx: Math.ceil(size.width / 2),
 					ty: '0',
-					tz: Math.ceil(this.slider.size.height / 2 - parseInt(this.css.width))
+					tz: Math.ceil(parseInt(this.style.width) - size.width / 2)
 				};
 
 				css.transform = 'rotateY('+ t.ry +'deg) translate3d('+ t.tx +'px, '+ t.ty +'px, '+ t.tz +'px)';
@@ -147,6 +194,90 @@
 
 				this.$nextTick(() => {
 					this.setCss(css);
+				});
+			},
+
+			turn(direction, to) {
+				if (direction === 'top')
+					this.turnTop();
+
+				else if (direction === 'back')
+					this.turnBack(to);
+
+				else if (direction === 'bottom')
+					this.turnBottom();
+
+				else if (direction === 'left')
+					this.turnLeft();
+
+				else if (direction === 'right')
+					this.turnRight();
+			},
+
+			turnTop() {
+				let height = parseInt(this.style.height);
+
+				let t = {
+					rx: 90,
+					ty: -Math.ceil(height / 2),
+					tz: Math.ceil(height / 2)
+				};
+
+				this.transform({
+					transform: 'rotateX('+ t.rx +'deg) translate3d(0, '+ t.ty +'px, '+ t.tz +'px)'
+				});
+			},
+
+			turnBack(to) {
+				let deg = 180;
+
+				if (to === 'left')
+					deg = -180;
+
+				this.transform({
+					transform: 'rotateY('+ deg +'deg)'
+				});
+			},
+
+			turnBottom() {
+				let height = parseInt(this.style.height);
+
+				let t = {
+					rx: -90,
+					ty: Math.ceil(height / 2),
+					tz: Math.ceil(height / 2)
+				};
+
+				this.transform({
+					transform: 'rotateX('+ t.rx +'deg) translate3d(0, '+ t.ty +'px, '+ t.tz +'px)'
+				});
+			},
+
+			turnLeft() {
+				let width = parseInt(this.style.width);
+
+				let t = {
+					ry: 90,
+					tx: Math.ceil(width / 2),
+					tz: Math.ceil(width / 2)
+				};
+
+				this.transform({
+					transform: 'rotateY('+ t.ry +'deg) translate3d('+ t.tx +'px, 0, '+ t.tz +'px)'
+				});
+			},
+
+			turnRight() {
+				let width = parseInt(this.style.width);
+
+				let t = {
+					ry: -90,
+					tx: -Math.ceil(width / 2),
+					tz: Math.ceil(width / 2)
+				};
+
+				this.transform({
+					transform: 'rotateY('+ t.ry +'deg) translate3d('+ t.tx +'px, 0, '+ t.tz +'px)'
 				});
 			}
 		}

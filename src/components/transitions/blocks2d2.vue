@@ -1,5 +1,5 @@
 <template>
-	<flux-grid :slider="slider" :num-rows="numRows" :num-cols="numCols" :index="index" :css="css" ref="grid"></flux-grid>
+	<flux-grid :slider="slider" :num-rows="numRows" :num-cols="numCols" :index="index" :tile-css="tileCss" ref="grid"></flux-grid>
 </template>
 
 <script>
@@ -18,7 +18,7 @@
 			totalDuration: 0,
 			easing: 'ease',
 			tileDelay: 80,
-			css: {}
+			tileCss: {}
 		}),
 
 		props: {
@@ -34,45 +34,61 @@
 
 		created() {
 			this.index = {
-				front: this.direction === 'right'? this.slider.currentImage.index : this.slider.nextImage.index
+				front: this.slider.currentImage.index
 			};
 
 			if (this.direction === 'left') {
-				this.css = {
+				this.index.front = this.slider.nextImage.index;
+
+				this.tileCss = {
 					opacity: 0,
 					transform: 'scale(0.4, 0.4)'
 				};
 			}
 
-			this.numRows = parseInt(this.slider.size.height / 90);
-			this.numCols = parseInt(this.slider.size.width / 90);
+			this.numRows = Math.floor(this.slider.size.height / 90);
+			this.numCols = Math.floor(this.slider.size.width / 90);
 			this.totalDuration = this.tileDelay * (this.numRows + this.numCols) + this.tileDuration;
 		},
 
 		mounted() {
+			let opacity, transform;
+
 			if (this.direction === 'right') {
+				opacity = 0;
+				transform = 'scale(0.4, 0.4)';
 				this.slider.currentImage.hide();
 
 			} else {
+				opacity = 1;
+				transform = 'scale(1, 1)';
 				this.slider.nextImage.hide();
 			}
 
 			this.grid.transform((tile, i) => {
-				let col = i % this.numCols;
-				let row = parseInt(i / this.numCols);
-				let delay = this.tileDelay * (this.direction === 'right'? col + row : this.numCols - col - 1 + this.numRows - row);
-
 				tile.transform({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ delay +'ms',
-					opacity: this.direction === 'right'? 0 : 1,
-					transform: this.direction === 'right'? 'scale(0.4, 0.4)' : 'scale(1, 1)'
+					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
+					opacity: opacity,
+					transform: transform
 				});
 			});
 		},
 
 		destroyed() {
 			this.slider.currentImage.show();
-			this.slider.nextImage.show();
+		},
+
+		methods: {
+			getDelay(i) {
+				let row = this.grid.getRow(i);
+				let col = this.grid.getCol(i);
+				let delay = col + row;
+
+				if (this.direction === 'left')
+					delay = this.numRows + this.numCols - delay - 1;
+
+				return delay * this.tileDelay;
+			}
 		}
 	};
 </script>
