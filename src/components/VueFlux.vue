@@ -1,26 +1,23 @@
 <template>
 	<div class="vue-flux" ref="container">
 		<img v-for="(src, index) in preload" :key="src" :src="path + src" alt="" @load="addImage(index)" ref="images">
+
 		<div class="mask" :style="sizePx" ref="mask">
 			<component v-if="transition.current" :is="transition.current" ref="transition" :slider="slider" :direction="direction"></component>
 			<flux-image v-if="imagesLoaded" :slider="slider" :index="image1Index" ref="image1"></flux-image>
 			<flux-image v-if="imagesLoaded" :slider="slider" :index="image2Index" ref="image2"></flux-image>
 		</div>
-
-		<button @click="showImage('next')">NEXT</button>
 	</div>
 </template>
 
 <script>
 	import FluxImage from './FluxImage.vue';
-	import Transitions from './transitions';
 
 	export default {
 		name: 'VueFlux',
 
 		components: {
-			FluxImage,
-			...Transitions
+			FluxImage
 		},
 
 		data: () => ({
@@ -44,6 +41,7 @@
 				image: ''
 			},
 			timer: undefined,
+			transitionNames: [],
 			transition: {
 				current: undefined,
 				last: undefined
@@ -61,8 +59,8 @@
 				default: () => {}
 			},
 			transitions: {
-				type: Array,
-				default: () => ['blocks2d2']
+				type: Object,
+				required: true
 			},
 			path: {
 				type: String,
@@ -79,7 +77,14 @@
 				return this;
 			},
 
+			mask: function() {
+				return this.$refs.mask;
+			},
+
 			sizePx: function() {
+				if (typeof this.size.width !== 'number' || typeof this.size.height !== 'number')
+					return {};
+
 				return {
 					width: this.size.width +'px',
 					height: this.size.height +'px'
@@ -105,28 +110,19 @@
 			this.size.width = this.config.width;
 			this.size.height = this.config.height;
 
-			if (this.transitions.length > 0)
-				this.transition.last = this.transitions.length - 1;
+			Object.assign(this.$options.components, this.transitions);
+
+			this.transitionNames = Object.keys(this.transitions);
+
+			if (this.transitionNames.length > 0)
+				this.transition.last = this.transitionNames.length - 1;
 		},
 
 		mounted() {
-			this.background.color = this.css(this.$refs.container, 'backgroundColor');
-			this.background.image = this.css(this.$refs.container, 'backgroundImage');
-
-			if (this.background.image)
-				this.background.image += '; ';
-
 			this.preloadImages(this.images);
 		},
 
 		methods: {
-			css(element, styleName, styleValue) {
-				if (styleValue === undefined)
-					return element.style[styleName];
-
-				element.style[styleName] = styleValue;
-			},
-
 			preloadImages(images) {
 				this.preload = JSON.parse(JSON.stringify(images));
 			},
@@ -150,7 +146,7 @@
 
 			init() {
 				// Find width
-				if (this.config.width.indexOf('px') != -1) {
+				if (this.config.width.indexOf('px') !== -1) {
 					this.size.width = parseInt(this.config.width);
 
 				} else if (this.$refs.mask.offsetParent !== null) {
@@ -164,22 +160,11 @@
 				if (this.config.height.indexOf('px') !== -1) {
 					this.size.height = parseInt(this.config.height);
 
-				} else if (this.config.height === 'auto') {
-					// Find tallest image
-					let maxRatio = 0;
-					let ratio = 0;
-
-					for (var i = 0; i < this.properties.length; i++) {
-						ratio = this.properties[i].height / this.properties[i].width;
-
-						if (ratio > maxRatio)
-							maxRatio = ratio;
-					}
-
-					this.size.height = parseInt(this.size.width * maxRatio);
+				} else if (this.config.height === 'auto' && this.$refs.container.offsetHeight) {
+					this.size.height = this.$refs.container.offsetHeight;
 
 				} else {
-					this.size.height = this.$refs.mask.offsetHeight;
+					this.size.height = Math.floor(this.size.width / 16 * 9);
 				}
 
 				this.$nextTick(() => {
@@ -233,14 +218,15 @@
 				let nextImage = this.nextImage;
 
 				this[nextImage.reference] = index;
+				nextImage.show();
 
 				this.$nextTick(() => {
 					// Get transition
-					if (transition === undefined && this.transitions.length > 0) {
-						this.transition.last = this.transition.last + 1 >= this.transitions.length? 0 : this.transition.last + 1;
+					if (transition === undefined && this.transitionNames.length > 0) {
+						this.transition.last = this.transition.last + 1 >= this.transitionNames.length? 0 : this.transition.last + 1;
 
-						transition = this.transitions[this.transition.last];
-						this.transition.current = 'transition-'+ transition;
+						transition = this.transitionNames[this.transition.last];
+						this.transition.current = transition;
 					}
 
 					this.$nextTick(() => {
@@ -278,61 +264,4 @@
 		position: relative;
 		overflow: visible;
 	}
-
-#gallery.fullscreen {
-	position:relative;
-	top:0px;
-	left:0px;
-	width:100%;
-	height:100%;
-	background-color:black;
-	z-index:10;
-}
-
-#page_body.view_gallery #gallery.presentation {
-	width:673px;
-	height:444px;
-}
-
-#page_body.view_gallery #gallery.presentation .front_image, #page_body.view_gallery #gallery.presentation .rear_image {
-	background-color:#0a0a0c;
-}
-
-#gallery.fullscreen div.controls {
-	position:absolute;
-	width:150px;
-	height:100px;
-	padding:10px 0px;
-	bottom:0px;
-	left:0px;
-	text-align:center;
-	background-color:pink;
-}
-
-#gallery.fullscreen ul.pagination {
-	position:absolute;
-	width:100%;
-	padding:10px 0px;
-	bottom:0px;
-	right:0px;
-	text-align:center;
-	background-color:#15171e;
-}
-
-#gallery.fullscreen ul.pagination li {
-	margin:0px 5px;
-	padding:1px;
-	height:86px;
-	border:1px solid #aaa;
-	opacity:0.6;
-}
-
-#gallery.fullscreen ul.pagination li:hover { opacity:1; }
-
-#gallery.fullscreen ul.pagination li.current {
-	border:1px solid white;
-	opacity:1;
-}
-
-
 </style>

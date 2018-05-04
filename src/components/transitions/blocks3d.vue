@@ -1,5 +1,5 @@
 <template>
-	<flux-grid :slider="slider" :num-rows="numRows" :num-cols="numCols" :index="index" ref="grid"></flux-grid>
+	<flux-grid :slider="slider" :num-rows="numRows" :num-cols="numCols" :index="index" :tile-css="tileCss" ref="grid"></flux-grid>
 </template>
 
 <script>
@@ -18,6 +18,7 @@
 			totalDuration: 0,
 			easing: 'ease-out',
 			tileDelay: 150,
+			tileCss: {}
 		}),
 
 		props: {
@@ -34,14 +35,12 @@
 		created() {
 			this.index = {
 				front: this.slider.currentImage.index,
-				top: this.slider.nextImage.index,
-				bottom: this.slider.nextImage.index,
-				left: '#333',
-				right: '#333'
+				back: this.slider.nextImage.index
 			};
 
-			this.numCols = Math.floor(this.slider.size.width / 90);
-			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
+			this.numRows = Math.floor(this.slider.size.height / 120);
+			this.numCols = Math.floor(this.slider.size.width / 120);
+			this.totalDuration = this.tileDelay * this.numRows * 2 + this.tileDuration;
 		},
 
 		mounted() {
@@ -49,7 +48,7 @@
 			this.slider.nextImage.hide();
 
 			this.grid.setCss({
-				perspective: '1200px'
+				perspective: '800px'
 			});
 
 			this.grid.transform((tile, i) => {
@@ -57,7 +56,7 @@
 					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms'
 				});
 
-				tile.turn(this.direction === 'right'? 'bottom' : 'top');
+				tile.turn('back', this.direction);
 			});
 		},
 
@@ -67,10 +66,12 @@
 
 		methods: {
 			getDelay(i) {
-				let delay = i;
+				let row = this.grid.getRow(i);
+				let col = this.grid.getCol(i);
+				let delay = col + row;
 
 				if (this.direction === 'left')
-					delay = this.numCols - i - 1;
+					delay = this.numRows + this.numCols - delay - 1;
 
 				return delay * this.tileDelay;
 			}

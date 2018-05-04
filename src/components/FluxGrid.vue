@@ -15,7 +15,7 @@
 	import FluxCube from './FluxCube.vue';
 
 	export default {
-		name: 'VueFluxGrid',
+		name: 'FluxGrid',
 
 		components: {
 			FluxCube
@@ -44,7 +44,7 @@
 			numRows: { type: Number, required: true },
 			numCols: { type: Number, required: true },
 			index: { type: Object, required: true },
-			css: { type: Object, default: () => {} }
+			tileCss: { type: Object, default: () => {} }
 		},
 
 		computed: {
@@ -65,10 +65,7 @@
 
 		methods: {
 			getRow(i) {
-				let row = parseInt(i / this.numCols);
-
-				if (i % this.numCols === 0)
-					row--;
+				let row = Math.floor(i / this.numCols);
 
 				return row;
 			},
@@ -76,13 +73,12 @@
 			getCol(i) {
 				let col = i % this.numCols;
 
-				if (col === 0)
-					col = this.numCols;
-
-				return col - 1;
+				return col;
 			},
 
 			getTileCss(i) {
+				i--;
+
 				let row = this.getRow(i);
 				let col = this.getCol(i);
 
@@ -92,9 +88,9 @@
 				let top = row * this.tile.height + (row < this.tile.remainder.height? row : this.tile.remainder.height);
 				let left = col * this.tile.width + (col < this.tile.remainder.width? col : this.tile.remainder.width);
 
-				let zIndex = i < this.numCols / 2? 13 + i : 13 + this.numCols - i;
+				let zIndex = i + 1 < this.numCols / 2? 13 + i : 13 + this.numCols - i;
 
-				return Object.assign({}, this.css, {
+				return Object.assign({}, this.tileCss, {
 					width: width +'px',
 					height: height +'px',
 					top: top +'px',
