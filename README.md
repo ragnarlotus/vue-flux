@@ -6,6 +6,8 @@ Supports all major browsers.
 You can add custom transitions.
 Hightly customizable.
 
+You can view a [demo here](https://deulos.github.io/vue-flux/)
+
 ### Installation
 
 ``` bash
