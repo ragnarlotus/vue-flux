@@ -1,11 +1,11 @@
 <template>
 	<div class="vue-flux" ref="container">
-		<img v-for="(src, index) in preload" :key="src" :src="path + src" alt="" @load="addImage(index)" ref="images">
+		<img v-for="(src, index) in preload" :key="src" :src="path + src" alt="" @load="addImage(index)" @error="addImage(index)" ref="images">
 
 		<div class="mask" :style="sizePx" ref="mask">
 			<component v-if="transition.current" :is="transition.current" ref="transition" :slider="slider" :direction="direction"></component>
-			<flux-image v-if="imagesLoaded" :slider="slider" :index="image1Index" ref="image1"></flux-image>
-			<flux-image v-if="imagesLoaded" :slider="slider" :index="image2Index" ref="image2"></flux-image>
+			<flux-image v-if="preloadCompleted" :slider="slider" :index="image1Index" ref="image1"></flux-image>
+			<flux-image v-if="preloadCompleted" :slider="slider" :index="image2Index" ref="image2"></flux-image>
 		</div>
 	</div>
 </template>
@@ -48,7 +48,8 @@
 			},
 			image1Index: 0,
 			image2Index: 1,
-			imagesLoaded: false,
+			imagesLoaded: 0,
+			preloadCompleted: false,
 			preload: [],
 			properties: []
 		}),
@@ -119,6 +120,9 @@
 		},
 
 		mounted() {
+			if (this.images.length < 2 || this.transitionNames.length === 0)
+				return;
+
 			this.preloadImages(this.images);
 		},
 
@@ -128,20 +132,20 @@
 			},
 
 			addImage(i) {
+				this.imagesLoaded++;
+
 				let img = this.$refs.images[i];
 
-				this.properties[i] = {
-					src: img.src,
-					width: img.naturalWidth || img.width,
-					height: img.naturalHeight || img.height
-				};
-
-				if (this.properties.length === this.preload.length) {
-					this.imagesLoaded = true;
-					this.preload = [];
-
-					this.init();
+				if (img.naturalWidth || img.width) {
+					this.properties[i] = {
+						src: img.src,
+						width: img.naturalWidth || img.width,
+						height: img.naturalHeight || img.height
+					};
 				}
+
+				if (this.imagesLoaded === this.preload.length)
+					this.init();
 			},
 
 			init() {
@@ -166,6 +170,10 @@
 				} else {
 					this.size.height = Math.floor(this.size.width / 16 * 9);
 				}
+
+				this.properties = this.properties.filter((p) => p);
+				this.preloadCompleted = true;
+				this.preload = [];
 
 				this.$nextTick(() => {
 					this.$refs.image1.reference = 'image1Index';
@@ -206,6 +214,9 @@
 			},
 
 			showImage(index, transition) {
+				if (!this.preloadCompleted)
+					return;
+
 				// If there is a transition running prevent showing new image
 				if (this.transition.current !== undefined)
 					return false;

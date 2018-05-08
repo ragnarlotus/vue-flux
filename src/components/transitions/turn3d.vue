@@ -18,6 +18,7 @@
 		data: () => ({
 			totalDuration: 1200,
 			easing: 'ease-out',
+			pageWidth: 0,
 			cubeCss: {
 				top: 0,
 				left: 0,
@@ -52,8 +53,10 @@
 		},
 
 		created() {
+			this.pageWidth = Math.ceil(this.slider.size.width / 2);
+
 			if (this.direction !== 'left') {
-				this.cubeCss.left = Math.ceil(this.slider.size.width / 2) +'px';
+				this.cubeCss.left = this.pageWidth +'px';
 				this.imageCss.left = this.cubeCss.left;
 			}
 
@@ -63,7 +66,6 @@
 
 		mounted() {
 			this.cube.setCss(this.getCubeCss());
-			this.cube.front.setCss(this.getFrontCss());
 			this.cube.back.setCss(this.getBackCss());
 			this.image.setCss(this.getImageCss());
 
@@ -80,6 +82,17 @@
 		},
 
 		methods: {
+			getBackgroundPosition(side) {
+				let x, y;
+
+				[ x, y ] = side.style.backgroundPosition.split(' ');
+
+				x = parseInt(x);
+				y = parseInt(y);
+
+				return { x, y };
+			},
+
 			getCubeCss() {
 				let css = {};
 
@@ -98,25 +111,18 @@
 				return css;
 			},
 
-			getFrontCss() {
-				let css = {};
-
-				if (this.direction === 'left')
-					css.backgroundPosition = '0 0';
-
-				return css;
-			},
-
 			getBackCss() {
-				let css = {};
+				let backgroundPosition = this.getBackgroundPosition(this.cube.back);
 
 				if (this.direction === 'left')
-					css.backgroundPosition = '-'+ Math.ceil(this.slider.size.width / 2) +'px 0';
+					backgroundPosition.x -= this.pageWidth;
 
 				else
-					css.backgroundPosition = '0 0';
+					backgroundPosition.x += this.pageWidth;
 
-				return css;
+				return {
+					backgroundPosition: backgroundPosition.x +'px '+ backgroundPosition.y +'px'
+				};
 			},
 
 			getImageCss() {

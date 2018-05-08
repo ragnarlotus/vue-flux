@@ -6,7 +6,7 @@ import FluxVortex from './components/FluxVortex.vue';
 import FluxImage from './components/FluxImage.vue';
 import Transitions from './components/transitions';
 
-export default {
+export {
 	VueFlux,
 	FluxWrapper,
 	FluxGrid,
