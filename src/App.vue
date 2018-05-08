@@ -24,15 +24,14 @@
 
 		data: () => ({
 			fluxOptions: {
+				autoplay: true
 			},
 			fluxImages: [
 				'/static/slides/1.jpg',
 				'/static/slides/2.jpg',
 				'/static/slides/3.jpg'
 			],
-			fluxTransitions: {
-				transitionSlide3d: Transitions.transitionSlide3d
-			}
+			fluxTransitions: Transitions
 		})
 	}
 </script>
