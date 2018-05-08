@@ -69,6 +69,9 @@
 			},
 
 			initImage() {
+				if (!this.properties)
+					return;
+
 				let image = {
 					top: 0,
 					left: 0,

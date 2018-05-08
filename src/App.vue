@@ -26,14 +26,12 @@
 			fluxOptions: {
 			},
 			fluxImages: [
-				'/static/slides/6.jpg',
 				'/static/slides/1.jpg',
-				'/static/slides/5.jpg',
-				'/static/slides/3.jpg',
-				'/static/slides/4.jpg'
+				'/static/slides/2.jpg',
+				'/static/slides/3.jpg'
 			],
 			fluxTransitions: {
-				transitionCamera: Transitions.transitionCamera
+				transitionSlide3d: Transitions.transitionSlide3d
 			}
 		})
 	}
