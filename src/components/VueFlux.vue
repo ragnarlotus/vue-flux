@@ -221,6 +221,8 @@
 				if (this.transition.current !== undefined)
 					return false;
 
+				clearTimeout(this.timer);
+
 				// Get image index if next or previous
 				index = this.getIndex(index);
 
@@ -237,8 +239,10 @@
 						this.transition.last = this.transition.last + 1 >= this.transitionNames.length? 0 : this.transition.last + 1;
 
 						transition = this.transitionNames[this.transition.last];
-						this.transition.current = transition;
 					}
+
+					if (transition)
+						this.transition.current = transition;
 
 					this.$nextTick(() => {
 						let timeout = transition !== undefined? this.$refs.transition.totalDuration + 20 : 0;
