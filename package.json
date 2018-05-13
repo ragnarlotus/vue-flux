@@ -44,6 +44,9 @@
       "autoprefixer": {}
     }
   },
+  "vue": {
+    "baseUrl": "/vue-flux/"
+  },
   "browserslist": [
     "> 1%",
     "last 2 versions",
