@@ -1,7 +1,7 @@
 <template>
 	<nav>
 		<ul>
-			<li v-for="i in slider.imagesLoaded" :key="i" :class="getClass(i - 1)" @click="slider.showImage(i - 1);">
+			<li v-for="i in slider.imagesLoaded" :key="i" :class="getClass(i - 1)" @click="slider.showImage(i - 1);" :title="getTitle(i - 1)">
 				<slot paginationItem name="paginationItem" :index="i">
 					<span class="pagination-item"></span>
 				</slot>
@@ -22,6 +22,9 @@
 			},
 
 			currentImageIndex: function() {
+				if (this.slider.currentImage === undefined)
+					return undefined;
+
 				return this.slider.currentImage.index;
 			},
 
@@ -39,6 +42,10 @@
 					return 'active';
 
 				return '';
+			},
+
+			getTitle(i) {
+				return this.slider.captions[i] || '';
 			}
 		}
 	};
@@ -74,6 +81,12 @@
 		border: 2px solid #fff;
 		border-radius: 50%;
 		background-color: rgba(0, 0, 0, 0.7);
+		transition: background-color 0.2s ease-in, border 0.2s ease-in;
+	}
+
+	li span.pagination-item:hover {
+		border: 2px solid black;
+		background-color: white;
 	}
 
 	li.active span.pagination-item {
