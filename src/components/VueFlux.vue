@@ -4,20 +4,38 @@
 
 		<div class="mask" :style="sizePx" ref="mask">
 			<component v-if="transition.current" :is="transition.current" ref="transition" :slider="slider" :direction="direction"></component>
-			<flux-image v-if="preloadCompleted" :slider="slider" :index="image1Index" ref="image1"></flux-image>
-			<flux-image v-if="preloadCompleted" :slider="slider" :index="image2Index" ref="image2"></flux-image>
+			<flux-image v-if="loadImagesCompleted" :slider="slider" :index="image1Index" ref="image1"></flux-image>
+			<flux-image v-if="loadImagesCompleted" :slider="slider" :index="image2Index" ref="image2"></flux-image>
 		</div>
+
+		<div class="caption" :class="currentCaption? 'display' : ''">{{ currentCaption }}</div>
+
+		<flux-controls v-if="config.showControls && loaded" :slider="slider" ref="controls">
+			<template v-if="typeof $slots.controls !== 'undefined'" slot="controls">
+				<slot name="controls"></slot>
+			</template>
+		</flux-controls>
+
+		<flux-pagination v-if="config.showPagination && loaded" :slider="slider" ref="pagination">
+			<template v-if="typeof $scopedSlots.paginationItem !== 'undefined'" slot-scope="paginationItem" slot="paginationItem">
+				<slot name="paginationItem" :index="paginationItem.index"></slot>
+			</template>
+		</flux-pagination>
 	</div>
 </template>
 
 <script>
 	import FluxImage from './FluxImage.vue';
+	import FluxControls from './FluxControls.vue';
+	import FluxPagination from './FluxPagination.vue';
 
 	export default {
 		name: 'VueFlux',
 
 		components: {
-			FluxImage
+			FluxImage,
+			FluxControls,
+			FluxPagination
 		},
 
 		data: () => ({
@@ -26,19 +44,13 @@
 				fullscreen: false,
 				delay: 5000,
 				showPagination: false,
-				paginationContent: 'index',
 				showControls: false,
-				showCaption: false,
 				width: '100%',
 				height: 'auto'
 			},
 			size: {
 				width: 0,
 				height: 0,
-			},
-			background: {
-				color: '',
-				image: ''
 			},
 			timer: undefined,
 			transitionNames: [],
@@ -49,7 +61,8 @@
 			image1Index: 0,
 			image2Index: 1,
 			imagesLoaded: 0,
-			preloadCompleted: false,
+			loadImagesCompleted: false,
+			loaded: false,
 			preload: [],
 			properties: []
 		}),
@@ -70,12 +83,24 @@
 			images: {
 				type: Array,
 				default: () => []
+			},
+			captions: {
+				type: Array,
+				default: () => []
 			}
 		},
 
 		computed: {
 			slider: function() {
 				return this;
+			},
+
+			controls: function() {
+				return this.$refs.controls;
+			},
+
+			pagination: function() {
+				return this.$refs.pagination;
 			},
 
 			mask: function() {
@@ -93,11 +118,42 @@
 			},
 
 			currentImage: function() {
+				if (this.$refs.image1 === undefined)
+					return undefined;
+
 				return this.$refs.image1.style.zIndex === 11? this.$refs.image1 : this.$refs.image2;
 			},
 
 			nextImage: function() {
 				return this.$refs.image1.style.zIndex === 10? this.$refs.image1 : this.$refs.image2;
+			},
+
+			currentCaption: function() {
+				if (!this.loaded)
+					return '';
+
+				if (this.transition.current !== undefined)
+					return '';
+
+				if (this.currentImage === undefined)
+					return '';
+
+				if (this.captions[this.currentImage.index] === undefined)
+					return '';
+
+				return this.captions[this.currentImage.index];
+			},
+
+			nextTransition: function() {
+				if (!this.transitionNames.length)
+					return undefined;
+
+				let nextIndex = this.transition.last + 1
+
+				if (nextIndex >= this.transitionNames.length)
+					nextIndex = 0;
+
+				return this.transitionNames[nextIndex];
 			},
 
 			direction: function() {
@@ -172,7 +228,7 @@
 				}
 
 				this.properties = this.properties.filter((p) => p);
-				this.preloadCompleted = true;
+				this.loadImagesCompleted = true;
 				this.preload = [];
 
 				this.$nextTick(() => {
@@ -181,6 +237,8 @@
 
 					this.$refs.image1.setCss({ zIndex: 11 });
 					this.$refs.image2.setCss({ zIndex: 10 });
+
+					this.loaded = true;
 
 					if (this.config.autoplay === true)
 						this.play();
@@ -201,6 +259,14 @@
 				clearTimeout(this.timer);
 			},
 
+			toggleAutoplay() {
+				if (this.config.autoplay)
+					this.stop();
+
+				else
+					this.play();
+			},
+
 			getIndex(index) {
 				if (typeof index === 'number')
 					return index;
@@ -214,11 +280,14 @@
 			},
 
 			showImage(index, transition) {
-				if (!this.preloadCompleted)
+				if (!this.loadImagesCompleted || this.$refs.image1 === undefined)
 					return;
 
 				// If there is a transition running prevent showing new image
 				if (this.transition.current !== undefined)
+					return false;
+
+				if (this.currentImage.index === index)
 					return false;
 
 				clearTimeout(this.timer);
@@ -235,14 +304,13 @@
 
 				this.$nextTick(() => {
 					// Get transition
-					if (transition === undefined && this.transitionNames.length > 0) {
-						this.transition.last = this.transition.last + 1 >= this.transitionNames.length? 0 : this.transition.last + 1;
+					if (transition === undefined)
+						transition = this.nextTransition;
 
-						transition = this.transitionNames[this.transition.last];
-					}
-
-					if (transition)
+					if (transition) {
+						this.transition.last = this.transitionNames.indexOf(transition);
 						this.transition.current = transition;
+					}
 
 					this.$nextTick(() => {
 						let timeout = transition !== undefined? this.$refs.transition.totalDuration + 20 : 0;
@@ -269,6 +337,8 @@
 
 <style lang="scss" scoped>
 	.vue-flux {
+		position: relative;
+
 		img {
 			position: absolute;
 			visibility: hidden;
@@ -278,5 +348,23 @@
 	.mask {
 		position: relative;
 		overflow: visible;
+	}
+
+	.caption {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		padding: 8px;
+		color: white;
+		text-align: center;
+		background-color: rgba(0, 0, 0, 0.65);
+		opacity: 0;
+		transition: opacity 0.3s ease-in;
+		z-index: 100;
+	}
+
+	.caption.display {
+		opacity: 1;
 	}
 </style>
