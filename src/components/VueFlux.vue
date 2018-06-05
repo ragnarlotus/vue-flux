@@ -49,8 +49,8 @@
 				height: 'auto'
 			},
 			size: {
-				width: 0,
-				height: 0,
+				width: undefined,
+				height: undefined,
 			},
 			timer: undefined,
 			transitionNames: [],
@@ -61,8 +61,8 @@
 			image1Index: 0,
 			image2Index: 1,
 			imagesLoaded: 0,
-			loadImagesCompleted: false,
 			loaded: false,
+			loadImagesCompleted: false,
 			preload: [],
 			properties: []
 		}),
@@ -180,6 +180,12 @@
 				return;
 
 			this.preloadImages(this.images);
+
+			window.addEventListener('resize', this.resize);
+		},
+
+		beforeDestroy() {
+			window.removeEventListener('resize', this.resize);
 		},
 
 		methods: {
@@ -204,29 +210,39 @@
 					this.init();
 			},
 
+			resize() {
+				this.size.width = undefined;
+				this.size.height = undefined;
+
+				this.$nextTick(() => {
+					// Find width
+					if (this.config.width.indexOf('px') !== -1) {
+						this.size.width = parseInt(this.config.width);
+
+					} else if (this.$refs.mask.offsetParent !== null) {
+						this.size.width = this.$refs.mask.offsetWidth;
+
+					} else {
+						this.size.width = this.$refs.container.offsetWidth;
+					}
+
+					// Find height
+					if (this.config.height.indexOf('px') !== -1) {
+						this.size.height = parseInt(this.config.height);
+
+					} else if (this.config.height === 'auto' && this.$refs.container.offsetHeight) {
+						this.size.height = this.$refs.container.offsetHeight;
+
+					} else {
+						this.size.height = Math.floor(this.size.width / 16 * 9);
+					}
+
+					this.currentImage.initImage();
+					this.nextImage.initImage();
+				});
+			},
+
 			init() {
-				// Find width
-				if (this.config.width.indexOf('px') !== -1) {
-					this.size.width = parseInt(this.config.width);
-
-				} else if (this.$refs.mask.offsetParent !== null) {
-					this.size.width = this.$refs.mask.offsetWidth;
-
-				} else {
-					this.size.width = this.$refs.container.offsetWidth;
-				}
-
-				// Find height
-				if (this.config.height.indexOf('px') !== -1) {
-					this.size.height = parseInt(this.config.height);
-
-				} else if (this.config.height === 'auto' && this.$refs.container.offsetHeight) {
-					this.size.height = this.$refs.container.offsetHeight;
-
-				} else {
-					this.size.height = Math.floor(this.size.width / 16 * 9);
-				}
-
 				this.properties = this.properties.filter((p) => p);
 				this.loadImagesCompleted = true;
 				this.preload = [];
@@ -239,6 +255,8 @@
 					this.$refs.image2.setCss({ zIndex: 10 });
 
 					this.loaded = true;
+
+					this.resize();
 
 					if (this.config.autoplay === true)
 						this.play();

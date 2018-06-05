@@ -57,6 +57,7 @@
 		background-repeat: no-repeat;
 		background-position: center center;
 		background-size: 16px 16px;
+		transition: background-color 0.2s ease-in;
 	}
 
 	.previous {
@@ -79,5 +80,12 @@
 	.next {
 		right: 25px;
 		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAIVBMVEX///////////////////////////////////////////9/gMdvAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAAAuUAAALlARv+XnsAAABYSURBVEjH7dYxDoAwDEPR5Ab1/S8LVEgsyL8SG3XWWK/dnKpnumA0/L4lAOSJE/DEtXfEBBxxBwYFBH8IEWJbggL4RIAAPwFWC+VDqXEtYrFyNWO5v58HB4q9HAkl7KTYAAAAAElFTkSuQmCC);
+	}
+
+	.previous:hover,
+	.play:hover,
+	.pause:hover,
+	.next:hover {
+		background-color: rgba(0, 0, 0, 0.9);
 	}
 </style>

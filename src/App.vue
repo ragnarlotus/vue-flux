@@ -118,7 +118,6 @@
 	}
 
 	.vue-flux {
-		width: 750px;
 		box-shadow: 0 0 12px 2px rgba(34,36,38,.85);
 	}
 </style>
