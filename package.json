@@ -1,7 +1,6 @@
 {
   "name": "vue-flux",
   "version": "1.0.0",
-  "private": true,
   "description": "Vue image slider",
   "author": "ragnar lotus",
   "repository": {
@@ -28,8 +27,8 @@
     "vue": "^2.5.16"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-beta.15",
-    "@vue/cli-service": "^3.0.0-beta.15",
+    "@vue/cli-plugin-babel": "^3.0.0-beta.16",
+    "@vue/cli-service": "^3.0.0-beta.16",
     "node-sass": "^4.7.2",
     "sass-loader": "^6.0.6",
     "vue-template-compiler": "^2.5.13"
