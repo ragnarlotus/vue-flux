@@ -58,7 +58,7 @@ export default {
 
 ## Performance
 
-Weight is just 37KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
+Weight is just 44KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
 
 ## Included transitions
 * Fade: fades from one image to next.
@@ -93,7 +93,3 @@ This slider was inspired by [Flux Slider](http://joelambert.co.uk/flux/).
 ## Contributing
 
 Contributions, questions and comments are all welcome and encouraged.
-
-## To do:
-* Add loading spinner
-* Add index

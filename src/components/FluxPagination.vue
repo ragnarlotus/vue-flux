@@ -86,7 +86,7 @@
 
 	li span.pagination-item:hover {
 		border: 2px solid black;
-		background-color: white;
+		background-color: #ffffa8;
 	}
 
 	li.active span.pagination-item {

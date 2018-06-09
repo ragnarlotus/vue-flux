@@ -4,9 +4,11 @@
 
 		<div class="mask" :style="sizePx" ref="mask">
 			<component v-if="transition.current" :is="transition.current" ref="transition" :slider="slider" :direction="direction"></component>
-			<flux-image v-if="loadImagesCompleted" :slider="slider" :index="image1Index" ref="image1"></flux-image>
-			<flux-image v-if="loadImagesCompleted" :slider="slider" :index="image2Index" ref="image2"></flux-image>
+			<flux-image v-if="!preload.length" :slider="slider" :index="image1Index" ref="image1"></flux-image>
+			<flux-image v-if="!preload.length" :slider="slider" :index="image2Index" ref="image2"></flux-image>
 		</div>
+
+		<div v-if="!loaded" class="spinner"></div>
 
 		<div class="caption" :class="currentCaption? 'display' : ''">{{ currentCaption }}</div>
 
@@ -62,7 +64,6 @@
 			image2Index: 1,
 			imagesLoaded: 0,
 			loaded: false,
-			loadImagesCompleted: false,
 			preload: [],
 			properties: []
 		}),
@@ -190,7 +191,7 @@
 
 		methods: {
 			preloadImages(images) {
-				this.preload = JSON.parse(JSON.stringify(images));
+				this.preload = images.slice(0);
 			},
 
 			addImage(i) {
@@ -214,49 +215,45 @@
 				this.size.width = undefined;
 				this.size.height = undefined;
 
+				if (this.config.width.indexOf('px') !== -1)
+					this.size.width = parseInt(this.config.width);
+
+				if (this.config.height.indexOf('px') !== -1)
+					this.size.height = parseInt(this.config.height);
+
+				if (this.size.width && this.size.height)
+					return;
+
 				this.$nextTick(() => {
 					// Find width
-					if (this.config.width.indexOf('px') !== -1) {
-						this.size.width = parseInt(this.config.width);
-
-					} else if (this.$refs.mask.offsetParent !== null) {
-						this.size.width = this.$refs.mask.offsetWidth;
-
-					} else {
-						this.size.width = this.$refs.container.offsetWidth;
-					}
+					this.size.width = this.$refs.container.offsetWidth;
 
 					// Find height
-					if (this.config.height.indexOf('px') !== -1) {
-						this.size.height = parseInt(this.config.height);
-
-					} else if (this.config.height === 'auto' && this.$refs.container.offsetHeight) {
+					if (this.config.height === 'auto' && this.$refs.container.offsetHeight) {
 						this.size.height = this.$refs.container.offsetHeight;
 
 					} else {
 						this.size.height = Math.floor(this.size.width / 16 * 9);
 					}
 
-					this.currentImage.initImage();
-					this.nextImage.initImage();
+					this.$refs.image1.initImage();
+					this.$refs.image2.initImage();
 				});
 			},
 
 			init() {
 				this.properties = this.properties.filter((p) => p);
-				this.loadImagesCompleted = true;
 				this.preload = [];
+				this.resize();
 
 				this.$nextTick(() => {
-					this.$refs.image1.reference = 'image1Index';
-					this.$refs.image2.reference = 'image2Index';
-
 					this.$refs.image1.setCss({ zIndex: 11 });
 					this.$refs.image2.setCss({ zIndex: 10 });
 
-					this.loaded = true;
+					this.$refs.image1.reference = 'image1Index';
+					this.$refs.image2.reference = 'image2Index';
 
-					this.resize();
+					this.loaded = true;
 
 					if (this.config.autoplay === true)
 						this.play();
@@ -298,7 +295,7 @@
 			},
 
 			showImage(index, transition) {
-				if (!this.loadImagesCompleted || this.$refs.image1 === undefined)
+				if (!this.loaded || this.$refs.image1 === undefined)
 					return;
 
 				// If there is a transition running prevent showing new image
@@ -361,6 +358,25 @@
 			position: absolute;
 			visibility: hidden;
 		}
+	}
+
+	.spinner {
+		position: absolute;
+		left: 50%;
+		top: 120px;
+		margin-left: -60px;
+		border: 16px solid #f3f3f3;
+		border-top: 16px solid #3498db;
+		border-bottom: 16px solid #3498db;
+		border-radius: 50%;
+		width: 120px;
+		height: 120px;
+		animation: spin 2s linear infinite;
+	}
+
+	@keyframes spin {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
 	}
 
 	.mask {
