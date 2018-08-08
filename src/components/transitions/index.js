@@ -1,4 +1,5 @@
 import transitionFade from './fade.vue';
+import transitionKenburn from './kenburn.vue';
 import transitionSwipe from './swipe.vue';
 import transitionSlide2d from './slide2d.vue';
 import transitionSlide3d from './slide3d.vue';
@@ -17,6 +18,7 @@ import transitionCamera from './camera.vue';
 
 export default {
 	transitionFade,
+	transitionKenburn,
 	transitionSwipe,
 	transitionSlide2d,
 	transitionSlide3d,

@@ -1,8 +1,8 @@
 <template>
-	<div class="vue-flux" ref="container">
-		<img v-for="(src, index) in preload" :key="src" :src="path + src" alt="" @load="addImage(index)" @error="addImage(index)" ref="images">
+	<div class="vue-flux" ref="container" @mouseover="mouseOver = true" @mouseleave="mouseOver = false">
+		<img v-for="(src, index) in preload" :key="index" :src="path + src" alt="" @load="addImage(index)" @error="addImage(index)" ref="images">
 
-		<div class="mask" :style="sizePx" ref="mask">
+		<div class="mask" :style="sizePx" ref="mask" @touchstart="dragging" @touchend="releasing">
 			<component v-if="transition.current" :is="transition.current" ref="transition" :slider="slider" :direction="direction"></component>
 			<flux-image v-if="!preload.length" :slider="slider" :index="image1Index" ref="image1"></flux-image>
 			<flux-image v-if="!preload.length" :slider="slider" :index="image2Index" ref="image2"></flux-image>
@@ -12,32 +12,22 @@
 
 		<div class="caption" :class="currentCaption? 'display' : ''">{{ currentCaption }}</div>
 
-		<flux-controls v-if="config.showControls && loaded" :slider="slider" ref="controls">
-			<template v-if="typeof $slots.controls !== 'undefined'" slot="controls">
-				<slot name="controls"></slot>
-			</template>
-		</flux-controls>
+		<slot name="controls"></slot>
 
-		<flux-pagination v-if="config.showPagination && loaded" :slider="slider" ref="pagination">
-			<template v-if="typeof $scopedSlots.paginationItem !== 'undefined'" slot-scope="paginationItem" slot="paginationItem">
-				<slot name="paginationItem" :index="paginationItem.index"></slot>
-			</template>
-		</flux-pagination>
+		<slot name="index"></slot>
+
+		<slot name="pagination"></slot>
 	</div>
 </template>
 
 <script>
 	import FluxImage from './FluxImage.vue';
-	import FluxControls from './FluxControls.vue';
-	import FluxPagination from './FluxPagination.vue';
 
 	export default {
 		name: 'VueFlux',
 
 		components: {
-			FluxImage,
-			FluxControls,
-			FluxPagination
+			FluxImage
 		},
 
 		data: () => ({
@@ -45,8 +35,6 @@
 				autoplay: false,
 				fullscreen: false,
 				delay: 5000,
-				showPagination: false,
-				showControls: false,
 				width: '100%',
 				height: 'auto'
 			},
@@ -60,6 +48,9 @@
 				current: undefined,
 				last: undefined
 			},
+			mouseOver: false,
+			dragStartX: undefined,
+			dragStartY: undefined,
 			image1Index: 0,
 			image2Index: 1,
 			imagesLoaded: 0,
@@ -97,11 +88,24 @@
 			},
 
 			controls: function() {
-				return this.$refs.controls;
+				if (this.$slots['controls'])
+					return this.$slots['controls'][0].componentInstance;
+
+				return undefined;
+			},
+
+			index: function() {
+				if (this.$slots['index'])
+					return this.$slots['index'][0].componentInstance;
+
+				return undefined;
 			},
 
 			pagination: function() {
-				return this.$refs.pagination;
+				if (this.$slots['pagination'])
+					return this.$slots['pagination'][0].componentInstance;
+
+				return undefined;
 			},
 
 			mask: function() {
@@ -236,8 +240,8 @@
 						this.size.height = Math.floor(this.size.width / 16 * 9);
 					}
 
-					this.$refs.image1.initImage();
-					this.$refs.image2.initImage();
+					this.$refs.image1.init();
+					this.$refs.image2.init();
 				});
 			},
 
@@ -345,6 +349,40 @@
 						}, timeout);
 					});
 				});
+			},
+
+			dragging(event) {
+				this.dragStartX = event.touches[0].clientX;
+				this.dragStartY = event.touches[0].clientY;
+				event.preventDefault();
+			},
+
+			releasing(event) {
+				event.preventDefault();
+
+				let triggerX = Math.floor(this.size.width / 3);
+				let offsetX = event.changedTouches[0].clientX - this.dragStartX;
+
+				if (offsetX > 0 && offsetX > triggerX) {
+					this.showImage('previous');
+					return;
+				}
+
+				if (offsetX < 0 && offsetX < -triggerX) {
+					this.showImage('next');
+					return;
+				}
+
+				if (this.index === undefined)
+					return;
+
+				let triggerY = Math.floor(this.size.height / 3);
+				let offsetY = event.changedTouches[0].clientY - this.dragStartY;
+
+				if (offsetY < 0 && offsetY < -triggerY) {
+					this.index.show();
+					return;
+				}
 			}
 		}
 	}
@@ -382,6 +420,7 @@
 	.mask {
 		position: relative;
 		overflow: visible;
+		cursor: pointer;
 	}
 
 	.caption {

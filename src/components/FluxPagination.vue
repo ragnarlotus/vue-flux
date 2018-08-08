@@ -1,10 +1,8 @@
 <template>
-	<nav>
+	<nav v-if="slider !== undefined && slider.loaded">
 		<ul>
-			<li v-for="i in slider.imagesLoaded" :key="i" :class="getClass(i - 1)" @click="slider.showImage(i - 1);" :title="getTitle(i - 1)">
-				<slot paginationItem name="paginationItem" :index="i">
-					<span class="pagination-item"></span>
-				</slot>
+			<li v-for="i in slider.imagesLoaded" :key="i" :class="getClass(i - 1)" @click="showImage(i - 1)" @touchend="showImage(i - 1, $event)" :title="getTitle(i - 1)">
+				<span class="pagination-item"></span>
 			</li>
 		</ul>
 	</nav>
@@ -13,7 +11,7 @@
 <script>
 	export default {
 		props: {
-			slider: { type: Object, required: true }
+			slider: { type: Object, required: false }
 		},
 
 		computed: {
@@ -46,6 +44,13 @@
 
 			getTitle(i) {
 				return this.slider.captions[i] || '';
+			},
+
+			showImage(index, event) {
+				this.slider.showImage(index);
+
+				if (event)
+					event.preventDefault();
 			}
 		}
 	};
@@ -54,8 +59,8 @@
 <style lang="scss" scoped>
 	nav {
 		position: absolute;
-		left: 0;
-		right: 0;
+		left: 50px;
+		right: 50px;
 		bottom: 20px;
 		z-index: 100;
 	}
@@ -86,7 +91,7 @@
 
 	li span.pagination-item:hover {
 		border: 2px solid black;
-		background-color: #ffffa8;
+		background-color: white;
 	}
 
 	li.active span.pagination-item {
