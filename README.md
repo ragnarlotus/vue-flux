@@ -12,7 +12,9 @@ You can view a [demo here](https://deulos.github.io/vue-flux/).
 | Responsive | The slider and the images are adapted to container to fill it always |
 | Compatibility | Supported by all major browsers |
 | Expandable | You can add your custom transitions very easily |
-| Customization | Many customizations to suit most needs |
+| Customization | Total customizable to suit most needs |
+| Gestures | Mobile friendly by gestures |
+| Parallax | It includes a parallax component very easy to set up |
 
 ## Quickstart
 
@@ -33,7 +35,6 @@ npm install --save vue-flux
 
 ``` javascript
 import { VueFlux, Transitions } from 'vue-flux';
-import 'vue-flux/dist/vue-flux.css';
 
 export default {
    components: {
@@ -58,10 +59,11 @@ export default {
 
 ## Performance
 
-Weight is just 44KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
+Weight is just 63KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
 
 ## Included transitions
 * Fade: fades from one image to next.
+* Kenburn: fade and zoom from one image to next.
 * Swipe: swipes the image to display next like uncovered with a curtain.
 * Slide 2D: slides the image horizontally revealing the next.
 * Slide 3D: turns the image to a side like if place in a cube.
@@ -77,6 +79,14 @@ Weight is just 44KB so is pretty light having only the essential CSS. It also do
 * Concentric: a concentric effect is performed by rotating the image converted into circles.
 * Warp: a concentric effect is performed by rotating the image converted into circles in alternate direction.
 * Camera: from outside to inside the image is being cropped like in a camera lens.
+
+## Parallax
+
+``` html
+<flux-parallax src="slides/1.jpg" height="300px" type="relative">
+   <div>CONTENT</div>
+</flux-parallax>
+```
 
 ## Troubleshooting
 
