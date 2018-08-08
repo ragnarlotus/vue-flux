@@ -110,9 +110,8 @@
 			},
 
 			transform(css) {
-				this.$refs.image.clientHeight;
-
 				this.$nextTick(() => {
+					this.$refs.image.clientHeight;
 					this.setCss(css);
 				});
 			},
