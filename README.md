@@ -59,11 +59,11 @@ export default {
 
 ## Performance
 
-Weight is just 63KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
+Weight is just 77KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
 
 ## Included transitions
 * Fade: fades from one image to next.
-* Kenburn: fade and zoom from one image to next.
+* Kenburn: fades, zoom and moves current image to next.
 * Swipe: swipes the image to display next like uncovered with a curtain.
 * Slide 2D: slides the image horizontally revealing the next.
 * Slide 3D: turns the image to a side like if place in a cube.
