@@ -1,5 +1,5 @@
 <template>
-	<div class="vue-flux" ref="container" @mouseover="mouseOver = true" @mouseleave="mouseOver = false">
+	<div class="vue-flux" ref="container" @mouseover="toggleMouseOver(true)" @mouseleave="toggleMouseOver(false)">
 		<img v-for="(src, index) in preload" :key="index" :src="path + src" alt="" @load="addImage(index)" @error="addImage(index)" ref="images">
 
 		<div class="mask" :style="sizePx" ref="mask" @touchstart="dragging" @touchend="releasing">
@@ -10,7 +10,7 @@
 
 		<div v-if="!loaded" class="spinner"></div>
 
-		<div class="caption" :class="currentCaption? 'display' : ''">{{ currentCaption }}</div>
+		<slot name="caption"></slot>
 
 		<slot name="controls"></slot>
 
@@ -87,6 +87,17 @@
 				return this;
 			},
 
+			touchable: function() {
+				return 'touchstart' in document.documentElement;
+			},
+
+			caption: function() {
+				if (this.$slots['caption'])
+					return this.$slots['caption'][0].componentInstance;
+
+				return undefined;
+			},
+
 			controls: function() {
 				if (this.$slots['controls'])
 					return this.$slots['controls'][0].componentInstance;
@@ -133,27 +144,11 @@
 				return this.$refs.image1.style.zIndex === 10? this.$refs.image1 : this.$refs.image2;
 			},
 
-			currentCaption: function() {
-				if (!this.loaded)
-					return '';
-
-				if (this.transition.current !== undefined)
-					return '';
-
-				if (this.currentImage === undefined)
-					return '';
-
-				if (this.captions[this.currentImage.index] === undefined)
-					return '';
-
-				return this.captions[this.currentImage.index];
-			},
-
 			nextTransition: function() {
 				if (!this.transitionNames.length)
 					return undefined;
 
-				let nextIndex = this.transition.last + 1
+				let nextIndex = this.transition.last + 1;
 
 				if (nextIndex >= this.transitionNames.length)
 					nextIndex = 0;
@@ -167,17 +162,8 @@
 		},
 
 		created() {
-			this.config = Object.assign({}, this.config, this.options);
-
-			this.size.width = this.config.width;
-			this.size.height = this.config.height;
-
-			Object.assign(this.$options.components, this.transitions);
-
-			this.transitionNames = Object.keys(this.transitions);
-
-			if (this.transitionNames.length > 0)
-				this.transition.last = this.transitionNames.length - 1;
+			this.setOptions(this.options);
+			this.setTransitions(this.transitions);
 		},
 
 		mounted() {
@@ -213,6 +199,27 @@
 
 				if (this.imagesLoaded === this.preload.length)
 					this.init();
+			},
+
+			setOptions(options) {
+				let currentSize = Object.assign({}, this.config.size);
+
+				this.config = Object.assign({}, this.config, options);
+
+				this.size.width = this.config.width;
+				this.size.height = this.config.height;
+
+				if (currentSize.width !== this.config.width || currentSize.height !== this.config.height)
+					this.resize();
+			},
+
+			setTransitions(transitions) {
+				Object.assign(this.$options.components, transitions);
+
+				this.transitionNames = Object.keys(transitions);
+
+				if (this.transitionNames.length > 0)
+					this.transition.last = this.transitionNames.length - 1;
 			},
 
 			resize() {
@@ -262,6 +269,13 @@
 					if (this.config.autoplay === true)
 						this.play();
 				});
+			},
+
+			toggleMouseOver(over) {
+				if (this.touchable)
+					return;
+
+				this.mouseOver = over;
 			},
 
 			play(index) {
@@ -421,23 +435,5 @@
 		position: relative;
 		overflow: visible;
 		cursor: pointer;
-	}
-
-	.caption {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		padding: 8px;
-		color: white;
-		text-align: center;
-		background-color: rgba(0, 0, 0, 0.65);
-		opacity: 0;
-		transition: opacity 0.3s ease-in;
-		z-index: 100;
-	}
-
-	.caption.display {
-		opacity: 1;
 	}
 </style>
