@@ -6,6 +6,7 @@
 			<div class="sm:block md:block lg:flex xl:flex -mx-2">
 				<div class="lg:w-3/5 px-2 mb-4">
 					<vue-flux :options="fluxOptions" :images="fluxImages" :transitions="fluxTransitions" :captions="fluxCaptions" ref="slider">
+						<flux-caption slot="caption" :slider="$refs.slider"></flux-caption>
 						<flux-controls slot="controls" :slider="$refs.slider"></flux-controls>
 						<flux-index slot="index" :slider="$refs.slider"></flux-index>
 						<flux-pagination slot="pagination" :slider="$refs.slider"></flux-pagination>
@@ -117,7 +118,7 @@
 
 			<p>Nulla hendrerit eu arcu non rhoncus. Mauris sed enim lorem. Nulla facilisi. Phasellus lacinia aliquam turpis, eu efficitur lacus ornare vel. Maecenas finibus tortor egestas, convallis augue at, blandit odio. Nunc efficitur accumsan aliquet. Sed facilisis erat sed magna rhoncus lobortis. Nunc bibendum tempor dolor, eu viverra felis sagittis vel. Fusce at ultrices ligula. Duis convallis, nulla at porta ultricies, lorem dolor consectetur massa, ac pellentesque tellus lectus quis leo. Integer id ipsum eu orci porttitor volutpat. Etiam et commodo tortor, in sagittis arcu. Vivamus tristique vestibulum leo, ut ultrices enim mollis ac.</p>
 
-			<flux-parallax src="slides/1.jpg" height="300px" type="relative" class="parallax">
+			<flux-parallax src="slides/1.jpg" height="300px" type="relative" offset="10%" class="parallax">
 				<div>CONTENT</div>
 			</flux-parallax>
 
@@ -144,6 +145,7 @@
 
 <script>
 	import VueFlux from './components/VueFlux.vue';
+	import FluxCaption from './components/FluxCaption.vue';
 	import FluxControls from './components/FluxControls.vue';
 	import FluxIndex from './components/FluxIndex.vue';
 	import FluxPagination from './components/FluxPagination.vue';
@@ -155,6 +157,7 @@
 
 		components: {
 			VueFlux,
+			FluxCaption,
 			FluxControls,
 			FluxIndex,
 			FluxPagination,
