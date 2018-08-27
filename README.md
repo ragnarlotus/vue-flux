@@ -38,7 +38,7 @@ import { VueFlux, Transitions } from 'vue-flux';
 
 export default {
    components: {
-      'vue-flux': VueFlux
+      VueFlux
    },
 
    data: () => ({
