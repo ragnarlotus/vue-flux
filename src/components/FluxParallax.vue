@@ -41,6 +41,10 @@
 				required: true
 			},
 
+			holder: {
+				default: () => window
+			},
+
 			type: {
 				type: String,
 				default: () => 'relative'
@@ -51,17 +55,32 @@
 				default: () => 'auto'
 			},
 
-			holder: {
-				default: () => window
+			offset: {
+				type: [Number, String],
+				default: () => '40%'
 			}
 		},
 
 		computed: {
-			finalHeight: function() {
-				if (/[0-9]+px$/.test(this.height) === false)
-					return this.$refs.parallax.offsetHeight;
+			parallaxHeight: function() {
+				if (/^[0-9]+px$/.test(this.height) === true)
+					return parseInt(this.height);
 
-				return parseInt(this.height);
+				return this.$refs.parallax.clientHeight;
+			},
+
+			backgroundHeight: function() {
+				if (/^[0-9]+px$/.test(this.offset) === true)
+					return this.parallaxHeight + parseInt(this.offset);
+
+				if (/^[0-9]+%$/.test(this.offset) === true)
+					return this.parallaxHeight * (1 + parseInt(this.offset) / 100);
+
+				return this.parallaxHeight;
+			},
+
+			finalOffset: function() {
+				return Math.floor(100 - (this.backgroundHeight * 100 / this.background.height));
 			}
 		},
 
@@ -96,52 +115,60 @@
 			},
 
 			resize() {
-				let image = {
-					width: this.properties.width,
-					height: this.properties.height
-				};
+				let parallax = this.$refs.parallax;
 
 				this.view.height = this.holder.innerHeight;
 
-				let parallax = this.$refs.parallax;
-
 				Object.assign(this.parallax, {
 					top: parallax.offsetTop,
-					width: parallax.offsetWidth,
-					height: this.finalHeight
+					width: 'auto',
+					height: this.parallaxHeight
 				});
 
-				if (image.height / image.width >= this.parallax.height / this.parallax.width) {
-					this.background.height = Math.floor(this.parallax.width * image.height / image.width);
-					this.background.width = this.parallax.width;
-					this.background.top = Math.floor((this.parallax.height - image.height) / 2);
+				this.setCss({
+					width: this.parallax.width,
+					height: this.parallax.height +'px'
+				});
 
-				} else {
-					this.background.width = Math.floor(this.parallax.height * image.width / image.height);
-					this.background.height = this.parallax.height;
-					this.background.left = Math.floor((this.parallax.width - image.width) / 2);
-				}
-
-				let css = {
-					width: this.parallax.width +'px',
-					height: this.parallax.height +'px',
-					backgroundImage: 'url("'+ this.properties.src +'")',
-					backgroundSize: this.background.width +'px '+ this.background.height +'px',
-					backgroundPosition: this.background.top +'px '+ this.background.left +'px',
-					backgroundRepeat: 'no-repeat'
-				};
-
-				if (this.type === 'fixed') {
-					css = Object.assign(css, {
-						backgroundPosition: 'center',
-						backgroundAttachment: 'fixed',
-						backgroundSize: 'cover',
+				this.$nextTick(() => {
+					Object.assign(this.parallax, {
+						width: parallax.clientWidth
 					});
-				}
 
-				this.setCss(css);
+					let image = {
+						width: this.properties.width,
+						height: this.properties.height
+					};
 
-				this.handleScroll();
+					this.background.height = this.backgroundHeight;
+					this.background.width = Math.floor(this.background.height * image.width / image.height);
+					this.background.top = 0;
+
+					if (this.background.width < this.parallax.width) {
+						this.background.width = this.parallax.width;
+						this.background.height = Math.floor(this.parallax.width * image.height / image.width);
+					}
+
+					let css = {
+						width: this.parallax.width +'px',
+						backgroundImage: 'url("'+ this.properties.src +'")',
+						backgroundSize: this.background.width +'px '+ this.background.height +'px',
+						backgroundPosition: 'center '+ this.background.top +'px',
+						backgroundRepeat: 'no-repeat'
+					};
+
+					if (this.type === 'fixed') {
+						css = Object.assign(css, {
+							backgroundPosition: 'center',
+							backgroundAttachment: 'fixed',
+							backgroundSize: 'cover',
+						});
+					}
+
+					this.setCss(css);
+
+					this.handleScroll();
+				});
 			},
 
 			init() {
@@ -156,6 +183,13 @@
 			},
 
 			moveBackgroundByPct(pct) {
+				if (this.background.height > this.backgroundHeight) {
+					console.log(pct);
+					console.log((100 - this.finalOffset) * (pct / 100));
+					pct = (100 - this.finalOffset) * (pct / 100) + (this.finalOffset / 2);
+					//pct = ((100 - this.finalOffset) * pct / 100) + (this.finalOffset / 2);
+				}
+
 				this.setCss({
 					backgroundPositionY: pct +'%'
 				});
@@ -202,7 +236,7 @@
 			},
 
 			handleRelative(positionY) {
-				let pct = 0;
+				let pct;
 
 				pct = Math.floor(positionY * 100 / (this.view.height + this.parallax.height));
 
