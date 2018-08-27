@@ -1,5 +1,5 @@
 <template>
-	<div :style="style" :title="caption(index)"></div>
+	<div :style="style" :title="caption"></div>
 </template>
 
 <script>
@@ -32,6 +32,10 @@
 		computed: {
 			properties: function() {
 				return this.slider.properties[this.index];
+			},
+
+			caption: function() {
+				return this.slider.captions[this.index] || '';
 			}
 		},
 
@@ -78,10 +82,6 @@
 
 			setCss(css) {
 				this.style = Object.assign({}, this.style, css);
-			},
-
-			caption(index) {
-				return this.slider.captions[this.index] || '';
 			}
 		}
 	};
