@@ -1,3 +1,4 @@
+import FluxCaption from './FluxCaption.vue';
 import FluxControls from './FluxControls.vue';
 import FluxCube from './FluxCube.vue';
 import FluxGrid from './FluxGrid.vue';
@@ -12,6 +13,7 @@ import VueFlux from './VueFlux.vue';
 import Transitions from './transitions/index.js';
 
 export {
+	FluxCaption,
 	FluxControls,
 	FluxCube,
 	FluxGrid,
