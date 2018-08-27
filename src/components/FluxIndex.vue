@@ -1,7 +1,7 @@
 <template>
 	<div v-if="slider !== undefined && slider.loaded">
 		<transition name="fade">
-			<div v-if="slider.mouseOver && displayButton" class="toggle" @click="toggle()"></div>
+			<div v-if="displayButton" class="toggle" @click="toggle()"></div>
 		</transition>
 
 		<nav :class="indexClass" @click="toggle()" @touchend="toggle">
@@ -95,8 +95,10 @@
 				this.$refs.thumbs.style.marginTop = '100%';
 
 				setTimeout(() => {
-					if (typeof index !== 'undefined')
+					if (typeof index !== 'undefined') {
+						this.slider.mouseOver = false;
 						this.slider.showImage(index);
+					}
 
 					this.visible = false;
 				}, this.delay);
