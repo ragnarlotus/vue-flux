@@ -4,11 +4,16 @@
 
 		<div class="mask" :style="sizePx" ref="mask" @touchstart="dragging" @touchend="releasing">
 			<component v-if="transition.current" :is="transition.current" ref="transition" :slider="slider" :direction="direction"></component>
-			<flux-image v-if="!preload.length" :slider="slider" :index="image1Index" ref="image1"></flux-image>
-			<flux-image v-if="!preload.length" :slider="slider" :index="image2Index" ref="image2"></flux-image>
+			<flux-image :slider="slider" :index="image1Index" ref="image1"></flux-image>
+			<flux-image :slider="slider" :index="image2Index" ref="image2"></flux-image>
 		</div>
 
-		<div v-if="!loaded" class="spinner"></div>
+		<slot name="spinner">
+			<div v-if="!loaded" class="spinner">
+				<div class="pct">{{ this.loadPct }}%</div>
+				<div class="border"></div>
+			</div>
+		</slot>
 
 		<slot name="caption"></slot>
 
@@ -133,6 +138,10 @@
 				};
 			},
 
+			loadPct: function() {
+				return Math.ceil(this.imagesLoaded * 100 / this.images.slice(0).length);
+			},
+
 			currentImage: function() {
 				if (this.$refs.image1 === undefined)
 					return undefined;
@@ -170,6 +179,8 @@
 			if (this.images.length < 2 || this.transitionNames.length === 0)
 				return;
 
+			this.resize();
+
 			this.preloadImages(this.images);
 
 			window.addEventListener('resize', this.resize);
@@ -197,12 +208,18 @@
 					};
 				}
 
+				if (i === 0)
+					this.$refs.image1.init();
+
 				if (this.imagesLoaded === this.preload.length)
 					this.init();
 			},
 
 			setOptions(options) {
-				let currentSize = Object.assign({}, this.config.size);
+				let currentSize = {
+					width: this.config.width,
+					height: this.config.height
+				};
 
 				this.config = Object.assign({}, this.config, options);
 
@@ -237,11 +254,11 @@
 
 				this.$nextTick(() => {
 					// Find width
-					this.size.width = this.$refs.container.offsetWidth;
+					this.size.width = this.$refs.container.clientWidth;
 
 					// Find height
-					if (this.config.height === 'auto' && this.$refs.container.offsetHeight) {
-						this.size.height = this.$refs.container.offsetHeight;
+					if (this.config.height === 'auto' && this.$refs.container.clientHeight) {
+						this.size.height = this.$refs.container.clientHeight;
 
 					} else {
 						this.size.height = Math.floor(this.size.width / 16 * 9);
@@ -255,20 +272,20 @@
 			init() {
 				this.properties = this.properties.filter((p) => p);
 				this.preload = [];
-				this.resize();
+				this.loaded = true;
+
+				this.$refs.image2.init();
 
 				this.$nextTick(() => {
-					this.$refs.image1.setCss({ zIndex: 11 });
-					this.$refs.image2.setCss({ zIndex: 10 });
-
 					this.$refs.image1.reference = 'image1Index';
 					this.$refs.image2.reference = 'image2Index';
 
-					this.loaded = true;
-
-					if (this.config.autoplay === true)
-						this.play();
+					this.$refs.image1.setCss({ zIndex: 11 });
+					this.$refs.image2.setCss({ zIndex: 10 });
 				});
+
+				if (this.config.autoplay === true)
+					this.play();
 			},
 
 			toggleMouseOver(over) {
@@ -412,18 +429,39 @@
 		}
 	}
 
+	$spinner-size: 80px;
+
 	.spinner {
 		position: absolute;
+		top: 50%;
 		left: 50%;
-		top: 120px;
-		margin-left: -60px;
-		border: 16px solid #f3f3f3;
-		border-top: 16px solid #3498db;
-		border-bottom: 16px solid #3498db;
-		border-radius: 50%;
-		width: 120px;
-		height: 120px;
-		animation: spin 2s linear infinite;
+		margin-top: -($spinner-size / 2);
+		margin-left: -($spinner-size / 2);
+		width: $spinner-size;
+		height: $spinner-size;
+		z-index: 12;
+
+		.pct {
+			position: absolute;
+			right: 0;
+			left: 0;
+			height: $spinner-size;
+			line-height: $spinner-size;
+			text-align: center;
+			font-weight: bold;
+			z-index: 1;
+		}
+
+		.border {
+			width: 100%;
+			height: 100%;
+			border: 14px solid #f3f3f3;
+			border-top-color: #3498db;
+			border-bottom-color: #3498db;
+			border-radius: 50%;
+			background-color: #f3f3f3;
+			animation: spin 2s linear infinite;
+		}
 	}
 
 	@keyframes spin {
@@ -434,6 +472,5 @@
 	.mask {
 		position: relative;
 		overflow: visible;
-		cursor: pointer;
 	}
 </style>
