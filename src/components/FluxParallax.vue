@@ -28,11 +28,7 @@
 				width: undefined,
 				height: undefined
 			},
-			style: {
-				display: 'flex',
-				position: 'relative',
-				overflow: 'hidden'
-			}
+			style: {}
 		}),
 
 		props: {
@@ -57,7 +53,7 @@
 
 			offset: {
 				type: [Number, String],
-				default: () => '40%'
+				default: () => '60%'
 			}
 		},
 
@@ -69,33 +65,55 @@
 				return this.$refs.parallax.clientHeight;
 			},
 
-			backgroundHeight: function() {
+			offsetHeight: function() {
+				let height = {
+					px: 0
+				};
+
 				if (/^[0-9]+px$/.test(this.offset) === true)
-					return this.parallaxHeight + parseInt(this.offset);
+					height.px = parseInt(this.offset);
 
 				if (/^[0-9]+%$/.test(this.offset) === true)
-					return this.parallaxHeight * (1 + parseInt(this.offset) / 100);
+					height.px = Math.ceil(this.parallaxHeight * parseInt(this.offset) / 100);
 
-				return this.parallaxHeight;
+				height.pct = height.px * 100 / this.background.height;
+
+				return height;
 			},
 
-			finalOffset: function() {
-				return Math.floor(100 - (this.backgroundHeight * 100 / this.background.height));
+			backgroundHeight: function() {
+				let height = {
+					px: this.parallaxHeight + this.offsetHeight.px
+				};
+
+				height.pct = height.px * 100 / this.background.height;
+
+				return height;
+			},
+
+			remainderHeight: function() {
+				let height = {
+					px: this.background.height - this.backgroundHeight.px
+				};
+
+				height.pct = height.px * 100 / this.background.height;
+
+				return height;
 			}
 		},
 
 		mounted() {
-			if (this.type !== 'fixed') {
-				window.addEventListener('resize', this.resize);
+			window.addEventListener('resize', this.resize);
+
+			if (this.type !== 'fixed')
 				this.holder.addEventListener('scroll', this.handleScroll);
-			}
 		},
 
 		beforeDestroy() {
-			if (this.type !== 'fixed') {
-				window.removeEventListener('resize', this.resize);
+			window.removeEventListener('resize', this.resize);
+
+			if (this.type !== 'fixed')
 				this.holder.removeEventListener('scroll', this.handleScroll);
-			}
 		},
 
 		methods: {
@@ -135,33 +153,37 @@
 						width: parallax.clientWidth
 					});
 
-					let image = {
-						width: this.properties.width,
-						height: this.properties.height
-					};
-
-					this.background.height = this.backgroundHeight;
-					this.background.width = Math.floor(this.background.height * image.width / image.height);
-					this.background.top = 0;
-
-					if (this.background.width < this.parallax.width) {
-						this.background.width = this.parallax.width;
-						this.background.height = Math.floor(this.parallax.width * image.height / image.width);
-					}
-
 					let css = {
 						width: this.parallax.width +'px',
 						backgroundImage: 'url("'+ this.properties.src +'")',
-						backgroundSize: this.background.width +'px '+ this.background.height +'px',
-						backgroundPosition: 'center '+ this.background.top +'px',
 						backgroundRepeat: 'no-repeat'
 					};
 
 					if (this.type === 'fixed') {
-						css = Object.assign(css, {
+						Object.assign(css, {
 							backgroundPosition: 'center',
 							backgroundAttachment: 'fixed',
-							backgroundSize: 'cover',
+							backgroundSize: 'cover'
+						});
+
+					} else {
+						let image = {
+							width: this.properties.width,
+							height: this.properties.height
+						};
+
+						this.background.height = this.backgroundHeight.px;
+						this.background.width = Math.floor(this.background.height * image.width / image.height);
+						this.background.top = 0;
+
+						if (this.background.width < this.parallax.width) {
+							this.background.width = this.parallax.width;
+							this.background.height = Math.floor(this.parallax.width * image.height / image.width);
+						}
+
+						Object.assign(css, {
+							backgroundSize: this.background.width +'px '+ this.background.height +'px',
+							backgroundPosition: 'center '+ this.background.top +'px'
 						});
 					}
 
@@ -183,15 +205,11 @@
 			},
 
 			moveBackgroundByPct(pct) {
-				if (this.background.height > this.backgroundHeight) {
-					console.log(pct);
-					console.log((100 - this.finalOffset) * (pct / 100));
-					pct = (100 - this.finalOffset) * (pct / 100) + (this.finalOffset / 2);
-					//pct = ((100 - this.finalOffset) * pct / 100) + (this.finalOffset / 2);
-				}
+				if (this.remainderHeight.px > 0)
+					pct = pct * this.offsetHeight.pct / 100 + 50 - this.offsetHeight.pct / 2;
 
 				this.setCss({
-					backgroundPositionY: pct +'%'
+					backgroundPositionY: pct.toFixed(2) +'%'
 				});
 			},
 
@@ -230,7 +248,7 @@
 					pct = 100;
 
 				else
-					pct = Math.floor((positionY - this.parallax.height) * 100 / (this.view.height - this.parallax.height));
+					pct = (positionY - this.parallax.height) * 100 / (this.view.height - this.parallax.height);
 
 				this.moveBackgroundByPct(pct);
 			},
@@ -238,7 +256,7 @@
 			handleRelative(positionY) {
 				let pct;
 
-				pct = Math.floor(positionY * 100 / (this.view.height + this.parallax.height));
+				pct = positionY * 100 / (this.view.height + this.parallax.height);
 
 				this.moveBackgroundByPct(pct);
 			}
