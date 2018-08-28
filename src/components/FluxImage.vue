@@ -36,12 +36,6 @@
 			}
 		},
 
-		computed: {
-			properties: function() {
-				return this.slider.properties[this.index];
-			}
-		},
-
 		watch: {
 			index: function(newIndex, oldIndex) {
 				this.init();
@@ -70,15 +64,17 @@
 			},
 
 			initImage() {
-				if (!this.properties)
+				let properties = this.slider.properties[this.index];
+
+				if (!properties)
 					return;
 
 				let image = {
 					top: 0,
 					left: 0,
-					width: this.properties.width,
-					height: this.properties.height,
-					src: 'url("'+ this.properties.src +'")'
+					width: properties.width,
+					height: properties.height,
+					src: 'url("'+ properties.src +'")'
 				};
 
 				if (image.height / image.width >= this.slider.size.height / this.slider.size.width) {
