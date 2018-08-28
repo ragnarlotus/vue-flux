@@ -30,9 +30,9 @@
     "vue": "^2.5.17"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-rc.11",
-    "@vue/cli-service": "^3.0.0-rc.11",
-    "node-sass": "^4.9.2",
+    "@vue/cli-plugin-babel": "^3.0.1",
+    "@vue/cli-service": "^3.0.1",
+    "node-sass": "^4.9.3",
     "sass-loader": "^6.0.6",
     "vue-template-compiler": "^2.5.17"
   },
@@ -48,7 +48,9 @@
   },
   "vue": {
     "baseUrl": "/vue-flux/",
-    "css": { "extract": false }
+    "css": {
+      "extract": false
+    }
   },
   "browserslist": [
     "> 1%",
