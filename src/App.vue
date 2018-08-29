@@ -118,7 +118,21 @@
 
 			<p>Nulla hendrerit eu arcu non rhoncus. Mauris sed enim lorem. Nulla facilisi. Phasellus lacinia aliquam turpis, eu efficitur lacus ornare vel. Maecenas finibus tortor egestas, convallis augue at, blandit odio. Nunc efficitur accumsan aliquet. Sed facilisis erat sed magna rhoncus lobortis. Nunc bibendum tempor dolor, eu viverra felis sagittis vel. Fusce at ultrices ligula. Duis convallis, nulla at porta ultricies, lorem dolor consectetur massa, ac pellentesque tellus lectus quis leo. Integer id ipsum eu orci porttitor volutpat. Etiam et commodo tortor, in sagittis arcu. Vivamus tristique vestibulum leo, ut ultrices enim mollis ac.</p>
 
+			<h2>Relative</h2>
+
 			<flux-parallax src="slides/1.jpg" height="300px" type="relative" offset="80%" class="parallax">
+				<div>CONTENT</div>
+			</flux-parallax>
+
+			<h2 class="mt-4">Static</h2>
+
+			<flux-parallax src="slides/1.jpg" height="300px" type="static" offset="80%" class="parallax">
+				<div>CONTENT</div>
+			</flux-parallax>
+
+			<h2 class="mt-4">Fixed</h2>
+
+			<flux-parallax src="slides/1.jpg" height="300px" type="fixed" offset="80%" class="parallax">
 				<div>CONTENT</div>
 			</flux-parallax>
 
