@@ -138,7 +138,6 @@
 				this.view.height = this.holder.innerHeight;
 
 				Object.assign(this.parallax, {
-					top: parallax.offsetTop,
 					width: 'auto',
 					height: this.parallaxHeight
 				});
@@ -150,6 +149,7 @@
 
 				this.$nextTick(() => {
 					Object.assign(this.parallax, {
+						top: parallax.offsetTop,
 						width: parallax.clientWidth
 					});
 
