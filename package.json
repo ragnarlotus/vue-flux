@@ -20,7 +20,7 @@
   "main": "dist/vue-flux.umd.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build-docs": "vue-cli-service build --dest docs && purgecss --css public/tailwind.min.css --content public/index.html src/App.vue --out docs",
+    "build-docs": "vue-cli-service build --dest docs && purgecss --css docs/tailwind.min.css --content docs/index.html --out docs",
     "bundle": "vue-cli-service build --target lib --name vue-flux \"src/components/index.js\""
   },
   "files": [
