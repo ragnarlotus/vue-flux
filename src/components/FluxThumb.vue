@@ -1,13 +1,11 @@
 <template>
-	<div :style="style" :title="caption"></div>
+	<div :style="style" :title="caption" class="flux-thumb" ref="thumb"></div>
 </template>
 
 <script>
 	export default {
 		data: () => ({
 			style: {
-				width: '160px',
-				height: '90px',
 				overflow: 'hidden'
 			}
 		}),
@@ -39,7 +37,7 @@
 			}
 		},
 
-		created() {
+		mounted() {
 			this.init();
 		},
 
@@ -57,8 +55,8 @@
 				};
 
 				let thumb = {
-					width: parseInt(this.style.width),
-					height: parseInt(this.style.height)
+					width: parseInt(this.$refs.thumb.clientWidth),
+					height: parseInt(this.$refs.thumb.clientHeight)
 				};
 
 				if (image.height / image.width >= thumb.height / thumb.width) {
@@ -86,3 +84,10 @@
 		}
 	};
 </script>
+
+<style lang="scss">
+	.vue-flux .flux-thumb {
+		width: 160px;
+		height: 90px;
+	}
+</style>
