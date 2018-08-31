@@ -6,8 +6,8 @@
 
 		<nav :class="indexClass" @click="toggle()" @touchend="toggle">
 			<ul ref="thumbs">
-				<li v-for="(image, index) in images" :key="index" :class="current(index)" @click="hide(index)" @touchend="hide(index)">
-					<flux-thumb :slider="slider" :index="index" :css="thumbStyle"></flux-thumb>
+				<li v-for="(image, index) in images" :key="index" :class="current(index)" @click="showImage(index)" @touchend="showImage(index)">
+					<flux-thumb :slider="slider" :index="index"></flux-thumb>
 				</li>
 			</ul>
 		</nav>
@@ -26,11 +26,7 @@
 
 		data: () => ({
 			visible: false,
-			delay: 500,
-			thumbStyle: {
-				width: '160px',
-				height: '90px'
-			}
+			delay: 500
 		}),
 
 		props: {
@@ -61,7 +57,7 @@
 			indexClass: function() {
 				let indexClass = '';
 
-				if (this.visible)
+				if (this.visible && this.slider.index)
 					indexClass += 'visible';
 
 				if (this.slider.mouseOver)
@@ -73,6 +69,9 @@
 
 		methods: {
 			toggle(event) {
+				if (!this.slider.index)
+					return;
+
 				if (event)
 					event.preventDefault();
 
@@ -93,17 +92,25 @@
 				});
 			},
 
+			showImage(index) {
+				if (this.slider.index && this.visible) {
+					this.hide(index);
+					return;
+				}
+
+				this.slider.mouseOver = false;
+				this.slider.showImage(index);
+			},
+
 			hide(index) {
 				this.$refs.thumbs.clientHeight;
 				this.$refs.thumbs.style.marginTop = '100%';
 
 				setTimeout(() => {
-					if (typeof index !== 'undefined') {
-						this.slider.mouseOver = false;
-						this.slider.showImage(index);
-					}
-
 					this.visible = false;
+
+					if (typeof index !== 'undefined')
+						this.showImage(index);
 				}, this.delay);
 			},
 
