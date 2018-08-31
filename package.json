@@ -10,7 +10,8 @@
   "keywords": [
     "vue",
     "image",
-    "slider"
+    "slider",
+    "parallax"
   ],
   "license": "MIT",
   "bugs": {

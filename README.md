@@ -6,7 +6,7 @@ This is an image slider developed with [Vuejs](https://vuejs.org/) 2 which comes
 
 You can view a [demo here](https://deulos.github.io/vue-flux/).
 
-### Features
+## Features
 | Feature | Description |
 |---------|-------------|
 | Responsive | The slider and the images are adapted to container to fill it always |
@@ -83,7 +83,7 @@ Weight is just 77KB so is pretty light having only the essential CSS. It also do
 ## Parallax
 
 ``` html
-<flux-parallax src="slides/1.jpg" height="300px" type="relative">
+<flux-parallax src="slides/1.jpg" height="300px" offset="80%" type="relative">
    <div>CONTENT</div>
 </flux-parallax>
 ```

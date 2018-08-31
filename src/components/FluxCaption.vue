@@ -1,6 +1,6 @@
 <template>
 	<transition name="fade">
-		<div v-if="caption" class="caption">{{ caption }}</div>
+		<div v-if="caption" class="flux-caption">{{ caption }}</div>
 	</transition>
 </template>
 
@@ -40,16 +40,8 @@
 	};
 </script>
 
-<style lang="scss" scoped>
-	.fade-enter, .fade-leave-to {
-		opacity: 0;
-	}
-
-	.fade-enter-active, .fade-leave-active {
-		transition: opacity 0.3s ease-in;
-	}
-
-	.caption {
+<style lang="scss">
+	.vue-flux .flux-caption {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -59,5 +51,13 @@
 		text-align: center;
 		background-color: rgba(0, 0, 0, 0.65);
 		z-index: 100;
+
+		&.fade-enter, &.fade-leave-to {
+			opacity: 0;
+		}
+
+		&.fade-enter-active, &.fade-leave-active {
+			transition: opacity 0.3s ease-in;
+		}
 	}
 </style>

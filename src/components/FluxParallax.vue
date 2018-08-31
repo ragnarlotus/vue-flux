@@ -1,5 +1,5 @@
 <template>
-	<div :style="style" ref="parallax">
+	<div class="flux-parallax" :style="style" ref="parallax">
 		<img v-if="loaded === false" :src="src" alt="" @load="setProperties" @error="setProperties" ref="image">
 		<slot></slot>
 	</div>
@@ -264,8 +264,8 @@
 	};
 </script>
 
-<style lang="scss" scoped>
-	img {
+<style lang="scss">
+	.flux-parallax img {
 		position: absolute;
 		visibility: hidden;
 	}
