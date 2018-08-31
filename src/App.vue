@@ -120,19 +120,19 @@
 
 			<h2>Relative</h2>
 
-			<flux-parallax src="slides/1.jpg" height="300px" type="relative" offset="80%" class="parallax">
+			<flux-parallax src="slides/1.jpg" height="300px" type="relative" offset="80%">
 				<div>CONTENT</div>
 			</flux-parallax>
 
 			<h2 class="mt-4">Static</h2>
 
-			<flux-parallax src="slides/1.jpg" height="300px" type="static" offset="80%" class="parallax">
+			<flux-parallax src="slides/1.jpg" height="300px" type="static" offset="80%">
 				<div>CONTENT</div>
 			</flux-parallax>
 
 			<h2 class="mt-4">Fixed</h2>
 
-			<flux-parallax src="slides/1.jpg" height="300px" type="fixed" offset="80%" class="parallax">
+			<flux-parallax src="slides/1.jpg" height="300px" type="fixed" offset="80%">
 				<div>CONTENT</div>
 			</flux-parallax>
 
@@ -183,7 +183,7 @@
 			activeTransitionClass: 'bg-black',
 			inactiveTransitionClass: 'bg-grey-darkest hover:bg-black',
 			fluxOptions: {
-				autoplay: false
+				autoplay: true
 			},
 			fluxImages: [
 				'slides/1.jpg',
@@ -204,7 +204,7 @@
 			},
 
 			currentTransition: function() {
-				if (!this.rendered)
+				if (!this.rendered || !this.$refs.slider || !this.$refs.slider.transition)
 					return undefined;
 
 				return this.$refs.slider.transition.current;
@@ -244,7 +244,7 @@
 		font-size: .975rem;
 	}
 
-	.parallax {
+	.flux-parallax {
 		display: flex;
 		position: relative;
 		font-size: 3rem;

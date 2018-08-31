@@ -1,5 +1,5 @@
 <template>
-	<div v-if="slider !== undefined && slider.loaded">
+	<div v-if="slider !== undefined && slider.loaded" class="flux-index">
 		<transition name="fade">
 			<div v-if="displayButton" class="toggle" @click="toggle()"></div>
 		</transition>
@@ -43,6 +43,9 @@
 			},
 
 			displayButton: function() {
+				if (!this.slider.index)
+					return false;
+
 				if (this.slider.mouseOver !== true)
 					return false;
 
@@ -111,84 +114,86 @@
 	};
 </script>
 
-<style lang="scss" scoped>
-	.fade-enter, .fade-leave-to {
-		opacity: 0;
-	}
+<style lang="scss">
+	.vue-flux .flux-index {
+		.fade-enter, .fade-leave-to {
+			opacity: 0;
+		}
 
-	.fade-enter-active, .fade-leave-active {
-		transition: opacity 0.3s ease-in;
-	}
+		.fade-enter-active, .fade-leave-active {
+			transition: opacity 0.3s ease-in;
+		}
 
-	.toggle {
-		position: absolute;
-		left: 50%;
-		bottom: 55px;
-		margin-left: -25px;
-		width: 50px;
-		height: 50px;
-		cursor: pointer;
-		border-radius: 50%;
-		background-color: rgba(0, 0, 0, 0.6);
-		background-repeat: no-repeat;
-		background-position: center center;
-		background-size: 40%;
-		background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAAA6ElEQVRYhe2ZUQ2DMBRFK6ESkFAJSEBCJSABB0iYBCRUAlKQcPexLtlHW+4Ly7Ju9yTvj3ffCQktUAdgBZCIurkCADyAjcyIlYxI9icAwcHGWBi4GPqPinQyZCyfloakSSQt6QaSlnSDUBgYDf17RXozZMwOwIjH3TqrqTQwD53JjKHS78n+ueYgRPfkh/GsfKN/YDJOHAKRMTwv3sml5iiJ5zCWtSK8GjKmv9hcJC3pBpKWdANJX5Hub0d8GdzPu4cQvwZ6/Bo3LDXAF/33sDAWBmpHJJA0haRJJC3pBlel33Zi293Z+B2f9cNhdwgb0QAAAABJRU5ErkJggg==');
-		z-index: 101;
-	}
+		.toggle {
+			position: absolute;
+			left: 50%;
+			bottom: 55px;
+			margin-left: -25px;
+			width: 50px;
+			height: 50px;
+			cursor: pointer;
+			border-radius: 50%;
+			background-color: rgba(0, 0, 0, 0.6);
+			background-repeat: no-repeat;
+			background-position: center center;
+			background-size: 40%;
+			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAAA6ElEQVRYhe2ZUQ2DMBRFK6ESkFAJSEBCJSABB0iYBCRUAlKQcPexLtlHW+4Ly7Ju9yTvj3ffCQktUAdgBZCIurkCADyAjcyIlYxI9icAwcHGWBi4GPqPinQyZCyfloakSSQt6QaSlnSDUBgYDf17RXozZMwOwIjH3TqrqTQwD53JjKHS78n+ueYgRPfkh/GsfKN/YDJOHAKRMTwv3sml5iiJ5zCWtSK8GjKmv9hcJC3pBpKWdANJX5Hub0d8GdzPu4cQvwZ6/Bo3LDXAF/33sDAWBmpHJJA0haRJJC3pBlel33Zi293Z+B2f9cNhdwgb0QAAAABJRU5ErkJggg==');
+			z-index: 101;
+		}
 
-	.toggle:hover {
-		transition: background-color 0.2s ease-in;
-		background-color: rgba(0, 0, 0, 0.9);
-	}
+		.toggle:hover {
+			transition: background-color 0.2s ease-in;
+			background-color: rgba(0, 0, 0, 0.9);
+		}
 
-	nav {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		display: block;
-		margin: 0;
-		overflow: hidden;
-	}
+		nav {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			display: block;
+			margin: 0;
+			overflow: hidden;
+		}
 
-	nav.visible {
-		z-index: 101;
-	}
+		nav.visible {
+			z-index: 101;
+		}
 
-	ul {
-		display: block;
-		height: 100%;
-		margin: 0;
-		margin-top: 100%;
-		padding: 18px 10px;
-		list-style-type: none;
-		text-align: center;
-		overflow-y: auto;
-		background-color: rgba(0, 0, 0, 0.8);
-		transition: all 0.5s linear;
-	}
+		ul {
+			display: block;
+			height: 100%;
+			margin: 0;
+			margin-top: 100%;
+			padding: 18px 10px;
+			list-style-type: none;
+			text-align: center;
+			overflow-y: auto;
+			background-color: rgba(0, 0, 0, 0.8);
+			transition: all 0.5s linear;
+		}
 
-	li {
-		position: relative;
-		display: inline-block;
-		margin: 8px 8px;
-		cursor: pointer;
-		transition: all 0.3s ease;
-	}
+		li {
+			position: relative;
+			display: inline-block;
+			margin: 8px 8px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
 
-	.mouse-over li:hover {
-		box-shadow: 0px 0px 3px 2px rgba(255,255,255,0.6);
-	}
+		.mouse-over li:hover {
+			box-shadow: 0px 0px 3px 2px rgba(255,255,255,0.6);
+		}
 
-	li.current {
-		cursor: auto;
-		border: 1px solid white;
-		box-shadow: none;
-	}
+		li.current {
+			cursor: auto;
+			border: 1px solid white;
+			box-shadow: none;
+		}
 
-	ul > li:last-child {
-		margin-bottom: 26px;
+		ul > li:last-child {
+			margin-bottom: 26px;
+		}
 	}
 </style>

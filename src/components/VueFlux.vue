@@ -419,7 +419,7 @@
 	}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	.vue-flux {
 		position: relative;
 
