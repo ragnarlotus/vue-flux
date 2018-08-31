@@ -108,13 +108,13 @@
 				let css = this.getBasicSideCss('top');
 
 				let t = {
-					rx: '90',
+					rx: '90deg',
 					tx: '0',
-					ty: '-'+ Math.ceil(this.slider.size.height / 2),
-					tz: Math.ceil(this.slider.size.height / 2)
+					ty: '-50%',
+					tz: (this.slider.size.height / 2).toFixed(2) +'px'
 				};
 
-				css.transform = 'rotateX('+ t.rx +'deg) translate3d('+ t.tx +'px, '+ t.ty +'px, '+ t.tz +'px)';
+				css.transform = 'rotateX('+ t.rx +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
 
 				return css;
 			},
@@ -132,13 +132,13 @@
 				let css = this.getBasicSideCss('bottom');
 
 				let t = {
-					rx: '-90',
+					rx: '-90deg',
 					tx: '0',
-					ty: Math.ceil(this.slider.size.height / 2),
-					tz: Math.ceil(this.slider.size.height / 2)
+					ty: '50%',
+					tz: (this.slider.size.height / 2).toFixed(2) +'px'
 				};
 
-				css.transform = 'rotateX('+ t.rx +'deg) translate3d('+ t.tx +'px, '+ t.ty +'px, '+ t.tz +'px)';
+				css.transform = 'rotateX('+ t.rx +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
 
 				return css;
 			},
@@ -155,13 +155,13 @@
 				css.height = size.height +'px';
 
 				let t = {
-					ry: '-90',
-					tx: -Math.ceil(size.width / 2),
-					ty:'0',
-					tz: Math.ceil(size.width / 2)
+					ry: '-90deg',
+					tx: '-50%',
+					ty: '0',
+					tz: (size.width / 2).toFixed(2) +'px'
 				};
 
-				css.transform = 'rotateY('+ t.ry +'deg) translate3d('+ t.tx +'px, '+ t.ty +'px, '+ t.tz +'px)';
+				css.transform = 'rotateY('+ t.ry +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
 
 				return css;
 			},
@@ -178,13 +178,13 @@
 				css.height = size.height +'px';
 
 				let t = {
-					ry: '90',
-					tx: Math.ceil(size.width / 2),
+					ry: '90deg',
+					tx: '50%',
 					ty: '0',
-					tz: Math.ceil(parseInt(this.style.width) - size.width / 2)
+					tz: (parseInt(this.style.width) - size.width / 2).toFixed(2) +'px'
 				};
 
-				css.transform = 'rotateY('+ t.ry +'deg) translate3d('+ t.tx +'px, '+ t.ty +'px, '+ t.tz +'px)';
+				css.transform = 'rotateY('+ t.ry +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
 
 				return css;
 			},
@@ -218,21 +218,21 @@
 				let height = parseInt(this.style.height);
 
 				let t = {
-					rx: 90,
-					ty: -Math.ceil(height / 2),
-					tz: Math.ceil(height / 2)
+					rx: '90deg',
+					ty: '-50%',
+					tz: (height / 2).toFixed(2) +'px'
 				};
 
 				this.transform({
-					transform: 'rotateX('+ t.rx +'deg) translate3d(0, '+ t.ty +'px, '+ t.tz +'px)'
+					transform: 'rotateX('+ t.rx +') translate3d(0, '+ t.ty +', '+ t.tz +')'
 				});
 			},
 
 			turnBack(to) {
-				let deg = 180;
+				let deg = '180';
 
 				if (to === 'left')
-					deg = -180;
+					deg = '-180';
 
 				this.transform({
 					transform: 'rotateY('+ deg +'deg)'
@@ -243,13 +243,13 @@
 				let height = parseInt(this.style.height);
 
 				let t = {
-					rx: -90,
-					ty: Math.ceil(height / 2),
-					tz: Math.ceil(height / 2)
+					rx: '-90deg',
+					ty: '50%',
+					tz: (height / 2).toFixed(2) +'px'
 				};
 
 				this.transform({
-					transform: 'rotateX('+ t.rx +'deg) translate3d(0, '+ t.ty +'px, '+ t.tz +'px)'
+					transform: 'rotateX('+ t.rx +') translate3d(0, '+ t.ty +', '+ t.tz +')'
 				});
 			},
 
@@ -257,13 +257,13 @@
 				let width = parseInt(this.style.width);
 
 				let t = {
-					ry: 90,
-					tx: Math.ceil(width / 2),
-					tz: Math.ceil(width / 2)
+					ry: '90deg',
+					tx: '50%',
+					tz: (width / 2).toFixed(2) +'px'
 				};
 
 				this.transform({
-					transform: 'rotateY('+ t.ry +'deg) translate3d('+ t.tx +'px, 0, '+ t.tz +'px)'
+					transform: 'rotateY('+ t.ry +') translate3d('+ t.tx +', 0, '+ t.tz +')'
 				});
 			},
 
@@ -271,13 +271,13 @@
 				let width = parseInt(this.style.width);
 
 				let t = {
-					ry: -90,
-					tx: -Math.ceil(width / 2),
-					tz: Math.ceil(width / 2)
+					ry: '-90deg',
+					tx: '-50%',
+					tz: (width / 2).toFixed(2) +'px'
 				};
 
 				this.transform({
-					transform: 'rotateY('+ t.ry +'deg) translate3d('+ t.tx +'px, 0, '+ t.tz +'px)'
+					transform: 'rotateY('+ t.ry +') translate3d('+ t.tx +', 0, '+ t.tz +')'
 				});
 			}
 		}
