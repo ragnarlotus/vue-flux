@@ -223,11 +223,12 @@
 
 				this.config = Object.assign({}, this.config, options);
 
-				this.size.width = this.config.width;
-				this.size.height = this.config.height;
+				if (currentSize.width !== this.config.width || currentSize.height !== this.config.height) {
+					this.size.width = this.config.width;
+					this.size.height = this.config.height;
 
-				if (currentSize.width !== this.config.width || currentSize.height !== this.config.height)
 					this.resize();
+				}
 			},
 
 			setTransitions(transitions) {
