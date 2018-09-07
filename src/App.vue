@@ -163,8 +163,8 @@
 	import FluxControls from './components/FluxControls.vue';
 	import FluxIndex from './components/FluxIndex.vue';
 	import FluxPagination from './components/FluxPagination.vue';
-	import FluxParallax from './components/FluxParallax.vue';
 	import Transitions from './components/transitions/index.js';
+	import FluxParallax from './components/FluxParallax.vue';
 
 	export default {
 		name: 'app',

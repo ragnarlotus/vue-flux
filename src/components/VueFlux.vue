@@ -1,9 +1,9 @@
 <template>
-	<div class="vue-flux" ref="container" @mouseover="toggleMouseOver(true)" @mouseleave="toggleMouseOver(false)">
+	<div class="vue-flux" :class="inFullscreen()? 'fullscreen' : ''" ref="container" @mouseover="toggleMouseOver(true)" @mouseleave="toggleMouseOver(false)">
 		<img v-for="(src, index) in preload" :key="index" :src="path + src" alt="" @load="addImage(index)" @error="addImage(index)" ref="images">
 
 		<div class="mask" :style="sizePx" ref="mask" @touchstart="dragging" @touchend="releasing">
-			<component v-if="transition.current" :is="transition.current" ref="transition" :slider="slider" :direction="direction"></component>
+			<component v-if="transition.current" :is="transition.current" ref="transition" :slider="slider"></component>
 			<flux-image :slider="slider" :index="image1Index" ref="image1"></flux-image>
 			<flux-image :slider="slider" :index="image2Index" ref="image2"></flux-image>
 		</div>
@@ -72,6 +72,10 @@
 			transitions: {
 				type: Object,
 				required: true
+			},
+			transitionOptions: {
+				type: Object,
+				default: () => {}
 			},
 			path: {
 				type: String,
@@ -163,10 +167,6 @@
 					nextIndex = 0;
 
 				return this.transitionNames[nextIndex];
-			},
-
-			direction: function() {
-				return this.currentImage.index < this.nextImage.index? 'right' : 'left';
 			}
 		},
 
@@ -240,6 +240,15 @@
 					this.transition.last = this.transitionNames.length - 1;
 			},
 
+			setTransitionOptions(transition, defaultValues = {}) {
+				let transitionOptions = this.transitionOptions || {};
+				let options = transitionOptions[this.transition.current] || {};
+
+				Object.assign(transition, {
+					direction: this.currentImage.index > this.nextImage.index? 'left' : 'right'
+				}, defaultValues, options);
+			},
+
 			resize() {
 				this.size.width = undefined;
 				this.size.height = undefined;
@@ -258,12 +267,11 @@
 					this.size.width = this.$refs.container.clientWidth;
 
 					// Find height
-					if (this.config.height === 'auto' && this.$refs.container.clientHeight) {
+					if (this.config.height === 'auto' && this.$refs.container.clientHeight)
 						this.size.height = this.$refs.container.clientHeight;
 
-					} else {
+					else
 						this.size.height = Math.floor(this.size.width / 16 * 9);
-					}
 
 					this.$refs.image1.init();
 					this.$refs.image2.init();
@@ -294,6 +302,50 @@
 					return;
 
 				this.mouseOver = over;
+			},
+
+			inFullscreen() {
+				return (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) !== undefined;
+			},
+
+			requestFullscreen() {
+				let container = this.$refs.container;
+
+				if (container.requestFullscreen)
+					container.requestFullscreen();
+
+				else if (container.mozRequestFullScreen)
+					container.mozRequestFullScreen();
+
+				else if (container.webkitRequestFullscreen)
+					container.webkitRequestFullscreen();
+
+				else if (container.msRequestFullscreen)
+					container.msRequestFullscreen();
+			},
+
+			exitFullscreen() {
+				if (document.exitFullscreen)
+					document.exitFullscreen();
+
+				else if (document.mozCancelFullScreen)
+					document.mozCancelFullScreen();
+
+				else if (document.webkitExitFullscreen)
+					document.webkitExitFullscreen();
+
+				else if (document.msExitFullscreen)
+					document.msExitFullscreen();
+			},
+
+			toggleFullscreen() {
+				if (this.inFullscreen())
+					this.exitFullscreen();
+
+				else
+					this.requestFullscreen();
+
+				this.resize();
 			},
 
 			play(index) {
@@ -364,7 +416,7 @@
 					}
 
 					this.$nextTick(() => {
-						let timeout = transition !== undefined? this.$refs.transition.totalDuration + 20 : 0;
+						let timeout = transition !== undefined? this.$refs.transition.totalDuration : 0;
 
 						setTimeout(() => {
 							currentImage.setCss({ zIndex: 10 });
@@ -423,6 +475,11 @@
 <style lang="scss">
 	.vue-flux {
 		position: relative;
+
+		&.fullscreen {
+			width: 100%;
+			height: 100%;
+		}
 
 		img {
 			position: absolute;

@@ -6,6 +6,8 @@
 	import FluxCube from '../FluxCube.vue';
 
 	export default {
+		name: 'transitionSlide3d',
+
 		components: {
 			FluxCube
 		},
@@ -13,12 +15,12 @@
 		data: () => ({
 			index: {},
 			totalDuration: 1400,
+			perspective: '1600px',
 			easing: 'ease-out'
 		}),
 
 		props: {
-			slider: Object,
-			direction: String
+			slider: Object
 		},
 
 		computed: {
@@ -28,6 +30,8 @@
 		},
 
 		created() {
+			this.slider.setTransitionOptions(this);
+
 			this.index = {
 				front: this.slider.currentImage.index,
 				left: this.slider.nextImage.index,
@@ -36,7 +40,7 @@
 		},
 
 		mounted() {
-			this.slider.mask.style.perspective = '1600px';
+			this.slider.mask.style.perspective = this.perspective;
 
 			this.slider.currentImage.hide();
 			this.slider.nextImage.hide();

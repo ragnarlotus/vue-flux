@@ -2,6 +2,8 @@
 
 <script>
 	export default {
+		name: 'transitionFade',
+
 		data: () => ({
 			totalDuration: 1200,
 			easing: 'ease-in'
@@ -9,6 +11,10 @@
 
 		props: {
 			slider: Object
+		},
+
+		created() {
+			this.slider.setTransitionOptions(this);
 		},
 
 		mounted() {

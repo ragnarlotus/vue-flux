@@ -10,6 +10,8 @@
 	import FluxImage from '../FluxImage.vue';
 
 	export default {
+		name: 'transitionTurn3d',
+
 		components: {
 			FluxCube,
 			FluxImage
@@ -38,8 +40,7 @@
 		}),
 
 		props: {
-			slider: Object,
-			direction: String
+			slider: Object
 		},
 
 		computed: {
@@ -53,6 +54,8 @@
 		},
 
 		created() {
+			this.slider.setTransitionOptions(this);
+
 			this.pageWidth = Math.ceil(this.slider.size.width / 2);
 
 			if (this.direction !== 'left') {

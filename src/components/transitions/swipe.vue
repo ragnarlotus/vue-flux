@@ -9,6 +9,8 @@
 	import FluxImage from '../FluxImage.vue';
 
 	export default {
+		name: 'transitionSwipe',
+
 		components: {
 			FluxWrapper,
 			FluxImage
@@ -23,8 +25,7 @@
 		}),
 
 		props: {
-			slider: Object,
-			direction: String
+			slider: Object
 		},
 
 		computed: {
@@ -34,6 +35,8 @@
 		},
 
 		created() {
+			this.slider.setTransitionOptions(this);
+
 			if (this.direction === 'left') {
 				this.wrapperCss.left = 'auto';
 				this.wrapperCss.right = 0;

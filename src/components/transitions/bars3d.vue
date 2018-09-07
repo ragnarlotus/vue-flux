@@ -6,6 +6,8 @@
 	import FluxGrid from '../FluxGrid.vue';
 
 	export default {
+		name: 'transitionBars3d',
+
 		components: {
 			FluxGrid
 		},
@@ -21,8 +23,7 @@
 		}),
 
 		props: {
-			slider: Object,
-			direction: String
+			slider: Object
 		},
 
 		computed: {
@@ -32,6 +33,12 @@
 		},
 
 		created() {
+			this.slider.setTransitionOptions(this, {
+				numCols: Math.floor(this.slider.size.width / 90)
+			});
+
+			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
+
 			this.index = {
 				front: this.slider.currentImage.index,
 				top: this.slider.nextImage.index,
@@ -39,9 +46,6 @@
 				left: '#333',
 				right: '#333'
 			};
-
-			this.numCols = Math.floor(this.slider.size.width / 90);
-			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
 		},
 
 		mounted() {
