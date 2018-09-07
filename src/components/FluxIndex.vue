@@ -162,10 +162,12 @@
 			display: block;
 			margin: 0;
 			overflow: hidden;
+			visibility: hidden;
 		}
 
 		nav.visible {
 			z-index: 101;
+			visibility: visible;
 		}
 
 		ul {
