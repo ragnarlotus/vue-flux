@@ -10,6 +10,8 @@
 	import FluxImage from '../FluxImage.vue';
 
 	export default {
+		name: 'transitionSlide2d',
+
 		components: {
 			FluxWrapper,
 			FluxImage
@@ -28,8 +30,7 @@
 		}),
 
 		props: {
-			slider: Object,
-			direction: String
+			slider: Object
 		},
 
 		computed: {
@@ -39,6 +40,8 @@
 		},
 
 		created() {
+			this.slider.setTransitionOptions(this);
+
 			this.index.left = this.slider.currentImage.index;
 			this.index.right = this.slider.nextImage.index;
 

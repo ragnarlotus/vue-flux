@@ -6,6 +6,8 @@
 	import FluxImage from '../FluxImage.vue';
 
 	export default {
+		name: 'transitionKenburn',
+
 		components: {
 			FluxImage
 		},
@@ -17,11 +19,12 @@
 		}),
 
 		props: {
-			slider: Object,
-			direction: String
+			slider: Object
 		},
 
 		created() {
+			this.slider.setTransitionOptions(this);
+
 			this.index = this.slider.currentImage.index;
 
 			if (this.direction === 'left')

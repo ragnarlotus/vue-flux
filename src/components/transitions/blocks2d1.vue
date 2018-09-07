@@ -6,6 +6,8 @@
 	import FluxGrid from '../FluxGrid.vue';
 
 	export default {
+		name: 'transitionBlocks2d1',
+
 		components: {
 			FluxGrid
 		},
@@ -21,8 +23,7 @@
 		}),
 
 		props: {
-			slider: Object,
-			direction: String
+			slider: Object
 		},
 
 		computed: {
@@ -32,12 +33,16 @@
 		},
 
 		created() {
+			this.slider.setTransitionOptions(this, {
+				numRows: Math.floor(this.slider.size.height / 90),
+				numCols: Math.floor(this.slider.size.width / 90)
+			});
+
+			this.totalDuration = this.tileDelay + this.tileDuration;
+
 			this.index = {
 				front: this.slider.currentImage.index
 			};
-			this.numRows = Math.floor(this.slider.size.height / 90);
-			this.numCols = Math.floor(this.slider.size.width / 90);
-			this.totalDuration = this.tileDelay + this.tileDuration;
 		},
 
 		mounted() {
