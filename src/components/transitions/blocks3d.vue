@@ -39,7 +39,7 @@
 				numCols: Math.floor(this.slider.size.width / 120)
 			});
 
-			this.totalDuration = this.tileDelay * this.numRows * 2 + this.tileDuration;
+			this.totalDuration = this.tileDelay * (this.numRows > this.numCols? this.numRows : this.numCols) * 2;
 
 			this.index = {
 				front: this.slider.currentImage.index,
