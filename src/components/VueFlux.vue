@@ -1,5 +1,5 @@
 <template>
-	<div class="vue-flux" :class="inFullscreen()? 'fullscreen' : ''" ref="container" @mouseover="toggleMouseOver(true)" @mouseleave="toggleMouseOver(false)">
+	<div class="vue-flux" :class="inFullscreen()? 'fullscreen' : ''" ref="container" @mouseover="toggleMouseOver(true)" @mouseleave="toggleMouseOver(false)" @dblclick="toggleFullscreen()">
 		<img v-for="(src, index) in preload" :key="index" :src="path + src" alt="" @load="addImage(index)" @error="addImage(index)" ref="images">
 
 		<div class="mask" :style="sizePx" ref="mask" @touchstart="dragging" @touchend="releasing">
@@ -38,7 +38,7 @@
 		data: () => ({
 			config: {
 				autoplay: false,
-				fullscreen: false,
+				fullscreen: true,
 				delay: 5000,
 				width: '100%',
 				height: 'auto'
@@ -339,6 +339,9 @@
 			},
 
 			toggleFullscreen() {
+				if (this.fullscreen === false)
+					return;
+
 				if (this.inFullscreen())
 					this.exitFullscreen();
 
