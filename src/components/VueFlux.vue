@@ -1,8 +1,8 @@
 <template>
-	<div class="vue-flux" :class="inFullscreen()? 'fullscreen' : ''" ref="container" @mouseover="toggleMouseOver(true)" @mouseleave="toggleMouseOver(false)" @dblclick="toggleFullscreen()">
+	<div class="vue-flux" :class="inFullscreen()? 'fullscreen' : ''" ref="container" @mouseover="toggleMouseOver(true)" @mouseleave="toggleMouseOver(false)" @dblclick="toggleFullscreen()" @touchstart="touchStart" @touchend="touchEnd">
 		<img v-for="(src, index) in preload" :key="index" :src="path + src" alt="" @load="addImage(index)" @error="addImage(index)" ref="images">
 
-		<div class="mask" :style="sizePx" ref="mask" @touchstart="dragging" @touchend="releasing">
+		<div class="mask" :style="sizePx" ref="mask">
 			<component v-if="transition.current" :is="transition.current" ref="transition" :slider="slider"></component>
 			<flux-image :slider="slider" :index="image1Index" ref="image1"></flux-image>
 			<flux-image :slider="slider" :index="image2Index" ref="image2"></flux-image>
@@ -38,7 +38,8 @@
 		data: () => ({
 			config: {
 				autoplay: false,
-				fullscreen: true,
+				bindKeys: false,
+				fullscreen: false,
 				delay: 5000,
 				width: '100%',
 				height: 'auto'
@@ -54,8 +55,10 @@
 				last: undefined
 			},
 			mouseOver: false,
-			dragStartX: undefined,
-			dragStartY: undefined,
+			touchStartX: 0,
+			touchStartY: 0,
+			touchStartTime: 0,
+			touchEndTime: 0,
 			image1Index: 0,
 			image2Index: 1,
 			imagesLoaded: 0,
@@ -97,7 +100,7 @@
 			},
 
 			touchable: function() {
-				return 'touchstart' in document.documentElement;
+				return true == ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch);
 			},
 
 			caption: function() {
@@ -184,10 +187,16 @@
 			this.preloadImages(this.images);
 
 			window.addEventListener('resize', this.resize);
+
+			if (this.config.bindKeys)
+				window.addEventListener('keydown', this.keydown);
 		},
 
 		beforeDestroy() {
 			window.removeEventListener('resize', this.resize);
+
+			if (this.config.bindKeys)
+				window.removeEventListener('keydown', this.keydown);
 		},
 
 		methods: {
@@ -438,17 +447,35 @@
 				});
 			},
 
-			dragging(event) {
-				this.dragStartX = event.touches[0].clientX;
-				this.dragStartY = event.touches[0].clientY;
-				event.preventDefault();
+			keydown(event) {
+				if (/ArrowLeft|Left/.test(event.key))
+					this.showImage('previous');
+
+				else if (/ArrowRight|Right/.test(event.key))
+					this.showImage('next');
 			},
 
-			releasing(event) {
+			touchStart(event) {
 				event.preventDefault();
 
+				this.touchStartTime = Date.now();
+				this.touchStartX = event.touches[0].clientX;
+				this.touchStartY = event.touches[0].clientY;
+			},
+
+			touchEnd(event) {
+				event.preventDefault();
+
+				let previousTouchTime = this.touchEndTime;
+				this.touchEndTime = Date.now();
+
+				if (this.touchEndTime - previousTouchTime < 200) {
+					this.toggleFullscreen();
+					return;
+				}
+
 				let triggerX = Math.floor(this.size.width / 3);
-				let offsetX = event.changedTouches[0].clientX - this.dragStartX;
+				let offsetX = event.changedTouches[0].clientX - this.touchStartX;
 
 				if (offsetX > 0 && offsetX > triggerX) {
 					this.showImage('previous');
@@ -464,7 +491,7 @@
 					return;
 
 				let triggerY = Math.floor(this.size.height / 3);
-				let offsetY = event.changedTouches[0].clientY - this.dragStartY;
+				let offsetY = event.changedTouches[0].clientY - this.touchStartY;
 
 				if (offsetY < 0 && offsetY < -triggerY) {
 					this.index.show();
