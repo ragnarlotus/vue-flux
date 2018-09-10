@@ -4,9 +4,9 @@
 			<div v-if="displayButton" class="toggle" @click="toggle()"></div>
 		</transition>
 
-		<nav :class="indexClass" @click="toggle()" @touchend="toggle">
+		<nav :class="indexClass" @click="click" @touchstart="touchStart" @touchend="touchEnd">
 			<ul ref="thumbs">
-				<li v-for="(image, index) in images" :key="index" :class="current(index)" @click="showImage(index)" @touchend="showImage(index)">
+				<li v-for="(image, index) in images" :key="index" :class="current(index)" @click="click(index)" @touchstart="touchStart($event, index)" @touchend="touchEnd($event, index)">
 					<flux-thumb :slider="slider" :index="index"></flux-thumb>
 				</li>
 			</ul>
@@ -26,7 +26,8 @@
 
 		data: () => ({
 			visible: false,
-			delay: 500
+			delay: 500,
+			touchStartTime: 0
 		}),
 
 		props: {
@@ -68,12 +69,39 @@
 		},
 
 		methods: {
-			toggle(event) {
-				if (!this.slider.index)
+			touchStart(event) {
+				event.stopPropagation();
+				this.touchStartTime = Date.now();
+			},
+
+			touchEnd(event, index) {
+				event.stopPropagation();
+				let offsetTime = Date.now() - this.touchStartTime;
+
+				if (offsetTime > 200)
 					return;
 
-				if (event)
-					event.preventDefault();
+				if (typeof index === 'undefined')
+					this.toggle();
+
+				else
+					this.showImage(index);
+			},
+
+			click(index) {
+				if (this.slider.touchable)
+					return;
+
+				if (typeof index === 'undefined')
+					this.toggle();
+
+				else
+					this.showImage(index);
+			},
+
+			toggle() {
+				if (!this.slider.index)
+					return;
 
 				if (!this.visible)
 					this.show();
