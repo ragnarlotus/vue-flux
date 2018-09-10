@@ -273,14 +273,21 @@
 
 				this.$nextTick(() => {
 					// Find width
-					this.size.width = this.$refs.container.clientWidth;
+					if (!this.size.width) {
+						let width = window.getComputedStyle(this.$refs.container).width;
+						width = parseFloat(width).toFixed(2);
+						this.size.width = Number(width);
+					}
 
 					// Find height
-					if (this.config.height === 'auto' && this.$refs.container.clientHeight)
-						this.size.height = this.$refs.container.clientHeight;
+					if (this.config.height === 'auto' && this.$refs.container.clientHeight) {
+						let height = window.getComputedStyle(this.$refs.container).height;
+						height = parseFloat(height).toFixed(2);
+						this.size.height = Number(height);
 
-					else
+					} else {
 						this.size.height = Math.floor(this.size.width / 16 * 9);
+					}
 
 					this.$refs.image1.init();
 					this.$refs.image2.init();
