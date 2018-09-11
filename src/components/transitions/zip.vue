@@ -33,8 +33,10 @@
 		},
 
 		created() {
+			let divider = this.slider.size.width / 10;
+
 			this.slider.setTransitionOptions(this, {
-				numCols: Math.floor(this.slider.size.width / 70)
+				numCols: Math.floor(this.slider.size.width / divider)
 			});
 
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;

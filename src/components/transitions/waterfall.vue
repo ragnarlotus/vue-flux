@@ -6,7 +6,7 @@
 	import FluxGrid from '../FluxGrid.vue';
 
 	export default {
-		name: 'transitionBlocks2d1',
+		name: 'transitionWaterfall',
 
 		components: {
 			FluxGrid
@@ -14,12 +14,12 @@
 
 		data: () => ({
 			index: {},
-			numRows: 0,
+			numRows: 1,
 			numCols: 0,
-			tileDuration: 300,
+			tileDuration: 600,
 			totalDuration: 0,
-			easing: 'linear',
-			tileDelay: 1000
+			easing: 'ease-in',
+			tileDelay: 80,
 		}),
 
 		props: {
@@ -33,12 +33,13 @@
 		},
 
 		created() {
+			let divider = this.slider.size.width / 10;
+
 			this.slider.setTransitionOptions(this, {
-				numRows: Math.floor(this.slider.size.height / 90),
-				numCols: Math.floor(this.slider.size.width / 90)
+				numCols: Math.floor(this.slider.size.width / divider)
 			});
 
-			this.totalDuration = this.tileDelay + this.tileDuration;
+			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
 
 			this.index = {
 				front: this.slider.currentImage.index
@@ -48,20 +49,27 @@
 		mounted() {
 			this.slider.currentImage.hide();
 
+			this.grid.setCss({
+				overflow: 'hidden'
+			});
+
 			this.grid.transform((tile, i) => {
 				tile.transform({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay() +'ms',
-					opacity: '0',
-					transform: 'scale(0.4, 0.4)'
+					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
+					opacity: '0.1',
+					transform: 'translateY('+ this.slider.size.height +'px)'
 				});
 			});
 		},
 
 		methods: {
-			getDelay() {
-				let delay = Math.random() * this.tileDelay;
+			getDelay(i) {
+				let delay = i;
 
-				return Math.floor(delay);
+				if (this.direction === 'left')
+					delay = this.numCols - i - 1;
+
+				return delay * this.tileDelay;
 			}
 		}
 	};

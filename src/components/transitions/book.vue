@@ -10,7 +10,7 @@
 	import FluxImage from '../FluxImage.vue';
 
 	export default {
-		name: 'transitionTurn3d',
+		name: 'transitionBook',
 
 		components: {
 			FluxCube,
