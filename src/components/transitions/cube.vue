@@ -6,7 +6,7 @@
 	import FluxCube from '../FluxCube.vue';
 
 	export default {
-		name: 'transitionSlide3d',
+		name: 'transitionCube',
 
 		components: {
 			FluxCube

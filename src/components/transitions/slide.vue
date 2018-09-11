@@ -10,7 +10,7 @@
 	import FluxImage from '../FluxImage.vue';
 
 	export default {
-		name: 'transitionSlide2d',
+		name: 'transitionSlide',
 
 		components: {
 			FluxWrapper,

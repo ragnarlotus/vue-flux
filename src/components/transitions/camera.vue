@@ -15,7 +15,6 @@
 		data: () => ({
 			index: undefined,
 			numCircles: undefined,
-			radius: 90,
 			tileDuration: 400,
 			totalDuration: 0,
 			easing: 'ease',
@@ -35,9 +34,10 @@
 		created() {
 			let size = this.slider.size;
 			let diag = Math.sqrt(Math.pow(size.width, 2) + Math.pow(size.height, 2));
+			let divider = this.slider.size.width / 8;
 
 			this.slider.setTransitionOptions(this, {
-				numCircles: Math.ceil(diag / 2 / this.radius) + 1
+				numCircles: Math.ceil(diag / 2 / divider) + 1
 			});
 
 			this.totalDuration = this.tileDelay * this.numCircles + this.tileDuration;

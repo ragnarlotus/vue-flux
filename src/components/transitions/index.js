@@ -1,37 +1,43 @@
 import transitionFade from './fade.vue';
 import transitionKenburn from './kenburn.vue';
 import transitionSwipe from './swipe.vue';
-import transitionSlide2d from './slide2d.vue';
-import transitionSlide3d from './slide3d.vue';
-import transitionBars2d from './bars2d.vue';
-import transitionBars3d from './bars3d.vue';
+import transitionSlide from './slide.vue';
+import transitionWaterfall from './waterfall.vue';
 import transitionZip from './zip.vue';
 import transitionBlinds2d from './blinds2d.vue';
-import transitionBlinds3d from './blinds3d.vue';
-import transitionTurn3d from './turn3d.vue';
-import transitionBlocks2d1 from './blocks2d1.vue';
-import transitionBlocks2d2 from './blocks2d2.vue';
-import transitionBlocks3d from './blocks3d.vue';
+import transitionBlocks1 from './blocks1.vue';
+import transitionBlocks2 from './blocks2.vue';
 import transitionConcentric from './concentric.vue';
 import transitionWarp from './warp.vue';
 import transitionCamera from './camera.vue';
+import transitionCube from './cube.vue';
+import transitionBook from './book.vue';
+import transitionFall from './fall.vue';
+import transitionWave from './wave.vue';
+import transitionBlinds3d from './blinds3d.vue';
+import transitionRound1 from './round1.vue';
+import transitionRound2 from './round2.vue';
+import transitionExplode from './explode.vue';
 
 export default {
 	transitionFade,
 	transitionKenburn,
 	transitionSwipe,
-	transitionSlide2d,
-	transitionSlide3d,
-	transitionBars2d,
-	transitionBars3d,
+	transitionSlide,
+	transitionWaterfall,
 	transitionZip,
 	transitionBlinds2d,
-	transitionBlinds3d,
-	transitionTurn3d,
-	transitionBlocks2d1,
-	transitionBlocks2d2,
-	transitionBlocks3d,
+	transitionBlocks1,
+	transitionBlocks2,
 	transitionConcentric,
 	transitionWarp,
-	transitionCamera
+	transitionCamera,
+	transitionCube,
+	transitionBook,
+	transitionFall,
+	transitionWave,
+	transitionBlinds3d,
+	transitionRound1,
+	transitionRound2,
+	transitionExplode
 };
