@@ -3,6 +3,8 @@
 		<div class="container mx-auto">
 			<h1 class="my-4">Vue flux</h1>
 
+			<p>You can use arrow keys to show next image (when no transition running). Double click to switch full screen mode.</p>
+
 			<div class="sm:block md:block lg:flex xl:flex -mx-2">
 				<div class="lg:w-3/5 px-2 mb-4">
 					<vue-flux :options="fluxOptions" :images="fluxImages" :transitions="fluxTransitions" :captions="fluxCaptions" ref="slider">
