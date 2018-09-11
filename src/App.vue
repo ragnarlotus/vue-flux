@@ -183,7 +183,9 @@
 			activeTransitionClass: 'bg-black',
 			inactiveTransitionClass: 'bg-grey-darkest hover:bg-black',
 			fluxOptions: {
-				autoplay: true
+				autoplay: true,
+				bindKeys: true,
+				fullscreen: true
 			},
 			fluxImages: [
 				'slides/1.jpg',

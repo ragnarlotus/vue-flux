@@ -12,6 +12,7 @@
 				width: '100%',
 				height: '100%',
 				overflow: 'hidden',
+				backfaceVisibility: 'hidden',
 				zIndex: 'auto'
 			}
 		}),
@@ -79,17 +80,17 @@
 
 				if (image.height / image.width >= this.slider.size.height / this.slider.size.width) {
 					image.height = Math.ceil(this.slider.size.width * image.height / image.width);
-					image.width = this.slider.size.width;
-					image.top = Math.floor((this.slider.size.height - image.height) / 2);
+					image.width = Math.ceil(this.slider.size.width);
+					image.top = Math.ceil((this.slider.size.height - image.height) / 2);
 
 				} else {
 					image.width = Math.ceil(this.slider.size.height * image.width / image.height);
-					image.height = this.slider.size.height;
-					image.left = Math.floor((this.slider.size.width - image.width) / 2);
+					image.height = Math.ceil(this.slider.size.height);
+					image.left = Math.ceil((this.slider.size.width - image.width) / 2);
 				}
 
-				image.top -= parseInt(this.css.top);
-				image.left -= parseInt(this.css.left);
+				image.top -= parseFloat(this.css.top);
+				image.left -= parseFloat(this.css.left);
 
 				this.setCss({
 					top: 0,

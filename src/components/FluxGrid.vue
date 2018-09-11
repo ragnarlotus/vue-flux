@@ -25,11 +25,7 @@
 			numTiles: 0,
 			tile: {
 				width: 1,
-				height: 1,
-				remainder: {
-					width: 0,
-					height: 0
-				}
+				height: 1
 			},
 			style: {
 				position: 'absolute',
@@ -56,11 +52,8 @@
 		created() {
 			this.numTiles = this.numRows * this.numCols;
 
-			this.tile.width = Math.floor(this.slider.size.width / this.numCols);
-			this.tile.height = Math.floor(this.slider.size.height / this.numRows);
-
-			this.tile.remainder.width = this.slider.size.width % this.numCols;
-			this.tile.remainder.height = this.slider.size.height % this.numRows;
+			this.tile.width = Math.ceil(this.slider.size.width / this.numCols);
+			this.tile.height = Math.ceil(this.slider.size.height / this.numRows);
 		},
 
 		methods: {
@@ -82,11 +75,17 @@
 				let row = this.getRow(i);
 				let col = this.getCol(i);
 
-				let width = this.tile.width + (col < this.tile.remainder.width? 1 : 0);
-				let height = this.tile.height + (row < this.tile.remainder.height? 1 : 0);
+				let width = this.tile.width;
+				let height = this.tile.height;
 
-				let top = row * this.tile.height + (row < this.tile.remainder.height? row : this.tile.remainder.height);
-				let left = col * this.tile.width + (col < this.tile.remainder.width? col : this.tile.remainder.width);
+				if (col + 1 == this.numCols)
+					width = Math.floor(this.slider.size.width - col * this.tile.width);
+
+				if (row + 1 == this.numRows)
+					height = Math.floor(this.slider.size.height - row * this.tile.height);
+
+				let top = row * this.tile.height;
+				let left = col * this.tile.width;
 
 				let zIndex = i + 1 < this.numCols / 2? 13 + i : 13 + this.numCols - i;
 
