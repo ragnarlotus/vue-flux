@@ -275,15 +275,13 @@
 					// Find width
 					if (!this.size.width) {
 						let width = window.getComputedStyle(this.$refs.container).width;
-						width = parseFloat(width).toFixed(2);
-						this.size.width = Number(width);
+						this.size.width = parseFloat(width);
 					}
 
 					// Find height
 					if (this.config.height === 'auto' && this.$refs.container.clientHeight) {
 						let height = window.getComputedStyle(this.$refs.container).height;
-						height = parseFloat(height).toFixed(2);
-						this.size.height = Number(height);
+						this.size.height = parseFloat(height);
 
 					} else {
 						this.size.height = Math.floor(this.size.width / 16 * 9);
