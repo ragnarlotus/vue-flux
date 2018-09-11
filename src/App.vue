@@ -115,7 +115,6 @@
 							<a @click="showNext('transitionExplode')" :class="transitionClass('transitionExplode')">Explode</a>
 						</li>
 					</ul>
-
 				</div>
 			</div>
 
