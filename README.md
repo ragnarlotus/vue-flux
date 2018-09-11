@@ -1,6 +1,6 @@
 ## Overview
 
-This is an image slider developed with [Vuejs](https://vuejs.org/) 2 which comes with 17 cool transitions out of the box.
+This is an image slider developed with [Vuejs](https://vuejs.org/) 2 which comes with 20 cool transitions out of the box.
 
 ## Demo
 
