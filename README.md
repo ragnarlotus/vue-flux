@@ -81,7 +81,7 @@ Weight is just 77KB so is pretty light having only the essential CSS. It also do
 #### 3D transitions
 * Cube: turns the image to a side like if place in a cube.
 * Book: makes the effect of turning a page to display next image.
-* Fall: The image falls in front displaying next image.
+* Fall: the image falls in front displaying next image.
 * Wave: makes the image 3D and divides it in slices that turn vertically to display the next image.
 * Blinds 3D: divides the image in vertical bars that blinds 180 deg to form the next image.
 * Round 1: the image is splited in blocks that turn 180 deg horizontally to form next image.

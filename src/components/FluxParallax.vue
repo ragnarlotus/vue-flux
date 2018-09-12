@@ -217,7 +217,7 @@
 				if (this.loaded === false)
 					return;
 
-				let scrollTop = this.holder.scrollY || this.holder.scrollTop || 0;
+				let scrollTop = this.holder.scrollY || this.holder.scrollTop || this.holder.pageYOffset || 0;
 
 				if (scrollTop + this.view.height < this.parallax.top)
 					return;
