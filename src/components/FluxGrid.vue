@@ -79,10 +79,10 @@
 				let height = this.tile.height;
 
 				if (col + 1 == this.numCols)
-					width = Math.floor(this.slider.size.width - col * this.tile.width);
+					width = this.slider.size.width - col * this.tile.width;
 
 				if (row + 1 == this.numRows)
-					height = Math.floor(this.slider.size.height - row * this.tile.height);
+					height = this.slider.size.height - row * this.tile.height;
 
 				let top = row * this.tile.height;
 				let left = col * this.tile.width;
