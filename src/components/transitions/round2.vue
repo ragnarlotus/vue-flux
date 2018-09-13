@@ -16,10 +16,10 @@
 			index: {},
 			numRows: 0,
 			numCols: 0,
-			tileDuration: 500,
+			tileDuration: 800,
 			totalDuration: 0,
 			easing: 'linear',
-			tileDelay: 1200
+			tileDelay: 100
 		}),
 
 		props: {
@@ -33,14 +33,14 @@
 		},
 
 		created() {
-			let divider = this.slider.size.width / 8;
+			let divider = this.slider.size.width / 8.9;
 
 			this.slider.setTransitionOptions(this, {
 				numRows: Math.floor(this.slider.size.height / divider),
 				numCols: Math.floor(this.slider.size.width / divider)
 			});
 
-			this.totalDuration = this.tileDelay + this.tileDuration;
+			this.totalDuration = (this.numCols / 2 + this.numRows) * (this.tileDelay * 2);
 
 			this.index = {
 				front: this.slider.currentImage.index
@@ -56,7 +56,7 @@
 
 			this.grid.transform((tile, i) => {
 				tile.front.transform({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay() +'ms',
+					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
 					opacity: '0',
 					transform: 'rotateX(-540deg)'
 				});
@@ -64,10 +64,13 @@
 		},
 
 		methods: {
-			getDelay() {
-				let delay = Math.random() * this.tileDelay;
+			getDelay(i) {
+				let row = this.grid.getRow(i);
+				let col = this.grid.getCol(i);
 
-				return Math.floor(delay);
+				let delay = Math.abs(this.numRows - row) + Math.abs(this.numCols / 2 - col);
+
+				return delay * this.tileDelay;
 			}
 		}
 	};
