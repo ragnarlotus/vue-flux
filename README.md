@@ -85,8 +85,8 @@ Weight is just 77KB so is pretty light having only the essential CSS. It also do
 * Wave: makes the image 3D and divides it in slices that turn vertically to display the next image.
 * Blinds 3D: divides the image in vertical bars that blinds 180 deg to form the next image.
 * Round 1: the image is splited in blocks that turn 180 deg horizontally to form next image.
-* Round 2: the image is splited in blocks that round vertically until disappear.
-* Explode: the image is splited in blocks that explode revealing the next image.
+* Round 2: panels start to round vertically revealing the next image in upper arrow form leaving trail.
+* Explode: the image starts to explode from the center to outside.
 
 ## Parallax
 
