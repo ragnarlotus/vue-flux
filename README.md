@@ -1,3 +1,5 @@
+# Home
+
 ## Overview
 
 This is an image slider developed with [Vuejs](https://vuejs.org/) 2 which comes with 20 cool transitions out of the box.
@@ -7,8 +9,9 @@ This is an image slider developed with [Vuejs](https://vuejs.org/) 2 which comes
 You can view a [demo here](https://deulos.github.io/vue-flux/).
 
 ## Features
+
 | Feature | Description |
-|---------|-------------|
+| :--- | :--- |
 | Responsive | The slider and the images are adapted to container to fill it always |
 | Compatibility | Supported by all major browsers |
 | Expandable | You can add your custom transitions very easily |
@@ -19,11 +22,11 @@ You can view a [demo here](https://deulos.github.io/vue-flux/).
 
 ## Quickstart
 
-``` bash
+```bash
 npm install --save vue-flux
 ```
 
-``` html
+```markup
 <vue-flux
    :options="fluxOptions"
    :images="fluxImages"
@@ -34,7 +37,7 @@ npm install --save vue-flux
 <button @click="$refs.slider.showImage('next')">NEXT</button>
 ```
 
-``` javascript
+```javascript
 import { VueFlux, Transitions } from 'vue-flux';
 
 export default {
@@ -60,11 +63,12 @@ export default {
 
 ## Performance
 
-Weight is just 77KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
+Weight is just 86KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
 
 ## Included transitions
 
-#### 2D transitions
+### 2D transitions
+
 * Fade: fades from one image to next.
 * Kenburn: fades, zoom and moves current image to next.
 * Swipe: swipes the image to display next like uncovered with a curtain.
@@ -78,7 +82,8 @@ Weight is just 77KB so is pretty light having only the essential CSS. It also do
 * Warp: a concentric effect is performed by rotating the image converted into circles in alternate direction.
 * Camera: from outside to inside the image is being cropped like in a camera lens.
 
-#### 3D transitions
+### 3D transitions
+
 * Cube: turns the image to a side like if place in a cube.
 * Book: makes the effect of turning a page to display next image.
 * Fall: the image falls in front displaying next image.
@@ -90,7 +95,7 @@ Weight is just 77KB so is pretty light having only the essential CSS. It also do
 
 ## Parallax
 
-``` html
+```markup
 <flux-parallax src="slides/1.jpg" height="300px" offset="80%" type="relative">
    <div>CONTENT</div>
 </flux-parallax>
@@ -111,3 +116,4 @@ This slider was inspired by [Flux Slider](http://joelambert.co.uk/flux/).
 ## Contributing
 
 Contributions, questions and comments are all welcome and encouraged.
+
