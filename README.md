@@ -60,7 +60,7 @@ export default {
 
 ## Performance
 
-Weight is just 77KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
+Weight is just 86KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
 
 ## Included transitions
 
@@ -111,3 +111,5 @@ This slider was inspired by [Flux Slider](http://joelambert.co.uk/flux/).
 ## Contributing
 
 Contributions, questions and comments are all welcome and encouraged.
+
+Do not hesitate to send me your own transitions to add them to the slider.
