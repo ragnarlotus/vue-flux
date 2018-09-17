@@ -4,7 +4,7 @@
 			<div v-if="displayButton" class="toggle" @click="toggle()"></div>
 		</transition>
 
-		<nav :class="indexClass" @click="click" @touchstart="touchStart" @touchend="touchEnd">
+		<nav :class="indexClass" @click="click()" @touchstart="touchStart" @touchend="touchEnd">
 			<ul ref="thumbs">
 				<li v-for="(image, index) in images" :key="index" :class="current(index)" @click="click(index)" @touchstart="touchStart($event, index)" @touchend="touchEnd($event, index)">
 					<flux-thumb :slider="slider" :index="index"></flux-thumb>
