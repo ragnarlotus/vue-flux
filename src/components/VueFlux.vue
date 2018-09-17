@@ -1,6 +1,14 @@
 <template>
-	<div class="vue-flux" :class="inFullscreen()? 'fullscreen' : ''" ref="container" @mouseover="toggleMouseOver(true)" @mouseleave="toggleMouseOver(false)" @dblclick="toggleFullscreen()" @touchstart="touchStart" @touchend="touchEnd">
-		<img v-for="(src, index) in preload" :key="index" :src="path + src" alt="" @load="addImage(index)" @error="addImage(index)" ref="images">
+	<div class="vue-flux" :class="inFullscreen()? 'fullscreen' : ''" ref="container"
+		@mouseover="toggleMouseOver(true)"
+		@mouseleave="toggleMouseOver(false)"
+		@dblclick="toggleFullscreen()"
+		@touchstart="touchStart"
+		@touchend="touchEnd">
+
+		<img v-for="(src, index) in preload" :key="index" :src="path + src" alt="" ref="images"
+			@load="addImage(index)"
+			@error="addImage(index)">
 
 		<div class="mask" :style="sizePx" ref="mask">
 			<component v-if="transition.current" :is="transition.current" ref="transition" :slider="slider"></component>
@@ -40,7 +48,7 @@
 				autoplay: false,
 				bindKeys: false,
 				fullscreen: false,
-				infinite: true,
+				infinite: false,
 				delay: 5000,
 				width: '100%',
 				height: 'auto'
@@ -174,18 +182,42 @@
 			}
 		},
 
+		watch: {
+			options: function() {
+				this.setOptions();
+			},
+
+			transitions: function() {
+				let wasPlaying = this.config.autoplay;
+
+				this.stop();
+
+				this.updateTransitions();
+
+				if (wasPlaying)
+					this.start();
+			},
+
+			images: function() {
+				let wasPlaying = this.config.autoplay;
+
+				this.stop();
+
+				this.preloadImages();
+
+				this.config.autoplay = wasPlaying;
+			}
+		},
+
 		created() {
-			this.setOptions(this.options);
-			this.setTransitions(this.transitions);
+			this.updateOptions();
+			this.updateTransitions();
 		},
 
 		mounted() {
-			if (this.images.length < 2 || this.transitionNames.length === 0)
-				return;
-
 			this.resize();
 
-			this.preloadImages(this.images);
+			this.preloadImages();
 
 			window.addEventListener('resize', this.resize);
 
@@ -201,8 +233,16 @@
 		},
 
 		methods: {
-			preloadImages(images) {
-				this.preload = images.slice(0);
+			preloadImages() {
+				if (this.images.length < 2 || this.transitionNames.length === 0)
+					return;
+
+				this.loaded = false;
+				this.image1Index = 0;
+				this.image2Index = 1;
+				this.imagesLoaded = 0;
+
+				this.preload = this.images.slice(0);
 			},
 
 			addImage(i) {
@@ -225,13 +265,13 @@
 					this.init();
 			},
 
-			setOptions(options) {
+			updateOptions() {
 				let currentSize = {
 					width: this.config.width,
 					height: this.config.height
 				};
 
-				this.config = Object.assign({}, this.config, options);
+				this.config = Object.assign({}, this.config, this.options);
 
 				if (currentSize.width !== this.config.width || currentSize.height !== this.config.height) {
 					this.size.width = this.config.width;
@@ -241,10 +281,10 @@
 				}
 			},
 
-			setTransitions(transitions) {
-				Object.assign(this.$options.components, transitions);
+			updateTransitions() {
+				Object.assign(this.$options.components, this.transitions);
 
-				this.transitionNames = Object.keys(transitions);
+				this.transitionNames = Object.keys(this.transitions);
 
 				if (this.transitionNames.length > 0)
 					this.transition.last = this.transitionNames.length - 1;
@@ -366,21 +406,23 @@
 				this.resize();
 			},
 
-			play(index) {
+			play(index = 'next', delay) {
 				this.config.autoplay = true;
-
-				if (this.checkLastStop(this.currentImage.index)) {
-					this.showImage('next');
-					return;
-				}
 
 				this.timer = setTimeout(() => {
 					this.showImage(index);
-				}, this.config.delay);
+				}, delay || this.config.delay);
 			},
 
 			stop() {
 				this.config.autoplay = false;
+
+				if (this.transition.current) {
+					this.currentImage.setCss({ zIndex: 10 });
+					this.nextImage.setCss({ zIndex: 11 });
+
+					this.transition.current = undefined;
+				}
 
 				clearTimeout(this.timer);
 			},
@@ -390,11 +432,7 @@
 					this.stop();
 
 				else
-					this.play();
-			},
-
-			checkLastStop(index) {
-				return this.config.infinite === false && index === this.images.length - 1;
+					this.play(undefined, 1);
 			},
 
 			getIndex(index) {
@@ -407,6 +445,52 @@
 					return currentIndex > 0? currentIndex - 1 : this.images.length - 1;
 
 				return currentIndex + 1 < this.images.length? currentIndex + 1 : 0;
+			},
+
+			setTransition(currentImage, nextImage, transition) {
+				// Get transition
+				if (transition === undefined)
+					transition = this.nextTransition;
+
+				if (transition) {
+					this.transition.last = this.transitionNames.indexOf(transition);
+					this.transition.current = transition;
+				}
+
+				this.$nextTick(() => {
+					this.transitionStart(currentImage, nextImage, transition);
+				});
+			},
+
+			transitionStart(currentImage, nextImage, transition) {
+				this.$emit('vueFlux-transitionStart');
+
+				let timeout = transition !== undefined? this.$refs.transition.totalDuration : 0;
+
+				setTimeout(() => {
+					this.transitionEnd(currentImage, nextImage);
+				}, timeout);
+			},
+
+			transitionEnd(currentImage, nextImage) {
+				currentImage.setCss({ zIndex: 10 });
+				nextImage.setCss({ zIndex: 11 });
+
+				this.transition.current = undefined;
+
+				if (this.config.infinite === false && nextImage.index === this.images.length - 1) {
+					this.stop();
+					return;
+				}
+
+				// Play next if autoplay is true
+				if (this.config.autoplay === true) {
+					this.timer = setTimeout(() => {
+						this.showImage('next');
+					}, this.config.delay);
+				}
+
+				this.$emit('vueFlux-transitionEnd');
 			},
 
 			showImage(index, transition) {
@@ -433,37 +517,7 @@
 				nextImage.show();
 
 				this.$nextTick(() => {
-					// Get transition
-					if (transition === undefined)
-						transition = this.nextTransition;
-
-					if (transition) {
-						this.transition.last = this.transitionNames.indexOf(transition);
-						this.transition.current = transition;
-					}
-
-					this.$nextTick(() => {
-						let timeout = transition !== undefined? this.$refs.transition.totalDuration : 0;
-
-						setTimeout(() => {
-							currentImage.setCss({ zIndex: 10 });
-							nextImage.setCss({ zIndex: 11 });
-
-							this.transition.current = undefined;
-
-							if (this.checkLastStop(index)) {
-								this.stop();
-								return;
-							}
-
-							// Play next if autoplay is true
-							if (this.config.autoplay === true) {
-								this.timer = setTimeout(() => {
-									this.showImage('next');
-								}, this.config.delay);
-							}
-						}, timeout);
-					});
+					this.setTransition(currentImage, nextImage, transition);
 				});
 			},
 
