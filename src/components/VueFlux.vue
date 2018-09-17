@@ -40,6 +40,7 @@
 				autoplay: false,
 				bindKeys: false,
 				fullscreen: false,
+				infinite: true,
 				delay: 5000,
 				width: '100%',
 				height: 'auto'
@@ -305,10 +306,10 @@
 
 					this.$refs.image1.setCss({ zIndex: 11 });
 					this.$refs.image2.setCss({ zIndex: 10 });
-				});
 
-				if (this.config.autoplay === true)
-					this.play();
+					if (this.config.autoplay === true)
+						this.play();
+				});
 			},
 
 			toggleMouseOver(over) {
@@ -368,6 +369,11 @@
 			play(index) {
 				this.config.autoplay = true;
 
+				if (this.checkLastStop(this.currentImage.index)) {
+					this.showImage('next');
+					return;
+				}
+
 				this.timer = setTimeout(() => {
 					this.showImage(index);
 				}, this.config.delay);
@@ -385,6 +391,10 @@
 
 				else
 					this.play();
+			},
+
+			checkLastStop(index) {
+				return this.config.infinite === false && index === this.images.length - 1;
 			},
 
 			getIndex(index) {
@@ -405,10 +415,10 @@
 
 				// If there is a transition running prevent showing new image
 				if (this.transition.current !== undefined)
-					return false;
+					return;
 
 				if (this.currentImage.index === index)
-					return false;
+					return;
 
 				clearTimeout(this.timer);
 
@@ -440,6 +450,11 @@
 							nextImage.setCss({ zIndex: 11 });
 
 							this.transition.current = undefined;
+
+							if (this.checkLastStop(index)) {
+								this.stop();
+								return;
+							}
 
 							// Play next if autoplay is true
 							if (this.config.autoplay === true) {
