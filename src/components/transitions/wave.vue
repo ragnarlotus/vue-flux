@@ -20,6 +20,7 @@
 			totalDuration: 0,
 			easing: 'ease-out',
 			tileDelay: 150,
+			sideColor: '#333'
 		}),
 
 		props: {
@@ -45,8 +46,8 @@
 				front: this.slider.currentImage.index,
 				top: this.slider.nextImage.index,
 				bottom: this.slider.nextImage.index,
-				left: '#333',
-				right: '#333'
+				left: this.sideColor,
+				right: this.sideColor
 			};
 		},
 
