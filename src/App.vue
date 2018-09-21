@@ -215,7 +215,7 @@
 				'slides/3.jpg',
 				'slides/4.jpg',
 				'slides/5.jpg',
-				'slides/6.jpg'
+				'slides/6.jpg',
 			],
 			fluxTransitions: Transitions,
 			fluxCaptions: [ 'First caption', 'Second caption', undefined, 'Fourth caption' ],

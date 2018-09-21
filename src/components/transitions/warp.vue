@@ -13,6 +13,8 @@
 		},
 
 		data: () => ({
+			currentImage: undefined,
+			nextImage: undefined,
 			index: undefined,
 			numCircles: undefined,
 			tileDuration: 800,
@@ -32,6 +34,9 @@
 		},
 
 		created() {
+			this.currentImage = this.slider.currentImage();
+			this.nextImage = this.slider.nextImage();
+
 			let size = this.slider.size;
 			let diag = Math.sqrt(Math.pow(size.width, 2) + Math.pow(size.height, 2));
 			let divider = this.slider.size.width / 8;
@@ -42,11 +47,11 @@
 
 			this.totalDuration = this.tileDelay * this.numCircles + this.tileDuration;
 
-			this.index = this.slider.currentImage.index;
+			this.index = this.currentImage.index;
 		},
 
 		mounted() {
-			this.slider.currentImage.hide();
+			this.currentImage.hide();
 
 			this.vortex.setCss({
 				overflow: 'hidden'

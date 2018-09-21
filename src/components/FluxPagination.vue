@@ -20,14 +20,18 @@
 			},
 
 			currentImageIndex: function() {
-				if (this.slider.currentImage === undefined)
+				let currentImage = this.slider.currentImage();
+
+				if (currentImage === undefined)
 					return undefined;
 
-				return this.slider.currentImage.index;
+				return currentImage.index;
 			},
 
 			nextImageIndex: function() {
-				return this.slider.nextImage.index;
+				let nextImage = this.slider.nextImage();
+
+				return nextImage.index;
 			}
 		},
 

@@ -13,6 +13,8 @@
 		},
 
 		data: () => ({
+			currentImage: undefined,
+			nextImage: undefined,
 			totalDuration: 6000,
 			easing: 'cubic-bezier(0.600, 0.040, 0.780, 0.335)',
 			index: undefined
@@ -23,12 +25,15 @@
 		},
 
 		created() {
+			this.currentImage = this.slider.currentImage();
+			this.nextImage = this.slider.nextImage();
+
 			this.slider.setTransitionOptions(this);
 
-			this.index = this.slider.currentImage.index;
+			this.index = this.currentImage.index;
 
 			if (this.direction === 'left')
-				this.index = this.slider.nextImage.index;
+				this.index = this.nextImage.index;
 		},
 
 		mounted() {
@@ -46,7 +51,7 @@
 		destroyed() {
 			this.slider.mask.style.overflow = 'visible';
 
-			this.slider.nextImage.setCss({
+			this.currentImage.setCss({
 				transition: 'none',
 				opacity: 1
 			});
@@ -59,7 +64,7 @@
 					zIndex: 12
 				});
 
-				this.slider.currentImage.hide();
+				this.currentImage.hide();
 
 				this.$refs.image.transform({
 					transition: 'all '+ this.totalDuration +'ms '+ this.easing,
@@ -69,7 +74,7 @@
 			},
 
 			focusOut(transform) {
-				this.slider.currentImage.setCss({
+				this.currentImage.setCss({
 					transition: 'opacity '+ this.totalDuration +'ms '+ this.easing,
 					opacity: 0
 				});

@@ -13,6 +13,8 @@
 		},
 
 		data: () => ({
+			currentImage: undefined,
+			nextImage: undefined,
 			index: {},
 			numRows: 1,
 			numCols: 0,
@@ -34,6 +36,9 @@
 		},
 
 		created() {
+			this.currentImage = this.slider.currentImage();
+			this.nextImage = this.slider.nextImage();
+
 			let divider = this.slider.size.width / 8;
 
 			this.slider.setTransitionOptions(this, {
@@ -43,17 +48,17 @@
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
 
 			this.index = {
-				front: this.slider.currentImage.index,
-				top: this.slider.nextImage.index,
-				bottom: this.slider.nextImage.index,
+				front: this.currentImage.index,
+				top: this.nextImage.index,
+				bottom: this.nextImage.index,
 				left: this.sideColor,
 				right: this.sideColor
 			};
 		},
 
 		mounted() {
-			this.slider.currentImage.hide();
-			this.slider.nextImage.hide();
+			this.currentImage.hide();
+			this.nextImage.hide();
 
 			this.grid.setCss({
 				perspective: '1200px'
@@ -69,7 +74,7 @@
 		},
 
 		destroyed() {
-			this.slider.currentImage.show();
+			this.nextImage.show();
 		},
 
 		methods: {

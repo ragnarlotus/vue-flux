@@ -38,7 +38,7 @@
 		},
 
 		watch: {
-			index: function(newIndex, oldIndex) {
+			index: function() {
 				this.init();
 			}
 		},
@@ -67,8 +67,14 @@
 			initImage() {
 				let properties = this.slider.properties[this.index];
 
-				if (!properties)
+				if (!properties) {
+					this.setCss({
+						backgroundColor: 'transparent',
+						backgroundImage: 'none'
+					});
+
 					return;
+				}
 
 				let image = {
 					top: 0,

@@ -1,6 +1,6 @@
 <template>
 	<flux-wrapper ref="wrapper">
-		<flux-image :slider="slider" :index="slider.currentImage.index" ref="image"></flux-image>
+		<flux-image :slider="slider" :index="currentImage.index" ref="image"></flux-image>
 	</flux-wrapper>
 </template>
 
@@ -17,6 +17,8 @@
 		},
 
 		data: () => ({
+			currentImage: undefined,
+			nextImage: undefined,
 			totalDuration: 1400,
 			easing: 'ease-in-out',
 			wrapperCss: {
@@ -35,6 +37,9 @@
 		},
 
 		created() {
+			this.currentImage = this.slider.currentImage();
+			this.nextImage = this.slider.nextImage();
+
 			this.slider.setTransitionOptions(this);
 
 			if (this.direction === 'left') {
@@ -54,7 +59,7 @@
 				});
 			}
 
-			this.slider.currentImage.hide();
+			this.currentImage.hide();
 
 			this.wrapper.transform({
 				transition: 'width '+ this.totalDuration +'ms '+ this.easing,
@@ -63,7 +68,7 @@
 		},
 
 		destroyed() {
-			this.slider.currentImage.show();
+			this.nextImage.show();
 		}
 	};
 </script>

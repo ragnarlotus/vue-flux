@@ -1,5 +1,5 @@
 <template>
-	<flux-image :slider="slider" :index="slider.currentImage.index" :css="imageCss" ref="image"></flux-image>
+	<flux-image :slider="slider" :index="currentImage.index" :css="imageCss" ref="image"></flux-image>
 </template>
 
 <script>
@@ -13,6 +13,8 @@
 		},
 
 		data: () => ({
+			currentImage: undefined,
+			nextImage: undefined,
 			totalDuration: 1600,
 			easing: 'ease-in',
 			imageCss: {
@@ -34,11 +36,14 @@
 		},
 
 		created() {
+			this.currentImage = this.slider.currentImage();
+			this.nextImage = this.slider.nextImage();
+
 			this.slider.setTransitionOptions(this);
 		},
 
 		mounted() {
-			this.slider.currentImage.hide();
+			this.currentImage.hide();
 			this.slider.mask.style.perspective = '1600px';
 
 			this.$nextTick(() => {
@@ -50,7 +55,7 @@
 		},
 
 		destroyed() {
-			this.slider.nextImage.show();
+			this.nextImage.show();
 			this.slider.mask.style.perspective = 'none';
 		}
 	};
