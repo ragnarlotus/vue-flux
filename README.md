@@ -104,6 +104,10 @@ If you find yourself running into issues during installation or running the slid
 
 You can view the full documentation at the project's [Wiki](https://github.com/deulos/vue-flux/wiki) with examples and detailed information.
 
+## Changelog
+
+Check the [Changelog](https://github.com/deulos/vue-flux/wiki/Changelog) for update info.
+
 ## Inspiration
 
 This slider was inspired by [Flux Slider](http://joelambert.co.uk/flux/).
