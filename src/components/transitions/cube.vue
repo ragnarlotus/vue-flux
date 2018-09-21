@@ -13,6 +13,8 @@
 		},
 
 		data: () => ({
+			currentImage: undefined,
+			nextImage: undefined,
 			index: {},
 			totalDuration: 1400,
 			perspective: '1600px',
@@ -30,20 +32,23 @@
 		},
 
 		created() {
+			this.currentImage = this.slider.currentImage();
+			this.nextImage = this.slider.nextImage();
+
 			this.slider.setTransitionOptions(this);
 
 			this.index = {
-				front: this.slider.currentImage.index,
-				left: this.slider.nextImage.index,
-				right: this.slider.nextImage.index
+				front: this.currentImage.index,
+				left: this.nextImage.index,
+				right: this.nextImage.index
 			};
 		},
 
 		mounted() {
 			this.slider.mask.style.perspective = this.perspective;
 
-			this.slider.currentImage.hide();
-			this.slider.nextImage.hide();
+			this.currentImage.hide();
+			this.nextImage.hide();
 
 			this.cube.setCss({
 				transition: 'all '+ this.totalDuration +'ms '+ this.easing
@@ -55,7 +60,7 @@
 		destroyed() {
 			this.slider.mask.style.perspective = 'none';
 
-			this.slider.currentImage.show();
+			this.nextImage.show();
 		}
 	};
 </script>

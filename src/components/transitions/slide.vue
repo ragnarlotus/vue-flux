@@ -18,6 +18,8 @@
 		},
 
 		data: () => ({
+			currentImage: undefined,
+			nextImage: undefined,
 			totalDuration: 1400,
 			easing: 'ease-in-out',
 			wrapperCss: {
@@ -40,14 +42,17 @@
 		},
 
 		created() {
+			this.currentImage = this.slider.currentImage();
+			this.nextImage = this.slider.nextImage();
+
 			this.slider.setTransitionOptions(this);
 
-			this.index.left = this.slider.currentImage.index;
-			this.index.right = this.slider.nextImage.index;
+			this.index.left = this.currentImage.index;
+			this.index.right = this.nextImage.index;
 
 			if (this.direction === 'left') {
-				this.index.left = this.slider.nextImage.index;
-				this.index.right = this.slider.currentImage.index;
+				this.index.left = this.nextImage.index;
+				this.index.right = this.currentImage.index;
 
 				this.wrapperCss.left = 'auto';
 				this.wrapperCss.right = 0;
@@ -55,7 +60,7 @@
 		},
 
 		mounted() {
-			this.slider.currentImage.hide();
+			this.currentImage.hide();
 
 			this.slider.mask.style.overflow = 'hidden';
 

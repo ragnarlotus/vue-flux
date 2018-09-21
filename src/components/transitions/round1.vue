@@ -13,6 +13,8 @@
 		},
 
 		data: () => ({
+			currentImage: undefined,
+			nextImage: undefined,
 			index: {},
 			numRows: 1,
 			numCols: 0,
@@ -34,6 +36,9 @@
 		},
 
 		created() {
+			this.currentImage = this.slider.currentImage();
+			this.nextImage = this.slider.nextImage();
+
 			let divider = this.slider.size.width / 6;
 
 			this.slider.setTransitionOptions(this, {
@@ -44,14 +49,14 @@
 			this.totalDuration = this.tileDelay * (this.numRows > this.numCols? this.numRows : this.numCols) * 2 + this.tileDelay;
 
 			this.index = {
-				front: this.slider.currentImage.index,
-				back: this.slider.nextImage.index
+				front: this.currentImage.index,
+				back: this.nextImage.index
 			};
 		},
 
 		mounted() {
-			this.slider.currentImage.hide();
-			this.slider.nextImage.hide();
+			this.currentImage.hide();
+			this.nextImage.hide();
 
 			this.grid.setCss({
 				perspective: '800px'
@@ -67,7 +72,7 @@
 		},
 
 		destroyed() {
-			this.slider.currentImage.show();
+			this.nextImage.show();
 		},
 
 		methods: {
