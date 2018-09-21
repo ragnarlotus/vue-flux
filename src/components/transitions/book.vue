@@ -18,6 +18,8 @@
 		},
 
 		data: () => ({
+			currentImage: undefined,
+			nextImage: undefined,
 			totalDuration: 1200,
 			easing: 'ease-out',
 			pageWidth: 0,
@@ -55,6 +57,9 @@
 		},
 
 		created() {
+			this.currentImage = this.slider.currentImage();
+			this.nextImage = this.slider.nextImage();
+
 			this.slider.setTransitionOptions(this);
 
 			this.pageWidth = this.slider.size.width / 2;
@@ -67,8 +72,8 @@
 				this.imageCss.left = Math.ceil(this.pageWidth) +'px';
 			}
 
-			this.index.front = this.slider.currentImage.index;
-			this.index.back = this.slider.nextImage.index;
+			this.index.front = this.currentImage.index;
+			this.index.back = this.nextImage.index;
 		},
 
 		mounted() {

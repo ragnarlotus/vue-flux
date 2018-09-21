@@ -143,7 +143,7 @@
 			},
 
 			current(index) {
-				return this.slider.currentImage.index === index? 'current' : '';
+				return this.slider.currentImage().index === index? 'current' : '';
 			}
 		}
 	};

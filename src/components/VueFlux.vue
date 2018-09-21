@@ -48,7 +48,7 @@
 				autoplay: false,
 				bindKeys: false,
 				fullscreen: false,
-				infinite: false,
+				infinite: true,
 				delay: 5000,
 				width: '100%',
 				height: 'auto'
@@ -158,17 +158,6 @@
 				return Math.ceil(this.imagesLoaded * 100 / this.images.slice(0).length);
 			},
 
-			currentImage: function() {
-				if (this.$refs.image1 === undefined)
-					return undefined;
-
-				return this.$refs.image1.style.zIndex === 11? this.$refs.image1 : this.$refs.image2;
-			},
-
-			nextImage: function() {
-				return this.$refs.image1.style.zIndex === 10? this.$refs.image1 : this.$refs.image2;
-			},
-
 			nextTransition: function() {
 				if (!this.transitionNames.length)
 					return undefined;
@@ -203,9 +192,11 @@
 
 				this.stop();
 
-				this.preloadImages();
+				this.$nextTick(() => {
+					this.preloadImages();
 
-				this.config.autoplay = wasPlaying;
+					this.config.autoplay = wasPlaying;
+				});
 			}
 		},
 
@@ -241,6 +232,11 @@
 				this.image1Index = 0;
 				this.image2Index = 1;
 				this.imagesLoaded = 0;
+
+				this.$nextTick(() => {
+					this.$refs.image1.setCss({ zIndex: 11 });
+					this.$refs.image2.setCss({ zIndex: 10 });
+				});
 
 				this.preload = this.images.slice(0);
 			},
@@ -290,12 +286,28 @@
 					this.transition.last = this.transitionNames.length - 1;
 			},
 
+			currentImage() {
+				if (this.$refs.image1 === undefined)
+					return undefined;
+
+				return this.$refs.image2.style.zIndex === 11? this.$refs.image2 : this.$refs.image1;
+			},
+
+			nextImage() {
+				return this.$refs.image1.style.zIndex === 10? this.$refs.image1 : this.$refs.image2;
+			},
+
 			setTransitionOptions(transition, defaultValues = {}) {
 				let transitionOptions = this.transitionOptions || {};
 				let options = transitionOptions[this.transition.current] || {};
 
+				let direction = 'right';
+
+				if (this.currentImage().index > this.nextImage().index)
+					direction = 'left';
+
 				Object.assign(transition, {
-					direction: this.currentImage.index > this.nextImage.index? 'left' : 'right'
+					direction: direction
 				}, defaultValues, options);
 			},
 
@@ -341,11 +353,11 @@
 				this.$refs.image2.init();
 
 				this.$nextTick(() => {
-					this.$refs.image1.reference = 'image1Index';
-					this.$refs.image2.reference = 'image2Index';
-
 					this.$refs.image1.setCss({ zIndex: 11 });
 					this.$refs.image2.setCss({ zIndex: 10 });
+
+					this.$refs.image1.reference = 'image1Index';
+					this.$refs.image2.reference = 'image2Index';
 
 					if (this.config.autoplay === true)
 						this.play();
@@ -417,12 +429,8 @@
 			stop() {
 				this.config.autoplay = false;
 
-				if (this.transition.current) {
-					this.currentImage.setCss({ zIndex: 10 });
-					this.nextImage.setCss({ zIndex: 11 });
-
+				if (this.transition.current)
 					this.transition.current = undefined;
-				}
 
 				clearTimeout(this.timer);
 			},
@@ -439,7 +447,7 @@
 				if (typeof index === 'number')
 					return index;
 
-				let currentIndex = this.currentImage.index;
+				let currentIndex = this.currentImage().index;
 
 				if (index === 'previous')
 					return currentIndex > 0? currentIndex - 1 : this.images.length - 1;
@@ -447,8 +455,7 @@
 				return currentIndex + 1 < this.images.length? currentIndex + 1 : 0;
 			},
 
-			setTransition(currentImage, nextImage, transition) {
-				// Get transition
+			setTransition(transition) {
 				if (transition === undefined)
 					transition = this.nextTransition;
 
@@ -458,66 +465,66 @@
 				}
 
 				this.$nextTick(() => {
-					this.transitionStart(currentImage, nextImage, transition);
+					this.transitionStart(transition);
 				});
 			},
 
-			transitionStart(currentImage, nextImage, transition) {
+			transitionStart(transition) {
 				this.$emit('vueFlux-transitionStart');
 
-				let timeout = transition !== undefined? this.$refs.transition.totalDuration : 0;
+				let timeout = 0;
 
-				setTimeout(() => {
-					this.transitionEnd(currentImage, nextImage);
+				if (transition !== undefined)
+					timeout = this.$refs.transition.totalDuration;
+
+				this.timer = setTimeout(() => {
+					this.transitionEnd();
 				}, timeout);
 			},
 
-			transitionEnd(currentImage, nextImage) {
+			transitionEnd() {
+				let currentImage = this.currentImage();
+				let nextImage = this.nextImage();
+
 				currentImage.setCss({ zIndex: 10 });
 				nextImage.setCss({ zIndex: 11 });
-
 				this.transition.current = undefined;
 
-				if (this.config.infinite === false && nextImage.index === this.images.length - 1) {
-					this.stop();
-					return;
-				}
+				this.$nextTick(() => {
+					if (this.config.infinite === false && nextImage.index === this.images.length - 1) {
+						this.stop();
+						return;
+					}
 
-				// Play next if autoplay is true
-				if (this.config.autoplay === true) {
-					this.timer = setTimeout(() => {
-						this.showImage('next');
-					}, this.config.delay);
-				}
+					if (this.config.autoplay === true) {
+						this.timer = setTimeout(() => {
+							this.showImage('next');
+						}, this.config.delay);
+					}
 
-				this.$emit('vueFlux-transitionEnd');
+					this.$emit('vueFlux-transitionEnd');
+				});
 			},
 
 			showImage(index, transition) {
 				if (!this.loaded || this.$refs.image1 === undefined)
 					return;
 
-				// If there is a transition running prevent showing new image
 				if (this.transition.current !== undefined)
 					return;
 
-				if (this.currentImage.index === index)
+				if (this.currentImage().index === index)
 					return;
 
 				clearTimeout(this.timer);
 
-				// Get image index if next or previous
-				index = this.getIndex(index);
+				let nextImage = this.nextImage();
 
-				// Prepare images
-				let currentImage = this.currentImage;
-				let nextImage = this.nextImage;
-
-				this[nextImage.reference] = index;
+				this[nextImage.reference] = this.getIndex(index);
 				nextImage.show();
 
 				this.$nextTick(() => {
-					this.setTransition(currentImage, nextImage, transition);
+					this.setTransition(transition);
 				});
 			},
 
