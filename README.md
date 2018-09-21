@@ -60,7 +60,7 @@ export default {
 
 ## Performance
 
-Weight is just 86KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
+Weight is just 97KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
 
 ## Included transitions
 
