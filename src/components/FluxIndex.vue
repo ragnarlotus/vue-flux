@@ -1,5 +1,5 @@
 <template>
-	<div v-if="slider !== undefined && slider.loaded" class="flux-index">
+	<div class="flux-index">
 		<transition name="fade">
 			<div v-if="displayButton" class="toggle" @click="toggle()"></div>
 		</transition>
