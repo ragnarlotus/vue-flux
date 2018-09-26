@@ -20,12 +20,6 @@
 			},
 
 			display: function() {
-				if (!this.slider)
-					return false;
-
-				if (!this.slider.loaded)
-					return false;
-
 				if (this.slider.mouseOver !== true)
 					return false;
 

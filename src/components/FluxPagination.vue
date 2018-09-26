@@ -1,5 +1,5 @@
 <template>
-	<nav v-if="slider !== undefined && slider.loaded" class="flux-pagination">
+	<nav class="flux-pagination">
 		<ul>
 			<li v-for="i in slider.imagesLoaded" :key="i" :class="getClass(i - 1)" @click="showImage(i - 1)" @touchend="showImage(i - 1, $event)" :title="getTitle(i - 1)">
 				<span class="pagination-item"></span>
