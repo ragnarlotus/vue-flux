@@ -23,13 +23,13 @@
 			</div>
 		</slot>
 
-		<slot name="caption"></slot>
+		<slot v-if="loaded" name="caption"></slot>
 
-		<slot name="controls"></slot>
+		<slot v-if="loaded" name="controls"></slot>
 
-		<slot name="index"></slot>
+		<slot v-if="loaded" name="index"></slot>
 
-		<slot name="pagination"></slot>
+		<slot v-if="loaded" name="pagination"></slot>
 	</div>
 </template>
 

@@ -21,12 +21,6 @@
 
 		methods: {
 			caption: function() {
-				if (!this.slider)
-					return '';
-
-				if (!this.slider.loaded)
-					return '';
-
 				if (this.slider.transition.current !== undefined)
 					return '';
 
