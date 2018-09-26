@@ -181,10 +181,6 @@
 
 <script>
 	import VueFlux from './components/VueFlux.vue';
-	import FluxCaption from './components/FluxCaption.vue';
-	import FluxControls from './components/FluxControls.vue';
-	import FluxIndex from './components/FluxIndex.vue';
-	import FluxPagination from './components/FluxPagination.vue';
 	import Transitions from './components/transitions/index.js';
 	import FluxParallax from './components/FluxParallax.vue';
 
@@ -193,10 +189,10 @@
 
 		components: {
 			VueFlux,
-			FluxCaption,
-			FluxControls,
-			FluxIndex,
-			FluxPagination,
+			FluxCaption: () => import('./components/FluxCaption.vue'),
+			FluxControls: () => import('./components/FluxControls.vue'),
+			FluxIndex: () => import('./components/FluxIndex.vue'),
+			FluxPagination: () => import('./components/FluxPagination.vue'),
 			FluxParallax
 		},
 
