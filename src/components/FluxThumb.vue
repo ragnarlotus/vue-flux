@@ -15,10 +15,12 @@
 				type: Object,
 				required: true
 			},
+
 			index: {
 				type: [Number, String],
 				required: true
 			},
+
 			css: {
 				type: Object,
 				default: () => {

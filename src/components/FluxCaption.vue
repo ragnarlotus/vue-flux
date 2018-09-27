@@ -1,30 +1,36 @@
 <template>
 	<transition name="fade">
-		<div v-if="caption()" class="flux-caption">{{ caption() }}</div>
+		<div v-if="caption" class="flux-caption">{{ caption }}</div>
 	</transition>
 </template>
 
 <script>
 	export default {
 		props: {
-			slider: {
-				type: Object,
-				required: false
-			}
+			slider: { type: Object }
 		},
 
 		computed: {
-			captions: function() {
-				return this.slider.captions;
-			}
-		},
+			vf: function() {
+				if (this.slider)
+					return this.slider;
 
-		methods: {
+				if (this.$parent.$options.name === 'VueFlux')
+					return this.$parent.loaded? this.$parent : undefined;
+
+				console.warn('slider not referenced, check https://github.com/deulos/vue-flux/wiki/FluxCaption for help');
+
+				return undefined;
+			},
+
 			caption: function() {
-				if (this.slider.transition.current !== undefined)
+				if (!this.vf)
 					return '';
 
-				let currentImage = this.slider.currentImage();
+				if (this.vf.transition.current !== undefined)
+					return '';
+
+				let currentImage = this.vf.currentImage();
 
 				if (currentImage === undefined)
 					return '';
@@ -33,6 +39,10 @@
 					return '';
 
 				return this.captions[currentImage.index];
+			},
+
+			captions: function() {
+				return this.vf.captions;
 			}
 		}
 	};
