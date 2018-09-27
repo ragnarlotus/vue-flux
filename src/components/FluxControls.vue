@@ -1,9 +1,9 @@
 <template>
 	<transition name="fade">
 		<div v-if="display" class="flux-controls">
-			<div class="previous" @click="slider.showImage('previous')"></div>
-			<div :class="autoplayClass" @click="slider.toggleAutoplay()"></div>
-			<div class="next" @click="slider.showImage('next')"></div>
+			<div class="previous" @click="vf.showImage('previous')"></div>
+			<div :class="autoplayClass" @click="vf.toggleAutoplay()"></div>
+			<div class="next" @click="vf.showImage('next')"></div>
 		</div>
 	</transition>
 </template>
@@ -11,29 +11,40 @@
 <script>
 	export default {
 		props: {
-			slider: { type: Object, required: false }
+			slider: { type: Object }
 		},
 
 		computed: {
-			controls: function() {
-				return this;
+			vf: function() {
+				if (this.slider)
+					return this.slider;
+
+				if (this.$parent.$options.name === 'VueFlux')
+					return this.$parent.loaded? this.$parent : undefined;
+
+				console.warn('slider not referenced, check https://github.com/deulos/vue-flux/wiki/FluxControls for help');
+
+				return undefined;
 			},
 
 			display: function() {
-				if (this.slider.mouseOver !== true)
+				if (!this.vf)
 					return false;
 
-				if (this.slider.transition.current !== undefined)
+				if (this.vf.mouseOver !== true)
 					return false;
 
-				if (this.slider.index !== undefined && this.slider.index.visible)
+				if (this.vf.transition.current !== undefined)
+					return false;
+
+				if (this.vf.index !== undefined && this.vf.index.visible)
 					return false;
 
 				return true;
 			},
 
 			autoplayClass: function() {
-				return this.slider.config.autoplay? 'pause' : 'play';
+				return this.vf.config.autoplay? 'pause' : 'play';
 			}
 		}
 	};

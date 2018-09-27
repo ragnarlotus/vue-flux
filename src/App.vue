@@ -8,10 +8,10 @@
 			<div class="sm:block md:block lg:flex xl:flex -mx-2">
 				<div class="lg:w-3/5 px-2 mb-4">
 					<vue-flux :options="fluxOptions" :images="fluxImages" :transitions="fluxTransitions" :captions="fluxCaptions" ref="slider">
-						<flux-caption slot="caption" :slider="$refs.slider"></flux-caption>
-						<flux-controls slot="controls" :slider="$refs.slider"></flux-controls>
-						<flux-index slot="index" :slider="$refs.slider"></flux-index>
-						<flux-pagination slot="pagination" :slider="$refs.slider"></flux-pagination>
+						<flux-caption slot="caption"></flux-caption>
+						<flux-controls slot="controls"></flux-controls>
+						<flux-index slot="index"></flux-index>
+						<flux-pagination slot="pagination"></flux-pagination>
 					</vue-flux>
 				</div>
 
@@ -181,6 +181,10 @@
 
 <script>
 	import VueFlux from './components/VueFlux.vue';
+	import FluxCaption from './components/FluxCaption.vue';
+	import FluxControls from './components/FluxControls.vue';
+	import FluxIndex from './components/FluxIndex.vue';
+	import FluxPagination from './components/FluxPagination.vue';
 	import Transitions from './components/transitions/index.js';
 	import FluxParallax from './components/FluxParallax.vue';
 
@@ -189,10 +193,10 @@
 
 		components: {
 			VueFlux,
-			FluxCaption: () => import('./components/FluxCaption.vue'),
-			FluxControls: () => import('./components/FluxControls.vue'),
-			FluxIndex: () => import('./components/FluxIndex.vue'),
-			FluxPagination: () => import('./components/FluxPagination.vue'),
+			FluxCaption,
+			FluxControls,
+			FluxIndex,
+			FluxPagination,
 			FluxParallax
 		},
 
@@ -214,25 +218,16 @@
 				'slides/6.jpg',
 			],
 			fluxTransitions: Transitions,
-			fluxCaptions: [ 'First caption', 'Second caption', undefined, 'Fourth caption' ],
-			rendered: false
+			fluxCaptions: [ 'First caption', 'Second caption', undefined, 'Fourth caption' ]
 		}),
 
 		computed: {
-			slider: function() {
-				return this.$refs.slider;
-			},
-
 			currentTransition: function() {
 				if (!this.rendered || !this.$refs.slider || !this.$refs.slider.transition)
 					return undefined;
 
 				return this.$refs.slider.transition.current;
 			}
-		},
-
-		mounted() {
-			this.rendered = true;
 		},
 
 		methods: {

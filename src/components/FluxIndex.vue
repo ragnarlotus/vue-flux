@@ -1,5 +1,5 @@
 <template>
-	<div class="flux-index">
+	<div v-if="vf !== undefined" class="flux-index">
 		<transition name="fade">
 			<div v-if="displayButton" class="toggle" @click="toggle()"></div>
 		</transition>
@@ -7,7 +7,7 @@
 		<nav :class="indexClass" @click="click()" @touchstart="touchStart" @touchend="touchEnd">
 			<ul ref="thumbs">
 				<li v-for="(image, index) in images" :key="index" :class="current(index)" @click="click(index)" @touchstart="touchStart($event, index)" @touchend="touchEnd($event, index)">
-					<flux-thumb :slider="slider" :index="index"></flux-thumb>
+					<flux-thumb :slider="vf" :index="index"></flux-thumb>
 				</li>
 			</ul>
 		</nav>
@@ -31,22 +31,34 @@
 		}),
 
 		props: {
-			slider: { type: Object, required: false }
+			slider: { type: Object }
 		},
 
 		computed: {
+			vf: function() {
+				if (this.slider)
+					return this.slider;
+
+				if (this.$parent.$options.name === 'VueFlux')
+					return this.$parent.loaded? this.$parent : undefined;
+
+				console.warn('slider not referenced, check https://github.com/deulos/vue-flux/wiki/FluxIndex for help');
+
+				return undefined;
+			},
+
 			images: function() {
-				return this.slider.properties;
+				return this.vf.properties;
 			},
 
 			displayButton: function() {
-				if (!this.slider.index)
+				if (!this.vf.index)
 					return false;
 
-				if (this.slider.mouseOver !== true)
+				if (this.vf.mouseOver !== true)
 					return false;
 
-				if (this.slider.transition.current !== undefined)
+				if (this.vf.transition.current !== undefined)
 					return false;
 
 				if (this.visible === true)
@@ -58,10 +70,10 @@
 			indexClass: function() {
 				let indexClass = '';
 
-				if (this.visible && this.slider.index)
+				if (this.visible && this.vf.index)
 					indexClass += 'visible';
 
-				if (this.slider.mouseOver)
+				if (this.vf.mouseOver)
 					indexClass += ' mouse-over';
 
 				return indexClass;
@@ -89,7 +101,7 @@
 			},
 
 			click(index) {
-				if (this.slider.touchable)
+				if (this.vf.touchable)
 					return;
 
 				if (typeof index === 'undefined')
@@ -100,7 +112,7 @@
 			},
 
 			toggle() {
-				if (!this.slider.index)
+				if (!this.vf.index)
 					return;
 
 				if (!this.visible)
@@ -111,7 +123,7 @@
 			},
 
 			show() {
-				this.slider.stop();
+				this.vf.stop();
 				this.visible = true;
 
 				this.$nextTick(() => {
@@ -121,13 +133,13 @@
 			},
 
 			showImage(index) {
-				if (this.slider.index && this.visible) {
+				if (this.vf.index && this.visible) {
 					this.hide(index);
 					return;
 				}
 
-				this.slider.mouseOver = false;
-				this.slider.showImage(index);
+				this.vf.mouseOver = false;
+				this.vf.showImage(index);
 			},
 
 			hide(index) {
@@ -143,7 +155,7 @@
 			},
 
 			current(index) {
-				return this.slider.currentImage().index === index? 'current' : '';
+				return this.vf.currentImage().index === index? 'current' : '';
 			}
 		}
 	};
