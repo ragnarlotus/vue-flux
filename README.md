@@ -29,28 +29,26 @@ npm install --save vue-flux
    :images="fluxImages"
    :transitions="fluxTransitions"
    ref="slider">
+      <flux-pagination slot="pagination"></flux-pagination>
 </vue-flux>
 
 <button @click="$refs.slider.showImage('next')">NEXT</button>
 ```
 
 ``` javascript
-import { VueFlux, Transitions } from 'vue-flux';
+import { VueFlux, FluxPagination, Transitions } from 'vue-flux';
 
 export default {
    components: {
-      VueFlux
+      VueFlux,
+      FluxPagination
    },
 
    data: () => ({
       fluxOptions: {
          autoplay: true
       },
-      fluxImages: [
-         'URL1',
-         'URL2',
-         'URL3'
-      ],
+      fluxImages: [ 'URL1', 'URL2', 'URL3' ],
       fluxTransitions: {
          transitionBook: Transitions.transitionBook
       }
