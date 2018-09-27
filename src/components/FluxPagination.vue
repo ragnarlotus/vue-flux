@@ -1,7 +1,7 @@
 <template>
-	<nav class="flux-pagination">
+	<nav v-if="vf !== undefined" class="flux-pagination">
 		<ul>
-			<li v-for="i in slider.imagesLoaded" :key="i" :class="getClass(i - 1)" @click="showImage(i - 1)" @touchend="showImage(i - 1, $event)" :title="getTitle(i - 1)">
+			<li v-for="i in vf.imagesLoaded" :key="i" :class="getClass(i - 1)" @click="showImage(i - 1)" @touchend="showImage(i - 1, $event)" :title="getTitle(i - 1)">
 				<span class="pagination-item"></span>
 			</li>
 		</ul>
@@ -11,16 +11,28 @@
 <script>
 	export default {
 		props: {
-			slider: { type: Object, required: false }
+			slider: { type: Object }
 		},
 
 		computed: {
+			vf: function() {
+				if (this.slider)
+					return this.slider;
+
+				if (this.$parent.$options.name === 'VueFlux')
+					return this.$parent.loaded? this.$parent : undefined;
+
+				console.warn('slider not referenced, check https://github.com/deulos/vue-flux/wiki/FluxPagination for help');
+
+				return undefined;
+			},
+
 			currentTransition: function() {
-				return this.slider.transition.current;
+				return this.vf.transition.current;
 			},
 
 			currentImageIndex: function() {
-				let currentImage = this.slider.currentImage();
+				let currentImage = this.vf.currentImage();
 
 				if (currentImage === undefined)
 					return undefined;
@@ -29,7 +41,7 @@
 			},
 
 			nextImageIndex: function() {
-				let nextImage = this.slider.nextImage();
+				let nextImage = this.vf.nextImage();
 
 				return nextImage.index;
 			}
@@ -47,11 +59,11 @@
 			},
 
 			getTitle(i) {
-				return this.slider.captions[i] || '';
+				return this.vf.captions[i] || '';
 			},
 
 			showImage(index, event) {
-				this.slider.showImage(index);
+				this.vf.showImage(index);
 
 				if (event)
 					event.preventDefault();
