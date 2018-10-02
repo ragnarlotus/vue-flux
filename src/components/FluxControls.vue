@@ -31,7 +31,7 @@
 				if (!this.vf)
 					return false;
 
-				if (this.vf.mouseOver !== true)
+				if ((this.vf.touchable === false && this.vf.mouseOver === false) || (this.vf.touchable && this.vf.options.enableGestures))
 					return false;
 
 				if (this.vf.transition.current !== undefined)
@@ -51,13 +51,15 @@
 </script>
 
 <style lang="scss">
+	$size: 50px;
+
 	.vue-flux .flux-controls {
 		position: absolute;
 		top: 50%;
 		left: 0;
 		right: 0;
-		height: 50px;
-		margin-top: -25px;
+		height: $size;
+		margin-top: -($size / 2);
 		text-align: center;
 		z-index: 100;
 
@@ -75,8 +77,8 @@
 		.next {
 			position: absolute;
 			top: 0;
-			width: 50px;
-			height: 50px;
+			width: $size;
+			height: $size;
 			cursor: pointer;
 			border-radius: 50%;
 			background-color: rgba(0, 0, 0, 0.6);
@@ -87,7 +89,7 @@
 		}
 
 		.previous {
-			left: 25px;
+			left: $size / 2;
 			background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAIVBMVEX///////////////////////////////////////////9/gMdvAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAAAuUAAALlARv+XnsAAABUSURBVEjH7dYxCgAgEAPB8weX/39WFBtBbsFSY2sYyzXicDLq0wQDKQGQAKiJAZTEvC+IRgPBYAEyYOB1AAf4hAkTXxB5nySOGmaRw4pp5rhv34MOQwscJ7/MrxQAAAAASUVORK5CYII=);
 		}
 
@@ -104,7 +106,7 @@
 		}
 
 		.next {
-			right: 25px;
+			right: $size / 2;
 			background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABABAMAAABYR2ztAAAAIVBMVEX///////////////////////////////////////////9/gMdvAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAAAuUAAALlARv+XnsAAABYSURBVEjH7dYxDoAwDEPR5Ab1/S8LVEgsyL8SG3XWWK/dnKpnumA0/L4lAOSJE/DEtXfEBBxxBwYFBH8IEWJbggL4RIAAPwFWC+VDqXEtYrFyNWO5v58HB4q9HAkl7KTYAAAAAElFTkSuQmCC);
 		}
 
@@ -113,6 +115,45 @@
 		.pause:hover,
 		.next:hover {
 			background-color: rgba(0, 0, 0, 0.9);
+		}
+
+		@media (max-width: 576px) {
+			$smSize: $size * 0.55;
+
+			.previous,
+			.play,
+			.pause,
+			.next {
+				width: $smSize;
+				height: $smSize;
+				background-size: 31%;
+			}
+		}
+
+		@media (min-width: 577px) and (max-width: 768px) {
+			$mdSize: $size * 0.70;
+
+			.previous,
+			.play,
+			.pause,
+			.next {
+				width: $mdSize;
+				height: $mdSize;
+				background-size: 34%;
+			}
+		}
+
+		@media (min-width: 769px) and (max-width: 992px) {
+			$lgSize: $size * 0.85;
+
+			.previous,
+			.play,
+			.pause,
+			.next {
+				width: $lgSize;
+				height: $lgSize;
+				background-size: 37%;
+			}
 		}
 	}
 </style>
