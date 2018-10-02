@@ -23,11 +23,11 @@
 			</div>
 		</slot>
 
-		<slot v-if="loaded" name="caption"></slot>
+		<slot name="caption"></slot>
 
-		<slot v-if="loaded" name="controls"></slot>
+		<slot name="controls"></slot>
 
-		<slot v-if="loaded" name="index"></slot>
+		<slot name="index"></slot>
 
 		<slot v-if="loaded" name="pagination"></slot>
 	</div>
@@ -47,6 +47,7 @@
 			config: {
 				autoplay: false,
 				bindKeys: false,
+				enableGestures: false,
 				fullscreen: false,
 				infinite: true,
 				delay: 5000,
@@ -537,6 +538,9 @@
 			},
 
 			touchStart(event) {
+				if (!this.config.enableGestures)
+					return;
+
 				event.preventDefault();
 
 				this.touchStartTime = Date.now();
@@ -545,6 +549,9 @@
 			},
 
 			touchEnd(event) {
+				if (!this.config.enableGestures)
+					return;
+
 				event.preventDefault();
 
 				let previousTouchTime = this.touchEndTime;
