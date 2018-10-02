@@ -1,7 +1,7 @@
 <template>
-	<div v-if="vf !== undefined" class="flux-index">
+	<div class="flux-index">
 		<transition name="fade">
-			<div v-if="displayButton" class="toggle" @click="toggle()"></div>
+			<div v-show="displayButton" class="toggle" @click="toggle()"></div>
 		</transition>
 
 		<nav :class="indexClass" @click="click()" @touchstart="touchStart" @touchend="touchEnd">
@@ -48,14 +48,20 @@
 			},
 
 			images: function() {
+				if (!this.vf)
+					return [];
+
 				return this.vf.properties;
 			},
 
 			displayButton: function() {
+				if (!this.vf)
+					return false;
+
 				if (!this.vf.index)
 					return false;
 
-				if (this.vf.mouseOver !== true)
+				if ((this.vf.touchable === false && this.vf.mouseOver === false) || (this.vf.touchable && this.vf.options.enableGestures))
 					return false;
 
 				if (this.vf.transition.current !== undefined)
@@ -68,6 +74,9 @@
 			},
 
 			indexClass: function() {
+				if (!this.vf)
+					return '';
+
 				let indexClass = '';
 
 				if (this.visible && this.vf.index)
@@ -82,12 +91,20 @@
 
 		methods: {
 			touchStart(event) {
+				if (!this.vf.config.enableGestures)
+					return;
+
 				event.stopPropagation();
+
 				this.touchStartTime = Date.now();
 			},
 
 			touchEnd(event, index) {
+				if (!this.vf.config.enableGestures)
+					return;
+
 				event.stopPropagation();
+
 				let offsetTime = Date.now() - this.touchStartTime;
 
 				if (offsetTime > 200)
@@ -171,13 +188,15 @@
 			transition: opacity 0.3s ease-in;
 		}
 
+		$size: 50px;
+
 		.toggle {
 			position: absolute;
 			left: 50%;
 			bottom: 55px;
-			margin-left: -25px;
-			width: 50px;
-			height: 50px;
+			margin-left: -($size / 2);
+			width: $size;
+			height: $size;
 			cursor: pointer;
 			border-radius: 50%;
 			background-color: rgba(0, 0, 0, 0.6);
@@ -191,6 +210,39 @@
 		.toggle:hover {
 			transition: background-color 0.2s ease-in;
 			background-color: rgba(0, 0, 0, 0.9);
+		}
+
+		@media (max-width: 576px) {
+			$smSize: $size * 0.55;
+
+			.toggle {
+				width: $smSize;
+				height: $smSize;
+				margin-left: -($smSize / 2);
+				background-size: 31%;
+			}
+		}
+
+		@media (min-width: 577px) and (max-width: 768px) {
+			$mdSize: $size * 0.70;
+
+			.toggle {
+				width: $mdSize;
+				height: $mdSize;
+				margin-left: -($mdSize / 2);
+				background-size: 34%;
+			}
+		}
+
+		@media (min-width: 769px) and (max-width: 992px) {
+			$lgSize: $size * 0.85;
+
+			.toggle {
+				width: $lgSize;
+				height: $lgSize;
+				margin-left: -($lgSize / 2);
+				background-size: 37%;
+			}
 		}
 
 		nav {
