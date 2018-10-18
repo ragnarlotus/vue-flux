@@ -243,8 +243,6 @@
 			transitionClass(transition) {
 				let tClass = this.baseTransitionClass;
 
-				console.log(this.currentTransition);
-
 				if (this.currentTransition === transition)
 					tClass += ' '+ this.activeTransitionClass;
 
