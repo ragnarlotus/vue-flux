@@ -333,12 +333,14 @@
 					}
 
 					// Find height
-					if (this.config.height === 'auto' && this.$refs.container.clientHeight) {
-						let height = window.getComputedStyle(this.$refs.container).height;
-						this.size.height = parseFloat(height);
+					if (this.config.height === 'auto') {
+						if (this.$refs.container.clientHeight) {
+							let height = window.getComputedStyle(this.$refs.container).height;
+							this.size.height = parseFloat(height);
 
-					} else {
-						this.size.height = Math.floor(this.size.width / 16 * 9);
+						} else {
+							this.size.height = Math.floor(this.size.width / 16 * 9);
+						}
 					}
 
 					this.$refs.image1.init();
