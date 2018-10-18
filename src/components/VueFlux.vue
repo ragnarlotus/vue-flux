@@ -334,8 +334,8 @@
 
 					// Find height
 					if (this.config.height === 'auto') {
-						if (this.$refs.container.clientHeight) {
-							let height = window.getComputedStyle(this.$refs.container).height;
+						if (this.$refs.container.parentNode.clientHeight) {
+							let height = window.getComputedStyle(this.$refs.container.parentNode).height;
 							this.size.height = parseFloat(height);
 
 						} else {
