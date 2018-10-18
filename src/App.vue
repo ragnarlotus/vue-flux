@@ -201,6 +201,7 @@
 		},
 
 		data: () => ({
+			rendered: false,
 			baseTransitionClass: 'text-center whitespace-no-wrap block border border-grey-light rounded text-white cursor-pointer py-2 px-4 shadow-md',
 			activeTransitionClass: 'bg-black',
 			inactiveTransitionClass: 'bg-grey-darkest hover:bg-black',
@@ -230,6 +231,10 @@
 			}
 		},
 
+		mounted() {
+			this.rendered = true;
+		},
+
 		methods: {
 			showNext(transition) {
 				this.$refs.slider.showImage('next', transition);
@@ -237,6 +242,8 @@
 
 			transitionClass(transition) {
 				let tClass = this.baseTransitionClass;
+
+				console.log(this.currentTransition);
 
 				if (this.currentTransition === transition)
 					tClass += ' '+ this.activeTransitionClass;
