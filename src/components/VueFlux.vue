@@ -329,18 +329,21 @@
 					// Find width
 					if (!this.size.width) {
 						let width = window.getComputedStyle(this.$refs.container).width;
+
 						this.size.width = parseFloat(width);
 					}
 
 					// Find height
 					if (this.config.height === 'auto') {
-						if (this.$refs.container.parentNode.clientHeight) {
-							let height = window.getComputedStyle(this.$refs.container.parentNode).height;
-							this.size.height = parseFloat(height);
+						let height = this.size.width / 16 * 9;
 
-						} else {
-							this.size.height = Math.floor(this.size.width / 16 * 9);
-						}
+						if (this.$refs.container.clientHeight)
+							height = window.getComputedStyle(this.$refs.container).height;
+
+						else if (this.$refs.container.parentNode.clientHeight)
+							height = window.getComputedStyle(this.$refs.container.parentNode).height;
+
+						this.size.height = parseFloat(height);
 					}
 
 					this.$refs.image1.init();
