@@ -1,7 +1,7 @@
 <template>
 	<nav v-if="vf !== undefined" class="flux-pagination">
 		<ul>
-			<li v-for="i in vf.imagesLoaded" :key="i" :class="getClass(i - 1)" @click="showImage(i - 1)" @touchend="showImage(i - 1, $event)" :title="getTitle(i - 1)">
+			<li v-for="i in vf.properties.length" :key="i" :class="getClass(i - 1)" @click="showImage(i - 1)" @touchend="showImage(i - 1, $event)" :title="getTitle(i - 1)">
 				<span class="pagination-item"></span>
 			</li>
 		</ul>
