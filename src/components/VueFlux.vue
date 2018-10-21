@@ -253,6 +253,9 @@
 						width: img.naturalWidth || img.width,
 						height: img.naturalHeight || img.height
 					};
+
+				} else {
+					console.warn('Image '+ this.images[i] +' could not be loaded');
 				}
 
 				if (i === 0)
@@ -456,9 +459,9 @@
 				let currentIndex = this.currentImage().index;
 
 				if (index === 'previous')
-					return currentIndex > 0? currentIndex - 1 : this.images.length - 1;
+					return currentIndex > 0? currentIndex - 1 : this.properties.length - 1;
 
-				return currentIndex + 1 < this.images.length? currentIndex + 1 : 0;
+				return currentIndex + 1 < this.properties.length? currentIndex + 1 : 0;
 			},
 
 			setTransition(transition) {
@@ -497,7 +500,7 @@
 				this.transition.current = undefined;
 
 				this.$nextTick(() => {
-					if (this.config.infinite === false && nextImage.index === this.images.length - 1) {
+					if (this.config.infinite === false && nextImage.index === this.properties.length - 1) {
 						this.stop();
 						return;
 					}
