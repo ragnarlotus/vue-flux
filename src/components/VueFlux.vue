@@ -222,6 +222,9 @@
 
 			if (this.config.bindKeys)
 				window.removeEventListener('keydown', this.keydown);
+
+			if (this.timer)
+				clearTimeout(this.timer);
 		},
 
 		methods: {
