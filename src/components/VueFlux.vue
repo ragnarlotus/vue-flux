@@ -418,7 +418,7 @@
 			},
 
 			toggleFullscreen() {
-				if (this.fullscreen === false)
+				if (this.config.fullscreen === false)
 					return;
 
 				if (this.inFullscreen())
