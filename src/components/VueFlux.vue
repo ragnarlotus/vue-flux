@@ -18,7 +18,7 @@
 
 		<slot name="spinner">
 			<div v-if="!loaded" class="spinner">
-				<div class="pct">{{ this.loadPct }}%</div>
+				<div class="pct">{{ loadPct }}%</div>
 				<div class="border"></div>
 			</div>
 		</slot>
