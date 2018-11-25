@@ -88,8 +88,25 @@
 </script>
 
 <style lang="scss">
+	$width: 160px;
+	$height: 90px;
+
 	.vue-flux .flux-thumb {
-		width: 160px;
-		height: 90px;
+		width: $width;
+		height: $height;
+	}
+
+	@media (max-width: 386px) {
+		.vue-flux .flux-thumb {
+			width: $width * 0.5;
+			height: $height * 0.5;
+		}
+	}
+
+	@media (min-width: 387px) and (max-width: 576px) {
+		.vue-flux .flux-thumb {
+			width: $width * 0.7;
+			height: $height * 0.7;
+		}
 	}
 </style>
