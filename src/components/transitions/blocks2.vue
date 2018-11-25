@@ -86,7 +86,7 @@
 		},
 
 		destroyed() {
-			this.currentImage.show();
+			this.nextImage.show();
 		},
 
 		methods: {
