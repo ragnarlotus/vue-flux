@@ -61,7 +61,7 @@
 				if (!this.vf.index)
 					return false;
 
-				if ((this.vf.touchable === false && this.vf.mouseOver === false) || (this.vf.touchable && this.vf.options.enableGestures))
+				if (this.vf.mouseOver === false)
 					return false;
 
 				if (this.vf.transition.current !== undefined)
@@ -107,7 +107,7 @@
 
 				let offsetTime = Date.now() - this.touchStartTime;
 
-				if (offsetTime > 200)
+				if (offsetTime > 100)
 					return;
 
 				if (typeof index === 'undefined')
@@ -155,8 +155,14 @@
 					return;
 				}
 
+				let mouseOver = this.vf.mouseOver;
 				this.vf.mouseOver = false;
+
 				this.vf.showImage(index);
+
+				setTimeout(() => {
+					this.vf.mouseOver = mouseOver;
+				}, 10);
 			},
 
 			hide(index) {
