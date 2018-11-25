@@ -31,7 +31,7 @@
 				if (!this.vf)
 					return false;
 
-				if ((this.vf.touchable === false && this.vf.mouseOver === false) || (this.vf.touchable && this.vf.options.enableGestures))
+				if (this.vf.mouseOver === false)
 					return false;
 
 				if (this.vf.transition.current !== undefined)
@@ -58,7 +58,6 @@
 		top: 50%;
 		left: 0;
 		right: 0;
-		height: $size;
 		margin-top: -($size / 2);
 		text-align: center;
 		z-index: 100;
