@@ -1,6 +1,6 @@
 <template>
 	<div class="vue-flux" :class="inFullscreen()? 'fullscreen' : ''" ref="container"
-		@mouseover="toggleMouseOver(true)"
+		@mousemove="toggleMouseOver(true)"
 		@mouseleave="toggleMouseOver(false)"
 		@dblclick="toggleFullscreen()"
 		@touchstart="touchStart"
@@ -52,13 +52,15 @@
 				infinite: true,
 				delay: 5000,
 				width: '100%',
-				height: 'auto'
+				height: 'auto',
+				autohideTime: 3000
 			},
 			size: {
 				width: undefined,
 				height: undefined,
 			},
 			timer: undefined,
+			mouseOverTimer: undefined,
 			transitionNames: [],
 			transition: {
 				current: undefined,
@@ -210,6 +212,9 @@
 			this.resize();
 
 			this.preloadImages();
+
+			if (this.config.autohideTime === 0)
+				this.mouseOver = true;
 
 			window.addEventListener('resize', this.resize);
 
@@ -377,8 +382,16 @@
 			},
 
 			toggleMouseOver(over) {
-				if (this.touchable)
+				if (this.config.autohideTime === 0)
 					return;
+
+				clearTimeout(this.mouseOverTimer);
+
+				if (over) {
+					this.mouseOverTimer = setTimeout(() => {
+						this.mouseOver = false;
+					}, this.config.autohideTime);
+				}
 
 				this.mouseOver = over;
 			},
@@ -552,7 +565,8 @@
 				if (!this.config.enableGestures)
 					return;
 
-				event.preventDefault();
+				if (event.path[1].matches('.mask') || event.path[1].matches('.vue-flux'))
+					event.preventDefault();
 
 				this.touchStartTime = Date.now();
 				this.touchStartX = event.touches[0].clientX;
@@ -560,21 +574,28 @@
 			},
 
 			touchEnd(event) {
-				if (!this.config.enableGestures)
-					return;
-
-				event.preventDefault();
-
 				let previousTouchTime = this.touchEndTime;
 				this.touchEndTime = Date.now();
+
+				let offsetX = event.changedTouches[0].clientX - this.touchStartX;
+				let offsetY = event.changedTouches[0].clientY - this.touchStartY;
 
 				if (this.touchEndTime - previousTouchTime < 200) {
 					this.toggleFullscreen();
 					return;
 				}
 
+				if (Math.abs(offsetX) < 5 && Math.abs(offsetY) < 5) {
+					this.toggleMouseOver(true);
+					return;
+				}
+
+				if (!this.config.enableGestures)
+					return;
+
+				event.preventDefault();
+
 				let triggerX = Math.floor(this.size.width / 3);
-				let offsetX = event.changedTouches[0].clientX - this.touchStartX;
 
 				if (offsetX > 0 && offsetX > triggerX) {
 					this.showImage('previous');
@@ -590,7 +611,6 @@
 					return;
 
 				let triggerY = Math.floor(this.size.height / 3);
-				let offsetY = event.changedTouches[0].clientY - this.touchStartY;
 
 				if (offsetY < 0 && offsetY < -triggerY) {
 					this.index.show();
