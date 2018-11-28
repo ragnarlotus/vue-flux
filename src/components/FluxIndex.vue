@@ -1,12 +1,12 @@
 <template>
 	<div class="flux-index">
 		<transition name="fade">
-			<div v-show="displayButton" class="toggle" @click="toggle()"></div>
+			<div v-show="displayButton" class="toggle" @click="toggle"></div>
 		</transition>
 
-		<nav :class="indexClass" @click="click()" @touchstart="touchStart" @touchend="touchEnd">
+		<nav :class="indexClass" @click="click" @touchstart.passive="touchStart" @touchend.passive="touchEnd">
 			<ul ref="thumbs">
-				<li v-for="(image, index) in images" :key="index" :class="current(index)" @click="click(index)" @touchstart="touchStart($event, index)" @touchend="touchEnd($event, index)">
+				<li v-for="(image, index) in images" :key="index" :class="current(index)" @click="click($event, index)">
 					<flux-thumb :slider="vf" :index="index"></flux-thumb>
 				</li>
 			</ul>
@@ -67,9 +67,6 @@
 				if (this.vf.transition.current !== undefined)
 					return false;
 
-				if (this.visible === true)
-					return false;
-
 				return true;
 			},
 
@@ -99,7 +96,7 @@
 				this.touchStartTime = Date.now();
 			},
 
-			touchEnd(event, index) {
+			touchEnd(event) {
 				if (!this.vf.config.enableGestures)
 					return;
 
@@ -107,21 +104,14 @@
 
 				let offsetTime = Date.now() - this.touchStartTime;
 
-				if (offsetTime > 100)
-					return;
-
-				if (typeof index === 'undefined')
+				if (offsetTime < 100)
 					this.toggle();
-
-				else
-					this.showImage(index);
 			},
 
-			click(index) {
-				if (this.vf.touchable)
-					return;
+			click(event, index) {
+				event.stopPropagation();
 
-				if (typeof index === 'undefined')
+				if (index === undefined)
 					this.toggle();
 
 				else
@@ -155,14 +145,7 @@
 					return;
 				}
 
-				let mouseOver = this.vf.mouseOver;
-				this.vf.mouseOver = false;
-
 				this.vf.showImage(index);
-
-				setTimeout(() => {
-					this.vf.mouseOver = mouseOver;
-				}, 10);
 			},
 
 			hide(index) {
