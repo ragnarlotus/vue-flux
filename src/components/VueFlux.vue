@@ -53,7 +53,7 @@
 				delay: 5000,
 				width: '100%',
 				height: 'auto',
-				autohideTime: 3000
+				autohideTime: 1500
 			},
 			size: {
 				width: undefined,
