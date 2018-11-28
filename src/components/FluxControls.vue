@@ -37,9 +37,6 @@
 				if (this.vf.transition.current !== undefined)
 					return false;
 
-				if (this.vf.index !== undefined && this.vf.index.visible)
-					return false;
-
 				return true;
 			},
 
