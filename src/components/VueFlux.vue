@@ -111,10 +111,6 @@
 				return this;
 			},
 
-			touchable: function() {
-				return true == ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch);
-			},
-
 			caption: function() {
 				if (this.$slots['caption'])
 					return this.$slots['caption'][0].componentInstance;
