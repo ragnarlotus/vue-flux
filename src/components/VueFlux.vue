@@ -172,7 +172,7 @@
 
 		watch: {
 			options: function() {
-				this.setOptions();
+				this.updateOptions();
 			},
 
 			transitions: function() {
