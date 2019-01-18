@@ -203,7 +203,6 @@
 			this.updateOptions();
 			this.updateTransitions();
 
-
 			this.$emit('VueFlux-Created', this);
 		},
 
