@@ -202,6 +202,9 @@
 		created() {
 			this.updateOptions();
 			this.updateTransitions();
+
+
+			this.$emit('VueFlux-Created', this);
 		},
 
 		mounted() {
@@ -216,6 +219,8 @@
 
 			if (this.config.bindKeys)
 				window.addEventListener('keydown', this.keydown);
+
+			this.$emit('VueFlux-Mounted', this);
 		},
 
 		beforeDestroy() {
@@ -226,6 +231,8 @@
 
 			if (this.timer)
 				clearTimeout(this.timer);
+
+			this.$emit('VueFlux-Destroyed', this);
 		},
 
 		methods: {
@@ -283,6 +290,9 @@
 
 					this.resize();
 				}
+
+
+				this.$emit('VueFlux-OptionsUpdated', this);
 			},
 
 			updateTransitions() {
@@ -292,6 +302,8 @@
 
 				if (this.transitionNames.length > 0)
 					this.transition.last = this.transitionNames.length - 1;
+
+				this.$emit('VueFlux-TransitionsUpdated', this);
 			},
 
 			currentImage() {
@@ -374,6 +386,8 @@
 
 					if (this.config.autoplay === true)
 						this.play();
+
+					this.$emit('VueFlux-Ready', this);
 				});
 			},
 
@@ -410,6 +424,8 @@
 
 				else if (container.msRequestFullscreen)
 					container.msRequestFullscreen();
+
+				this.$emit('VueFlux-EnterFullscreen', this);
 			},
 
 			exitFullscreen() {
@@ -424,6 +440,8 @@
 
 				else if (document.msExitFullscreen)
 					document.msExitFullscreen();
+
+				this.$emit('VueFlux-ExitFullscreen', this);
 			},
 
 			toggleFullscreen() {
@@ -445,6 +463,8 @@
 				this.timer = setTimeout(() => {
 					this.showImage(index);
 				}, delay || this.config.delay);
+
+				this.$emit('VueFlux-Play', this);
 			},
 
 			stop() {
@@ -454,6 +474,8 @@
 					this.transition.current = undefined;
 
 				clearTimeout(this.timer);
+
+				this.$emit('VueFlux-Stop', this);
 			},
 
 			toggleAutoplay() {
@@ -491,7 +513,7 @@
 			},
 
 			transitionStart(transition) {
-				this.$emit('vueFlux-transitionStart');
+				this.$emit('VueFlux-TransitionStart', this, transition);
 
 				let timeout = 0;
 
@@ -499,11 +521,11 @@
 					timeout = this.$refs.transition.totalDuration;
 
 				this.timer = setTimeout(() => {
-					this.transitionEnd();
+					this.transitionEnd(transition);
 				}, timeout);
 			},
 
-			transitionEnd() {
+			transitionEnd(transition) {
 				let currentImage = this.currentImage();
 				let nextImage = this.nextImage();
 
@@ -523,7 +545,7 @@
 						}, this.config.delay);
 					}
 
-					this.$emit('vueFlux-transitionEnd');
+					this.$emit('VueFlux-TransitionEnd', this, transition);
 				});
 			},
 
@@ -543,6 +565,8 @@
 
 				this[nextImage.reference] = this.getIndex(index);
 				nextImage.show();
+
+				this.$emit('VueFlux-Show', this, this[nextImage.reference]);
 
 				this.$nextTick(() => {
 					this.setTransition(transition);

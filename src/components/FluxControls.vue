@@ -41,7 +41,7 @@
 			},
 
 			autoplayClass: function() {
-				return this.vf.config.autoplay? 'pause' : 'play';
+				return this.vf && this.vf.config.autoplay? 'pause' : 'play';
 			}
 		}
 	};
