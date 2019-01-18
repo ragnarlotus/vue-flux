@@ -42,7 +42,7 @@
 			},
 
 			captions: function() {
-				return this.vf.captions;
+				return this.vf? this.vf.captions : {};
 			}
 		}
 	};
