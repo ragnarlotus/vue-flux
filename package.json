@@ -31,11 +31,11 @@
     "vue": "^2.5.21"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.2.2",
-    "@vue/cli-service": "^3.2.3",
+    "@vue/cli-plugin-babel": "^3.3.0",
+    "@vue/cli-service": "^3.3.0",
     "node-sass": "^4.11.0",
     "sass-loader": "^6.0.6",
-    "vue-template-compiler": "^2.5.21"
+    "vue-template-compiler": "^2.5.22"
   },
   "babel": {
     "presets": [
