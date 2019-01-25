@@ -343,10 +343,13 @@
 				if (this.size.width && this.size.height)
 					return;
 
+
 				this.$nextTick(() => {
+					let container = this.$refs.container;
+
 					// Find width
 					if (!this.size.width) {
-						let width = window.getComputedStyle(this.$refs.container).width;
+						let width = window.getComputedStyle(container).width;
 
 						this.size.width = parseFloat(width);
 					}
@@ -355,11 +358,8 @@
 					if (this.config.height === 'auto') {
 						let height = this.size.width / 16 * 9;
 
-						if (this.$refs.container.clientHeight)
-							height = window.getComputedStyle(this.$refs.container).height;
-
-						else if (this.$refs.container.parentNode.clientHeight)
-							height = window.getComputedStyle(this.$refs.container.parentNode).height;
+						if (container.clientHeight)
+							height = window.getComputedStyle(container).height;
 
 						this.size.height = parseFloat(height);
 					}
