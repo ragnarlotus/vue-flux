@@ -34,8 +34,8 @@
 		},
 
 		created() {
-			this.currentImage = this.slider.currentImage();
-			this.nextImage = this.slider.nextImage();
+			this.currentImage = this.slider.imaman.current();
+			this.nextImage = this.slider.imaman.next();
 
 			let size = this.slider.size;
 			let diag = Math.sqrt(Math.pow(size.width, 2) + Math.pow(size.height, 2));

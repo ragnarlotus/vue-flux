@@ -65,7 +65,7 @@
 			},
 
 			initImage() {
-				let properties = this.slider.properties[this.index];
+				let properties = this.slider.imaman.props[this.index];
 
 				if (!properties) {
 					this.setCss({
