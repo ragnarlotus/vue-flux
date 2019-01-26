@@ -27,10 +27,10 @@
 				if (!this.vf)
 					return '';
 
-				if (this.vf.transition.current !== undefined)
+				if (this.vf.traman.current !== undefined)
 					return '';
 
-				let currentImage = this.vf.currentImage();
+				let currentImage = this.vf.imaman.current();
 
 				if (currentImage === undefined)
 					return '';
