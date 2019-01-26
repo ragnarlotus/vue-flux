@@ -1,17 +1,17 @@
 <template>
-	<div class="vue-flux" :class="inFullscreen()? 'fullscreen' : ''" ref="container"
+	<div class="vue-flux" :class="scrman.inFullScreen()? 'fullscreen' : ''" ref="container"
 		@mousemove="toggleMouseOver(true)"
 		@mouseleave="toggleMouseOver(false)"
-		@dblclick="toggleFullscreen()"
-		@touchstart="touchStart"
-		@touchend="touchEnd">
+		@dblclick="toggleFullScreen()"
+		@touchstart="touman.start"
+		@touchend="touman.end">
 
-		<img v-for="(src, index) in preload" :key="index" :src="path + src" alt="" ref="images"
-			@load="addImage(index)"
-			@error="addImage(index)">
+		<img v-for="(url, index) in imaman.loading" :key="index" :src="config.path + url" alt="" ref="images"
+			@load="imaman.add(index)"
+			@error="imaman.add(index)">
 
 		<div class="mask" :style="sizePx" ref="mask">
-			<component v-if="transition.current" :is="transition.current" ref="transition" :slider="slider"></component>
+			<component v-if="traman.current" :is="traman.current" ref="transition" :slider="slider"></component>
 			<flux-image :slider="slider" :index="image1Index" ref="image1"></flux-image>
 			<flux-image :slider="slider" :index="image2Index" ref="image2"></flux-image>
 		</div>
@@ -34,7 +34,12 @@
 </template>
 
 <script>
-	import FluxImage from './FluxImage.vue';
+	import ScreenManager from '@/classes/ScreenManager.js';
+	import TimersManager from '@/classes/TimersManager.js';
+	import TransitionsManager from '@/classes/TransitionsManager.js';
+	import ImagesManager from '@/classes/ImagesManager.js';
+	import TouchManager from '@/classes/TouchManager.js';
+	import FluxImage from '@/components/FluxImage.vue';
 
 	export default {
 		name: 'VueFlux',
@@ -53,30 +58,24 @@
 				delay: 5000,
 				width: '100%',
 				height: 'auto',
-				autohideTime: 1500
+				autohideTime: 1500,
+				lazyLoad: true,
+				lazyLoadAfter: 3,
+				path: ''
 			},
 			size: {
 				width: undefined,
 				height: undefined,
 			},
-			timer: undefined,
-			mouseOverTimer: undefined,
-			transitionNames: [],
-			transition: {
-				current: undefined,
-				last: undefined
-			},
-			mouseOver: false,
-			touchStartX: 0,
-			touchStartY: 0,
-			touchStartTime: 0,
-			touchEndTime: 0,
-			image1Index: 0,
-			image2Index: 1,
-			imagesLoaded: 0,
 			loaded: false,
-			preload: [],
-			properties: []
+			scrman: undefined,
+			timman: undefined,
+			traman: undefined,
+			touman: undefined,
+			imaman: undefined,
+			mouseOver: false,
+			image1Index: 0,
+			image2Index: 1
 		}),
 
 		props: {
@@ -91,10 +90,6 @@
 			transitionOptions: {
 				type: Object,
 				default: () => {}
-			},
-			path: {
-				type: String,
-				default: ''
 			},
 			images: {
 				type: Array,
@@ -154,20 +149,8 @@
 			},
 
 			loadPct: function() {
-				return Math.ceil(this.imagesLoaded * 100 / this.images.slice(0).length);
+				return Math.ceil(this.imaman.loaded * 100 / this.count) || 0;
 			},
-
-			nextTransition: function() {
-				if (!this.transitionNames.length)
-					return undefined;
-
-				let nextIndex = this.transition.last + 1;
-
-				if (nextIndex >= this.transitionNames.length)
-					nextIndex = 0;
-
-				return this.transitionNames[nextIndex];
-			}
 		},
 
 		watch: {
@@ -180,10 +163,9 @@
 
 				this.stop();
 
-				this.updateTransitions();
+				this.traman.update();
 
-				if (wasPlaying)
-					this.start();
+				wasPlaying && this.start();
 			},
 
 			images: function() {
@@ -192,7 +174,7 @@
 				this.stop();
 
 				this.$nextTick(() => {
-					this.preloadImages();
+					this.imaman.preload();
 
 					this.config.autoplay = wasPlaying;
 				});
@@ -200,8 +182,14 @@
 		},
 
 		created() {
+			this.scrman = new ScreenManager(this);
+			this.timman = new TimersManager(this);
+			this.traman = new TransitionsManager(this);
+			this.imaman = new ImagesManager(this);
+			this.touman = new TouchManager(this);
+
 			this.updateOptions();
-			this.updateTransitions();
+			this.traman.update();
 
 			this.$emit('VueFlux-Created', this);
 		},
@@ -209,7 +197,7 @@
 		mounted() {
 			this.resize();
 
-			this.preloadImages();
+			this.imaman.preload();
 
 			if (this.config.autohideTime === 0)
 				this.mouseOver = true;
@@ -228,53 +216,12 @@
 			if (this.config.bindKeys)
 				window.removeEventListener('keydown', this.keydown);
 
-			if (this.timer)
-				clearTimeout(this.timer);
+			this.timman.clear();
 
 			this.$emit('VueFlux-Destroyed', this);
 		},
 
 		methods: {
-			preloadImages() {
-				if (this.images.length < 2 || this.transitionNames.length === 0)
-					return;
-
-				this.loaded = false;
-				this.image1Index = 0;
-				this.image2Index = 1;
-				this.imagesLoaded = 0;
-
-				this.$nextTick(() => {
-					this.$refs.image1.setCss({ zIndex: 11 });
-					this.$refs.image2.setCss({ zIndex: 10 });
-				});
-
-				this.preload = this.images.slice(0);
-			},
-
-			addImage(i) {
-				this.imagesLoaded++;
-
-				let img = this.$refs.images[i];
-
-				if (img.naturalWidth || img.width) {
-					this.properties[i] = {
-						src: img.src,
-						width: img.naturalWidth || img.width,
-						height: img.naturalHeight || img.height
-					};
-
-				} else {
-					console.warn('Image '+ this.images[i] +' could not be loaded');
-				}
-
-				if (i === 0)
-					this.$refs.image1.init();
-
-				if (this.imagesLoaded === this.preload.length)
-					this.init();
-			},
-
 			updateOptions() {
 				let currentSize = {
 					width: this.config.width,
@@ -290,39 +237,16 @@
 					this.resize();
 				}
 
-
 				this.$emit('VueFlux-OptionsUpdated', this);
-			},
-
-			updateTransitions() {
-				Object.assign(this.$options.components, this.transitions);
-
-				this.transitionNames = Object.keys(this.transitions);
-
-				if (this.transitionNames.length > 0)
-					this.transition.last = this.transitionNames.length - 1;
-
-				this.$emit('VueFlux-TransitionsUpdated', this);
-			},
-
-			currentImage() {
-				if (this.$refs.image1 === undefined)
-					return undefined;
-
-				return this.$refs.image2.style.zIndex === 11? this.$refs.image2 : this.$refs.image1;
-			},
-
-			nextImage() {
-				return this.$refs.image1.style.zIndex === 10? this.$refs.image1 : this.$refs.image2;
 			},
 
 			setTransitionOptions(transition, defaultValues = {}) {
 				let transitionOptions = this.transitionOptions || {};
-				let options = transitionOptions[this.transition.current] || {};
+				let options = transitionOptions[this.traman.current] || {};
 
 				let direction = 'right';
 
-				if (this.currentImage().index > this.nextImage().index)
+				if (this.imaman.current().index > this.imaman.next().index)
 					direction = 'left';
 
 				Object.assign(transition, {
@@ -342,7 +266,6 @@
 
 				if (this.size.width && this.size.height)
 					return;
-
 
 				this.$nextTick(() => {
 					let container = this.$refs.container;
@@ -370,8 +293,6 @@
 			},
 
 			init() {
-				this.properties = this.properties.filter((p) => p);
-				this.preload = [];
 				this.loaded = true;
 
 				this.$refs.image2.init();
@@ -394,10 +315,10 @@
 				if (this.config.autohideTime === 0)
 					return;
 
-				clearTimeout(this.mouseOverTimer);
+				this.timman.clear('mouse-over');
 
 				if (over) {
-					this.mouseOverTimer = setTimeout(() => {
+					this.timman.mouseOver = setTimeout(() => {
 						this.mouseOver = false;
 					}, this.config.autohideTime);
 				}
@@ -405,61 +326,25 @@
 				this.mouseOver = over;
 			},
 
-			inFullscreen() {
-				return (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) !== undefined;
-			},
-
-			requestFullscreen() {
-				let container = this.$refs.container;
-
-				if (container.requestFullscreen)
-					container.requestFullscreen();
-
-				else if (container.mozRequestFullScreen)
-					container.mozRequestFullScreen();
-
-				else if (container.webkitRequestFullscreen)
-					container.webkitRequestFullscreen();
-
-				else if (container.msRequestFullscreen)
-					container.msRequestFullscreen();
-
-				this.$emit('VueFlux-EnterFullscreen', this);
-			},
-
-			exitFullscreen() {
-				if (document.exitFullscreen)
-					document.exitFullscreen();
-
-				else if (document.mozCancelFullScreen)
-					document.mozCancelFullScreen();
-
-				else if (document.webkitExitFullscreen)
-					document.webkitExitFullscreen();
-
-				else if (document.msExitFullscreen)
-					document.msExitFullscreen();
-
-				this.$emit('VueFlux-ExitFullscreen', this);
-			},
-
-			toggleFullscreen() {
+			enterFullScreen() {
 				if (this.config.fullscreen === false)
 					return;
 
-				if (this.inFullscreen())
-					this.exitFullscreen();
+				ScreenManager.requestFullScreen(this.$refs.container);
+			},
 
-				else
-					this.requestFullscreen();
+			exitFullScreen() {
+				ScreenManager.exitFullScreen();
+			},
 
-				this.resize();
+			toggleFullScreen() {
+				ScreenManager.inFullScreen()? this.exitFullScreen() : this.enterFullScreen();
 			},
 
 			play(index = 'next', delay) {
 				this.config.autoplay = true;
 
-				this.timer = setTimeout(() => {
+				this.timman.image = setTimeout(() => {
 					this.showImage(index);
 				}, delay || this.config.delay);
 
@@ -469,107 +354,31 @@
 			stop() {
 				this.config.autoplay = false;
 
-				if (this.transition.current)
-					this.transition.current = undefined;
+				if (this.traman.current)
+					this.traman.current = undefined;
 
-				clearTimeout(this.timer);
+				this.timman.clear('image');
 
 				this.$emit('VueFlux-Stop', this);
 			},
 
 			toggleAutoplay() {
-				if (this.config.autoplay)
-					this.stop();
-
-				else
-					this.play(undefined, 1);
-			},
-
-			getIndex(index) {
-				if (typeof index === 'number')
-					return index;
-
-				let currentIndex = this.currentImage().index;
-
-				if (index === 'previous')
-					return currentIndex > 0? currentIndex - 1 : this.properties.length - 1;
-
-				return currentIndex + 1 < this.properties.length? currentIndex + 1 : 0;
-			},
-
-			setTransition(transition) {
-				if (transition === undefined)
-					transition = this.nextTransition;
-
-				if (transition) {
-					this.transition.last = this.transitionNames.indexOf(transition);
-					this.transition.current = transition;
-				}
-
-				this.$nextTick(() => {
-					this.transitionStart(transition);
-				});
-			},
-
-			transitionStart(transition) {
-				this.$emit('VueFlux-TransitionStart', this, transition);
-
-				let timeout = 0;
-
-				if (transition !== undefined)
-					timeout = this.$refs.transition.totalDuration;
-
-				this.timer = setTimeout(() => {
-					this.transitionEnd(transition);
-				}, timeout);
-			},
-
-			transitionEnd(transition) {
-				let currentImage = this.currentImage();
-				let nextImage = this.nextImage();
-
-				currentImage.setCss({ zIndex: 10 });
-				nextImage.setCss({ zIndex: 11 });
-				this.transition.current = undefined;
-
-				this.$nextTick(() => {
-					if (this.config.infinite === false && nextImage.index === this.properties.length - 1) {
-						this.stop();
-						return;
-					}
-
-					if (this.config.autoplay === true) {
-						this.timer = setTimeout(() => {
-							this.showImage('next');
-						}, this.config.delay);
-					}
-
-					this.$emit('VueFlux-TransitionEnd', this, transition);
-				});
+				this.config.autoplay? this.stop() : this.play(undefined, 1);
 			},
 
 			showImage(index, transition) {
-				if (!this.loaded || this.$refs.image1 === undefined)
+				if (this.loaded === false || this.$refs.image1 === undefined)
 					return;
 
-				if (this.transition.current !== undefined)
+				if (this.traman.current !== undefined)
 					return;
 
-				if (this.currentImage().index === index)
+				if (this.imaman.current().index === index)
 					return;
 
-				clearTimeout(this.timer);
+				let next = this.imaman.show(index, transition);
 
-				let nextImage = this.nextImage();
-
-				this[nextImage.reference] = this.getIndex(index);
-				nextImage.show();
-
-				this.$emit('VueFlux-Show', this, this[nextImage.reference]);
-
-				this.$nextTick(() => {
-					this.setTransition(transition);
-				});
+				this.$emit('VueFlux-Show', this, this[next.reference]);
 			},
 
 			keydown(event) {
@@ -578,63 +387,6 @@
 
 				else if (/ArrowRight|Right/.test(event.key))
 					this.showImage('next');
-			},
-
-			touchStart(event) {
-				if (!this.config.enableGestures)
-					return;
-
-				if (event.path[1].matches('.mask') || event.path[1].matches('.vue-flux'))
-					event.preventDefault();
-
-				this.touchStartTime = Date.now();
-				this.touchStartX = event.touches[0].clientX;
-				this.touchStartY = event.touches[0].clientY;
-			},
-
-			touchEnd(event) {
-				let previousTouchTime = this.touchEndTime;
-				this.touchEndTime = Date.now();
-
-				let offsetX = event.changedTouches[0].clientX - this.touchStartX;
-				let offsetY = event.changedTouches[0].clientY - this.touchStartY;
-
-				if (this.touchEndTime - previousTouchTime < 200) {
-					this.toggleFullscreen();
-					return;
-				}
-
-				if (Math.abs(offsetX) < 5 && Math.abs(offsetY) < 5) {
-					this.toggleMouseOver(true);
-					return;
-				}
-
-				if (!this.config.enableGestures)
-					return;
-
-				event.preventDefault();
-
-				let triggerX = Math.floor(this.size.width / 3);
-
-				if (offsetX > 0 && offsetX > triggerX) {
-					this.showImage('previous');
-					return;
-				}
-
-				if (offsetX < 0 && offsetX < -triggerX) {
-					this.showImage('next');
-					return;
-				}
-
-				if (this.index === undefined)
-					return;
-
-				let triggerY = Math.floor(this.size.height / 3);
-
-				if (offsetY < 0 && offsetY < -triggerY) {
-					this.index.show();
-					return;
-				}
 			}
 		}
 	}
