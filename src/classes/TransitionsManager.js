@@ -94,6 +94,3 @@ export default class TransitionsManager {
 	}
 
 }
-
-
-
