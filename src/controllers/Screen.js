@@ -1,4 +1,4 @@
-export default class ScreenManager {
+export default class ScreenController {
 
 	constructor(vm) {
 		this.vm = vm;
@@ -12,7 +12,7 @@ export default class ScreenManager {
 			'msFullscreenElement'
 		];
 
-		return props.some(prop => prop in document);
+		return document[props.find(prop => prop in document)];
 	}
 
 	requestFullScreen(element) {

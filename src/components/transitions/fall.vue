@@ -5,6 +5,8 @@
 <script>
 	import FluxImage from '../FluxImage.vue';
 
+	let vf, currentImage, nextImage;
+
 	export default {
 		name: 'transitionFall',
 
@@ -13,8 +15,6 @@
 		},
 
 		data: () => ({
-			currentImage: undefined,
-			nextImage: undefined,
 			totalDuration: 1600,
 			easing: 'ease-in',
 			imageCss: {
@@ -26,7 +26,10 @@
 		}),
 
 		props: {
-			slider: Object
+			slider: {
+				type: Object,
+				required: true
+			}
 		},
 
 		computed: {
@@ -36,15 +39,16 @@
 		},
 
 		created() {
-			this.currentImage = this.slider.imaman.current();
-			this.nextImage = this.slider.imaman.next();
+			vf = this.slider;
+			currentImage = vf.Images.current;
+			nextImage = vf.Images.next;
 
-			this.slider.setTransitionOptions(this);
+			vf.Transitions.setOptions(this);
 		},
 
 		mounted() {
 			this.currentImage.hide();
-			this.slider.mask.style.perspective = '1600px';
+			vf.mask.style.perspective = '1600px';
 
 			this.$nextTick(() => {
 				this.image.transform({
@@ -55,8 +59,8 @@
 		},
 
 		destroyed() {
-			this.nextImage.show();
-			this.slider.mask.style.perspective = 'none';
+			nextImage.show();
+			vf.mask.style.perspective = 'none';
 		}
 	};
 </script>

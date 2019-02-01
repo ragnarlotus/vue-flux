@@ -5,6 +5,8 @@
 <script>
 	import FluxCube from '../FluxCube.vue';
 
+	let vf, currentImage, nextImage;
+
 	export default {
 		name: 'transitionCube',
 
@@ -13,8 +15,6 @@
 		},
 
 		data: () => ({
-			currentImage: undefined,
-			nextImage: undefined,
 			index: {},
 			totalDuration: 1400,
 			perspective: '1600px',
@@ -22,7 +22,10 @@
 		}),
 
 		props: {
-			slider: Object
+			slider: {
+				type: Object,
+				required: true
+			}
 		},
 
 		computed: {
@@ -32,23 +35,24 @@
 		},
 
 		created() {
-			this.currentImage = this.slider.imaman.current();
-			this.nextImage = this.slider.imaman.next();
+			vf = this.slider;
+			currentImage = vf.Images.current;
+			nextImage = vf.Images.next;
 
-			this.slider.setTransitionOptions(this);
+			vf.Transitions.setOptions(this);
 
 			this.index = {
-				front: this.currentImage.index,
-				left: this.nextImage.index,
-				right: this.nextImage.index
+				front: currentImage.index,
+				left: nextImage.index,
+				right: nextImage.index
 			};
 		},
 
 		mounted() {
-			this.slider.mask.style.perspective = this.perspective;
+			vf.mask.style.perspective = this.perspective;
 
-			this.currentImage.hide();
-			this.nextImage.hide();
+			currentImage.hide();
+			nextImage.hide();
 
 			this.cube.setCss({
 				transition: 'all '+ this.totalDuration +'ms '+ this.easing
@@ -58,9 +62,9 @@
 		},
 
 		destroyed() {
-			this.slider.mask.style.perspective = 'none';
+			vf.mask.style.perspective = 'none';
 
-			this.nextImage.show();
+			nextImage.show();
 		}
 	};
 </script>

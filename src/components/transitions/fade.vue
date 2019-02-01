@@ -1,25 +1,29 @@
 <template></template>
 
 <script>
+	let vf, currentImage, nextImage;
+
 	export default {
 		name: 'transitionFade',
 
 		data: () => ({
-			currentImage: undefined,
-			nextImage: undefined,
 			totalDuration: 1200,
 			easing: 'ease-in'
 		}),
 
 		props: {
-			slider: Object
+			slider: {
+				type: Object,
+				required: true
+			}
 		},
 
 		created() {
-			this.currentImage = this.slider.imaman.current();
-			this.nextImage = this.slider.imaman.next();
+			vf = this.slider;
+			currentImage = vf.Images.current;
+			nextImage = vf.Images.next;
 
-			this.slider.setTransitionOptions(this);
+			vf.Transitions.setOptions(this);
 		},
 
 		mounted() {

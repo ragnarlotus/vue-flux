@@ -5,6 +5,8 @@
 <script>
 	import FluxGrid from '../FluxGrid.vue';
 
+	let vf, currentImage, nextImage;
+
 	export default {
 		name: 'transitionBlocks2',
 
@@ -13,8 +15,6 @@
 		},
 
 		data: () => ({
-			currentImage: undefined,
-			nextImage: undefined,
 			index: {},
 			numRows: 1,
 			numCols: 0,
@@ -26,7 +26,10 @@
 		}),
 
 		props: {
-			slider: Object
+			slider: {
+				type: Object,
+				required: true
+			}
 		},
 
 		computed: {
@@ -36,24 +39,25 @@
 		},
 
 		created() {
-			this.currentImage = this.slider.imaman.current();
-			this.nextImage = this.slider.imaman.next();
+			vf = this.slider;
+			currentImage = vf.Images.current;
+			nextImage = vf.Images.next;
 
-			let divider = this.slider.size.width / 8;
+			let divider = vf.size.width / 8;
 
-			this.slider.setTransitionOptions(this, {
-				numRows: Math.floor(this.slider.size.height / divider),
-				numCols: Math.floor(this.slider.size.width / divider)
+			vf.Transitions.setOptions(this, {
+				numRows: Math.floor(vf.size.height / divider),
+				numCols: Math.floor(vf.size.width / divider)
 			});
 
 			this.totalDuration = this.tileDelay * (this.numRows + this.numCols) + this.tileDuration;
 
 			this.index = {
-				front: this.currentImage.index
+				front: currentImage.index
 			};
 
 			if (this.direction === 'left') {
-				this.index.front = this.nextImage.index;
+				this.index.front = nextImage.index;
 
 				this.tileCss = {
 					opacity: 0,
@@ -68,12 +72,12 @@
 			if (this.direction === 'right') {
 				opacity = 0;
 				transform = 'scale(0.4, 0.4)';
-				this.currentImage.hide();
+				currentImage.hide();
 
 			} else {
 				opacity = 1;
 				transform = 'scale(1, 1)';
-				this.nextImage.hide();
+				nextImage.hide();
 			}
 
 			this.grid.transform((tile, i) => {
@@ -86,7 +90,7 @@
 		},
 
 		destroyed() {
-			this.nextImage.show();
+			nextImage.show();
 		},
 
 		methods: {

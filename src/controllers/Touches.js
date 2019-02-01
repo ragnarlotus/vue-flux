@@ -1,4 +1,4 @@
-export default class TouchManager {
+export default class TouchesController {
 
 	constructor(vm) {
 		this.vm = vm;

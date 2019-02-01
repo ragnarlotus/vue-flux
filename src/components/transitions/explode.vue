@@ -5,6 +5,8 @@
 <script>
 	import FluxGrid from '../FluxGrid.vue';
 
+	let vf, currentImage, nextImage;
+
 	export default {
 		name: 'transitionExplode',
 
@@ -13,8 +15,6 @@
 		},
 
 		data: () => ({
-			currentImage: undefined,
-			nextImage: undefined,
 			index: {},
 			numRows: 0,
 			numCols: 0,
@@ -25,7 +25,10 @@
 		}),
 
 		props: {
-			slider: Object
+			slider: {
+				type: Object,
+				required: true
+			}
 		},
 
 		computed: {
@@ -35,14 +38,15 @@
 		},
 
 		created() {
-			this.currentImage = this.slider.imaman.current();
-			this.nextImage = this.slider.imaman.next();
+			vf = this.slider;
+			currentImage = vf.Images.current;
+			nextImage = vf.Images.next;
 
-			let divider = this.slider.size.width / 9;
+			let divider = vf.size.width / 9;
 
-			this.slider.setTransitionOptions(this, {
-				numRows: Math.floor(this.slider.size.height / divider),
-				numCols: Math.floor(this.slider.size.width / divider)
+			vf.Transitions.setOptions(this, {
+				numRows: Math.floor(vf.size.height / divider),
+				numCols: Math.floor(vf.size.width / divider)
 			});
 
 			this.totalDuration = (this.numCols / 2 + this.numRows / 2) * (this.tileDelay * 2);
@@ -66,7 +70,7 @@
 		},
 
 		destroyed() {
-			this.slider.mask.style.perspective = 'none';
+			vf.mask.style.perspective = 'none';
 		},
 
 		methods: {

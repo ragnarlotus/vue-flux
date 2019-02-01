@@ -11,7 +11,9 @@
 <script>
 	export default {
 		props: {
-			slider: { type: Object }
+			slider: {
+				type: Object
+			}
 		},
 
 		computed: {

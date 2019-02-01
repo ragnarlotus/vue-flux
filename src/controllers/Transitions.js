@@ -1,4 +1,4 @@
-export default class TransitionsManager {
+export default class TransitionsController {
 
 	constructor(vm) {
 		this.vm = vm;
@@ -51,6 +51,21 @@ export default class TransitionsManager {
 		});
 	}
 
+	setOptions(transition, transitionOptions = {}) {
+		let sliderOptions = this.vm.transitionOptions[this.current] || {};
+
+		Object.assign(transition, transitionOptions, sliderOptions);
+
+		if (transition.direction === undefined) {
+			let direction = 'right';
+
+			if (this.vm.Images.current.index > this.vm.Images.next.index)
+				direction = 'left';
+
+			transition.direction = direction;
+		}
+	}
+
 	start(transition) {
 		let vm = this.vm;
 
@@ -61,9 +76,9 @@ export default class TransitionsManager {
 		if (transition !== undefined)
 			timeout = vm.$refs.transition.totalDuration;
 
-		vm.timman.transition = setTimeout(() => {
+		vm.Timers.set('transition', timeout, () => {
 			this.end(transition);
-		}, timeout);
+		});
 	}
 
 	end(transition) {
@@ -84,9 +99,9 @@ export default class TransitionsManager {
 			}
 
 			if (vm.config.autoplay === true) {
-				vm.timman.image = setTimeout(() => {
+				vm.Timers.set('image', vm.config.delay, () => {
 					vm.showImage('next');
-				}, vm.config.delay);
+				});
 			}
 
 			vm.$emit('VueFlux-TransitionEnd', vm, transition);

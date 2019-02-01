@@ -1,31 +1,40 @@
 <template>
-	<div :style="style" ref="image"></div>
+	<div :style="style" ref="image">
+		<img v-if="src && !imageSize" :src="src" @load="setSize()" @error="setSize()">
+	</div>
 </template>
 
 <script>
 	export default {
 		data: () => ({
-			style: {
-				position: 'absolute',
-				top: 0,
-				left: 0,
-				width: '100%',
-				height: '100%',
-				overflow: 'hidden',
-				backfaceVisibility: 'hidden',
-				zIndex: 'auto'
-			}
+			style: {},
+			imageSrc: undefined,
+			imageSize: undefined,
+			displaySize: undefined,
+			lastInit: 0
 		}),
 
 		props: {
 			slider: {
 				type: Object,
-				required: true
+				required: false
 			},
-			index: {
-				type: [Number, String],
-				required: true
+
+			src: {
+				type: String,
+				required: false
 			},
+
+			size: {
+				type: Object,
+				required: false
+			},
+
+			color: {
+				type: String,
+				required: false
+			},
+
 			css: {
 				type: Object,
 				default: () => {
@@ -38,78 +47,150 @@
 		},
 
 		watch: {
-			index: function() {
-				this.init();
+			src: function(newSrc, oldSrc) {
+				this.setSrc(newSrc);
+			},
+
+			size: function(newSize, oldSize) {
+				this.setSize(newSize);
+			},
+
+			color: function() {
+				this.$nextTick(() => {
+					this.init();
+				});
 			}
 		},
 
-		created() {
-			this.init();
+		mounted() {
+			this.setDisplaySize();
+
+			this.setSrc(this.src);
+			this.setSize(this.size);
+
+			this.init(this.lastInit);
 		},
 
 		methods: {
-			init() {
-				this.setCss(this.css);
-
-				if (typeof this.index === 'number')
-					this.initImage();
-
-				else if (/^#/.test(this.index))
-					this.initColor();
-			},
-
-			initColor() {
-				this.setCss({
-					backgroundColor: this.index
-				});
-			},
-
-			initImage() {
-				let properties = this.slider.imaman.props[this.index];
-
-				if (!properties) {
-					this.setCss({
-						backgroundColor: 'transparent',
-						backgroundImage: 'none'
-					});
-
+			setDisplaySize(size) {
+				if (this.slider !== undefined) {
+					this.displaySize = this.slider.size;
 					return;
 				}
 
-				let image = {
-					top: 0,
-					left: 0,
-					width: properties.width,
-					height: properties.height,
-					src: 'url("'+ properties.src +'")'
-				};
-
-				if (image.height / image.width >= this.slider.size.height / this.slider.size.width) {
-					image.height = Math.ceil(this.slider.size.width * image.height / image.width);
-					image.width = Math.ceil(this.slider.size.width);
-					image.top = Math.ceil((this.slider.size.height - image.height) / 2);
-
-				} else {
-					image.width = Math.ceil(this.slider.size.height * image.width / image.height);
-					image.height = Math.ceil(this.slider.size.height);
-					image.left = Math.ceil((this.slider.size.width - image.width) / 2);
+				if (size !== undefined) {
+					this.displaySize = size;
+					return;
 				}
 
-				image.top -= parseFloat(this.css.top);
-				image.left -= parseFloat(this.css.left);
+				let container = this.$refs.image.parentNode;
 
-				this.setCss({
-					top: 0,
-					left: 0,
-					backgroundImage: image.src,
-					backgroundSize: image.width +'px '+ image.height +'px',
-					backgroundPosition: image.left +'px '+ image.top +'px',
-					backgroundRepeat: 'no-repeat'
+				this.displaySize = {
+					width: container.clientWidth,
+					height: container.clientHeight
+				};
+			},
+
+			setSrc(src) {
+				this.imageSrc = src;
+				this.imageSize = undefined;
+
+				let time = this.lastInit = Date.now();
+
+				this.$nextTick(() => {
+					this.init(time);
 				});
 			},
 
+			setSize(size) {
+				let img = this.$refs.image.firstChild;
+
+				if (size === undefined && img.tagName !== 'IMG')
+					return;
+
+				if (size !== undefined) {
+					this.imageSize = size;
+
+				} else if (img.naturalWidth || img.width) {
+					this.imageSize = {
+						width: img.naturalWidth || img.width,
+						height: img.naturalHeight || img.height
+					};
+
+				} else {
+					return;
+				}
+
+				let time = this.lastInit = Date.now();
+
+				this.$nextTick(() => {
+					this.init(time);
+				});
+			},
+
+			init(time) {
+				if (this.lastInit !== time)
+					return;
+
+				this.setCss({
+					position: 'absolute',
+					top: 0,
+					left: 0,
+					width: '100%',
+					height: '100%',
+					overflow: 'hidden',
+					backfaceVisibility: 'hidden',
+					backgroundColor: 'transparent',
+					backgroundImage: 'none',
+					zIndex: 'auto'
+				});
+
+				if (this.color !== undefined) {
+					this.setCss({
+						backgroundColor: this.color
+					});
+				}
+
+				if (this.imageSize !== undefined) {
+					let container = this.displaySize;
+
+					let image = {
+						top: 0,
+						left: 0,
+						...this.imageSize,
+						src: 'url("'+ this.src +'")'
+					};
+
+					if (image.height / image.width >= container.height / container.width) {
+						image.height = container.width * image.height / image.width;
+						image.width = container.width;
+						image.top = (container.height - image.height) / 2;
+
+					} else {
+						image.width = container.height * image.width / image.height;
+						image.height = container.height;
+						image.left = (container.width - image.width) / 2;
+					}
+
+					image.top -= parseFloat(this.css.top);
+					image.left -= parseFloat(this.css.left);
+
+					this.setCss({
+						top: 0,
+						left: 0,
+						backgroundImage: image.src,
+						backgroundSize: image.width +'px '+ image.height +'px',
+						backgroundPosition: image.left +'px '+ image.top +'px',
+						backgroundRepeat: 'no-repeat'
+					});
+				}
+			},
+
 			setCss(css) {
-				this.style = Object.assign({}, this.style, css);
+				this.style = {
+					...this.style,
+					...css
+				};
 			},
 
 			transform(css) {
@@ -133,3 +214,10 @@
 		}
 	};
 </script>
+
+<style lang="scss" scoped>
+	img {
+		position: absolute;
+		visibility: hidden;
+	}
+</style>

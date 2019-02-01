@@ -1,4 +1,4 @@
-export default class ImagesManager {
+export default class ImagesController {
 
 	constructor(vm) {
 		this.vm = vm;
@@ -9,6 +9,21 @@ export default class ImagesManager {
 		this.props = [];
 	}
 
+	get current() {
+		let refs = this.vm.$refs;
+
+		if (refs.image1 === undefined)
+			return undefined;
+
+		return refs.image2.style.zIndex === 11? refs.image2 : refs.image1;
+	}
+
+	get next() {
+		let refs = this.vm.$refs;
+
+		return refs.image1.style.zIndex === 10? refs.image1 : refs.image2;
+	}
+
 	preload() {
 		let vm = this.vm;
 
@@ -17,12 +32,10 @@ export default class ImagesManager {
 		this.loaded = 0;
 		this.props = [];
 
-		if (this.count < 2 || vm.traman.count === 0)
+		if (this.count < 2 || vm.Transitions.count === 0)
 			return;
 
 		vm.loaded = false;
-		vm.image1Index = 0;
-		vm.image2Index = 1;
 
 		vm.$nextTick(() => {
 			vm.$refs.image1.setCss({ zIndex: 11 });
@@ -47,26 +60,19 @@ export default class ImagesManager {
 			console.warn('Image '+ vm.images[i] +' could not be loaded');
 		}
 
-		if (i === 0)
+		if (i === 0) {
+			vm.$refs.image1.setSrc(this.props[0].src);
+			vm.$refs.image1.setImagesize = this.props[0].size;
 			vm.$refs.image1.init();
+		}
+
+		if (i === 1) {
+			vm.$refs.image2.setSrc(this.props[1].src);
+			vm.$refs.image2.size = this.props[1].size;
+		}
 
 		if (this.loaded === this.count)
 			vm.init();
-	}
-
-	current() {
-		let refs = this.vm.$refs;
-
-		if (refs.image1 === undefined)
-			return undefined;
-
-		return refs.image2.style.zIndex === 11? refs.image2 : refs.image1;
-	}
-
-	next() {
-		let refs = this.vm.$refs;
-
-		return refs.image1.style.zIndex === 10? refs.image1 : refs.image2;
 	}
 
 	getIndex(index) {
@@ -87,11 +93,14 @@ export default class ImagesManager {
 	show(index, transition) {
 		let vm = this.vm;
 
-		vm.timman.clear('image');
+		vm.Timers.clear('image');
 
 		let next = this.next();
+		index = this.getIndex(index);
 
-		vm[next.reference] = this.getIndex(index);
+		next.setSrc(this.props[index].src);
+		next.size = this.props[index].size;
+
 		next.show();
 
 		vm.$nextTick(() => {

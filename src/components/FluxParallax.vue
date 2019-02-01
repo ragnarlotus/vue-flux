@@ -103,10 +103,15 @@
 		},
 
 		mounted() {
-			window.addEventListener('resize', this.resize);
+			window.addEventListener('resize', this.resize, {
+				passive: true
+			});
 
-			if (this.type !== 'fixed')
-				this.holder.addEventListener('scroll', this.handleScroll);
+			if (this.type !== 'fixed') {
+				this.holder.addEventListener('scroll', this.handleScroll, {
+					passive: true
+				});
+			}
 		},
 
 		beforeDestroy() {
