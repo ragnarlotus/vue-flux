@@ -5,6 +5,8 @@
 <script>
 	import FluxGrid from '../FluxGrid.vue';
 
+	let vf, currentImage, nextImage;
+
 	export default {
 		name: 'transitionRound1',
 
@@ -13,8 +15,6 @@
 		},
 
 		data: () => ({
-			currentImage: undefined,
-			nextImage: undefined,
 			index: {},
 			numRows: 1,
 			numCols: 0,
@@ -26,7 +26,10 @@
 		}),
 
 		props: {
-			slider: Object
+			slider: {
+				type: Object,
+				required: true
+			}
 		},
 
 		computed: {
@@ -36,27 +39,28 @@
 		},
 
 		created() {
-			this.currentImage = this.slider.imaman.current();
-			this.nextImage = this.slider.imaman.next();
+			vf = this.slider;
+			currentImage = vf.Images.current;
+			nextImage = vf.Images.next;
 
-			let divider = this.slider.size.width / 6;
+			let divider = vf.size.width / 6;
 
-			this.slider.setTransitionOptions(this, {
-				numRows: Math.floor(this.slider.size.height / divider),
-				numCols: Math.floor(this.slider.size.width / divider)
+			vf.Transitions.setOptions(this, {
+				numRows: Math.floor(vf.size.height / divider),
+				numCols: Math.floor(vf.size.width / divider)
 			});
 
 			this.totalDuration = this.tileDelay * (this.numRows > this.numCols? this.numRows : this.numCols) * 2 + this.tileDelay;
 
 			this.index = {
-				front: this.currentImage.index,
-				back: this.nextImage.index
+				front: currentImage.index,
+				back: nextImage.index
 			};
 		},
 
 		mounted() {
-			this.currentImage.hide();
-			this.nextImage.hide();
+			currentImage.hide();
+			nextImage.hide();
 
 			this.grid.setCss({
 				perspective: '800px'
@@ -72,7 +76,7 @@
 		},
 
 		destroyed() {
-			this.nextImage.show();
+			nextImage.show();
 		},
 
 		methods: {

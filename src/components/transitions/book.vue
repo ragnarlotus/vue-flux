@@ -9,6 +9,8 @@
 	import FluxCube from '../FluxCube.vue';
 	import FluxImage from '../FluxImage.vue';
 
+	let vf, currentImage, nextImage;
+
 	export default {
 		name: 'transitionBook',
 
@@ -18,8 +20,6 @@
 		},
 
 		data: () => ({
-			currentImage: undefined,
-			nextImage: undefined,
 			totalDuration: 1200,
 			easing: 'ease-out',
 			pageWidth: 0,
@@ -43,7 +43,10 @@
 		}),
 
 		props: {
-			slider: Object
+			slider: {
+				type: Object,
+				required: true
+			}
 		},
 
 		computed: {
@@ -57,12 +60,13 @@
 		},
 
 		created() {
-			this.currentImage = this.slider.imaman.current();
-			this.nextImage = this.slider.imaman.next();
+			vf = this.slider;
+			currentImage = vf.Images.current;
+			nextImage = vf.Images.next;
 
-			this.slider.setTransitionOptions(this);
+			vf.Transitions.setOptions(this);
 
-			this.pageWidth = this.slider.size.width / 2;
+			this.pageWidth = vf.size.width / 2;
 
 			this.imageCss.width = Math.ceil(this.pageWidth) +'px';
 			this.cubeCss.width = Math.ceil(this.pageWidth) +'px';
@@ -72,8 +76,8 @@
 				this.imageCss.left = Math.ceil(this.pageWidth) +'px';
 			}
 
-			this.index.front = this.currentImage.index;
-			this.index.back = this.nextImage.index;
+			this.index.front = currentImage.index;
+			this.index.back = nextImage.index;
 		},
 
 		mounted() {
@@ -81,7 +85,7 @@
 			this.setCubeBackCss();
 			this.setImageCss();
 
-			this.slider.mask.style.perspective = '1600px';
+			vf.mask.style.perspective = '1600px';
 
 			this.$nextTick(() => {
 				this.cube.transform({
@@ -92,7 +96,7 @@
 		},
 
 		destroyed() {
-			this.slider.mask.style.perspective = 'none';
+			vf.mask.style.perspective = 'none';
 		},
 
 		methods: {

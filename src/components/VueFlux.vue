@@ -1,19 +1,20 @@
 <template>
-	<div class="vue-flux" :class="scrman.inFullScreen()? 'fullscreen' : ''" ref="container"
+	<div class="vue-flux" :class="Screen.inFullScreen()? 'fullscreen' : ''" ref="container"
 		@mousemove="toggleMouseOver(true)"
 		@mouseleave="toggleMouseOver(false)"
 		@dblclick="toggleFullScreen()"
-		@touchstart="touman.start"
-		@touchend="touman.end">
+		@touchstart="Touches.start"
+		@touchend="Touches.end">
 
-		<img v-for="(url, index) in imaman.loading" :key="index" :src="config.path + url" alt="" ref="images"
-			@load="imaman.add(index)"
-			@error="imaman.add(index)">
+		<img v-for="(url, index) in Images.loading" :key="index" :src="config.path + url" alt="" ref="images"
+			@load="Images.add(index)"
+			@error="Images.add(index)">
 
 		<div class="mask" :style="sizePx" ref="mask">
-			<component v-if="traman.current" :is="traman.current" ref="transition" :slider="slider"></component>
-			<flux-image :slider="slider" :index="image1Index" ref="image1"></flux-image>
-			<flux-image :slider="slider" :index="image2Index" ref="image2"></flux-image>
+			<component v-if="Transitions.current" :is="Transitions.current" ref="transition" :slider="slider"></component>
+
+			<flux-image :slider="slider" ref="image1"></flux-image>
+			<flux-image :slider="slider" ref="image2"></flux-image>
 		</div>
 
 		<slot name="spinner">
@@ -34,12 +35,14 @@
 </template>
 
 <script>
-	import ScreenManager from '@/classes/ScreenManager.js';
-	import TimersManager from '@/classes/TimersManager.js';
-	import TransitionsManager from '@/classes/TransitionsManager.js';
-	import ImagesManager from '@/classes/ImagesManager.js';
-	import TouchManager from '@/classes/TouchManager.js';
+	import ScreenController from '@/controllers/Screen.js';
+	import TimersController from '@/controllers/Timers.js';
+	import TransitionsController from '@/controllers/Transitions.js';
+	import ImagesController from '@/controllers/Images.js';
+	import TouchesController from '@/controllers/Touches.js';
 	import FluxImage from '@/components/FluxImage.vue';
+
+	let Screen, Timers, Transitions, Images, Touches;
 
 	export default {
 		name: 'VueFlux',
@@ -68,11 +71,11 @@
 				height: undefined,
 			},
 			loaded: false,
-			scrman: undefined,
-			timman: undefined,
-			traman: undefined,
-			touman: undefined,
-			imaman: undefined,
+			Screen: undefined,
+			Timers: undefined,
+			Transitions: undefined,
+			Touches: undefined,
+			Images: undefined,
 			mouseOver: false,
 			image1Index: 0,
 			image2Index: 1
@@ -83,18 +86,22 @@
 				type: Object,
 				default: () => {}
 			},
+
 			transitions: {
 				type: Object,
 				required: true
 			},
+
 			transitionOptions: {
 				type: Object,
 				default: () => {}
 			},
+
 			images: {
 				type: Array,
 				default: () => []
 			},
+
 			captions: {
 				type: Array,
 				default: () => []
@@ -149,8 +156,8 @@
 			},
 
 			loadPct: function() {
-				return Math.ceil(this.imaman.loaded * 100 / this.count) || 0;
-			},
+				return Math.ceil(Images.loaded * 100 / Images.count) || 0;
+			}
 		},
 
 		watch: {
@@ -163,7 +170,7 @@
 
 				this.stop();
 
-				this.traman.update();
+				Transitions.update();
 
 				wasPlaying && this.start();
 			},
@@ -174,7 +181,7 @@
 				this.stop();
 
 				this.$nextTick(() => {
-					this.imaman.preload();
+					Images.preload();
 
 					this.config.autoplay = wasPlaying;
 				});
@@ -182,14 +189,14 @@
 		},
 
 		created() {
-			this.scrman = new ScreenManager(this);
-			this.timman = new TimersManager(this);
-			this.traman = new TransitionsManager(this);
-			this.imaman = new ImagesManager(this);
-			this.touman = new TouchManager(this);
+			Screen = this.Screen = new ScreenController(this);
+			Timers = this.Timers = new TimersController(this);
+			Transitions = this.Transitions = new TransitionsController(this);
+			Images = this.Images = new ImagesController(this);
+			Touches = this.Touches = new TouchesController(this);
 
 			this.updateOptions();
-			this.traman.update();
+			Transitions.update();
 
 			this.$emit('VueFlux-Created', this);
 		},
@@ -197,7 +204,7 @@
 		mounted() {
 			this.resize();
 
-			this.imaman.preload();
+			Images.preload();
 
 			if (this.config.autohideTime === 0)
 				this.mouseOver = true;
@@ -216,7 +223,7 @@
 			if (this.config.bindKeys)
 				window.removeEventListener('keydown', this.keydown);
 
-			this.timman.clear();
+			Timers.clear();
 
 			this.$emit('VueFlux-Destroyed', this);
 		},
@@ -228,7 +235,10 @@
 					height: this.config.height
 				};
 
-				this.config = Object.assign({}, this.config, this.options);
+				this.config = {
+					...this.config,
+					...this.options
+				};
 
 				if (currentSize.width !== this.config.width || currentSize.height !== this.config.height) {
 					this.size.width = this.config.width;
@@ -238,20 +248,6 @@
 				}
 
 				this.$emit('VueFlux-OptionsUpdated', this);
-			},
-
-			setTransitionOptions(transition, defaultValues = {}) {
-				let transitionOptions = this.transitionOptions || {};
-				let options = transitionOptions[this.traman.current] || {};
-
-				let direction = 'right';
-
-				if (this.imaman.current().index > this.imaman.next().index)
-					direction = 'left';
-
-				Object.assign(transition, {
-					direction: direction
-				}, defaultValues, options);
 			},
 
 			resize() {
@@ -301,9 +297,6 @@
 					this.$refs.image1.setCss({ zIndex: 11 });
 					this.$refs.image2.setCss({ zIndex: 10 });
 
-					this.$refs.image1.reference = 'image1Index';
-					this.$refs.image2.reference = 'image2Index';
-
 					if (this.config.autoplay === true)
 						this.play();
 
@@ -315,12 +308,12 @@
 				if (this.config.autohideTime === 0)
 					return;
 
-				this.timman.clear('mouse-over');
+				Timers.clear('mouse-over');
 
 				if (over) {
-					this.timman.mouseOver = setTimeout(() => {
+					Timers.set('mouseOver', this.config.autohideTime, () => {
 						this.mouseOver = false;
-					}, this.config.autohideTime);
+					});
 				}
 
 				this.mouseOver = over;
@@ -330,23 +323,23 @@
 				if (this.config.fullscreen === false)
 					return;
 
-				ScreenManager.requestFullScreen(this.$refs.container);
+				ScreenController.requestFullScreen(this.$refs.container);
 			},
 
 			exitFullScreen() {
-				ScreenManager.exitFullScreen();
+				ScreenController.exitFullScreen();
 			},
 
 			toggleFullScreen() {
-				ScreenManager.inFullScreen()? this.exitFullScreen() : this.enterFullScreen();
+				ScreenController.inFullScreen()? this.exitFullScreen() : this.enterFullScreen();
 			},
 
 			play(index = 'next', delay) {
 				this.config.autoplay = true;
 
-				this.timman.image = setTimeout(() => {
+				Timers.set('image', delay || this.config.delay, () => {
 					this.showImage(index);
-				}, delay || this.config.delay);
+				});
 
 				this.$emit('VueFlux-Play', this);
 			},
@@ -354,10 +347,10 @@
 			stop() {
 				this.config.autoplay = false;
 
-				if (this.traman.current)
-					this.traman.current = undefined;
+				if (Transitions.current)
+					Transitions.current = undefined;
 
-				this.timman.clear('image');
+				Timers.clear('image');
 
 				this.$emit('VueFlux-Stop', this);
 			},
@@ -370,13 +363,13 @@
 				if (this.loaded === false || this.$refs.image1 === undefined)
 					return;
 
-				if (this.traman.current !== undefined)
+				if (Transitions.current !== undefined)
 					return;
 
-				if (this.imaman.current().index === index)
+				if (Images.current.index === index)
 					return;
 
-				let next = this.imaman.show(index, transition);
+				let next = Images.show(index, transition);
 
 				this.$emit('VueFlux-Show', this, this[next.reference]);
 			},

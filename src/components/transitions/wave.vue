@@ -5,6 +5,8 @@
 <script>
 	import FluxGrid from '../FluxGrid.vue';
 
+	let vf, currentImage, nextImage;
+
 	export default {
 		name: 'transitionWave',
 
@@ -13,8 +15,6 @@
 		},
 
 		data: () => ({
-			currentImage: undefined,
-			nextImage: undefined,
 			index: {},
 			numRows: 1,
 			numCols: 0,
@@ -26,7 +26,10 @@
 		}),
 
 		props: {
-			slider: Object
+			slider: {
+				type: Object,
+				required: true
+			}
 		},
 
 		computed: {
@@ -36,29 +39,30 @@
 		},
 
 		created() {
-			this.currentImage = this.slider.imaman.current();
-			this.nextImage = this.slider.imaman.next();
+			vf = this.slider;
+			currentImage = vf.Images.current;
+			nextImage = vf.Images.next;
 
-			let divider = this.slider.size.width / 8;
+			let divider = vf.size.width / 8;
 
-			this.slider.setTransitionOptions(this, {
-				numCols: Math.floor(this.slider.size.width / divider)
+			vf.Transitions.setOptions(this, {
+				numCols: Math.floor(vf.size.width / divider)
 			});
 
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
 
 			this.index = {
-				front: this.currentImage.index,
-				top: this.nextImage.index,
-				bottom: this.nextImage.index,
+				front: currentImage.index,
+				top: nextImage.index,
+				bottom: nextImage.index,
 				left: this.sideColor,
 				right: this.sideColor
 			};
 		},
 
 		mounted() {
-			this.currentImage.hide();
-			this.nextImage.hide();
+			currentImage.hide();
+			nextImage.hide();
 
 			this.grid.setCss({
 				perspective: '1200px'

@@ -5,6 +5,8 @@
 <script>
 	import FluxVortex from '../FluxVortex.vue';
 
+	let vf, currentImage, nextImage;
+
 	export default {
 		name: 'transitionCamera',
 
@@ -13,8 +15,6 @@
 		},
 
 		data: () => ({
-			currentImage: undefined,
-			nextImage: undefined,
 			index: undefined,
 			numCircles: undefined,
 			tileDuration: 400,
@@ -24,7 +24,10 @@
 		}),
 
 		props: {
-			slider: Object
+			slider: {
+				type: Object,
+				required: true
+			}
 		},
 
 		computed: {
@@ -34,14 +37,15 @@
 		},
 
 		created() {
-			this.currentImage = this.slider.imaman.current();
-			this.nextImage = this.slider.imaman.next();
+			vf = this.slider;
+			currentImage = vf.Images.current;
+			nextImage = vf.Images.next;
 
-			let size = this.slider.size;
+			let size = vf.size;
 			let diag = Math.sqrt(Math.pow(size.width, 2) + Math.pow(size.height, 2));
-			let divider = this.slider.size.width / 8;
+			let divider = size.width / 8;
 
-			this.slider.setTransitionOptions(this, {
+			vf.Transitions.setOptions(this, {
 				numCircles: Math.ceil(diag / 2 / divider) + 1
 			});
 

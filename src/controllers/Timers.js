@@ -1,9 +1,13 @@
-export default class TimersManager {
+export default class TimersController {
 
 	constructor() {
 		this.image = undefined;
 		this.transition = undefined;
 		this.mouseOver = undefined;
+	}
+
+	set(timer, time, cb) {
+		this[timer] = setTimeout(cb, time);
 	}
 
 	clear(timer) {

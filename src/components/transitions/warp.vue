@@ -5,6 +5,8 @@
 <script>
 	import FluxVortex from '../FluxVortex.vue';
 
+	let vf, currentImage;
+
 	export default {
 		name: 'transitionWarp',
 
@@ -13,8 +15,6 @@
 		},
 
 		data: () => ({
-			currentImage: undefined,
-			nextImage: undefined,
 			index: undefined,
 			numCircles: undefined,
 			tileDuration: 800,
@@ -24,7 +24,10 @@
 		}),
 
 		props: {
-			slider: Object
+			slider: {
+				type: Object,
+				required: true
+			}
 		},
 
 		computed: {
@@ -34,24 +37,24 @@
 		},
 
 		created() {
-			this.currentImage = this.slider.imaman.current();
-			this.nextImage = this.slider.imaman.next();
+			vf = this.slider;
+			currentImage = vf.Images.current;
 
-			let size = this.slider.size;
+			let size = vf.size;
 			let diag = Math.sqrt(Math.pow(size.width, 2) + Math.pow(size.height, 2));
-			let divider = this.slider.size.width / 8;
+			let divider = size.width / 8;
 
-			this.slider.setTransitionOptions(this, {
+			vf.Transitions.setOptions(this, {
 				numCircles: Math.ceil(diag / 2 / divider) + 1
 			});
 
 			this.totalDuration = this.tileDelay * this.numCircles + this.tileDuration;
 
-			this.index = this.currentImage.index;
+			this.index = currentImage.index;
 		},
 
 		mounted() {
-			this.currentImage.hide();
+			currentImage.hide();
 
 			this.vortex.setCss({
 				overflow: 'hidden'

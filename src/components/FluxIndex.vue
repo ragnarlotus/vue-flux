@@ -31,7 +31,9 @@
 		}),
 
 		props: {
-			slider: { type: Object }
+			slider: {
+				type: Object
+			}
 		},
 
 		computed: {

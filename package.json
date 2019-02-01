@@ -48,7 +48,7 @@
     }
   },
   "vue": {
-    "baseUrl": "/vue-flux/",
+    "publicPath": "/vue-flux/",
     "css": {
       "extract": false
     }

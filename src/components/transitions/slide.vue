@@ -9,6 +9,8 @@
 	import FluxWrapper from '../FluxWrapper.vue';
 	import FluxImage from '../FluxImage.vue';
 
+	let vf, currentImage, nextImage;
+
 	export default {
 		name: 'transitionSlide',
 
@@ -18,8 +20,6 @@
 		},
 
 		data: () => ({
-			currentImage: undefined,
-			nextImage: undefined,
 			totalDuration: 1400,
 			easing: 'ease-in-out',
 			wrapperCss: {
@@ -32,7 +32,10 @@
 		}),
 
 		props: {
-			slider: Object
+			slider: {
+				type: Object,
+				required: true
+			}
 		},
 
 		computed: {
@@ -42,17 +45,18 @@
 		},
 
 		created() {
-			this.currentImage = this.slider.imaman.current();
-			this.nextImage = this.slider.imaman.next();
+			vf = this.slider;
+			currentImage = vf.Images.current;
+			nextImage = vf.Images.next;
 
-			this.slider.setTransitionOptions(this);
+			vf.Transitions.setOptions(this);
 
-			this.index.left = this.currentImage.index;
-			this.index.right = this.nextImage.index;
+			this.index.left = currentImage.index;
+			this.index.right = nextImage.index;
 
 			if (this.direction === 'left') {
-				this.index.left = this.nextImage.index;
-				this.index.right = this.currentImage.index;
+				this.index.left = nextImage.index;
+				this.index.right = currentImage.index;
 
 				this.wrapperCss.left = 'auto';
 				this.wrapperCss.right = 0;
@@ -62,7 +66,7 @@
 		mounted() {
 			this.currentImage.hide();
 
-			this.slider.mask.style.overflow = 'hidden';
+			vf.mask.style.overflow = 'hidden';
 
 			this.wrapper.setCss(this.wrapperCss);
 
@@ -83,12 +87,12 @@
 		},
 
 		destroyed() {
-			this.slider.mask.style.overflow = 'visible';
+			vf.mask.style.overflow = 'visible';
 		},
 
 		methods: {
 			getTx() {
-				let tx = -this.slider.size.width;
+				let tx = -vf.size.width;
 
 				if (this.direction === 'left')
 					tx = Math.abs(tx);
