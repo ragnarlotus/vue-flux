@@ -6,7 +6,9 @@
 		@touchstart="Touches.start"
 		@touchend="Touches.end">
 
-		<img v-for="(url, index) in Images.loading" :key="index" :src="config.path + url" alt="" ref="images"
+		<img v-for="(url, index) in Images.loading" :key="index" alt="" ref="loading"
+			v-if="Images.loading[index]"
+			:src="config.path + url"
 			@load="Images.add(index)"
 			@error="Images.add(index)">
 
