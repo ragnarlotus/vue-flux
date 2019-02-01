@@ -116,9 +116,6 @@
 						width: img.naturalWidth || img.width,
 						height: img.naturalHeight || img.height
 					};
-
-				} else {
-					return;
 				}
 
 				let time = this.lastInit = Date.now();
