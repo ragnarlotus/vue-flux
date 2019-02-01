@@ -5,6 +5,8 @@
 <script>
 	import FluxImage from '../FluxImage.vue';
 
+	let vf, currentImage, nextImage;
+
 	export default {
 		name: 'transitionKenburn',
 
@@ -13,31 +15,33 @@
 		},
 
 		data: () => ({
-			currentImage: undefined,
-			nextImage: undefined,
 			totalDuration: 6000,
 			easing: 'cubic-bezier(0.600, 0.040, 0.780, 0.335)',
 			index: undefined
 		}),
 
 		props: {
-			slider: Object
+			slider: {
+				type: Object,
+				required: true
+			}
 		},
 
 		created() {
-			this.currentImage = this.slider.imaman.current();
-			this.nextImage = this.slider.imaman.next();
+			vf = this.slider;
+			currentImage = vf.Images.current;
+			nextImage = vf.Images.next;
 
-			this.slider.setTransitionOptions(this);
+			vf.Transitions.setOptions(this);
 
-			this.index = this.currentImage.index;
+			this.index = currentImage.index;
 
 			if (this.direction === 'left')
-				this.index = this.nextImage.index;
+				this.index = nextImage.index;
 		},
 
 		mounted() {
-			this.slider.mask.style.overflow = 'hidden';
+			vf.mask.style.overflow = 'hidden';
 
 			let transform = this.getTransform();
 
@@ -49,7 +53,7 @@
 		},
 
 		destroyed() {
-			this.slider.mask.style.overflow = 'visible';
+			vf.mask.style.overflow = 'visible';
 
 			this.currentImage.setCss({
 				transition: 'none',

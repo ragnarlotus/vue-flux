@@ -7,7 +7,9 @@
 <script>
 	export default {
 		props: {
-			slider: { type: Object }
+			slider: {
+				type: Object
+			}
 		},
 
 		computed: {
@@ -27,10 +29,10 @@
 				if (!this.vf)
 					return '';
 
-				if (this.vf.traman.current !== undefined)
+				if (this.vf.Transitions.current !== undefined)
 					return '';
 
-				let currentImage = this.vf.imaman.current();
+				let currentImage = this.vf.Images.current;
 
 				if (currentImage === undefined)
 					return '';
