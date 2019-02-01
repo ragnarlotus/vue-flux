@@ -43,36 +43,39 @@ export default class ImagesController {
 		});
 	}
 
-	add(i) {
+	add(index) {
 		this.loaded++;
 
 		let vm = this.vm;
-		let img = vm.$refs.images[i];
+
+		let img = vm.$refs.loading[index];
 
 		if (img.naturalWidth || img.width) {
-			this.props[i] = {
+			this.props[index] = {
 				src: img.src,
 				width: img.naturalWidth || img.width,
 				height: img.naturalHeight || img.height
 			};
 
 		} else {
-			console.warn('Image '+ vm.images[i] +' could not be loaded');
+			console.warn('Image '+ vm.images[index] +' could not be loaded');
 		}
 
-		if (i === 0) {
+		if (index === 0) {
 			vm.$refs.image1.setSrc(this.props[0].src);
 			vm.$refs.image1.setImagesize = this.props[0].size;
 			vm.$refs.image1.init();
 		}
 
-		if (i === 1) {
+		if (index === 1) {
 			vm.$refs.image2.setSrc(this.props[1].src);
 			vm.$refs.image2.size = this.props[1].size;
 		}
 
-		if (this.loaded === this.count)
+		if (this.loaded === this.loading.length) {
+			this.loading = [];
 			vm.init();
+		}
 	}
 
 	getIndex(index) {
