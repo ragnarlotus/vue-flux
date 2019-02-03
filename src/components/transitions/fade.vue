@@ -27,16 +27,16 @@
 		},
 
 		mounted() {
-			this.currentImage.setCss({
+			currentImage.setCss({
 				transition: 'opacity '+ this.totalDuration +'ms '+ this.easing,
 				opacity: 0
 			});
 		},
 
 		destroyed() {
-			this.currentImage.hide();
+			currentImage.hide();
 
-			this.currentImage.setCss({
+			currentImage.setCss({
 				transition: 'none',
 				opacity: 1
 			});

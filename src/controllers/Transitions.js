@@ -52,18 +52,12 @@ export default class TransitionsController {
 	}
 
 	setOptions(transition, transitionOptions = {}) {
-		let sliderOptions = this.vm.transitionOptions[this.current] || {};
+		let sliderOptions = {};
+
+		if (this.vm.transitionOptions && this.vm.transitionOptions[this.current])
+			sliderOptions = this.vm.transitionOptions[this.current];
 
 		Object.assign(transition, transitionOptions, sliderOptions);
-
-		if (transition.direction === undefined) {
-			let direction = 'right';
-
-			if (this.vm.Images.current.index > this.vm.Images.next.index)
-				direction = 'left';
-
-			transition.direction = direction;
-		}
 	}
 
 	start(transition) {
@@ -84,8 +78,8 @@ export default class TransitionsController {
 	end(transition) {
 		let vm = this.vm;
 
-		let currentImage = vm.imaman.current();
-		let nextImage = vm.imaman.next();
+		let currentImage = vm.Images.current;
+		let nextImage = vm.Images.next;
 
 		currentImage.setCss({ zIndex: 10 });
 		nextImage.setCss({ zIndex: 11 });
@@ -93,7 +87,7 @@ export default class TransitionsController {
 		this.current = undefined;
 
 		vm.$nextTick(() => {
-			if (vm.config.infinite === false && nextImage.index === vm.imaman.count - 1) {
+			if (vm.config.infinite === false && nextImage.index === vm.Images.count - 1) {
 				vm.stop();
 				return;
 			}

@@ -36,25 +36,21 @@ export default class ImagesController {
 			return;
 
 		vm.loaded = false;
-
-		vm.$nextTick(() => {
-			vm.$refs.image1.setCss({ zIndex: 11 });
-			vm.$refs.image2.setCss({ zIndex: 10 });
-		});
 	}
 
 	add(index) {
 		this.loaded++;
 
 		let vm = this.vm;
-
 		let img = vm.$refs.loading[index];
 
 		if (img.naturalWidth || img.width) {
 			this.props[index] = {
 				src: img.src,
-				width: img.naturalWidth || img.width,
-				height: img.naturalHeight || img.height
+				size: {
+					width: img.naturalWidth || img.width,
+					height: img.naturalHeight || img.height
+				}
 			};
 
 		} else {
@@ -63,18 +59,21 @@ export default class ImagesController {
 
 		if (index === 0) {
 			vm.$refs.image1.setSrc(this.props[0].src);
-			vm.$refs.image1.setImagesize = this.props[0].size;
+			vm.$refs.image1.setSize(this.props[0].size);
 			vm.$refs.image1.init();
 		}
 
 		if (index === 1) {
 			vm.$refs.image2.setSrc(this.props[1].src);
-			vm.$refs.image2.size = this.props[1].size;
+			vm.$refs.image2.setSize(this.props[1].size);
+			vm.$refs.image2.init();
 		}
 
 		if (this.loaded === this.loading.length) {
 			this.loading = [];
-			vm.init();
+
+			if (vm.loaded !== true)
+				vm.init();
 		}
 	}
 
@@ -82,7 +81,7 @@ export default class ImagesController {
 		if (typeof index === 'number')
 			return index;
 
-		let current = this.current();
+		let current = this.current;
 
 		if (current === undefined)
 			return undefined;
@@ -94,20 +93,21 @@ export default class ImagesController {
 	}
 
 	show(index, transition) {
+		debugger;
 		let vm = this.vm;
 
 		vm.Timers.clear('image');
 
-		let next = this.next();
 		index = this.getIndex(index);
 
+		let next = this.next;
 		next.setSrc(this.props[index].src);
-		next.size = this.props[index].size;
+		next.setSize(this.props[index].size);
 
 		next.show();
 
 		vm.$nextTick(() => {
-			vm.traman.set(transition);
+			vm.Transitions.set(transition);
 		});
 
 		return next;
