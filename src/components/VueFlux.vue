@@ -20,7 +20,7 @@
 		</div>
 
 		<slot name="spinner">
-			<div v-if="!loaded" class="spinner">
+			<div v-show="!loaded" class="spinner">
 				<div class="pct">{{ loadPct }}%</div>
 				<div class="border"></div>
 			</div>
@@ -73,14 +73,12 @@
 				height: undefined,
 			},
 			loaded: false,
+			mouseOver: false,
 			Screen: undefined,
 			Timers: undefined,
 			Transitions: undefined,
 			Touches: undefined,
-			Images: undefined,
-			mouseOver: false,
-			image1Index: 0,
-			image2Index: 1
+			Images: undefined
 		}),
 
 		props: {
@@ -206,6 +204,9 @@
 		mounted() {
 			this.resize();
 
+			this.$refs.image1.setCss({ zIndex: 11 });
+			this.$refs.image2.setCss({ zIndex: 10 });
+
 			Images.preload();
 
 			if (this.config.autohideTime === 0)
@@ -293,12 +294,7 @@
 			init() {
 				this.loaded = true;
 
-				this.$refs.image2.init();
-
 				this.$nextTick(() => {
-					this.$refs.image1.setCss({ zIndex: 11 });
-					this.$refs.image2.setCss({ zIndex: 10 });
-
 					if (this.config.autoplay === true)
 						this.play();
 
@@ -325,15 +321,15 @@
 				if (this.config.fullscreen === false)
 					return;
 
-				ScreenController.requestFullScreen(this.$refs.container);
+				Screen.requestFullScreen(this.$refs.container);
 			},
 
 			exitFullScreen() {
-				ScreenController.exitFullScreen();
+				Screen.exitFullScreen();
 			},
 
 			toggleFullScreen() {
-				ScreenController.inFullScreen()? this.exitFullScreen() : this.enterFullScreen();
+				Screen.inFullScreen()? this.exitFullScreen() : this.exitFullScreen();
 			},
 
 			play(index = 'next', delay) {
