@@ -7,7 +7,18 @@
 <script>
 	export default {
 		data: () => ({
-			style: {},
+			style: {
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				width: '100%',
+				height: '100%',
+				overflow: 'hidden',
+				backfaceVisibility: 'hidden',
+				backgroundColor: 'transparent',
+				backgroundImage: 'none',
+				zIndex: 'auto'
+			},
 			imageSrc: undefined,
 			imageSize: undefined,
 			displaySize: undefined,
@@ -129,19 +140,6 @@
 				if (this.lastInit !== time)
 					return;
 
-				this.setCss({
-					position: 'absolute',
-					top: 0,
-					left: 0,
-					width: '100%',
-					height: '100%',
-					overflow: 'hidden',
-					backfaceVisibility: 'hidden',
-					backgroundColor: 'transparent',
-					backgroundImage: 'none',
-					zIndex: 'auto'
-				});
-
 				if (this.color !== undefined) {
 					this.setCss({
 						backgroundColor: this.color
@@ -155,7 +153,7 @@
 						top: 0,
 						left: 0,
 						...this.imageSize,
-						src: 'url("'+ this.src +'")'
+						src: 'url("'+ this.imageSrc +'")'
 					};
 
 					if (image.height / image.width >= container.height / container.width) {
