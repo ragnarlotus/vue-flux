@@ -60,12 +60,14 @@ export default class ImagesController {
 		if (index === 0) {
 			vm.$refs.image1.setSrc(this.props[0].src);
 			vm.$refs.image1.setSize(this.props[0].size);
+			vm.$refs.image1.index = 0;
 			vm.$refs.image1.init();
 		}
 
 		if (index === 1) {
 			vm.$refs.image2.setSrc(this.props[1].src);
 			vm.$refs.image2.setSize(this.props[1].size);
+			vm.$refs.image2.index = 1;
 			vm.$refs.image2.init();
 		}
 
@@ -93,7 +95,6 @@ export default class ImagesController {
 	}
 
 	show(index, transition) {
-		debugger;
 		let vm = this.vm;
 
 		vm.Timers.clear('image');
@@ -103,6 +104,7 @@ export default class ImagesController {
 		let next = this.next;
 		next.setSrc(this.props[index].src);
 		next.setSize(this.props[index].size);
+		next.index = index;
 
 		next.show();
 

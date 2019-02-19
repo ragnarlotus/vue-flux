@@ -1,9 +1,9 @@
 <template>
-	<flux-image :slider="slider" :index="index" ref="image"></flux-image>
+	<flux-image :slider="slider" :src="imageSrc" :size="imageSize" ref="image"></flux-image>
 </template>
 
 <script>
-	import FluxImage from '../FluxImage.vue';
+	import FluxImage from '@/components/FluxImage.vue';
 
 	let vf, currentImage, nextImage;
 
@@ -15,9 +15,10 @@
 		},
 
 		data: () => ({
-			totalDuration: 6000,
-			easing: 'cubic-bezier(0.600, 0.040, 0.780, 0.335)',
-			index: undefined
+			totalDuration: 1500,
+			easing: 'cubic-bezier(.35,.4,.65,.6)',
+			imageSrc: undefined,
+			imageSize: undefined
 		}),
 
 		props: {
@@ -34,10 +35,10 @@
 
 			vf.Transitions.setOptions(this);
 
-			this.index = currentImage.index;
+			let image = this.direction === 'left'? nextImage : currentImage;
 
-			if (this.direction === 'left')
-				this.index = nextImage.index;
+			this.imageSrc = image.imageSrc;
+			this.imageSize = image.imageSize;
 		},
 
 		mounted() {
@@ -55,7 +56,7 @@
 		destroyed() {
 			vf.mask.style.overflow = 'visible';
 
-			this.currentImage.setCss({
+			currentImage.setCss({
 				transition: 'none',
 				opacity: 1
 			});
@@ -68,17 +69,19 @@
 					zIndex: 12
 				});
 
-				this.currentImage.hide();
+				currentImage.hide();
 
-				this.$refs.image.transform({
-					transition: 'all '+ this.totalDuration +'ms '+ this.easing,
-					transform: 'scale('+ transform.scale +') translate('+ transform.translateX +', '+ transform.translateY +')',
-					opacity: 0
+				this.$nextTick(() => {
+					this.$refs.image.transform({
+						transition: 'all '+ this.totalDuration +'ms '+ this.easing,
+						transform: 'scale('+ transform.scale +') translate('+ transform.translateX +', '+ transform.translateY +')',
+						opacity: 0
+					});
 				});
 			},
 
 			focusOut(transform) {
-				this.currentImage.setCss({
+				currentImage.setCss({
 					transition: 'opacity '+ this.totalDuration +'ms '+ this.easing,
 					opacity: 0
 				});
@@ -89,9 +92,11 @@
 					zIndex: 11
 				});
 
-				this.$refs.image.transform({
-					transition: 'all '+ this.totalDuration +'ms '+ this.easing,
-					transform: 'scale(1) translate(0, 0)'
+				this.$nextTick(() => {
+					this.$refs.image.transform({
+						transition: 'all '+ this.totalDuration +'ms '+ this.easing,
+						transform: 'scale(1) translate(0, 0)'
+					});
 				});
 			},
 
@@ -100,9 +105,9 @@
 
 				if (origin === 1) {
 					return {
-						scale: '2',
-						translateX: '-50%',
-						translateY: '-50%',
+						scale: '1.7',
+						translateX: '-35%',
+						translateY: '-35%',
 						originX: 'top',
 						originY: 'left'
 					};
@@ -110,9 +115,9 @@
 
 				if (origin === 2) {
 					return {
-						scale: '2',
-						translateX: '50%',
-						translateY: '-50%',
+						scale: '1.7',
+						translateX: '35%',
+						translateY: '-35%',
 						originX: 'top',
 						originY: 'right'
 					};
@@ -120,18 +125,18 @@
 
 				if (origin === 3) {
 					return {
-						scale: '2',
-						translateX: '-50%',
-						translateY: '50%',
+						scale: '1.7',
+						translateX: '-35%',
+						translateY: '35%',
 						originX: 'bottom',
 						originY: 'left'
 					};
 				}
 
 				return {
-					scale: '2',
-					translateX: '50%',
-					translateY: '50%',
+					scale: '1.7',
+					translateX: '35%',
+					translateY: '35%',
 					originX: 'bottom',
 					originY: 'right'
 				};

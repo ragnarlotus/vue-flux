@@ -3,12 +3,12 @@
 </template>
 
 <script>
-	import FluxGrid from '../FluxGrid.vue';
+	import FluxGrid from '@/components/FluxGrid.vue';
 
-	let vf, currentImage, nextImage;
+	let vf, currentImage;
 
 	export default {
-		name: 'transitionBlocks1',
+		name: 'transitionWaterfall',
 
 		components: {
 			FluxGrid
@@ -16,12 +16,12 @@
 
 		data: () => ({
 			index: {},
-			numRows: 0,
+			numRows: 1,
 			numCols: 0,
-			tileDuration: 300,
+			tileDuration: 600,
 			totalDuration: 0,
-			easing: 'linear',
-			tileDelay: 1000
+			easing: 'ease-in',
+			tileDelay: 80,
 		}),
 
 		props: {
@@ -40,16 +40,14 @@
 		created() {
 			vf = this.slider;
 			currentImage = vf.Images.current;
-			nextImage = vf.Images.next;
 
-			let divider = vf.size.width / 8;
+			let divider = this.vf.size.width / 10;
 
 			vf.Transitions.setOptions(this, {
-				numRows: Math.floor(vf.size.height / divider),
 				numCols: Math.floor(vf.size.width / divider)
 			});
 
-			this.totalDuration = this.tileDelay + this.tileDuration;
+			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
 
 			this.index = {
 				front: currentImage.index
@@ -59,20 +57,27 @@
 		mounted() {
 			currentImage.hide();
 
+			this.grid.setCss({
+				overflow: 'hidden'
+			});
+
 			this.grid.transform((tile, i) => {
 				tile.transform({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay() +'ms',
-					opacity: '0',
-					transform: 'scale(0.4, 0.4)'
+					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
+					opacity: '0.1',
+					transform: 'translateY('+ this.vf.size.height +'px)'
 				});
 			});
 		},
 
 		methods: {
-			getDelay() {
-				let delay = Math.random() * this.tileDelay;
+			getDelay(i) {
+				let delay = i;
 
-				return Math.floor(delay);
+				if (this.direction === 'left')
+					delay = this.numCols - i - 1;
+
+				return delay * this.tileDelay;
 			}
 		}
 	};

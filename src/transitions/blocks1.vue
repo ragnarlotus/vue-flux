@@ -3,12 +3,12 @@
 </template>
 
 <script>
-	import FluxGrid from '../FluxGrid.vue';
+	import FluxGrid from '@/components/FluxGrid.vue';
 
 	let vf, currentImage, nextImage;
 
 	export default {
-		name: 'transitionExplode',
+		name: 'transitionBlocks1',
 
 		components: {
 			FluxGrid
@@ -21,7 +21,7 @@
 			tileDuration: 300,
 			totalDuration: 0,
 			easing: 'linear',
-			tileDelay: 100
+			tileDelay: 1000
 		}),
 
 		props: {
@@ -42,45 +42,37 @@
 			currentImage = vf.Images.current;
 			nextImage = vf.Images.next;
 
-			let divider = vf.size.width / 9;
+			let divider = vf.size.width / 8;
 
 			vf.Transitions.setOptions(this, {
 				numRows: Math.floor(vf.size.height / divider),
 				numCols: Math.floor(vf.size.width / divider)
 			});
 
-			this.totalDuration = (this.numCols / 2 + this.numRows / 2) * (this.tileDelay * 2);
+			this.totalDuration = this.tileDelay + this.tileDuration;
 
 			this.index = {
-				front: this.currentImage.index
+				front: currentImage.index
 			};
 		},
 
 		mounted() {
-			this.currentImage.hide();
+			currentImage.hide();
 
 			this.grid.transform((tile, i) => {
-				tile.front.transform({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
-					borderRadius: '100%',
+				tile.transform({
+					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay() +'ms',
 					opacity: '0',
-					transform: 'scale(1.6, 1.6)'
+					transform: 'scale(0.4, 0.4)'
 				});
 			});
 		},
 
-		destroyed() {
-			vf.mask.style.perspective = 'none';
-		},
-
 		methods: {
-			getDelay(i) {
-				let row = this.grid.getRow(i);
-				let col = this.grid.getCol(i);
+			getDelay() {
+				let delay = Math.random() * this.tileDelay;
 
-				let delay = Math.abs(this.numRows / 2 - 0.5 - row) + Math.abs(this.numCols / 2 - 0.5 - col) - 1;
-
-				return delay * this.tileDelay;
+				return Math.floor(delay);
 			}
 		}
 	};

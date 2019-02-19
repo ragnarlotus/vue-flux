@@ -19,13 +19,15 @@
 
 		methods: {
 			setCss(css) {
-				this.style = Object.assign({}, this.style, css);
+				this.style = {
+					...this.style,
+					...css
+				};
 			},
 
 			transform(css) {
-				this.$refs.wrapper.clientHeight;
-
 				this.$nextTick(() => {
+					this.$refs.wrapper.clientHeight;
 					this.setCss(css);
 				});
 			}
