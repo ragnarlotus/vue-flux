@@ -3,7 +3,7 @@
 </template>
 
 <script>
-	import FluxVortex from '../FluxVortex.vue';
+	import FluxVortex from '@/components/FluxVortex.vue';
 
 	let vf, currentImage, nextImage;
 

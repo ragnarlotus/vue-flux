@@ -6,8 +6,8 @@
 </template>
 
 <script>
-	import FluxWrapper from '../FluxWrapper.vue';
-	import FluxImage from '../FluxImage.vue';
+	import FluxWrapper from '@/components/FluxWrapper.vue';
+	import FluxImage from '@/components/FluxImage.vue';
 
 	let vf, currentImage, nextImage;
 

@@ -3,12 +3,12 @@
 </template>
 
 <script>
-	import FluxGrid from '../FluxGrid.vue';
+	import FluxGrid from '@/components/FluxGrid.vue';
 
-	let vf, currentImage, nextImage;
+	let vf, currentImage;
 
 	export default {
-		name: 'transitionWave',
+		name: 'transitionZip',
 
 		components: {
 			FluxGrid
@@ -18,11 +18,10 @@
 			index: {},
 			numRows: 1,
 			numCols: 0,
-			tileDuration: 800,
+			tileDuration: 600,
 			totalDuration: 0,
-			easing: 'ease-out',
-			tileDelay: 150,
-			sideColor: '#333'
+			easing: 'ease-in',
+			tileDelay: 80
 		}),
 
 		props: {
@@ -41,9 +40,8 @@
 		created() {
 			vf = this.slider;
 			currentImage = vf.Images.current;
-			nextImage = vf.Images.next;
 
-			let divider = vf.size.width / 8;
+			let divider = vf.size.width / 10;
 
 			vf.Transitions.setOptions(this, {
 				numCols: Math.floor(vf.size.width / divider)
@@ -52,33 +50,24 @@
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
 
 			this.index = {
-				front: currentImage.index,
-				top: nextImage.index,
-				bottom: nextImage.index,
-				left: this.sideColor,
-				right: this.sideColor
+				front: currentImage.index
 			};
 		},
 
 		mounted() {
 			currentImage.hide();
-			nextImage.hide();
 
 			this.grid.setCss({
-				perspective: '1200px'
+				overflow: 'hidden'
 			});
 
 			this.grid.transform((tile, i) => {
-				tile.setCss({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms'
+				tile.transform({
+					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
+					opacity: '0.1',
+					transform: 'translateY('+ (i % 2 === 0? '-' : '') + vf.size.height +'px)'
 				});
-
-				tile.turn(this.direction === 'right'? 'bottom' : 'top');
 			});
-		},
-
-		destroyed() {
-			this.nextImage.show();
 		},
 
 		methods: {

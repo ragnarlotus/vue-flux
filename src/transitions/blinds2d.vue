@@ -3,12 +3,12 @@
 </template>
 
 <script>
-	import FluxGrid from '../FluxGrid.vue';
+	import FluxGrid from '@/components/FluxGrid.vue';
 
 	let vf, currentImage, nextImage;
 
 	export default {
-		name: 'transitionRound2',
+		name: 'transitionBlinds2d',
 
 		components: {
 			FluxGrid
@@ -16,7 +16,7 @@
 
 		data: () => ({
 			index: {},
-			numRows: 0,
+			numRows: 1,
 			numCols: 0,
 			tileDuration: 800,
 			totalDuration: 0,
@@ -42,46 +42,40 @@
 			currentImage = vf.Images.current;
 			nextImage = vf.Images.next;
 
-			let divider = vf.size.width / 9;
+			let divider = vf.size.width / 10;
 
 			vf.Transitions.setOptions(this, {
-				numRows: Math.floor(vf.size.height / divider),
 				numCols: Math.floor(vf.size.width / divider)
 			});
 
-			this.totalDuration = (this.numCols / 2 + this.numRows) * (this.tileDelay * 2);
+			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
 
 			this.index = {
-				front: this.currentImage.index
+				front: currentImage.index
 			};
 		},
 
 		mounted() {
-			this.currentImage.hide();
-
-			this.grid.setCss({
-				perspective: '1200px'
-			});
+			currentImage.hide();
 
 			this.grid.transform((tile, i) => {
-				tile.front.transform({
+				tile.transform({
 					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
-					opacity: '0',
-					transform: 'rotateX(-540deg)'
+					opacity: '0.1',
+					transform: 'scaleX(0)'
 				});
 			});
 		},
 
 		methods: {
 			getDelay(i) {
-				let row = this.grid.getRow(i);
-				let col = this.grid.getCol(i);
+				let delay = i;
 
-				let delay = Math.abs(this.numRows - row) + Math.abs(this.numCols / 2 - 0.5 - col) - 1;
+				if (this.direction === 'left')
+					delay = this.numCols - i - 1;
 
 				return delay * this.tileDelay;
 			}
 		}
 	};
 </script>
-
