@@ -3,7 +3,7 @@
 </template>
 
 <script>
-	import FluxCube from '../FluxCube.vue';
+	import FluxCube from '@/components/FluxCube.vue';
 
 	let vf, currentImage, nextImage;
 

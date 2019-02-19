@@ -1,12 +1,12 @@
 <template>
 	<flux-wrapper ref="wrapper">
-		<flux-image :slider="slider" :src="src" :size="size" ref="image"></flux-image>
+		<flux-image :slider="slider" :src="imageSrc" :size="imageSize" ref="image"></flux-image>
 	</flux-wrapper>
 </template>
 
 <script>
-	import FluxWrapper from '../FluxWrapper.vue';
-	import FluxImage from '../FluxImage.vue';
+	import FluxWrapper from '@/components/FluxWrapper.vue';
+	import FluxImage from '@/components/FluxImage.vue';
 
 	let vf, currentImage, nextImage;
 
@@ -19,12 +19,16 @@
 		},
 
 		data: () => ({
-			src: undefined,
-			size: undefined,
+			imageSrc: undefined,
+			imageSize: undefined,
 			totalDuration: 1400,
 			easing: 'ease-in-out',
 			wrapperCss: {
 				overflow: 'hidden'
+			},
+			imageCss: {
+				top: 0,
+				left: 0
 			}
 		}),
 
@@ -46,39 +50,36 @@
 			currentImage = vf.Images.current;
 			nextImage = vf.Images.next;
 
-			let props = vf.Images.props[currentImage.index];
-
-			this.src = props.src;
-
-			this.size = {
-				width: props.width,
-				height: props.height
-			};
+			this.imageSrc = currentImage.getSrc();
+			this.imageSize = currentImage.getSize();
 
 			vf.Transitions.setOptions(this);
 
 			if (this.direction === 'left') {
 				this.wrapperCss.left = 'auto';
 				this.wrapperCss.right = 0;
+
+				this.imageCss = {
+					...this.imageCss,
+					left: 'auto',
+					right: 0,
+					width: vf.size.width +'px'
+				}
 			}
 		},
 
 		mounted() {
 			this.wrapper.setCss(this.wrapperCss);
 
-			if (this.direction === 'left') {
-				this.$refs.image.setCss({
-					left: 'auto',
-					right: 0,
-					width: vf.size.width +'px'
-				});
-			}
-
 			currentImage.hide();
 
-			this.wrapper.transform({
-				transition: 'width '+ this.totalDuration +'ms '+ this.easing,
-				width: 0
+			this.$nextTick(() => {
+				this.$refs.image.setCss(this.imageCss);
+
+				this.wrapper.transform({
+					transition: 'width '+ this.totalDuration +'ms '+ this.easing,
+					width: 0
+				});
 			});
 		},
 

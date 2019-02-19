@@ -3,7 +3,7 @@
 </template>
 
 <script>
-	import FluxImage from '../FluxImage.vue';
+	import FluxImage from '@/components/FluxImage.vue';
 
 	let vf, currentImage, nextImage;
 

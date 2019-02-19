@@ -102,6 +102,10 @@
 				};
 			},
 
+			getSrc() {
+				return this.imageSrc;
+			},
+
 			setSrc(src) {
 				this.imageSrc = src;
 				this.imageSize = undefined;
@@ -111,6 +115,10 @@
 				this.$nextTick(() => {
 					this.init(time);
 				});
+			},
+
+			getSize() {
+				return this.imageSize;
 			},
 
 			setSize(size) {
@@ -189,8 +197,9 @@
 			},
 
 			transform(css) {
+				this.$refs.image.clientHeight;
+
 				this.$nextTick(() => {
-					this.$refs.image.clientHeight;
 					this.setCss(css);
 				});
 			},

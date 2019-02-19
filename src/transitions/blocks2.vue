@@ -3,12 +3,12 @@
 </template>
 
 <script>
-	import FluxGrid from '../FluxGrid.vue';
+	import FluxGrid from '@/components/FluxGrid.vue';
 
 	let vf, currentImage, nextImage;
 
 	export default {
-		name: 'transitionRound1',
+		name: 'transitionBlocks2',
 
 		components: {
 			FluxGrid
@@ -20,8 +20,8 @@
 			numCols: 0,
 			tileDuration: 800,
 			totalDuration: 0,
-			easing: 'ease-out',
-			tileDelay: 150,
+			easing: 'ease',
+			tileDelay: 80,
 			tileCss: {}
 		}),
 
@@ -43,35 +43,49 @@
 			currentImage = vf.Images.current;
 			nextImage = vf.Images.next;
 
-			let divider = vf.size.width / 6;
+			let divider = vf.size.width / 8;
 
 			vf.Transitions.setOptions(this, {
 				numRows: Math.floor(vf.size.height / divider),
 				numCols: Math.floor(vf.size.width / divider)
 			});
 
-			this.totalDuration = this.tileDelay * (this.numRows > this.numCols? this.numRows : this.numCols) * 2 + this.tileDelay;
+			this.totalDuration = this.tileDelay * (this.numRows + this.numCols) + this.tileDuration;
 
 			this.index = {
-				front: currentImage.index,
-				back: nextImage.index
+				front: currentImage.index
 			};
+
+			if (this.direction === 'left') {
+				this.index.front = nextImage.index;
+
+				this.tileCss = {
+					opacity: 0,
+					transform: 'scale(0.4, 0.4)'
+				};
+			}
 		},
 
 		mounted() {
-			currentImage.hide();
-			nextImage.hide();
+			let opacity, transform;
 
-			this.grid.setCss({
-				perspective: '800px'
-			});
+			if (this.direction === 'right') {
+				opacity = 0;
+				transform = 'scale(0.4, 0.4)';
+				currentImage.hide();
+
+			} else {
+				opacity = 1;
+				transform = 'scale(1, 1)';
+				nextImage.hide();
+			}
 
 			this.grid.transform((tile, i) => {
-				tile.setCss({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms'
+				tile.transform({
+					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
+					opacity: opacity,
+					transform: transform
 				});
-
-				tile.turn('back', this.direction);
 			});
 		},
 
