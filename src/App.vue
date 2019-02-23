@@ -123,7 +123,7 @@
 	import FluxControls from './components/FluxControls.vue';
 	import FluxIndex from './components/FluxIndex.vue';
 	import FluxPagination from './components/FluxPagination.vue';
-	import Transitions from './components/transitions/index.js';
+	import Transitions from '@/transitions/index.js';
 	import FluxParallax from './components/FluxParallax.vue';
 
 	export default {
@@ -156,9 +156,7 @@
 				'slides/5.jpg',
 				'slides/6.jpg',
 			],
-			fluxTransitions: {
-				transitionFade: Transitions.transitionFade
-			},
+			fluxTransitions: Transitions,
 			fluxCaptions: [ 'First caption', 'Second caption', undefined, 'Fourth caption' ]
 		}),
 

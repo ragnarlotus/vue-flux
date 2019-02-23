@@ -1,6 +1,6 @@
 <template>
-	<div :style="style" ref="image">
-		<img v-if="src && !imageSize" :src="src" @load="setSize()" @error="setSize()">
+	<div :style="style" ref="display">
+		<img v-if="image.src && !image.size" :src="image.src" @load="setImageSize()" @error="setImageSize()" ref="image">
 	</div>
 </template>
 
@@ -19,10 +19,13 @@
 				backgroundImage: 'none',
 				zIndex: 'auto'
 			},
-			imageSrc: undefined,
-			imageSize: undefined,
-			displaySize: undefined,
-			lastInit: 0
+			image: {
+				src: undefined,
+				size: undefined
+			},
+			display: {
+				size: undefined
+			}
 		}),
 
 		props: {
@@ -31,12 +34,17 @@
 				required: false
 			},
 
-			src: {
+			displaySize: {
+				type: Object,
+				required: false
+			},
+
+			imageSrc: {
 				type: String,
 				required: false
 			},
 
-			size: {
+			imageSize: {
 				type: Object,
 				required: false
 			},
@@ -58,135 +66,131 @@
 		},
 
 		watch: {
-			src: function(newSrc, oldSrc) {
+			displaySize: function(newSize, oldSize) {
+				this.setDisplaySize(newSize);
+			},
+
+			imageSrc: function(newSrc, oldSrc) {
 				this.setSrc(newSrc);
 			},
 
-			size: function(newSize, oldSize) {
-				this.setSize(newSize);
+			imageSize: function(newSize, oldSize) {
+				this.setDisplaySize(newSize);
 			},
 
 			color: function() {
-				this.$nextTick(() => {
-					this.init();
-				});
+				this.setColor(this.color);
 			}
 		},
 
 		mounted() {
 			this.setDisplaySize();
 
-			this.setSrc(this.src);
-			this.setSize(this.size);
+			if (this.imageSrc)
+				this.setImageSrc(this.imageSrc);
 
-			this.init(this.lastInit);
+			if (this.imageSize)
+				this.setImageSize(this.imageSize);
 		},
 
 		methods: {
+			getDisplaySize() {
+				return this.display.size;
+			},
+
 			setDisplaySize(size) {
-				if (this.slider !== undefined) {
-					this.displaySize = this.slider.size;
-					return;
-				}
-
 				if (size !== undefined) {
-					this.displaySize = size;
+					this.display.size = size;
 					return;
 				}
 
-				let container = this.$refs.image.parentNode;
+				if (this.slider !== undefined) {
+					this.display.size = this.slider.size;
+					return;
+				}
 
-				this.displaySize = {
+				let container = this.$refs.display.parentNode;
+
+				this.display.size = {
 					width: container.clientWidth,
 					height: container.clientHeight
 				};
 			},
 
-			getSrc() {
-				return this.imageSrc;
+			getImageSrc() {
+				return this.image.src;
 			},
 
-			setSrc(src) {
-				this.imageSrc = src;
-				this.imageSize = undefined;
+			setImageSrc(src) {
+				this.image.src = src;
+				this.image.size = undefined;
 
-				let time = this.lastInit = Date.now();
-
-				this.$nextTick(() => {
-					this.init(time);
-				});
+				this.init();
 			},
 
-			getSize() {
-				return this.imageSize;
+			getImageSize() {
+				return this.image.size;
 			},
 
-			setSize(size) {
-				let img = this.$refs.image.firstChild;
-
-				if (size === undefined && img.tagName !== 'IMG')
-					return;
+			setImageSize(size) {
+				let img = this.$refs.image;
 
 				if (size !== undefined) {
-					this.imageSize = size;
+					this.image.size = size;
 
 				} else if (img.naturalWidth || img.width) {
-					this.imageSize = {
+					this.image.size = {
 						width: img.naturalWidth || img.width,
 						height: img.naturalHeight || img.height
 					};
 				}
 
-				let time = this.lastInit = Date.now();
-
-				this.$nextTick(() => {
-					this.init(time);
-				});
+				this.init();
 			},
 
-			init(time) {
-				if (this.lastInit !== time)
+			getColor() {
+				return this.style.backgroundColor;
+			},
+
+			setColor(color) {
+				this.style.backgroundColor = color;
+			},
+
+			init() {
+				if (this.image.size === undefined)
 					return;
 
-				if (this.color !== undefined) {
-					this.setCss({
-						backgroundColor: this.color
-					});
+				let display = this.display.size;
+
+				let image = {
+					top: 0,
+					left: 0,
+					...this.image.size,
+					src: 'url("'+ this.image.src +'")'
+				};
+
+				if (image.height / image.width >= display.height / display.width) {
+					image.height = display.width * image.height / image.width;
+					image.width = display.width;
+					image.top = (display.height - image.height) / 2;
+
+				} else {
+					image.width = display.height * image.width / image.height;
+					image.height = display.height;
+					image.left = (display.width - image.width) / 2;
 				}
 
-				if (this.imageSize !== undefined) {
-					let container = this.displaySize;
+				image.top -= parseFloat(this.css.top);
+				image.left -= parseFloat(this.css.left);
 
-					let image = {
-						top: 0,
-						left: 0,
-						...this.imageSize,
-						src: 'url("'+ this.imageSrc +'")'
-					};
-
-					if (image.height / image.width >= container.height / container.width) {
-						image.height = container.width * image.height / image.width;
-						image.width = container.width;
-						image.top = (container.height - image.height) / 2;
-
-					} else {
-						image.width = container.height * image.width / image.height;
-						image.height = container.height;
-						image.left = (container.width - image.width) / 2;
-					}
-
-					image.top -= parseFloat(this.css.top);
-					image.left -= parseFloat(this.css.left);
-
-					this.setCss({
-						top: 0,
-						left: 0,
-						backgroundImage: image.src,
-						backgroundSize: image.width +'px '+ image.height +'px',
-						backgroundPosition: image.left +'px '+ image.top +'px',
-						backgroundRepeat: 'no-repeat'
-					});
-				}
+				this.setCss({
+					top: 0,
+					left: 0,
+					backgroundImage: image.src,
+					backgroundSize: image.width +'px '+ image.height +'px',
+					backgroundPosition: image.left +'px '+ image.top +'px',
+					backgroundRepeat: 'no-repeat'
+				});
 			},
 
 			setCss(css) {
@@ -197,7 +201,7 @@
 			},
 
 			transform(css) {
-				this.$refs.image.clientHeight;
+				this.$refs.display.clientHeight;
 
 				this.$nextTick(() => {
 					this.setCss(css);
