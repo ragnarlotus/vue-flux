@@ -1,7 +1,7 @@
 export default class ImagesController {
 
-	constructor(vm) {
-		this.vm = vm;
+	constructor(vf) {
+		this.vf = vf;
 
 		this.count = 0;
 		this.loading = [];
@@ -10,7 +10,7 @@ export default class ImagesController {
 	}
 
 	get current() {
-		let refs = this.vm.$refs;
+		let refs = this.vf.$refs;
 
 		if (refs.image1 === undefined)
 			return undefined;
@@ -19,30 +19,30 @@ export default class ImagesController {
 	}
 
 	get next() {
-		let refs = this.vm.$refs;
+		let refs = this.vf.$refs;
 
 		return refs.image1.style.zIndex === 10? refs.image1 : refs.image2;
 	}
 
 	preload() {
-		let vm = this.vm;
+		let vf = this.vf;
 
-		this.loading = vm.images.slice(0);
+		this.loading = vf.images.slice(0);
 		this.count = this.loading.length || 0;
 		this.loaded = 0;
 		this.props = [];
 
-		if (this.count < 2 || vm.Transitions.count === 0)
+		if (this.count < 2 || vf.Transitions.count === 0)
 			return;
 
-		vm.loaded = false;
+		vf.loaded = false;
 	}
 
 	add(index) {
 		this.loaded++;
 
-		let vm = this.vm;
-		let img = vm.$refs.loading[index];
+		let vf = this.vf;
+		let img = vf.$refs.loading[index];
 
 		if (img.naturalWidth || img.width) {
 			this.props[index] = {
@@ -54,28 +54,26 @@ export default class ImagesController {
 			};
 
 		} else {
-			console.warn('Image '+ vm.images[index] +' could not be loaded');
+			console.warn('Image '+ vf.images[index] +' could not be loaded');
 		}
 
-		if (index === 0) {
-			vm.$refs.image1.setSrc(this.props[0].src);
-			vm.$refs.image1.setSize(this.props[0].size);
-			vm.$refs.image1.index = 0;
-			vm.$refs.image1.init();
+		if (index === 0 && this.props[0]) {
+			vf.$refs.image1.index = 0;
+			vf.$refs.image1.setImageSrc(this.props[0].src);
+			vf.$refs.image1.setImageSize(this.props[0].size);
 		}
 
-		if (index === 1) {
-			vm.$refs.image2.setSrc(this.props[1].src);
-			vm.$refs.image2.setSize(this.props[1].size);
-			vm.$refs.image2.index = 1;
-			vm.$refs.image2.init();
+		if (index === 1 && this.props[1]) {
+			vf.$refs.image2.index = 1;
+			vf.$refs.image2.setImageSrc(this.props[1].src);
+			vf.$refs.image2.setImageSize(this.props[1].size);
 		}
 
 		if (this.loaded === this.loading.length) {
 			this.loading = [];
 
-			if (vm.loaded !== true)
-				vm.init();
+			if (vf.loaded !== true)
+				vf.init();
 		}
 	}
 
@@ -95,21 +93,21 @@ export default class ImagesController {
 	}
 
 	show(index, transition) {
-		let vm = this.vm;
+		let vf = this.vf;
 
-		vm.Timers.clear('image');
+		vf.Timers.clear('image');
 
 		index = this.getIndex(index);
 
 		let next = this.next;
-		next.setSrc(this.props[index].src);
-		next.setSize(this.props[index].size);
 		next.index = index;
+		next.setImageSrc(this.props[index].src);
+		next.setImageSize(this.props[index].size);
 
 		next.show();
 
-		vm.$nextTick(() => {
-			vm.Transitions.set(transition);
+		vf.$nextTick(() => {
+			vf.Transitions.set(transition);
 		});
 
 		return next;

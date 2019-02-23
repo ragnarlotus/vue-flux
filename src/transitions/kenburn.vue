@@ -1,5 +1,5 @@
 <template>
-	<flux-image :slider="slider" :src="imageSrc" :size="imageSize" ref="image"></flux-image>
+	<flux-image :slider="slider" :image-src="imageSrc" :image-size="imageSize" ref="image"></flux-image>
 </template>
 
 <script>
@@ -37,8 +37,8 @@
 
 			let image = this.direction === 'left'? nextImage : currentImage;
 
-			this.imageSrc = image.imageSrc;
-			this.imageSize = image.imageSize;
+			this.imageSrc = image.getImageSrc();
+			this.imageSize = image.getImageSize();
 		},
 
 		mounted() {
@@ -71,12 +71,10 @@
 
 				currentImage.hide();
 
-				this.$nextTick(() => {
-					this.$refs.image.transform({
-						transition: 'all '+ this.totalDuration +'ms '+ this.easing,
-						transform: 'scale('+ transform.scale +') translate('+ transform.translateX +', '+ transform.translateY +')',
-						opacity: 0
-					});
+				this.$refs.image.transform({
+					transition: 'all '+ this.totalDuration +'ms '+ this.easing,
+					transform: 'scale('+ transform.scale +') translate('+ transform.translateX +', '+ transform.translateY +')',
+					opacity: 0
 				});
 			},
 
@@ -92,11 +90,9 @@
 					zIndex: 11
 				});
 
-				this.$nextTick(() => {
-					this.$refs.image.transform({
-						transition: 'all '+ this.totalDuration +'ms '+ this.easing,
-						transform: 'scale(1) translate(0, 0)'
-					});
+				this.$refs.image.transform({
+					transition: 'all '+ this.totalDuration +'ms '+ this.easing,
+					transform: 'scale(1) translate(0, 0)'
 				});
 			},
 
