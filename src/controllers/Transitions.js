@@ -1,7 +1,7 @@
 export default class TransitionsController {
 
-	constructor(vm) {
-		this.vm = vm;
+	constructor(vf) {
+		this.vf = vf;
 
 		this.current = undefined;
 		this.last = undefined;
@@ -10,11 +10,11 @@ export default class TransitionsController {
 	}
 
 	update() {
-		let vm = this.vm;
+		let vf = this.vf;
 
-		let transitions = vm.transitions;
+		let transitions = vf.transitions;
 
-		Object.assign(vm.$options.components, transitions);
+		Object.assign(vf.$options.components, transitions);
 
 		this.names = Object.keys(transitions);
 		this.count = this.names.length;
@@ -22,7 +22,7 @@ export default class TransitionsController {
 		if (this.count > 0)
 			this.last = this.count - 1;
 
-		vm.$emit('VueFlux-TransitionsUpdated', vm);
+		vf.$emit('VueFlux-TransitionsUpdated', vf);
 	}
 
 	next() {
@@ -46,7 +46,7 @@ export default class TransitionsController {
 			this.current = transition;
 		}
 
-		this.vm.$nextTick(() => {
+		this.vf.$nextTick(() => {
 			this.start(transition);
 		});
 	}
@@ -54,12 +54,12 @@ export default class TransitionsController {
 	setOptions(transition, transitionOptions = {}) {
 		let userOptions = {};
 
-		if (this.vm.transitionOptions && this.vm.transitionOptions[this.current])
-			userOptions = this.vm.transitionOptions[this.current];
+		if (this.vf.transitionOptions && this.vf.transitionOptions[this.current])
+			userOptions = this.vf.transitionOptions[this.current];
 
 		if (transitionOptions.direction === undefined) {
-			let currentImage = this.vm.Images.current;
-			let nextImage = this.vm.Images.next;
+			let currentImage = this.vf.Images.current;
+			let nextImage = this.vf.Images.next;
 
 			transitionOptions.direction = nextImage.index < currentImage.index? 'left' : 'right';
 		}
@@ -68,44 +68,44 @@ export default class TransitionsController {
 	}
 
 	start(transition) {
-		let vm = this.vm;
+		let vf = this.vf;
 
-		vm.$emit('VueFlux-TransitionStart', vm, transition);
+		vf.$emit('VueFlux-TransitionStart', vf, transition);
 
 		let timeout = 0;
 
 		if (transition !== undefined)
-			timeout = vm.$refs.transition.totalDuration;
+			timeout = vf.$refs.transition.totalDuration;
 
-		vm.Timers.set('transition', timeout, () => {
+		vf.Timers.set('transition', timeout, () => {
 			this.end(transition);
 		});
 	}
 
 	end(transition) {
-		let vm = this.vm;
+		let vf = this.vf;
 
-		let currentImage = vm.Images.current;
-		let nextImage = vm.Images.next;
+		let currentImage = vf.Images.current;
+		let nextImage = vf.Images.next;
 
 		currentImage.setCss({ zIndex: 10 });
 		nextImage.setCss({ zIndex: 11 });
 
 		this.current = undefined;
 
-		vm.$nextTick(() => {
-			if (vm.config.infinite === false && nextImage.index >= vm.Images.count - 1) {
-				vm.stop();
+		vf.$nextTick(() => {
+			if (vf.config.infinite === false && nextImage.index >= vf.Images.count - 1) {
+				vf.stop();
 				return;
 			}
 
-			if (vm.config.autoplay === true) {
-				vm.Timers.set('image', vm.config.delay, () => {
-					vm.showImage('next');
+			if (vf.config.autoplay === true) {
+				vf.Timers.set('image', vf.config.delay, () => {
+					vf.showImage('next');
 				});
 			}
 
-			vm.$emit('VueFlux-TransitionEnd', vm, transition);
+			vf.$emit('VueFlux-TransitionEnd', vf, transition);
 		});
 	}
 

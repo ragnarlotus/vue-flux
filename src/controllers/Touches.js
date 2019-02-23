@@ -1,7 +1,7 @@
 export default class TouchesController {
 
-	constructor(vm) {
-		this.vm = vm;
+	constructor(vf) {
+		this.vf = vf;
 
 		this.startX = 0;
 		this.startY = 0;
@@ -20,7 +20,7 @@ export default class TouchesController {
 	}
 
 	start(event) {
-		if (!this.vm.config.enableGestures)
+		if (!this.vf.config.enableGestures)
 			return;
 
 		// Prevent web scrolling
@@ -33,13 +33,13 @@ export default class TouchesController {
 	}
 
 	end(event) {
-		let vm = this.vm;
+		let vf = this.vf;
 
 		this.previousTouchTime = this.endTime;
 		this.endTime = Date.now();
 
 		if (this.doubleTap()) {
-			vm.toggleFullscreen();
+			vf.toggleFullscreen();
 			return;
 		}
 
@@ -47,24 +47,24 @@ export default class TouchesController {
 		let offsetY = event.changedTouches[0].clientY - this.startY;
 
 		if (this.tap(offsetX, offsetY)) {
-			vm.toggleMouseOver(true);
+			vf.toggleMouseOver(true);
 			return;
 		}
 
-		if (!vm.config.enableGestures)
+		if (!vf.config.enableGestures)
 			return;
 
 		// Prevent web scrolling
 		event.preventDefault();
 
 		if (this.slideRight(offsetX)) {
-			vm.showImage('previous');
+			vf.showImage('previous');
 
 		} else if (this.slideLeft(offsetX)) {
-			vm.showImage('next');
+			vf.showImage('next');
 
-		} else if (vm.index !== undefined && this.slideUp(offsetY)) {
-			vm.index.show();
+		} else if (vf.index !== undefined && this.slideUp(offsetY)) {
+			vf.index.show();
 		}
 	}
 
@@ -77,19 +77,19 @@ export default class TouchesController {
 	}
 
 	slideLeft(offsetX) {
-		return offsetX < 0 && offsetX < -(this.vm.size.width * this.slideTrigger);
+		return offsetX < 0 && offsetX < -(this.vf.size.width * this.slideTrigger);
 	}
 
 	slideRight(offsetX) {
-		return offsetX > 0 && offsetX > this.vm.size.width * this.slideTrigger;
+		return offsetX > 0 && offsetX > this.vf.size.width * this.slideTrigger;
 	}
 
 	slideUp(offsetY) {
-		return offsetY < 0 && offsetY < -(this.vm.size.height * this.slideTrigger);
+		return offsetY < 0 && offsetY < -(this.vf.size.height * this.slideTrigger);
 	}
 
 	slideDown(offsetY) {
-		return offsetY > 0 && offsetY > this.vm.size.height * this.slideTrigger;
+		return offsetY > 0 && offsetY > this.vf.size.height * this.slideTrigger;
 	}
 
 }
