@@ -1,6 +1,6 @@
 <template>
 	<flux-wrapper ref="wrapper">
-		<flux-image :slider="slider" :src="imageSrc" :size="imageSize" ref="image"></flux-image>
+		<flux-image :slider="slider" :image-src="image.src" :image-size="image.size" ref="image"></flux-image>
 	</flux-wrapper>
 </template>
 
@@ -19,16 +19,18 @@
 		},
 
 		data: () => ({
-			imageSrc: undefined,
-			imageSize: undefined,
 			totalDuration: 1400,
 			easing: 'ease-in-out',
 			wrapperCss: {
 				overflow: 'hidden'
 			},
-			imageCss: {
-				top: 0,
-				left: 0
+			image: {
+				src: undefined,
+				size: undefined,
+				css: {
+					top: 0,
+					left: 0
+				}
 			}
 		}),
 
@@ -50,8 +52,10 @@
 			currentImage = vf.Images.current;
 			nextImage = vf.Images.next;
 
-			this.imageSrc = currentImage.getSrc();
-			this.imageSize = currentImage.getSize();
+			this.image = {
+				...this.image,
+				...currentImage.getImageProperties()
+			};
 
 			vf.Transitions.setOptions(this);
 
@@ -59,8 +63,8 @@
 				this.wrapperCss.left = 'auto';
 				this.wrapperCss.right = 0;
 
-				this.imageCss = {
-					...this.imageCss,
+				this.image.css = {
+					...this.image.css,
 					left: 'auto',
 					right: 0,
 					width: vf.size.width +'px'
@@ -73,13 +77,11 @@
 
 			currentImage.hide();
 
-			this.$nextTick(() => {
-				this.$refs.image.setCss(this.imageCss);
+			this.$refs.image.setCss(this.image.css);
 
-				this.wrapper.transform({
-					transition: 'width '+ this.totalDuration +'ms '+ this.easing,
-					width: 0
-				});
+			this.wrapper.transform({
+				transition: 'width '+ this.totalDuration +'ms '+ this.easing,
+				width: 0
 			});
 		},
 

@@ -36,11 +36,32 @@
 		}),
 
 		props: {
-			slider: { type: Object, required: true },
-			numRows: { type: Number, required: true },
-			numCols: { type: Number, required: true },
-			index: { type: Object, required: true },
-			tileCss: { type: Object, default: () => {} }
+			slider: {
+				type: Object,
+				required: false
+			},
+
+			numRows: {
+				type: Number,
+				required: false,
+				default: () => 1
+			},
+
+			numCols: {
+				type: Number,
+				required: false,
+				default: () => 1
+			},
+
+			index: {
+				type: Object,
+				required: true
+			},
+
+			tileCss: {
+				type: Object,
+				required: false
+			}
 		},
 
 		computed: {
@@ -52,28 +73,24 @@
 		created() {
 			this.numTiles = this.numRows * this.numCols;
 
-			this.tile.width = Math.ceil(this.slider.size.width / this.numCols);
-			this.tile.height = Math.ceil(this.slider.size.height / this.numRows);
+			this.tile.width = this.slider.size.width / this.numCols;
+			this.tile.height = this.slider.size.height / this.numRows;
 		},
 
 		methods: {
-			getRow(i) {
-				let row = Math.floor(i / this.numCols);
-
-				return row;
+			getRowNumber(i) {
+				return row = Math.floor(i / this.numCols);
 			},
 
-			getCol(i) {
-				let col = i % this.numCols;
-
-				return col;
+			getColNumber(i) {
+				return col = i % this.numCols;
 			},
 
 			getTileCss(i) {
 				i--;
 
-				let row = this.getRow(i);
-				let col = this.getCol(i);
+				let row = this.getRowNumber(i);
+				let col = this.getColNumber(i);
 
 				let width = this.tile.width;
 				let height = this.tile.height;

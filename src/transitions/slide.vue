@@ -1,7 +1,7 @@
 <template>
 	<flux-wrapper ref="wrapper">
-		<flux-image :slider="slider" :index="index.left" ref="imageLeft"></flux-image>
-		<flux-image :slider="slider" :index="index.right" ref="imageRight"></flux-image>
+		<flux-image :slider="slider" :image-src="images.left.src" :image-size="images.left.size" ref="imageLeft"></flux-image>
+		<flux-image :slider="slider" :image-src="images.right.src" :image-size="images.right.size" ref="imageRight"></flux-image>
 	</flux-wrapper>
 </template>
 
@@ -20,12 +20,12 @@
 		},
 
 		data: () => ({
-			totalDuration: 1400,
+			totalDuration: 140000,
 			easing: 'ease-in-out',
 			wrapperCss: {
 				width: '200%'
 			},
-			index: {
+			images: {
 				left: undefined,
 				right: undefined
 			}
@@ -51,12 +51,12 @@
 
 			vf.Transitions.setOptions(this);
 
-			this.index.left = currentImage.index;
-			this.index.right = nextImage.index;
+			this.images.left = currentImage.getImageProperties();
+			this.images.right = nextImage.getImageProperties();
 
 			if (this.direction === 'left') {
-				this.index.left = nextImage.index;
-				this.index.right = currentImage.index;
+				this.images.left = nextImage.getImageProperties();
+				this.images.right = currentImage.getImageProperties();
 
 				this.wrapperCss.left = 'auto';
 				this.wrapperCss.right = 0;
@@ -64,7 +64,7 @@
 		},
 
 		mounted() {
-			this.currentImage.hide();
+			currentImage.hide();
 
 			vf.mask.style.overflow = 'hidden';
 
