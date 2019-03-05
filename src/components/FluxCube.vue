@@ -1,11 +1,17 @@
 <template>
 	<div :style="style" ref="cube">
-		<flux-image :slider="slider" :index="index.front" :css="getFrontSideCss()" ref="front"></flux-image>
-		<flux-image v-if="sideSet('top')" :slider="slider" :index="index.top" :css="getTopSideCss()" ref="top"></flux-image>
-		<flux-image v-if="sideSet('back')" :slider="slider" :index="index.back" :css="getBackSideCss()" ref="back"></flux-image>
-		<flux-image v-if="sideSet('bottom')" :slider="slider" :index="index.bottom" :css="getBottomSideCss()" ref="bottom"></flux-image>
-		<flux-image v-if="sideSet('left')" :slider="slider" :index="index.left" :css="getLeftSideCss()" ref="left"></flux-image>
-		<flux-image v-if="sideSet('right')" :slider="slider" :index="index.right" :css="getRightSideCss()" ref="right"></flux-image>
+		<flux-image
+			v-for="side in sides"
+			v-if="sideSet(side)"
+			:key="side"
+			:slider="slider"
+			:display-size="displaySize[side]"
+			:image-src="imageSrcs[side]"
+			:image-size="imageSizes[side]"
+			:color="colors[side]"
+			:css="getSideCss(side)"
+			:ref="side">
+		</flux-image>
 	</div>
 </template>
 
@@ -20,6 +26,14 @@
 		},
 
 		data: () => ({
+			sides: [
+				'front',
+				'top',
+				'back',
+				'bottom',
+				'left',
+				'right'
+			],
 			style: {
 				position: 'absolute',
 				top: 0,
@@ -28,16 +42,45 @@
 				height: 0,
 				overflow: 'visible',
 				transformStyle: 'preserve-3d'
-			}
+			},
+			display: {
+				size: undefined
+			},
 		}),
 
 		props: {
-			slider: { type: Object, required: true },
-			index: { type: Object, required: true },
-			css: { type: Object, default: () => ({
-				top: 0,
-				left: 0
-			})}
+			slider: {
+				type: Object,
+				required: false
+			},
+
+			displaySize: {
+				type: Object,
+				required: false
+			},
+
+			imageSrcs: {
+				type: Object,
+				required: false
+			},
+
+			imageSizes: {
+				type: Object,
+				required: false
+			},
+
+			colors: {
+				type: Object,
+				required: false
+			},
+
+			css: {
+				type: Object,
+				default: () => ({
+					top: 0,
+					left: 0
+				})
+			}
 		},
 
 		computed: {
@@ -69,28 +112,77 @@
 		created() {
 			let css = this.css;
 
-			if (!css.width)
-				css.width = this.slider.size.width +'px';
+			if (this.slider) {
+				if (!css.width)
+					css.width = this.slider.size.width +'px';
 
-			if (!css.height)
-				css.height = this.slider.size.height +'px';
+				if (!css.height)
+					css.height = this.slider.size.height +'px';
+			}
 
 			this.setCss(css);
 		},
 
+		mounted() {
+			this.setDisplaySize();
+		},
+
 		methods: {
+			getDisplaySize() {
+				return this.display.size;
+			},
+
+			setDisplaySize(size) {
+				if (size !== undefined) {
+					this.display.size = size;
+					return;
+				}
+
+				if (this.slider !== undefined) {
+					this.display.size = this.slider.size;
+					return;
+				}
+
+				let container = new DomMan(this.$refs.cube.parentNode);
+
+				this.display.size = container.getSize();
+			},
+
 			sideSet(side) {
-				return this.index[side] !== undefined;
+				return this.imageSrc[side] !== undefined;
 			},
 
 			setCss(css) {
-				this.style = Object.assign({}, this.style, css);
+				this.style = {
+					...this.style,
+					...css
+				};
 			},
 
-			getBasicSideCss(side) {
+			getSideCss(side) {
+				if (side === 'front')
+					return this.getFrontSideCss();
+
+				if (side === 'top')
+					return this.getTopSideCss();
+
+				if (side === 'back')
+					return this.getBackSideCss();
+
+				if (side === 'bottom')
+					return this.getBottomSideCss();
+
+				if (side === 'left')
+					return this.getLeftSideCss();
+
+				if (side === 'right')
+					return this.getRightSideCss();
+			},
+
+			getDefaultSideCss(side) {
 				let css = {};
 
-				if (typeof this.index[side] === 'number') {
+				if (this.sideSet(side)) {
 					css.top = this.css.top;
 					css.left = this.css.left;
 				}
@@ -99,13 +191,11 @@
 			},
 
 			getFrontSideCss() {
-				let css = this.getBasicSideCss('front');
-
-				return css;
+				return this.getDefaultSideCss('front');
 			},
 
 			getTopSideCss() {
-				let css = this.getBasicSideCss('top');
+				let css = this.getDefaultSideCss('top');
 
 				let t = {
 					rx: '90deg',
@@ -120,7 +210,7 @@
 			},
 
 			getBackSideCss() {
-				let css = this.getBasicSideCss('back');
+				let css = this.getDefaultSideCss('back');
 
 				css.transform = 'rotateY(180deg)';
 				css.backfaceVisibility = 'hidden';
@@ -129,7 +219,7 @@
 			},
 
 			getBottomSideCss() {
-				let css = this.getBasicSideCss('bottom');
+				let css = this.getDefaultSideCss('bottom');
 
 				let t = {
 					rx: '-90deg',
@@ -144,7 +234,7 @@
 			},
 
 			getLeftSideCss() {
-				let css = this.getBasicSideCss('left');
+				let css = this.getDefaultSideCss('left');
 
 				let size = {
 					width: parseInt(typeof this.index.left === 'number'? this.style.width : this.style.height),
@@ -167,7 +257,7 @@
 			},
 
 			getRightSideCss() {
-				let css = this.getBasicSideCss('right');
+				let css = this.getDefaultSideCss('right');
 
 				let size = {
 					width: parseInt(typeof this.index.right === 'number'? this.style.width : this.style.height),

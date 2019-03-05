@@ -1,5 +1,5 @@
 <template>
-	<flux-image :slider="slider" :image-src="imageSrc" :image-size="imageSize" ref="image"></flux-image>
+	<flux-image :slider="slider" :image-src="image.src" :image-size="image.size" ref="image"></flux-image>
 </template>
 
 <script>
@@ -17,8 +17,10 @@
 		data: () => ({
 			totalDuration: 1500,
 			easing: 'cubic-bezier(.35,.4,.65,.6)',
-			imageSrc: undefined,
-			imageSize: undefined
+			image: {
+				src: undefined,
+				size: undefined
+			}
 		}),
 
 		props: {
@@ -37,8 +39,7 @@
 
 			let image = this.direction === 'left'? nextImage : currentImage;
 
-			this.imageSrc = image.getImageSrc();
-			this.imageSize = image.getImageSize();
+			this.image = image.getImageProperties();
 		},
 
 		mounted() {
