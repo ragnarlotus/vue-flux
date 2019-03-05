@@ -5,6 +5,8 @@
 </template>
 
 <script>
+	import DomMan from '@/classes/DomMan.js';
+
 	export default {
 		data: () => ({
 			style: {
@@ -19,13 +21,13 @@
 				backgroundImage: 'none',
 				zIndex: 'auto'
 			},
+			display: {
+				size: undefined
+			},
 			image: {
 				src: undefined,
 				size: undefined
 			},
-			display: {
-				size: undefined
-			}
 		}),
 
 		props: {
@@ -56,12 +58,10 @@
 
 			css: {
 				type: Object,
-				default: () => {
-					return {
-						top: 0,
-						left: 0
-					};
-				}
+				default: () => ({
+					top: 0,
+					left: 0
+				})
 			}
 		},
 
@@ -109,12 +109,9 @@
 					return;
 				}
 
-				let container = this.$refs.display.parentNode;
+				let container = new DomMan(this.$refs.display.parentNode);
 
-				this.display.size = {
-					width: container.clientWidth,
-					height: container.clientHeight
-				};
+				this.display.size = container.getSize();
 			},
 
 			getImageSrc() {
@@ -146,6 +143,10 @@
 				}
 
 				this.init();
+			},
+
+			getImageProperties() {
+				return this.image;
 			},
 
 			getColor() {

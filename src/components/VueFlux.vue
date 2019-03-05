@@ -37,6 +37,7 @@
 </template>
 
 <script>
+	import DomMan from '@/classes/DomMan.js';
 	import ScreenController from '@/controllers/Screen.js';
 	import TimersController from '@/controllers/Timers.js';
 	import TransitionsController from '@/controllers/Transitions.js';
@@ -258,32 +259,29 @@
 				this.size.height = undefined;
 
 				if (this.config.width.indexOf('px') !== -1)
-					this.size.width = parseInt(this.config.width);
+					this.size.width = parseFloat(this.config.width);
 
 				if (this.config.height.indexOf('px') !== -1)
-					this.size.height = parseInt(this.config.height);
+					this.size.height = parseFloat(this.config.height);
 
 				if (this.size.width && this.size.height)
 					return;
 
 				this.$nextTick(() => {
-					let container = this.$refs.container;
+					let container = new DomMan(this.$refs.container);
 
 					// Find width
-					if (!this.size.width) {
-						let width = window.getComputedStyle(container).width;
-
-						this.size.width = parseFloat(width);
-					}
+					if (!this.size.width)
+						this.size.width = container.getWidth();
 
 					// Find height
 					if (this.config.height === 'auto') {
 						let height = this.size.width / 16 * 9;
 
-						if (container.clientHeight)
-							height = window.getComputedStyle(container).height;
+						if (container.hasHeight())
+							height = container.getHeight();
 
-						this.size.height = parseFloat(height);
+						this.size.height = height;
 					}
 
 					this.$refs.image1.init();
