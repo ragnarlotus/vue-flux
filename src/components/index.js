@@ -1,29 +1,13 @@
-import FluxCaption from './FluxCaption.vue';
-import FluxControls from './FluxControls.vue';
-import FluxCube from './FluxCube.vue';
-import FluxGrid from './FluxGrid.vue';
-import FluxImage from './FluxImage.vue';
-import FluxIndex from './FluxIndex.vue';
-import FluxPagination from './FluxPagination.vue';
-import FluxParallax from './FluxParallax.vue';
-import FluxThumb from './FluxThumb.vue';
-import FluxVortex from './FluxVortex.vue';
-import FluxWrapper from './FluxWrapper.vue';
-import VueFlux from './VueFlux.vue';
-import Transitions from './transitions/index.js';
-
-export {
-	FluxCaption,
-	FluxControls,
-	FluxCube,
-	FluxGrid,
-	FluxImage,
-	FluxIndex,
-	FluxPagination,
-	FluxParallax,
-	FluxThumb,
-	FluxVortex,
-	FluxWrapper,
-	VueFlux,
-	Transitions
-};
+export { FluxCaption } from './FluxCaption.vue';
+export { FluxControls } from './FluxControls.vue';
+export { FluxCube } from './FluxCube.vue';
+export { FluxGrid } from './FluxGrid.vue';
+export { FluxImage } from './FluxImage.vue';
+export { FluxIndex } from './FluxIndex.vue';
+export { FluxPagination } from './FluxPagination.vue';
+export { FluxParallax } from './FluxParallax.vue';
+export { FluxThumb } from './FluxThumb.vue';
+export { FluxVortex } from './FluxVortex.vue';
+export { FluxWrapper } from './FluxWrapper.vue';
+export { VueFlux } from './VueFlux.vue';
+export { Transitions } from './transitions/index.js';
