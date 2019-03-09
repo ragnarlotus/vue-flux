@@ -12,13 +12,18 @@
 </template>
 
 <script>
-	import FluxCube from './FluxCube.vue';
+	import FluxBase from '@/mixins/FluxBase.js';
+	import FluxCube from '@/components/FluxCube.vue';
 
 	export default {
 		name: 'FluxGrid',
 
 		components: {
 			FluxCube
+		},
+
+		mixins: {
+			FluxBase
 		},
 
 		data: () => ({
@@ -53,11 +58,6 @@
 				default: () => 1
 			},
 
-			index: {
-				type: Object,
-				required: true
-			},
-
 			tileCss: {
 				type: Object,
 				required: false
@@ -72,9 +72,13 @@
 
 		created() {
 			this.numTiles = this.numRows * this.numCols;
+		},
 
-			this.tile.width = this.slider.size.width / this.numCols;
-			this.tile.height = this.slider.size.height / this.numRows;
+		mounted() {
+			let display = this.display.size;
+
+			this.tile.width = display.width / this.numCols;
+			this.tile.height = display.height / this.numRows;
 		},
 
 		methods: {
@@ -106,17 +110,14 @@
 
 				let zIndex = i + 1 < this.numCols / 2? 13 + i : 13 + this.numCols - i;
 
-				return Object.assign({}, this.tileCss, {
+				return {
+					...this.tileCss,
 					width: width +'px',
 					height: height +'px',
 					top: top +'px',
 					left: left +'px',
 					zIndex: zIndex
-				});
-			},
-
-			setCss(css) {
-				this.style = Object.assign({}, this.style, css);
+				};
 			},
 
 			transform(func) {

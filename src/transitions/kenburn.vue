@@ -16,7 +16,7 @@
 
 		data: () => ({
 			totalDuration: 1500,
-			easing: 'cubic-bezier(.35,.4,.65,.6)',
+			easing: 'linear',
 			image: {
 				src: undefined,
 				size: undefined
@@ -39,7 +39,7 @@
 
 			let image = this.direction === 'left'? nextImage : currentImage;
 
-			this.image = image.getImageProperties();
+			this.image = image.getImage();
 		},
 
 		mounted() {

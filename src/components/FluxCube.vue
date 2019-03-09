@@ -5,10 +5,10 @@
 			v-if="sideSet(side)"
 			:key="side"
 			:slider="slider"
-			:display-size="displaySize[side]"
-			:image-src="imageSrcs[side]"
-			:image-size="imageSizes[side]"
-			:color="colors[side]"
+			:display-size="displaySize"
+			:image-src="imageSrc[side]"
+			:image-size="imageSize[side]"
+			:color="color[side]"
 			:css="getSideCss(side)"
 			:ref="side">
 		</flux-image>
@@ -16,13 +16,18 @@
 </template>
 
 <script>
-	import FluxImage from './FluxImage.vue';
+	import FluxBase from '@/mixins/FluxBase.js';
+	import FluxImage from '@/components/FluxImage.vue';
 
 	export default {
 		name: 'FluxCube',
 
 		components: {
 			FluxImage
+		},
+
+		mixins: {
+			FluxBase
 		},
 
 		data: () => ({
@@ -42,38 +47,10 @@
 				height: 0,
 				overflow: 'visible',
 				transformStyle: 'preserve-3d'
-			},
-			display: {
-				size: undefined
-			},
+			}
 		}),
 
 		props: {
-			slider: {
-				type: Object,
-				required: false
-			},
-
-			displaySize: {
-				type: Object,
-				required: false
-			},
-
-			imageSrcs: {
-				type: Object,
-				required: false
-			},
-
-			imageSizes: {
-				type: Object,
-				required: false
-			},
-
-			colors: {
-				type: Object,
-				required: false
-			},
-
 			css: {
 				type: Object,
 				default: () => ({
@@ -123,40 +100,9 @@
 			this.setCss(css);
 		},
 
-		mounted() {
-			this.setDisplaySize();
-		},
-
 		methods: {
-			getDisplaySize() {
-				return this.display.size;
-			},
-
-			setDisplaySize(size) {
-				if (size !== undefined) {
-					this.display.size = size;
-					return;
-				}
-
-				if (this.slider !== undefined) {
-					this.display.size = this.slider.size;
-					return;
-				}
-
-				let container = new DomMan(this.$refs.cube.parentNode);
-
-				this.display.size = container.getSize();
-			},
-
 			sideSet(side) {
 				return this.imageSrc[side] !== undefined;
-			},
-
-			setCss(css) {
-				this.style = {
-					...this.style,
-					...css
-				};
 			},
 
 			getSideCss(side) {

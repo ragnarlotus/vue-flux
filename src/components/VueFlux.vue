@@ -37,7 +37,7 @@
 </template>
 
 <script>
-	import DomMan from '@/classes/DomMan.js';
+	import DomHelper from '@/classes/DomHelper.js';
 	import ScreenController from '@/controllers/Screen.js';
 	import TimersController from '@/controllers/Timers.js';
 	import TransitionsController from '@/controllers/Transitions.js';
@@ -199,7 +199,7 @@
 			this.updateOptions();
 			Transitions.update();
 
-			this.$emit('VueFlux-Created', this);
+			this.$emit('vf-created', this);
 		},
 
 		mounted() {
@@ -218,7 +218,7 @@
 			if (this.config.bindKeys)
 				window.addEventListener('keydown', this.keydown);
 
-			this.$emit('VueFlux-Mounted', this);
+			this.$emit('vf-mounted', this);
 		},
 
 		beforeDestroy() {
@@ -229,7 +229,7 @@
 
 			Timers.clear();
 
-			this.$emit('VueFlux-Destroyed', this);
+			this.$emit('vf-destroyed', this);
 		},
 
 		methods: {
@@ -251,7 +251,7 @@
 					this.resize();
 				}
 
-				this.$emit('VueFlux-OptionsUpdated', this);
+				this.$emit('vf-options-updated', this);
 			},
 
 			resize() {
@@ -268,7 +268,7 @@
 					return;
 
 				this.$nextTick(() => {
-					let container = new DomMan(this.$refs.container);
+					let container = new DomHelper(this.$refs.mask);
 
 					// Find width
 					if (!this.size.width)
@@ -296,7 +296,7 @@
 					if (this.config.autoplay === true)
 						this.play();
 
-					this.$emit('VueFlux-Ready', this);
+					this.$emit('vf-ready', this);
 				});
 			},
 
@@ -337,7 +337,7 @@
 					this.showImage(index);
 				});
 
-				this.$emit('VueFlux-Play', this);
+				this.$emit('vf-play', this);
 			},
 
 			stop() {
@@ -348,7 +348,7 @@
 
 				Timers.clear('image');
 
-				this.$emit('VueFlux-Stop', this);
+				this.$emit('vf-stop', this);
 			},
 
 			toggleAutoplay() {
@@ -367,7 +367,7 @@
 
 				let next = Images.show(index, transition);
 
-				this.$emit('VueFlux-Show', this, this[next.reference]);
+				this.$emit('vf-show', this, this[next.reference]);
 			},
 
 			keydown(event) {

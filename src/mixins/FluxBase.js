@@ -1,8 +1,9 @@
 import DomHelper from '../classes/DomHelper.js';
 
 export default {
+	name: 'FluxBase',
+
 	data: () => ({
-		parentNode: undefined,
 		display: {
 			size: undefined,
 		},
@@ -49,16 +50,23 @@ export default {
 		},
 
 		imageSize: function(newSize, oldSize) {
-			this.setDisplaySize(newSize);
+			this.setImageSize(newSize);
 		},
+
+		color: function() {
+			if (this.setColor)
+				this.setColor(this.color);
+		}
 	},
 
 	mounted() {
 		this.setDisplaySize();
 
-		if (this.imageSrc) this.setImageSrc(this.imageSrc);
+		if (this.imageSrc)
+			this.setImageSrc(this.imageSrc);
 
-		if (this.imageSize) this.setImageSize(this.imageSize);
+		if (this.imageSize)
+			this.setImageSize(this.imageSize);
 	},
 
 	methods: {
@@ -77,7 +85,7 @@ export default {
 				return;
 			}
 
-			let container = new DomMan(this.$refs.display.parentNode);
+			let container = new DomHelper(this.$refs.display);
 
 			this.display.size = container.getSize();
 		},
@@ -87,10 +95,14 @@ export default {
 		},
 
 		setImageSrc(src) {
+			if (typeof src !== 'string')
+				return;
+
 			this.image.src = src;
 			this.image.size = undefined;
 
-			this.init();
+			if (this.init)
+				this.init();
 		},
 
 		getImageSize() {
@@ -100,8 +112,9 @@ export default {
 		setImageSize(size) {
 			let img = this.$refs.image;
 
-			if (size !== undefined) {
+			if (size && size.width !== undefined && size.height !== undefined) {
 				this.image.size = size;
+
 			} else if (img.naturalWidth || img.width) {
 				this.image.size = {
 					width: img.naturalWidth || img.width,
@@ -109,7 +122,8 @@ export default {
 				};
 			}
 
-			this.init();
+			if (this.init)
+				this.init();
 		},
 
 		getImage() {
