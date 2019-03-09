@@ -54,7 +54,7 @@
 
 			this.image = {
 				...this.image,
-				...currentImage.getImageProperties()
+				...currentImage.getImage()
 			};
 
 			vf.Transitions.setOptions(this);

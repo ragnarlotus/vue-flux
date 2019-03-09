@@ -12,7 +12,7 @@
 </template>
 
 <script>
-	import FluxImage from './FluxImage.vue';
+	import FluxImage from '@/components/FluxImage.vue';
 
 	export default {
 		name: 'FluxVortex',

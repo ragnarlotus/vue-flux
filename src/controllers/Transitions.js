@@ -22,7 +22,7 @@ export default class TransitionsController {
 		if (this.count > 0)
 			this.last = this.count - 1;
 
-		vf.$emit('VueFlux-TransitionsUpdated', vf);
+		vf.$emit('vf-transitions-updated', vf);
 	}
 
 	next() {
@@ -70,7 +70,7 @@ export default class TransitionsController {
 	start(transition) {
 		let vf = this.vf;
 
-		vf.$emit('VueFlux-TransitionStart', vf, transition);
+		vf.$emit('vf-transition-start', vf, transition);
 
 		let timeout = 0;
 
@@ -105,7 +105,7 @@ export default class TransitionsController {
 				});
 			}
 
-			vf.$emit('VueFlux-TransitionEnd', vf, transition);
+			vf.$emit('vf-transition-end', vf, transition);
 		});
 	}
 
