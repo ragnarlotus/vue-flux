@@ -5,9 +5,13 @@
 </template>
 
 <script>
-	import DomMan from '@/classes/DomMan.js';
+	import FluxBase from '@/mixins/FluxBase.js';
 
 	export default {
+		mixins: [
+			FluxBase
+		],
+
 		data: () => ({
 			style: {
 				position: 'absolute',
@@ -20,42 +24,10 @@
 				backgroundColor: 'transparent',
 				backgroundImage: 'none',
 				zIndex: 'auto'
-			},
-			display: {
-				size: undefined
-			},
-			image: {
-				src: undefined,
-				size: undefined
-			},
+			}
 		}),
 
 		props: {
-			slider: {
-				type: Object,
-				required: false
-			},
-
-			displaySize: {
-				type: Object,
-				required: false
-			},
-
-			imageSrc: {
-				type: String,
-				required: false
-			},
-
-			imageSize: {
-				type: Object,
-				required: false
-			},
-
-			color: {
-				type: String,
-				required: false
-			},
-
 			css: {
 				type: Object,
 				default: () => ({
@@ -65,90 +37,7 @@
 			}
 		},
 
-		watch: {
-			displaySize: function(newSize, oldSize) {
-				this.setDisplaySize(newSize);
-			},
-
-			imageSrc: function(newSrc, oldSrc) {
-				this.setSrc(newSrc);
-			},
-
-			imageSize: function(newSize, oldSize) {
-				this.setDisplaySize(newSize);
-			},
-
-			color: function() {
-				this.setColor(this.color);
-			}
-		},
-
-		mounted() {
-			this.setDisplaySize();
-
-			if (this.imageSrc)
-				this.setImageSrc(this.imageSrc);
-
-			if (this.imageSize)
-				this.setImageSize(this.imageSize);
-		},
-
 		methods: {
-			getDisplaySize() {
-				return this.display.size;
-			},
-
-			setDisplaySize(size) {
-				if (size !== undefined) {
-					this.display.size = size;
-					return;
-				}
-
-				if (this.slider !== undefined) {
-					this.display.size = this.slider.size;
-					return;
-				}
-
-				let container = new DomMan(this.$refs.display.parentNode);
-
-				this.display.size = container.getSize();
-			},
-
-			getImageSrc() {
-				return this.image.src;
-			},
-
-			setImageSrc(src) {
-				this.image.src = src;
-				this.image.size = undefined;
-
-				this.init();
-			},
-
-			getImageSize() {
-				return this.image.size;
-			},
-
-			setImageSize(size) {
-				let img = this.$refs.image;
-
-				if (size !== undefined) {
-					this.image.size = size;
-
-				} else if (img.naturalWidth || img.width) {
-					this.image.size = {
-						width: img.naturalWidth || img.width,
-						height: img.naturalHeight || img.height
-					};
-				}
-
-				this.init();
-			},
-
-			getImageProperties() {
-				return this.image;
-			},
-
 			getColor() {
 				return this.style.backgroundColor;
 			},
@@ -194,18 +83,12 @@
 				});
 			},
 
-			setCss(css) {
-				this.style = {
-					...this.style,
-					...css
-				};
-			},
-
 			transform(css) {
 				this.$refs.display.clientHeight;
 
 				this.$nextTick(() => {
 					this.setCss(css);
+					this.$refs.display.clientHeight;
 				});
 			},
 

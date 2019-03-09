@@ -27,7 +27,7 @@ export default class ScreenController {
 			return method in element? element[method]() || true : false;
 		});
 
-		this.vf.$emit('VueFlux-EnterFullscreen', this.vf);
+		this.vf.$emit('vf-enter-fullscreen', this.vf);
 	}
 
 	exitFullScreen() {
@@ -42,7 +42,7 @@ export default class ScreenController {
 			return method in document? document[method]() || true : false;
 		});
 
-		this.vf.$emit('VueFlux-ExitFullscreen', this.vf);
+		this.vf.$emit('vf-exit-fullscreen', this.vf);
 	}
 
 }

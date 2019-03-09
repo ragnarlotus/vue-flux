@@ -15,7 +15,7 @@
 </template>
 
 <script>
-	import FluxThumb from './FluxThumb.vue';
+	import FluxThumb from '@/components/FluxThumb.vue';
 
 	export default {
 		name: 'FluxIndex',
