@@ -10,6 +10,8 @@
 
 <script>
 	export default {
+		name: 'FluxPagination',
+
 		props: {
 			slider: { type: Object }
 		},

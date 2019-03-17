@@ -8,6 +8,8 @@
 	import FluxBase from '@/mixins/FluxBase.js';
 
 	export default {
+		name: 'FluxImage',
+
 		mixins: [
 			FluxBase
 		],
@@ -84,11 +86,9 @@
 			},
 
 			transform(css) {
-				this.$refs.display.clientHeight;
-
 				this.$nextTick(() => {
-					this.setCss(css);
 					this.$refs.display.clientHeight;
+					this.setCss(css);
 				});
 			},
 

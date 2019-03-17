@@ -4,6 +4,8 @@
 
 <script>
 	export default {
+		name: 'FluxThumb',
+
 		data: () => ({
 			style: {
 				overflow: 'hidden'

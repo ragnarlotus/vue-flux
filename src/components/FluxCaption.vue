@@ -6,6 +6,8 @@
 
 <script>
 	export default {
+		name: 'FluxCaption',
+
 		props: {
 			slider: {
 				type: Object

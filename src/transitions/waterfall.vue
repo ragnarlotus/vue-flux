@@ -1,5 +1,12 @@
 <template>
-	<flux-grid :slider="slider" :num-rows="numRows" :num-cols="numCols" :index="index" ref="grid"></flux-grid>
+	<flux-grid
+		:num-rows="numRows"
+		:num-cols="numCols"
+		:slider="slider"
+		:image-src="image.src"
+		:image-size="image.size"
+		ref="grid">
+	</flux-grid>
 </template>
 
 <script>
@@ -15,13 +22,13 @@
 		},
 
 		data: () => ({
-			index: {},
 			numRows: 1,
-			numCols: 0,
+			numCols: 1,
 			tileDuration: 600,
 			totalDuration: 0,
 			easing: 'ease-in',
 			tileDelay: 80,
+			image: {},
 		}),
 
 		props: {
@@ -41,7 +48,7 @@
 			vf = this.slider;
 			currentImage = vf.Images.current;
 
-			let divider = this.vf.size.width / 10;
+			let divider = vf.size.width / 10;
 
 			vf.Transitions.setOptions(this, {
 				numCols: Math.floor(vf.size.width / divider)
@@ -49,8 +56,9 @@
 
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
 
-			this.index = {
-				front: currentImage.index
+			this.image = {
+				...this.image,
+				...currentImage.getImage()
 			};
 		},
 
@@ -65,7 +73,7 @@
 				tile.transform({
 					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
 					opacity: '0.1',
-					transform: 'translateY('+ this.vf.size.height +'px)'
+					transform: 'translateY('+ vf.size.height +'px)'
 				});
 			});
 		},
