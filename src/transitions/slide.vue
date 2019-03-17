@@ -20,7 +20,7 @@
 		},
 
 		data: () => ({
-			totalDuration: 140000,
+			totalDuration: 1400,
 			easing: 'ease-in-out',
 			wrapperCss: {
 				width: '200%'

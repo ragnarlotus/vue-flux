@@ -6,6 +6,8 @@
 
 <script>
 	export default {
+		name: 'FluxWrapper',
+
 		data: () => ({
 			style: {
 				position: 'absolute',
