@@ -24,14 +24,7 @@
 			wrapperCss: {
 				overflow: 'hidden'
 			},
-			image: {
-				src: undefined,
-				size: undefined,
-				css: {
-					top: 0,
-					left: 0
-				}
-			}
+			image: {}
 		}),
 
 		props: {

@@ -10,6 +10,8 @@
 
 <script>
 	export default {
+		name: 'FluxControls',
+
 		props: {
 			slider: {
 				type: Object

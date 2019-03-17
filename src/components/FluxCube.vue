@@ -26,9 +26,9 @@
 			FluxImage
 		},
 
-		mixins: {
+		mixins: [
 			FluxBase
-		},
+		],
 
 		data: () => ({
 			sides: [

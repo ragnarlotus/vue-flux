@@ -4,7 +4,10 @@
 			v-for="i in numTiles"
 			:key="i"
 			:slider="slider"
-			:index="index"
+			:display-size="displaySize"
+			:image-src="imageSrc"
+			:image-size="imageSize"
+			:color="color"
 			:css="getTileCss(i)"
 			ref="tiles">
 		</flux-cube>
@@ -22,9 +25,9 @@
 			FluxCube
 		},
 
-		mixins: {
+		mixins: [
 			FluxBase
-		},
+		],
 
 		data: () => ({
 			numTiles: 0,
@@ -41,11 +44,6 @@
 		}),
 
 		props: {
-			slider: {
-				type: Object,
-				required: false
-			},
-
 			numRows: {
 				type: Number,
 				required: false,
@@ -83,11 +81,11 @@
 
 		methods: {
 			getRowNumber(i) {
-				return row = Math.floor(i / this.numCols);
+				return Math.floor(i / this.numCols);
 			},
 
 			getColNumber(i) {
-				return col = i % this.numCols;
+				return i % this.numCols;
 			},
 
 			getTileCss(i) {

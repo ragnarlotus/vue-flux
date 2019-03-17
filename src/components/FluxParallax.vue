@@ -7,6 +7,8 @@
 
 <script>
 	export default {
+		name: 'FluxParallax',
+
 		data: () => ({
 			loaded: false,
 			view: {
