@@ -3,8 +3,8 @@
 		:num-rows="numRows"
 		:num-cols="numCols"
 		:slider="slider"
-		:image-src="image.src"
-		:image-size="image.size"
+		:image-src="imageSrc"
+		:image-size="imageSize"
 		ref="grid">
 	</flux-grid>
 </template>
@@ -24,11 +24,16 @@
 		data: () => ({
 			numRows: 1,
 			numCols: 1,
-			tileDuration: 600,
+			tileDuration: 600000,
 			totalDuration: 0,
 			easing: 'ease-in',
 			tileDelay: 80,
-			image: {},
+			imageSrc: {
+				front: undefined
+			},
+			imageSize: {
+				front: {}
+			},
 		}),
 
 		props: {
@@ -56,10 +61,8 @@
 
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
 
-			this.image = {
-				...this.image,
-				...currentImage.getImage()
-			};
+			this.imageSrc.front = currentImage.getImageSrc();
+			this.imageSize.front = currentImage.getImageSize();
 		},
 
 		mounted() {

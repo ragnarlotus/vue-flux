@@ -1,7 +1,27 @@
-export default class ScreenController {
+import DomHelper from '@/classes/DomHelper.js';
 
-	constructor(vf) {
-		this.vf = vf;
+export default class DisplayController {
+
+	constructor(vm) {
+		this.vm = vm;
+
+		this.size = {
+			width: undefined,
+			height: undefined,
+		};
+	}
+
+	setSize(size) {
+		this.size = {
+			...this.size,
+			...size
+		};
+	}
+
+	setSizeFrom(element) {
+		element = new DomHelper(element);
+
+		this.size = element.getSize();
 	}
 
 	inFullScreen() {
@@ -27,7 +47,7 @@ export default class ScreenController {
 			return method in element? element[method]() || true : false;
 		});
 
-		this.vf.$emit('vf-enter-fullscreen', this.vf);
+		this.vm.$emit('vf-enter-fullscreen', this.vm);
 	}
 
 	exitFullScreen() {
@@ -42,7 +62,7 @@ export default class ScreenController {
 			return method in document? document[method]() || true : false;
 		});
 
-		this.vf.$emit('vf-exit-fullscreen', this.vf);
+		this.vm.$emit('vf-exit-fullscreen', this.vm);
 	}
 
 }

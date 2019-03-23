@@ -51,12 +51,12 @@
 
 			vf.Transitions.setOptions(this);
 
-			this.images.left = currentImage.getImage();
-			this.images.right = nextImage.getImage();
+			this.images.left = currentImage.getProperties();
+			this.images.right = nextImage.getProperties();
 
 			if (this.direction === 'left') {
-				this.images.left = nextImage.getImage();
-				this.images.right = currentImage.getImage();
+				this.images.left = nextImage.getProperties();
+				this.images.right = currentImage.getProperties();
 
 				this.wrapperCss.left = 'auto';
 				this.wrapperCss.right = 0;

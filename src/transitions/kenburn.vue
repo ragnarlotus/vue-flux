@@ -17,10 +17,7 @@
 		data: () => ({
 			totalDuration: 1500,
 			easing: 'linear',
-			image: {
-				src: undefined,
-				size: undefined
-			}
+			image: {}
 		}),
 
 		props: {
@@ -39,7 +36,7 @@
 
 			let image = this.direction === 'left'? nextImage : currentImage;
 
-			this.image = image.getImage();
+			this.image = image.getProperties();
 		},
 
 		mounted() {
