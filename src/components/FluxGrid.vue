@@ -4,7 +4,7 @@
 			v-for="i in numTiles"
 			:key="i"
 			:slider="slider"
-			:display-size="displaySize"
+			:display-size="display.size"
 			:image-src="imageSrc"
 			:image-size="imageSize"
 			:color="color"
@@ -15,7 +15,6 @@
 </template>
 
 <script>
-	import FluxBase from '@/mixins/FluxBase.js';
 	import FluxCube from '@/components/FluxCube.vue';
 
 	export default {
@@ -24,10 +23,6 @@
 		components: {
 			FluxCube
 		},
-
-		mixins: [
-			FluxBase
-		],
 
 		data: () => ({
 			numTiles: 0,

@@ -1,5 +1,5 @@
 <template>
-	<div class="vue-flux" :class="Screen.inFullScreen()? 'fullscreen' : ''" ref="container"
+	<div class="vue-flux" :class="Display.inFullScreen()? 'fullscreen' : ''" ref="container"
 		@mousemove="toggleMouseOver(true)"
 		@mouseleave="toggleMouseOver(false)"
 		@dblclick="toggleFullScreen()"
@@ -15,8 +15,8 @@
 		<div class="mask" :style="sizePx" ref="mask">
 			<component v-if="Transitions.current" :is="Transitions.current" ref="transition" :slider="slider"></component>
 
-			<flux-image :slider="slider" ref="image1"></flux-image>
-			<flux-image :slider="slider" ref="image2"></flux-image>
+			<flux-image :slider="slider" :display-size="this.size" ref="image1"></flux-image>
+			<flux-image :slider="slider" :display-size="this.size" ref="image2"></flux-image>
 		</div>
 
 		<slot name="spinner">
@@ -38,14 +38,14 @@
 
 <script>
 	import DomHelper from '@/classes/DomHelper.js';
-	import ScreenController from '@/controllers/Screen.js';
+	import DisplayController from '@/controllers/Display.js';
 	import TimersController from '@/controllers/Timers.js';
 	import TransitionsController from '@/controllers/Transitions.js';
 	import ImagesController from '@/controllers/Images.js';
 	import TouchesController from '@/controllers/Touches.js';
 	import FluxImage from '@/components/FluxImage.vue';
 
-	let Screen, Timers, Transitions, Images, Touches;
+	let Display, Timers, Transitions, Images, Touches;
 
 	export default {
 		name: 'VueFlux',
@@ -75,7 +75,7 @@
 			},
 			loaded: false,
 			mouseOver: false,
-			Screen: undefined,
+			Display: undefined,
 			Timers: undefined,
 			Transitions: undefined,
 			Touches: undefined,
@@ -190,7 +190,7 @@
 		},
 
 		created() {
-			Screen = this.Screen = new ScreenController(this);
+			Display = this.Display = new DisplayController(this, 'container');
 			Timers = this.Timers = new TimersController(this);
 			Transitions = this.Transitions = new TransitionsController(this);
 			Images = this.Images = new ImagesController(this);
@@ -255,34 +255,37 @@
 			},
 
 			resize() {
-				this.size.width = undefined;
-				this.size.height = undefined;
+				let size = {};
 
 				if (this.config.width.indexOf('px') !== -1)
-					this.size.width = parseFloat(this.config.width);
+					size.width = parseFloat(this.config.width);
 
 				if (this.config.height.indexOf('px') !== -1)
-					this.size.height = parseFloat(this.config.height);
+					size.height = parseFloat(this.config.height);
 
-				if (this.size.width && this.size.height)
+				if (size.width && size.height) {
+					this.size = size;
 					return;
+				}
 
 				this.$nextTick(() => {
 					let container = new DomHelper(this.$refs.mask);
 
 					// Find width
-					if (!this.size.width)
-						this.size.width = container.getWidth();
+					if (!size.width)
+						size.width = container.getWidth();
 
 					// Find height
 					if (this.config.height === 'auto') {
-						let height = this.size.width / 16 * 9;
+						let height = size.width / 16 * 9;
 
 						if (container.hasHeight())
 							height = container.getHeight();
 
-						this.size.height = height;
+						size.height = height;
 					}
+
+					this.size = size;
 
 					this.$refs.image1.init();
 					this.$refs.image2.init();
@@ -319,15 +322,15 @@
 				if (this.config.fullscreen === false)
 					return;
 
-				Screen.requestFullScreen(this.$refs.container);
+				Display.requestFullScreen(this.$refs.container);
 			},
 
 			exitFullScreen() {
-				Screen.exitFullScreen();
+				Display.exitFullScreen();
 			},
 
 			toggleFullScreen() {
-				Screen.inFullScreen()? this.exitFullScreen() : this.exitFullScreen();
+				Display.inFullScreen()? this.exitFullScreen() : this.exitFullScreen();
 			},
 
 			play(index = 'next', delay) {

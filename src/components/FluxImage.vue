@@ -1,20 +1,19 @@
 <template>
-	<div :style="style" ref="display">
-		<img v-if="image.src && !image.size" :src="image.src" @load="setImageSize()" @error="setImageSize()" ref="image">
+	<div :style="style" ref="image">
+		<img v-if="src && !size" :src="src" @load="setImageSize()" @error="setImageSize()">
 	</div>
 </template>
 
 <script>
-	import FluxBase from '@/mixins/FluxBase.js';
+	import DisplayController from '@/controllers/Display.js';
 
 	export default {
 		name: 'FluxImage',
 
-		mixins: [
-			FluxBase
-		],
-
 		data: () => ({
+			display: undefined,
+			src: undefined,
+			size: undefined,
 			style: {
 				position: 'absolute',
 				top: 0,
@@ -30,6 +29,31 @@
 		}),
 
 		props: {
+			slider: {
+				type: Object,
+				required: false,
+			},
+
+			displaySize: {
+				type: Object,
+				required: false,
+			},
+
+			imageSrc: {
+				type: String,
+				required: false,
+			},
+
+			imageSize: {
+				type: Object,
+				required: false,
+			},
+
+			color: {
+				type: String,
+				required: false,
+			},
+
 			css: {
 				type: Object,
 				default: () => ({
@@ -39,7 +63,77 @@
 			}
 		},
 
+		watch: {
+			displaySize: function(newSize, oldSize) {
+				this.display.setSize(newSize);
+			},
+
+			imageSrc: function(newSrc, oldSrc) {
+				this.setImageSrc(newSrc);
+			},
+
+			imageSize: function(newSize, oldSize) {
+				this.setImageSize(newSize);
+			},
+
+			color: function() {
+				this.setColor(this.color);
+			}
+		},
+
+		mounted() {
+			this.display = new DisplayController(this);
+
+			if (this.slider)
+				this.display.setSize(this.slider.size);
+
+			else
+				this.display.setSizeFrom(this.$refs.image);
+
+			if (this.imageSrc)
+				this.setImageSrc(this.imageSrc);
+
+			if (this.imageSize)
+				this.setImageSize(this.imageSize);
+		},
+
 		methods: {
+			getImageSrc() {
+				return this.src;
+			},
+
+			setImageSrc(src) {
+				this.src = src;
+				this.size = this.imageSize;
+
+				this.init();
+			},
+
+			getImageSize() {
+				return this.size;
+			},
+
+			setImageSize(size) {
+				if (size === undefined) {
+					let img = this.$refs.image.firstChild;
+
+					if (img === undefined)
+						return;
+
+					size = {
+						width: img.naturalWidth || img.width,
+						height: img.naturalHeight || img.height,
+					};
+				}
+
+				this.size = {
+					...this.size,
+					...size
+				};
+
+				this.init();
+			},
+
 			getColor() {
 				return this.style.backgroundColor;
 			},
@@ -48,8 +142,15 @@
 				this.style.backgroundColor = color;
 			},
 
+			getProperties() {
+				return {
+					src: this.src,
+					size: this.size,
+				};
+			},
+
 			init() {
-				if (this.image.size === undefined)
+				if (this.size === undefined)
 					return;
 
 				let display = this.display.size;
@@ -57,8 +158,8 @@
 				let image = {
 					top: 0,
 					left: 0,
-					...this.image.size,
-					src: 'url("'+ this.image.src +'")'
+					...this.size,
+					src: 'url("'+ this.src +'")'
 				};
 
 				if (image.height / image.width >= display.height / display.width) {
@@ -85,9 +186,16 @@
 				});
 			},
 
+			setCss(css) {
+				this.style = {
+					...this.style,
+					...css,
+				};
+			},
+
 			transform(css) {
 				this.$nextTick(() => {
-					this.$refs.display.clientHeight;
+					this.$refs.image.clientHeight;
 					this.setCss(css);
 				});
 			},

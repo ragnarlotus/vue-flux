@@ -1,12 +1,13 @@
 export default class DomHelper {
+
 	constructor(node) {
 		this.node = node;
 		this.parent = node.parentNode;
 	}
 
 	hasWidth() {
-		return this.parent.clientWidth ? true : false;
-	}
+		return this.parent.clientWidth? true : false;
+	};
 
 	getWidth() {
 		let width;
@@ -39,7 +40,8 @@ export default class DomHelper {
 	getSize() {
 		return {
 			width: this.getWidth(),
-			height: this.getHeight(),
+			height: this.getHeight()
 		};
 	}
+
 }
