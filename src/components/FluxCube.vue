@@ -8,7 +8,7 @@
 			:display-size="displaySize"
 			:image-src="imageSrc[side]"
 			:image-size="imageSize[side]"
-			:color="color[side]"
+			:color="color"
 			:css="getSideCss(side)"
 			:ref="side">
 		</flux-image>
@@ -16,7 +16,6 @@
 </template>
 
 <script>
-	import FluxBase from '@/mixins/FluxBase.js';
 	import FluxImage from '@/components/FluxImage.vue';
 
 	export default {
@@ -25,10 +24,6 @@
 		components: {
 			FluxImage
 		},
-
-		mixins: [
-			FluxBase
-		],
 
 		data: () => ({
 			sides: [
