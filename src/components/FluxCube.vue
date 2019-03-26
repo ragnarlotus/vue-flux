@@ -2,12 +2,12 @@
 	<div :style="style" ref="cube">
 		<flux-image
 			v-for="side in sides"
-			v-if="sideSet(side)"
+			v-if="sideDefined(side)"
 			:key="side"
 			:slider="slider"
 			:display-size="displaySize"
-			:image-src="imageSrc[side]"
-			:image-size="imageSize[side]"
+			:image-src="getSideSrc(side)"
+			:image-size="getSideSize(side)"
 			:color="color"
 			:css="getSideCss(side)"
 			:ref="side">
@@ -34,6 +34,7 @@
 				'left',
 				'right'
 			],
+
 			style: {
 				position: 'absolute',
 				top: 0,
@@ -46,13 +47,43 @@
 		}),
 
 		props: {
+			slider: {
+				type: Object,
+				required: false,
+			},
+
+			displaySize: {
+				type: Object,
+				required: false,
+			},
+
+			images: {
+				type: Object,
+				required: false,
+			},
+
+			imageSrc: {
+				type: Object,
+				required: false,
+			},
+
+			imageSize: {
+				type: Object,
+				required: false,
+			},
+
+			color: {
+				type: String,
+				required: false,
+			},
+
 			css: {
 				type: Object,
 				default: () => ({
 					top: 0,
 					left: 0
 				})
-			}
+			},
 		},
 
 		computed: {
@@ -78,6 +109,13 @@
 
 			right: function() {
 				return this.$refs.right;
+			},
+
+			size: function() {
+				return {
+					width: parseFloat(this.style.width),
+					height: parseFloat(this.style.height),
+				};
 			}
 		},
 
@@ -96,53 +134,71 @@
 		},
 
 		methods: {
-			sideSet(side) {
-				return this.imageSrc[side] !== undefined;
+			sideDefined(side) {
+				if (this.imageSrc && this.imageSrc[side] !== undefined)
+					return true;
+
+				if (this.images[side] && this.images[side].src !== undefined)
+					return true;
+
+				return false;
+			},
+
+			getSideSrc(side) {
+				if (this.imageSrc && this.imageSrc[side])
+					return this.imageSrc[side];
+
+				if (this.images[side] && this.images[side].src)
+					return this.images[side].src;
+
+				return undefined;
+			},
+
+			getSideSize(side) {
+				if (this.imageSize && this.imageSize[side])
+					return this.imageSize[side];
+
+				if (this.images[side] && this.images[side].size)
+					return this.images[side].size;
+
+				return undefined;
 			},
 
 			getSideCss(side) {
+				let css = {
+					top: this.css.top,
+					left: this.css.left,
+				};
+
 				if (side === 'front')
-					return this.getFrontSideCss();
+					return this.getFrontSideCss(css);
 
 				if (side === 'top')
-					return this.getTopSideCss();
+					return this.getTopSideCss(css);
 
 				if (side === 'back')
-					return this.getBackSideCss();
+					return this.getBackSideCss(css);
 
 				if (side === 'bottom')
-					return this.getBottomSideCss();
+					return this.getBottomSideCss(css);
 
 				if (side === 'left')
-					return this.getLeftSideCss();
+					return this.getLeftSideCss(css);
 
 				if (side === 'right')
-					return this.getRightSideCss();
+					return this.getRightSideCss(css);
 			},
 
-			getDefaultSideCss(side) {
-				let css = {};
-
-				if (this.sideSet(side)) {
-					css.top = this.css.top;
-					css.left = this.css.left;
-				}
-
+			getFrontSideCss(css) {
 				return css;
 			},
 
-			getFrontSideCss() {
-				return this.getDefaultSideCss('front');
-			},
-
-			getTopSideCss() {
-				let css = this.getDefaultSideCss('top');
-
+			getTopSideCss(css) {
 				let t = {
 					rx: '90deg',
 					tx: '0',
 					ty: '-50%',
-					tz: (this.slider.size.height / 2).toFixed(2) +'px'
+					tz: (this.slider.size.height / 2) +'px'
 				};
 
 				css.transform = 'rotateX('+ t.rx +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
@@ -150,23 +206,19 @@
 				return css;
 			},
 
-			getBackSideCss() {
-				let css = this.getDefaultSideCss('back');
-
+			getBackSideCss(css) {
 				css.transform = 'rotateY(180deg)';
 				css.backfaceVisibility = 'hidden';
 
 				return css;
 			},
 
-			getBottomSideCss() {
-				let css = this.getDefaultSideCss('bottom');
-
+			getBottomSideCss(css) {
 				let t = {
 					rx: '-90deg',
 					tx: '0',
 					ty: '50%',
-					tz: (this.slider.size.height / 2).toFixed(2) +'px'
+					tz: (this.slider.size.height / 2) +'px'
 				};
 
 				css.transform = 'rotateX('+ t.rx +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
@@ -174,12 +226,10 @@
 				return css;
 			},
 
-			getLeftSideCss() {
-				let css = this.getDefaultSideCss('left');
-
+			getLeftSideCss(css) {
 				let size = {
-					width: parseInt(typeof this.index.left === 'number'? this.style.width : this.style.height),
-					height: parseInt(this.style.height)
+					width: this.sideDefined('left')? this.size.width : this.size.height,
+					height: this.size.height,
 				};
 
 				css.width = size.width +'px';
@@ -189,7 +239,7 @@
 					ry: '-90deg',
 					tx: '-50%',
 					ty: '0',
-					tz: (size.width / 2).toFixed(2) +'px'
+					tz: (size.width / 2) +'px'
 				};
 
 				css.transform = 'rotateY('+ t.ry +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
@@ -197,12 +247,10 @@
 				return css;
 			},
 
-			getRightSideCss() {
-				let css = this.getDefaultSideCss('right');
-
+			getRightSideCss(css) {
 				let size = {
-					width: parseInt(typeof this.index.right === 'number'? this.style.width : this.style.height),
-					height: parseInt(this.style.height)
+					width: this.sideDefined('right')? this.size.width : this.size.height,
+					height: this.size.height,
 				};
 
 				css.width = size.width +'px';
@@ -212,7 +260,7 @@
 					ry: '90deg',
 					tx: '50%',
 					ty: '0',
-					tz: (parseInt(this.style.width) - size.width / 2).toFixed(2) +'px'
+					tz: (parseFloat(this.style.width) - size.width / 2) +'px'
 				};
 
 				css.transform = 'rotateY('+ t.ry +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
@@ -220,10 +268,16 @@
 				return css;
 			},
 
-			transform(css) {
-				this.$refs.cube.clientHeight;
+			setCss(css) {
+				this.style = {
+					...this.style,
+					...css,
+				};
+			},
 
+			transform(css) {
 				this.$nextTick(() => {
+					this.$refs.cube.clientHeight;
 					this.setCss(css);
 				});
 			},
@@ -246,12 +300,10 @@
 			},
 
 			turnTop() {
-				let height = parseInt(this.style.height);
-
 				let t = {
 					rx: '90deg',
 					ty: '-50%',
-					tz: (height / 2).toFixed(2) +'px'
+					tz: (this.size.height / 2) +'px',
 				};
 
 				this.transform({
@@ -271,12 +323,10 @@
 			},
 
 			turnBottom() {
-				let height = parseInt(this.style.height);
-
 				let t = {
 					rx: '-90deg',
 					ty: '50%',
-					tz: (height / 2).toFixed(2) +'px'
+					tz: (this.size.height / 2) +'px',
 				};
 
 				this.transform({
@@ -285,12 +335,10 @@
 			},
 
 			turnLeft() {
-				let width = parseInt(this.style.width);
-
 				let t = {
 					ry: '90deg',
 					tx: '50%',
-					tz: (width / 2).toFixed(2) +'px'
+					tz: (this.size.width / 2) +'px',
 				};
 
 				this.transform({
@@ -299,18 +347,16 @@
 			},
 
 			turnRight() {
-				let width = parseInt(this.style.width);
-
 				let t = {
 					ry: '-90deg',
 					tx: '-50%',
-					tz: (width / 2).toFixed(2) +'px'
+					tz: (this.size.width / 2) +'px'
 				};
 
 				this.transform({
 					transform: 'rotateY('+ t.ry +') translate3d('+ t.tx +', 0, '+ t.tz +')'
 				});
-			}
+			},
 		}
 	};
 </script>
