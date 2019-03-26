@@ -1,5 +1,5 @@
 <template>
-	<flux-cube :slider="slider" :index="index" ref="cube"></flux-cube>
+	<flux-cube :slider="slider" :images="images" ref="cube"></flux-cube>
 </template>
 
 <script>
@@ -15,7 +15,11 @@
 		},
 
 		data: () => ({
-			index: {},
+			images: {
+				front: {},
+				left: {},
+				right: {},
+			},
 			totalDuration: 1400,
 			perspective: '1600px',
 			easing: 'ease-out'
@@ -24,8 +28,8 @@
 		props: {
 			slider: {
 				type: Object,
-				required: true
-			}
+				required: true,
+			},
 		},
 
 		computed: {
@@ -41,10 +45,10 @@
 
 			vf.Transitions.setOptions(this);
 
-			this.index = {
-				front: currentImage.index,
-				left: nextImage.index,
-				right: nextImage.index
+			this.images = {
+				front: currentImage.getProperties(),
+				left: nextImage.getProperties(),
+				right: nextImage.getProperties(),
 			};
 		},
 
@@ -65,6 +69,6 @@
 			vf.mask.style.perspective = 'none';
 
 			nextImage.show();
-		}
+		},
 	};
 </script>

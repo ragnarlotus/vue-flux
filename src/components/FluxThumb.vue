@@ -59,19 +59,19 @@
 				};
 
 				let thumb = {
-					width: parseInt(this.$refs.thumb.clientWidth),
-					height: parseInt(this.$refs.thumb.clientHeight)
+					width: this.$refs.thumb.clientWidth,
+					height: this.$refs.thumb.clientHeight
 				};
 
 				if (image.height / image.width >= thumb.height / thumb.width) {
-					image.height = Math.ceil(thumb.width * image.height / image.width);
+					image.height = thumb.width * image.height / image.width;
 					image.width = thumb.width;
-					image.top = Math.floor((thumb.height - image.height) / 2);
+					image.top = (thumb.height - image.height) / 2;
 
 				} else {
-					image.width = Math.ceil(thumb.height * image.width / image.height);
+					image.width = thumb.height * image.width / image.height;
 					image.height = thumb.height;
-					image.left = Math.floor((thumb.width - image.width) / 2);
+					image.left = (thumb.width - image.width) / 2;
 				}
 
 				this.setCss({
@@ -83,7 +83,10 @@
 			},
 
 			setCss(css) {
-				this.style = Object.assign({}, this.style, css);
+				this.style = {
+					...this.style,
+					...csss,
+				};
 			}
 		}
 	};

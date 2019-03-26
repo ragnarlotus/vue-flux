@@ -60,7 +60,7 @@
 					top: 0,
 					left: 0
 				})
-			}
+			},
 		},
 
 		watch: {
@@ -81,11 +81,18 @@
 			}
 		},
 
+		created() {
+			this.setCss(this.css);
+		},
+
 		mounted() {
 			this.display = new DisplayController(this);
 
 			if (this.slider)
 				this.display.setSize(this.slider.size);
+
+			else if (this.displaySize)
+				this.display.setSize(this.displaySize);
 
 			else
 				this.display.setSizeFrom(this.$refs.image);
