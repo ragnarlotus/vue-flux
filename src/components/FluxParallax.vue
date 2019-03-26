@@ -11,26 +11,31 @@
 
 		data: () => ({
 			loaded: false,
+
 			view: {
-				height: undefined
+				height: undefined,
 			},
+
 			parallax: {
 				top: undefined,
 				width: undefined,
-				height: undefined
+				height: undefined,
 			},
+
 			background: {
 				top: undefined,
 				left: undefined,
 				width: undefined,
-				height: undefined
+				height: undefined,
 			},
+
 			properties: {
 				src: undefined,
 				width: undefined,
-				height: undefined
+				height: undefined,
 			},
-			style: {}
+
+			style: {},
 		}),
 
 		props: {
@@ -62,7 +67,7 @@
 		computed: {
 			parallaxHeight: function() {
 				if (/^[0-9]+px$/.test(this.height) === true)
-					return parseInt(this.height);
+					return this.height;
 
 				return this.$refs.parallax.clientHeight;
 			},
@@ -73,10 +78,10 @@
 				};
 
 				if (/^[0-9]+px$/.test(this.offset) === true)
-					height.px = parseInt(this.offset);
+					height.px = this.offset;
 
 				if (/^[0-9]+%$/.test(this.offset) === true)
-					height.px = Math.ceil(this.parallaxHeight * parseInt(this.offset) / 100);
+					height.px = this.parallaxHeight * this.offset / 100;
 
 				height.pct = height.px * 100 / this.background.height;
 
@@ -106,12 +111,12 @@
 
 		mounted() {
 			window.addEventListener('resize', this.resize, {
-				passive: true
+				passive: true,
 			});
 
 			if (this.type !== 'fixed') {
 				this.holder.addEventListener('scroll', this.handleScroll, {
-					passive: true
+					passive: true,
 				});
 			}
 		},
@@ -128,11 +133,12 @@
 				let img = this.$refs.image;
 
 				if (img.naturalWidth || img.width) {
-					Object.assign(this.properties, {
+					this.properties = {
+						...this.properties,
 						src: img.src,
 						width: img.naturalWidth || img.width,
-						height: img.naturalHeight || img.height
-					});
+						height: img.naturalHeight || img.height,
+					};
 				}
 
 				this.loaded = true;
@@ -144,54 +150,58 @@
 
 				this.view.height = this.holder.innerHeight;
 
-				Object.assign(this.parallax, {
+				this.parallax = {
+					...this.parallax,
 					width: 'auto',
-					height: this.parallaxHeight
-				});
+					height: this.parallaxHeight,
+				};
 
 				this.setCss({
 					width: this.parallax.width,
-					height: this.parallax.height +'px'
+					height: this.parallax.height +'px',
 				});
 
 				this.$nextTick(() => {
-					Object.assign(this.parallax, {
+					this.parallax = {
+						...this.parallax,
 						top: parallax.offsetTop,
-						width: parallax.clientWidth
-					});
+						width: parallax.clientWidth,
+					};
 
 					let css = {
 						width: this.parallax.width +'px',
 						backgroundImage: 'url("'+ this.properties.src +'")',
-						backgroundRepeat: 'no-repeat'
+						backgroundRepeat: 'no-repeat',
 					};
 
 					if (this.type === 'fixed') {
-						Object.assign(css, {
+						css = {
+							...css,
 							backgroundPosition: 'center',
 							backgroundAttachment: 'fixed',
-							backgroundSize: 'cover'
-						});
+							backgroundSize: 'cover',
+						};
 
 					} else {
 						let image = {
 							width: this.properties.width,
-							height: this.properties.height
+							height: this.properties.height,
 						};
 
 						this.background.height = this.backgroundHeight.px;
-						this.background.width = Math.floor(this.background.height * image.width / image.height);
+						this.background.width = this.background.height * image.width / image.height;
 						this.background.top = 0;
 
 						if (this.background.width < this.parallax.width) {
 							this.background.width = this.parallax.width;
-							this.background.height = Math.floor(this.parallax.width * image.height / image.width);
+							this.background.height = this.parallax.width * image.height / image.width;
 						}
 
-						Object.assign(css, {
+						css = {
+							...css,
 							backgroundSize: this.background.width +'px '+ this.background.height +'px',
-							backgroundPosition: 'center '+ this.background.top +'px'
-						});
+							backgroundPosition: 'center '+ this.background.top +'px',
+						};
 					}
 
 					this.setCss(css);
@@ -208,7 +218,10 @@
 			},
 
 			setCss(css) {
-				this.style = Object.assign({}, this.style, css);
+				this.style = {
+					...this.style,
+					...css,
+				};
 			},
 
 			moveBackgroundByPct(pct) {
