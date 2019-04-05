@@ -1,5 +1,11 @@
 <template>
-	<flux-vortex :slider="slider" :num-circles="numCircles" :index="index" ref="vortex"></flux-vortex>
+	<flux-vortex
+		:slider="slider"
+		:num-circles="numCircles"
+		:image-src="imageSrc"
+		:imageSize="imageSize"
+		ref="vortex">
+	</flux-vortex>
 </template>
 
 <script>
@@ -15,7 +21,8 @@
 		},
 
 		data: () => ({
-			index: undefined,
+			imageSrc: undefined,
+			imageSize: undefined,
 			numCircles: undefined,
 			tileDuration: 800,
 			totalDuration: 0,
@@ -51,11 +58,12 @@
 
 			this.totalDuration = this.tileDelay * this.numCircles + this.tileDuration;
 
-			this.index = this.currentImage.index;
+			this.imageSrc = currentImage.getImageSrc();
+			this.imageSize = currentImage.getImageSize();
 		},
 
 		mounted() {
-			this.currentImage.hide();
+			currentImage.hide();
 
 			this.vortex.setCss({
 				overflow: 'hidden'

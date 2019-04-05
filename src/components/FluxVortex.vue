@@ -1,10 +1,12 @@
 <template>
-	<div :style="style">
+	<div :style="style" ref="vortex">
 		<flux-image
 			v-for="i in numCircles"
 			:key="i"
 			:slider="slider"
-			:index="index"
+			:display-size="displaySize"
+			:image-src="imageSrc"
+			:image-size="imageSize"
 			:css="getTileCss(i)"
 			ref="tiles">
 		</flux-image>
@@ -12,6 +14,7 @@
 </template>
 
 <script>
+	import DisplayController from '@/controllers/Display.js';
 	import FluxImage from '@/components/FluxImage.vue';
 
 	export default {
@@ -22,6 +25,7 @@
 		},
 
 		data: () => ({
+			display: undefined,
 			diag: undefined,
 			radius: undefined,
 			tile: {
@@ -37,24 +41,65 @@
 		}),
 
 		props: {
-			slider: { type: Object, required: true },
-			numCircles: { type: Number, default: 0 },
-			index: { type: Number, required: true }
+			numCircles: {
+				type: Number,
+				default: 1
+			},
+
+			slider: {
+				type: Object,
+				required: false,
+			},
+
+			displaySize: {
+				type: Object,
+				required: false,
+			},
+
+			imageSrc: {
+				type: String,
+				required: false,
+			},
+
+			imageSize: {
+				type: Object,
+				required: false,
+			},
+
+			color: {
+				type: String,
+				required: false,
+			},
+
+			css: {
+				type: Object,
+				default: () => ({
+					top: 0,
+					left: 0
+				})
+			},
 		},
 
 		computed: {
-			size: function() {
-				return this.slider.size;
-			},
-
 			tiles: function() {
 				return this.$refs.tiles;
 			}
 		},
 
 		created() {
-			let width = this.size.width;
-			let height = this.size.height;
+			this.display = new DisplayController(this);
+
+			if (this.slider)
+				this.display.setSize(this.slider.size);
+
+			else if (this.displaySize)
+				this.display.setSize(this.displaySize);
+
+			else
+				this.display.setSizeFrom(this.$refs.vortex);
+
+			let width = this.display.size.width;
+			let height = this.display.size.height;
 
 			this.diag = Math.ceil(Math.sqrt(width * width + height * height));
 			this.radius = Math.ceil(this.diag / 2 / this.numCircles);
@@ -89,18 +134,21 @@
 				let height = width;
 				let zIndex = 13 + i;
 
-				return Object.assign({}, this.tileCss, {
+				return {
 					top: this.getTileTop(i) +'px',
 					left: this.getTileLeft(i) +'px',
 					width: width +'px',
 					height: height +'px',
 					borderRadius: Math.ceil(width / 2) +'px',
-					zIndex: zIndex
-				});
+					zIndex: zIndex,
+				};
 			},
 
 			setCss(css) {
-				this.style = Object.assign({}, this.style, css);
+				this.style = {
+					...this.style,
+					...css,
+				};
 			},
 
 			transform(func) {
