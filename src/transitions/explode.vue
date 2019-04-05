@@ -1,5 +1,11 @@
 <template>
-	<flux-grid :slider="slider" :num-rows="numRows" :num-cols="numCols" :index="index" ref="grid"></flux-grid>
+	<flux-grid
+		:slider="slider"
+		:num-rows="numRows"
+		:num-cols="numCols"
+		:images="images"
+		ref="grid">
+	</flux-grid>
 </template>
 
 <script>
@@ -15,13 +21,15 @@
 		},
 
 		data: () => ({
-			index: {},
 			numRows: 0,
 			numCols: 0,
 			tileDuration: 300,
 			totalDuration: 0,
 			easing: 'linear',
-			tileDelay: 100
+			tileDelay: 100,
+			images: {
+				front: {},
+			},
 		}),
 
 		props: {
@@ -51,13 +59,11 @@
 
 			this.totalDuration = (this.numCols / 2 + this.numRows / 2) * (this.tileDelay * 2);
 
-			this.index = {
-				front: this.currentImage.index
-			};
+			this.images.front = currentImage.getProperties();
 		},
 
 		mounted() {
-			this.currentImage.hide();
+			currentImage.hide();
 
 			this.grid.transform((tile, i) => {
 				tile.front.transform({
@@ -75,8 +81,8 @@
 
 		methods: {
 			getDelay(i) {
-				let row = this.grid.getRow(i);
-				let col = this.grid.getCol(i);
+				let row = this.grid.getRowNumber(i);
+				let col = this.grid.getColNumber(i);
 
 				let delay = Math.abs(this.numRows / 2 - 0.5 - row) + Math.abs(this.numCols / 2 - 0.5 - col) - 1;
 
