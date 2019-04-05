@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<flux-cube :slider="slider" :index="index" :css="cubeCss" ref="cube"></flux-cube>
-		<flux-image :slider="slider" :index="index.back" :css="imageCss" ref="image"></flux-image>
+		<flux-cube :slider="slider" :images="images" :css="cubeCss" ref="cube"></flux-cube>
+		<flux-image :slider="slider" :image-src="images.back.src" :image-size="images.back.size" :css="imageCss" ref="image"></flux-image>
 	</div>
 </template>
 
@@ -23,6 +23,10 @@
 			totalDuration: 1200,
 			easing: 'ease-out',
 			pageWidth: 0,
+			images: {
+				front: {},
+				back: {},
+			},
 			cubeCss: {
 				top: 0,
 				left: 0,
@@ -36,10 +40,6 @@
 				width: 0,
 				zIndex: 12
 			},
-			index: {
-				front: undefined,
-				back: undefined
-			}
 		}),
 
 		props: {
@@ -68,16 +68,13 @@
 
 			this.pageWidth = vf.size.width / 2;
 
-			this.imageCss.width = Math.ceil(this.pageWidth) +'px';
-			this.cubeCss.width = Math.ceil(this.pageWidth) +'px';
+			this.cubeCss.width = this.imageCss.width = this.pageWidth +'px';
 
-			if (this.direction !== 'left') {
-				this.cubeCss.left = Math.ceil(this.pageWidth) +'px';
-				this.imageCss.left = Math.ceil(this.pageWidth) +'px';
-			}
+			if (this.direction === 'right')
+				this.cubeCss.left = this.imageCss.left = this.imageCss.width;
 
-			this.index.front = currentImage.index;
-			this.index.back = nextImage.index;
+			this.images.front = currentImage.getProperties();
+			this.images.back = nextImage.getProperties();
 		},
 
 		mounted() {
@@ -112,7 +109,7 @@
 				let [backgroundPositionX] = this.cube.back.style.backgroundPosition.split(' ');
 				backgroundPositionX = parseFloat(backgroundPositionX);
 
-				if (this.direction !== 'left')
+				if (this.direction === 'right')
 					backgroundPositionX += this.pageWidth;
 
 				else
@@ -124,9 +121,9 @@
 			},
 
 			setImageCss() {
-				if (this.direction !== 'left') { 
+				if (this.direction === 'right') { 
 					this.image.setCss({
-						left: Math.ceil(this.pageWidth) +'px'
+						left: this.pageWidth +'px'
 					});
 				}
 			},
