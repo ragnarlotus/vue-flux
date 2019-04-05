@@ -1,5 +1,12 @@
 <template>
-	<flux-grid :slider="slider" :num-rows="numRows" :num-cols="numCols" :index="index" :tile-css="tileCss" ref="grid"></flux-grid>
+	<flux-grid
+		:num-rows="numRows"
+		:num-cols="numCols"
+		:slider="slider"
+		:images="images"
+		:tile-css="tileCss"
+		ref="grid">
+	</flux-grid>
 </template>
 
 <script>
@@ -15,14 +22,16 @@
 		},
 
 		data: () => ({
-			index: {},
 			numRows: 1,
-			numCols: 0,
+			numCols: 1,
 			tileDuration: 800,
 			totalDuration: 0,
 			easing: 'ease',
 			tileDelay: 80,
-			tileCss: {}
+			tileCss: {},
+			images: {
+				front: {},
+			},
 		}),
 
 		props: {
@@ -52,12 +61,10 @@
 
 			this.totalDuration = this.tileDelay * (this.numRows + this.numCols) + this.tileDuration;
 
-			this.index = {
-				front: currentImage.index
-			};
+			this.images.front = currentImage.getProperties();
 
 			if (this.direction === 'left') {
-				this.index.front = nextImage.index;
+				this.images.front = nextImage.getProperties();
 
 				this.tileCss = {
 					opacity: 0,
@@ -95,8 +102,8 @@
 
 		methods: {
 			getDelay(i) {
-				let row = this.grid.getRow(i);
-				let col = this.grid.getCol(i);
+				let row = this.grid.getRowNumber(i);
+				let col = this.grid.getColNumber(i);
 				let delay = col + row;
 
 				if (this.direction === 'left')

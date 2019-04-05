@@ -1,5 +1,11 @@
 <template>
-	<flux-grid :slider="slider" :num-rows="numRows" :num-cols="numCols" :index="index" ref="grid"></flux-grid>
+	<flux-grid
+		:num-rows="numRows"
+		:num-cols="numCols"
+		:slider="slider"
+		:images="images"
+		ref="grid">
+	</flux-grid>
 </template>
 
 <script>
@@ -15,14 +21,16 @@
 		},
 
 		data: () => ({
-			index: {},
 			numRows: 1,
 			numCols: 0,
 			tileDuration: 800,
 			totalDuration: 0,
 			easing: 'ease-out',
 			tileDelay: 150,
-			sideColor: '#333'
+			sideColor: '#333',
+			images: {
+				front: {}
+			},
 		}),
 
 		props: {
@@ -51,12 +59,16 @@
 
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
 
-			this.index = {
-				front: currentImage.index,
-				top: nextImage.index,
-				bottom: nextImage.index,
-				left: this.sideColor,
-				right: this.sideColor
+			this.images = {
+				front: currentImage.getProperties(),
+				top: nextImage.getProperties(),
+				bottom: nextImage.getProperties(),
+				left: {
+					color: this.sideColor,
+				},
+				right: {
+					color: this.sideColor,
+				},
 			};
 		},
 
@@ -78,7 +90,7 @@
 		},
 
 		destroyed() {
-			this.nextImage.show();
+			nextImage.show();
 		},
 
 		methods: {
