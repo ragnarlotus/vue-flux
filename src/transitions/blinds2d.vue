@@ -1,11 +1,17 @@
 <template>
-	<flux-grid :slider="slider" :num-rows="numRows" :num-cols="numCols" :index="index" ref="grid"></flux-grid>
+	<flux-grid
+		:num-rows="numRows"
+		:num-cols="numCols"
+		:slider="slider"
+		:images="images"
+		ref="grid">
+	</flux-grid>
 </template>
 
 <script>
 	import FluxGrid from '@/components/FluxGrid.vue';
 
-	let vf, currentImage, nextImage;
+	let vf, currentImage;
 
 	export default {
 		name: 'transitionBlinds2d',
@@ -15,13 +21,15 @@
 		},
 
 		data: () => ({
-			index: {},
 			numRows: 1,
-			numCols: 0,
+			numCols: 1,
 			tileDuration: 800,
 			totalDuration: 0,
 			easing: 'linear',
-			tileDelay: 100
+			tileDelay: 100,
+			images: {
+				front: {},
+			},
 		}),
 
 		props: {
@@ -40,7 +48,6 @@
 		created() {
 			vf = this.slider;
 			currentImage = vf.Images.current;
-			nextImage = vf.Images.next;
 
 			let divider = vf.size.width / 10;
 
@@ -50,9 +57,7 @@
 
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
 
-			this.index = {
-				front: currentImage.index
-			};
+			this.images.front = currentImage.getProperties();
 		},
 
 		mounted() {
