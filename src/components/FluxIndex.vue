@@ -21,18 +21,18 @@
 		name: 'FluxIndex',
 
 		components: {
-			FluxThumb
+			FluxThumb,
 		},
 
 		data: () => ({
 			visible: false,
 			delay: 500,
-			touchStartTime: 0
+			touchStartTime: 0,
 		}),
 
 		props: {
 			slider: {
-				type: Object
+				type: Object,
 			}
 		},
 
@@ -53,7 +53,7 @@
 				if (!this.vf)
 					return [];
 
-				return this.vf.properties;
+				return this.vf.Images.props;
 			},
 
 			displayButton: function() {
@@ -66,7 +66,7 @@
 				if (this.vf.mouseOver === false)
 					return false;
 
-				if (this.vf.transition.current !== undefined)
+				if (this.vf.Transitions.current !== undefined)
 					return false;
 
 				return true;
@@ -163,7 +163,7 @@
 			},
 
 			current(index) {
-				return this.vf.currentImage().index === index? 'current' : '';
+				return this.vf.Images.current.index === index? 'current' : '';
 			}
 		}
 	};

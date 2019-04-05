@@ -8,37 +8,35 @@
 
 		data: () => ({
 			style: {
-				overflow: 'hidden'
-			}
+				overflow: 'hidden',
+			},
 		}),
 
 		props: {
 			slider: {
 				type: Object,
-				required: true
+				required: true,
 			},
 
 			index: {
 				type: [Number, String],
-				required: true
+				required: true,
 			},
 
 			css: {
 				type: Object,
-				default: () => {
-					return {};
-				}
-			}
+				default: () => ({}),
+			},
 		},
 
 		computed: {
 			properties: function() {
-				return this.slider.properties[this.index];
+				return this.slider.Images.props[this.index];
 			},
 
 			caption: function() {
 				return this.slider.captions[this.index] || '';
-			}
+			},
 		},
 
 		mounted() {
@@ -53,8 +51,8 @@
 					return;
 
 				let image = {
-					width: this.properties.width,
-					height: this.properties.height,
+					width: this.properties.size.width,
+					height: this.properties.size.height,
 					src: 'url("'+ this.properties.src +'")'
 				};
 
@@ -85,10 +83,10 @@
 			setCss(css) {
 				this.style = {
 					...this.style,
-					...csss,
+					...css,
 				};
-			}
-		}
+			},
+		},
 	};
 </script>
 

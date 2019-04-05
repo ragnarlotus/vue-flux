@@ -41,27 +41,27 @@
 		props: {
 			src: {
 				type: String,
-				required: true
+				required: true,
 			},
 
 			holder: {
-				default: () => window
+				default: () => window,
 			},
 
 			type: {
 				type: String,
-				default: () => 'relative'
+				default: () => 'relative',
 			},
 
 			height: {
 				type: String,
-				default: () => 'auto'
+				default: () => 'auto',
 			},
 
 			offset: {
 				type: [Number, String],
-				default: () => '60%'
-			}
+				default: () => '60%',
+			},
 		},
 
 		computed: {
@@ -106,7 +106,7 @@
 				height.pct = height.px * 100 / this.background.height;
 
 				return height;
-			}
+			},
 		},
 
 		mounted() {
@@ -279,8 +279,8 @@
 				pct = positionY * 100 / (this.view.height + this.parallax.height);
 
 				this.moveBackgroundByPct(pct);
-			}
-		}
+			},
+		},
 	};
 </script>
 

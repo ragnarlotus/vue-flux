@@ -15,15 +15,15 @@
 				left: 0,
 				width: '100%',
 				height: '100%',
-				zIndex: 12
-			}
+				zIndex: 12,
+			},
 		}),
 
 		methods: {
 			setCss(css) {
 				this.style = {
 					...this.style,
-					...css
+					...css,
 				};
 			},
 
@@ -32,7 +32,7 @@
 					this.$refs.wrapper.clientHeight;
 					this.setCss(css);
 				});
-			}
-		}
+			},
+		},
 	};
 </script>
