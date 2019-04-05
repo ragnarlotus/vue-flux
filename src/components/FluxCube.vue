@@ -8,7 +8,7 @@
 			:display-size="displaySize"
 			:image-src="getSideSrc(side)"
 			:image-size="getSideSize(side)"
-			:color="color"
+			:color="getSideColor(side)"
 			:css="getSideCss(side)"
 			:ref="side">
 		</flux-image>
@@ -138,7 +138,10 @@
 				if (this.imageSrc && this.imageSrc[side] !== undefined)
 					return true;
 
-				if (this.images[side] && this.images[side].src !== undefined)
+				if (this.images[side] && (this.images[side].src !== undefined || this.images[side].color !== undefined))
+					return true;
+
+				if (this.color && this.color[side] !== undefined)
 					return true;
 
 				return false;
@@ -164,29 +167,28 @@
 				return undefined;
 			},
 
+			getSideColor(side) {
+				if (this.color && typeof this.color === 'string')
+					return this.color;
+
+				if (this.color && this.color[side])
+					return this.color[side];
+
+				if (this.images[side] && this.images[side].color)
+					return this.images[side].color;
+
+				return undefined;
+			},
+
 			getSideCss(side) {
 				let css = {
 					top: this.css.top,
 					left: this.css.left,
 				};
 
-				if (side === 'front')
-					return this.getFrontSideCss(css);
+				side = side.charAt(0).toUpperCase() + side.slice(1);
 
-				if (side === 'top')
-					return this.getTopSideCss(css);
-
-				if (side === 'back')
-					return this.getBackSideCss(css);
-
-				if (side === 'bottom')
-					return this.getBottomSideCss(css);
-
-				if (side === 'left')
-					return this.getLeftSideCss(css);
-
-				if (side === 'right')
-					return this.getRightSideCss(css);
+				return this['get'+ side +'SideCss'](css);
 			},
 
 			getFrontSideCss(css) {
