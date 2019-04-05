@@ -32,7 +32,7 @@
 				'back',
 				'bottom',
 				'left',
-				'right'
+				'right',
 			],
 
 			style: {
@@ -42,8 +42,8 @@
 				width: 0,
 				height: 0,
 				overflow: 'visible',
-				transformStyle: 'preserve-3d'
-			}
+				transformStyle: 'preserve-3d',
+			},
 		}),
 
 		props: {
@@ -81,8 +81,8 @@
 				type: Object,
 				default: () => ({
 					top: 0,
-					left: 0
-				})
+					left: 0,
+				}),
 			},
 		},
 
@@ -116,7 +116,7 @@
 					width: parseFloat(this.style.width),
 					height: parseFloat(this.style.height),
 				};
-			}
+			},
 		},
 
 		created() {

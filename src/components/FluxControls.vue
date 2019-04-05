@@ -14,8 +14,8 @@
 
 		props: {
 			slider: {
-				type: Object
-			}
+				type: Object,
+			},
 		},
 
 		computed: {
@@ -38,7 +38,7 @@
 				if (this.vf.mouseOver === false)
 					return false;
 
-				if (this.vf.transition.current !== undefined)
+				if (this.vf.Transitions.current !== undefined)
 					return false;
 
 				return true;
@@ -46,8 +46,8 @@
 
 			autoplayClass: function() {
 				return this.vf && this.vf.config.autoplay? 'pause' : 'play';
-			}
-		}
+			},
+		},
 	};
 </script>
 

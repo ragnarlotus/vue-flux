@@ -11,6 +11,7 @@
 						<flux-caption slot="caption"></flux-caption>
 						<flux-controls slot="controls"></flux-controls>
 						<flux-index slot="index"></flux-index>
+						<flux-pagination slot="pagination"></flux-pagination>
 					</vue-flux>
 				</div>
 
@@ -183,6 +184,7 @@
 	import FluxCaption from './components/FluxCaption.vue';
 	import FluxControls from './components/FluxControls.vue';
 	import FluxIndex from './components/FluxIndex.vue';
+	import FluxPagination from './components/FluxPagination.vue';
 	import Transitions from './transitions/index.js';
 	import FluxParallax from './components/FluxParallax.vue';
 
@@ -194,6 +196,7 @@
 			FluxCaption,
 			FluxControls,
 			FluxIndex,
+			FluxPagination,
 			FluxParallax
 		},
 
@@ -214,10 +217,10 @@
 
 		computed: {
 			currentTransition: function() {
-				if (!this.rendered || !this.$refs.slider || !this.$refs.slider.traman)
+				if (!this.rendered || !this.$refs.slider || !this.$refs.slider.Transitions)
 					return undefined;
 
-				return this.$refs.slider.traman.current;
+				return this.$refs.slider.Transitions.current;
 			}
 		},
 
@@ -270,6 +273,11 @@
 
 	.transitions a {
 		font-size: .975rem;
+		transition: all .5s linear;
+
+		&.bg-black {
+			color: #ff3;
+		}
 	}
 
 	.flux-parallax {

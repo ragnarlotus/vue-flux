@@ -1,7 +1,7 @@
 <template>
 	<nav v-if="vf !== undefined" class="flux-pagination">
 		<ul>
-			<li v-for="i in vf.properties.length" :key="i" :class="getClass(i - 1)" @click="showImage(i - 1)" @touchend="showImage(i - 1, $event)" :title="getTitle(i - 1)">
+			<li v-for="i in vf.Images.props.length" :key="i" :class="getClass(i - 1)" @click="showImage(i - 1)" @touchend="showImage(i - 1, $event)" :title="getTitle(i - 1)">
 				<span class="pagination-item"></span>
 			</li>
 		</ul>
@@ -13,7 +13,9 @@
 		name: 'FluxPagination',
 
 		props: {
-			slider: { type: Object }
+			slider: {
+				type: Object,
+			},
 		},
 
 		computed: {
@@ -30,11 +32,11 @@
 			},
 
 			currentTransition: function() {
-				return this.vf.transition.current;
+				return this.vf.Transitions.current;
 			},
 
 			currentImageIndex: function() {
-				let currentImage = this.vf.currentImage();
+				let currentImage = this.vf.Images.current;
 
 				if (currentImage === undefined)
 					return undefined;
@@ -43,10 +45,10 @@
 			},
 
 			nextImageIndex: function() {
-				let nextImage = this.vf.nextImage();
+				let nextImage = this.vf.Images.next;
 
 				return nextImage.index;
-			}
+			},
 		},
 
 		methods: {
@@ -69,8 +71,8 @@
 
 				if (event)
 					event.preventDefault();
-			}
-		}
+			},
+		},
 	};
 </script>
 

@@ -10,8 +10,8 @@
 
 		props: {
 			slider: {
-				type: Object
-			}
+				type: Object,
+			},
 		},
 
 		computed: {
@@ -47,8 +47,8 @@
 
 			captions: function() {
 				return this.vf? this.vf.captions : {};
-			}
-		}
+			},
+		},
 	};
 </script>
 
