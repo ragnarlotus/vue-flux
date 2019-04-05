@@ -102,6 +102,9 @@
 
 			if (this.imageSize)
 				this.setImageSize(this.imageSize);
+
+			if (this.color)
+				this.setColor(this.color);
 		},
 
 		methods: {
