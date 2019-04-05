@@ -5,6 +5,7 @@
 			:key="i"
 			:slider="slider"
 			:display-size="display.size"
+			:images="images"
 			:image-src="imageSrc"
 			:image-size="imageSize"
 			:color="color"
@@ -15,6 +16,7 @@
 </template>
 
 <script>
+	import DisplayController from '@/controllers/Display.js';
 	import FluxCube from '@/components/FluxCube.vue';
 
 	export default {
@@ -25,6 +27,7 @@
 		},
 
 		data: () => ({
+			display: undefined,
 			numTiles: 0,
 			tile: {
 				width: 1,
@@ -51,10 +54,48 @@
 				default: () => 1
 			},
 
+			slider: {
+				type: Object,
+				required: false,
+			},
+
+			displaySize: {
+				type: Object,
+				required: false,
+			},
+
+			images: {
+				type: Object,
+				required: false,
+			},
+
+			imageSrc: {
+				type: String,
+				required: false,
+			},
+
+			imageSize: {
+				type: Object,
+				required: false,
+			},
+
+			color: {
+				type: String,
+				required: false,
+			},
+
+			css: {
+				type: Object,
+				default: () => ({
+					top: 0,
+					left: 0
+				})
+			},
+
 			tileCss: {
 				type: Object,
 				required: false
-			}
+			},
 		},
 
 		computed: {
@@ -64,14 +105,23 @@
 		},
 
 		created() {
+			this.display = new DisplayController(this);
+
+			if (this.slider)
+				this.display.setSize(this.slider.size);
+
+			else if (this.displaySize)
+				this.display.setSize(this.displaySize);
+
+			else
+				this.display.setSizeFrom(this.$refs.vortex);
+
+			let size = this.display.size;
+
+			this.tile.width = Math.ceil(size.width / this.numCols);
+			this.tile.height = Math.ceil(size.height / this.numRows);
+
 			this.numTiles = this.numRows * this.numCols;
-		},
-
-		mounted() {
-			let display = this.display.size;
-
-			this.tile.width = display.width / this.numCols;
-			this.tile.height = display.height / this.numRows;
 		},
 
 		methods: {
@@ -93,10 +143,10 @@
 				let height = this.tile.height;
 
 				if (col + 1 == this.numCols)
-					width = this.slider.size.width - col * this.tile.width;
+					width = this.display.size.width - col * this.tile.width;
 
 				if (row + 1 == this.numRows)
-					height = this.slider.size.height - row * this.tile.height;
+					height = this.display.size.height - row * this.tile.height;
 
 				let top = row * this.tile.height;
 				let left = col * this.tile.width;
@@ -110,6 +160,13 @@
 					top: top +'px',
 					left: left +'px',
 					zIndex: zIndex
+				};
+			},
+
+			setCss(css) {
+				this.style = {
+					...this.style,
+					...css,
 				};
 			},
 
