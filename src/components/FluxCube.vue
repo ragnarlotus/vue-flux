@@ -181,10 +181,12 @@
 			},
 
 			getSideCss(side) {
-				let css = {
-					top: this.css.top,
-					left: this.css.left,
-				};
+				let css = {};
+
+				if (this.getSideSrc(side)) {
+					css.top = this.css.top;
+					css.left = this.css.left;
+				}
 
 				side = side.charAt(0).toUpperCase() + side.slice(1);
 
@@ -230,7 +232,7 @@
 
 			getLeftSideCss(css) {
 				let size = {
-					width: this.sideDefined('left')? this.size.width : this.size.height,
+					width: this.getSideSrc('left')? this.size.width : this.size.height,
 					height: this.size.height,
 				};
 
@@ -251,7 +253,7 @@
 
 			getRightSideCss(css) {
 				let size = {
-					width: this.sideDefined('right')? this.size.width : this.size.height,
+					width: this.getSideSrc('right')? this.size.width : this.size.height,
 					height: this.size.height,
 				};
 
