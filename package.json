@@ -28,14 +28,14 @@
     "dist"
   ],
   "dependencies": {
-    "vue": "^2.6.7"
+    "vue": "^2.6.10"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.4.1",
-    "@vue/cli-service": "^3.4.1",
+    "@vue/cli-plugin-babel": "^3.5.5",
+    "@vue/cli-service": "^3.5.3",
     "node-sass": "^4.11.0",
-    "sass-loader": "^6.0.6",
-    "vue-template-compiler": "^2.6.7"
+    "sass-loader": "^7.1.0",
+    "vue-template-compiler": "^2.6.10"
   },
   "babel": {
     "presets": [

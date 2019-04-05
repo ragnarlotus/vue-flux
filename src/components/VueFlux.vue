@@ -1,12 +1,14 @@
 <template>
-	<div class="vue-flux" :class="Display.inFullScreen()? 'fullscreen' : ''" ref="container"
+	<div class="vue-flux"
+		:class="Display.inFullScreen()? 'fullscreen' : ''" ref="container"
 		@mousemove="toggleMouseOver(true)"
 		@mouseleave="toggleMouseOver(false)"
 		@dblclick="toggleFullScreen()"
 		@touchstart="Touches.start"
 		@touchend="Touches.end">
 
-		<img v-for="(url, index) in Images.loading" :key="index" alt="" ref="loading"
+		<img alt="" ref="loading"
+			v-for="(url, index) in Images.loading" :key="index"
 			v-if="Images.loading[index]"
 			:src="config.path + url"
 			@load="Images.add(index)"
@@ -67,7 +69,7 @@
 				autohideTime: 1500,
 				lazyLoad: true,
 				lazyLoadAfter: 3,
-				path: ''
+				path: '',
 			},
 			size: {
 				width: undefined,
@@ -79,34 +81,34 @@
 			Timers: undefined,
 			Transitions: undefined,
 			Touches: undefined,
-			Images: undefined
+			Images: undefined,
 		}),
 
 		props: {
 			options: {
 				type: Object,
-				default: () => {}
+				default: () => {},
 			},
 
 			transitions: {
 				type: Object,
-				required: true
+				required: true,
 			},
 
 			transitionOptions: {
 				type: Object,
-				default: () => {}
+				default: () => {},
 			},
 
 			images: {
 				type: Array,
-				default: () => []
+				default: () => [],
 			},
 
 			captions: {
 				type: Array,
-				default: () => []
-			}
+				default: () => [],
+			},
 		},
 
 		computed: {
@@ -152,13 +154,13 @@
 
 				return {
 					width: this.size.width +'px',
-					height: this.size.height +'px'
+					height: this.size.height +'px',
 				};
 			},
 
 			loadPct: function() {
 				return Math.ceil(Images.loaded * 100 / Images.count) || 0;
-			}
+			},
 		},
 
 		watch: {
@@ -186,7 +188,7 @@
 
 					this.config.autoplay = wasPlaying;
 				});
-			}
+			},
 		},
 
 		created() {
@@ -236,12 +238,12 @@
 			updateOptions() {
 				let currentSize = {
 					width: this.config.width,
-					height: this.config.height
+					height: this.config.height,
 				};
 
 				this.config = {
 					...this.config,
-					...this.options
+					...this.options,
 				};
 
 				if (currentSize.width !== this.config.width || currentSize.height !== this.config.height) {
@@ -309,13 +311,17 @@
 
 				Timers.clear('mouse-over');
 
-				if (over) {
+				this.mouseOver = over;
+
+				if (this.mouseOver) {
 					Timers.set('mouseOver', this.config.autohideTime, () => {
 						this.mouseOver = false;
 					});
-				}
 
-				this.mouseOver = over;
+				} else {
+					this.mouseOver = false;
+					Timers.clear('mouseOver');
+				}
 			},
 
 			enterFullScreen() {
@@ -379,8 +385,8 @@
 
 				else if (/ArrowRight|Right/.test(event.key))
 					this.showImage('next');
-			}
-		}
+			},
+		},
 	}
 </script>
 

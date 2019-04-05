@@ -21,7 +21,7 @@
 		name: 'FluxVortex',
 
 		components: {
-			FluxImage
+			FluxImage,
 		},
 
 		data: () => ({
@@ -36,14 +36,14 @@
 				position: 'absolute',
 				width: '100%',
 				height: '100%',
-				zIndex: '12'
-			}
+				zIndex: '12',
+			},
 		}),
 
 		props: {
 			numCircles: {
 				type: Number,
-				default: 1
+				default: 1,
 			},
 
 			slider: {
@@ -75,20 +75,20 @@
 				type: Object,
 				default: () => ({
 					top: 0,
-					left: 0
-				})
+					left: 0,
+				}),
 			},
 
 			tileCss: {
 				type: Object,
-				required: false
+				required: false,
 			},
 		},
 
 		computed: {
 			tiles: function() {
 				return this.$refs.tiles;
-			}
+			},
 		},
 
 		created() {
@@ -161,7 +161,7 @@
 				this.$nextTick(() => {
 					this.tiles.forEach((tile, i) => func(tile, i));
 				});
-			}
-		}
+			},
+		},
 	};
 </script>
