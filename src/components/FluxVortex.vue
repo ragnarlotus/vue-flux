@@ -78,6 +78,11 @@
 					left: 0
 				})
 			},
+
+			tileCss: {
+				type: Object,
+				required: false
+			},
 		},
 
 		computed: {
@@ -135,6 +140,7 @@
 				let zIndex = 13 + i;
 
 				return {
+					...this.tileCss,
 					top: this.getTileTop(i) +'px',
 					left: this.getTileLeft(i) +'px',
 					width: width +'px',
