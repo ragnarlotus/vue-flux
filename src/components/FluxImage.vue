@@ -170,15 +170,16 @@
 				};
 
 				if (image.height / image.width >= display.height / display.width) {
-					image.height = display.width * image.height / image.width;
-					image.width = display.width;
-					image.top = (display.height - image.height) / 2;
+					image.height = Math.ceil(display.width * image.height / image.width);
+					image.width = Math.ceil(display.width);
+					image.top = Math.ceil((display.height - image.height) / 2);
 
 				} else {
-					image.width = display.height * image.width / image.height;
-					image.height = display.height;
-					image.left = (display.width - image.width) / 2;
+					image.width = Math.ceil(display.height * image.width / image.height);
+					image.height = Math.ceil(display.height);
+					image.left = Math.ceil((display.width - image.width) / 2);
 				}
+
 
 				image.top -= parseFloat(this.css.top);
 				image.left -= parseFloat(this.css.left);
