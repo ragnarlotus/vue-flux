@@ -88,27 +88,27 @@
 
 		computed: {
 			front: function() {
-				return this.$refs.front;
+				return this.$refs.front[0];
 			},
 
 			top: function() {
-				return this.$refs.top;
+				return this.$refs.top[0];
 			},
 
 			back: function() {
-				return this.$refs.back;
+				return this.$refs.back[0];
 			},
 
 			bottom: function() {
-				return this.$refs.bottom;
+				return this.$refs.bottom[0];
 			},
 
 			left: function() {
-				return this.$refs.left;
+				return this.$refs.left[0];
 			},
 
 			right: function() {
-				return this.$refs.right;
+				return this.$refs.right[0];
 			},
 
 			size: function() {
@@ -208,7 +208,7 @@
 
 			getBackSideCss(css) {
 				css.transform = 'rotateY(180deg)';
-				css.backfaceVisibility = 'hidden';
+				//css.backfaceVisibility = 'hidden';
 
 				return css;
 			},

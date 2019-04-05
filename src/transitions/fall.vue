@@ -1,5 +1,5 @@
 <template>
-	<flux-image :slider="slider" :index="currentImage.index" :css="imageCss" ref="image"></flux-image>
+	<flux-image :slider="slider" :image-src="imageSrc" :image-size="imageSize" :css="imageCss" ref="image"></flux-image>
 </template>
 
 <script>
@@ -17,6 +17,8 @@
 		data: () => ({
 			totalDuration: 1600,
 			easing: 'ease-in',
+			imageSrc: undefined,
+			imageSize: undefined,
 			imageCss: {
 				top: 0,
 				left: 0,
@@ -43,18 +45,19 @@
 			currentImage = vf.Images.current;
 			nextImage = vf.Images.next;
 
+			this.imageSrc = currentImage.getImageSrc();
+			this.imageSize = currentImage.getImageSize();
+
 			vf.Transitions.setOptions(this);
 		},
 
 		mounted() {
-			this.currentImage.hide();
+			currentImage.hide();
 			vf.mask.style.perspective = '1600px';
 
-			this.$nextTick(() => {
-				this.image.transform({
-					transition: 'transform '+ this.totalDuration +'ms '+ this.easing,
-					transform: 'rotateX(-90deg)'
-				});
+			this.image.transform({
+				transition: 'transform '+ this.totalDuration +'ms '+ this.easing,
+				transform: 'rotateX(-90deg)'
 			});
 		},
 
