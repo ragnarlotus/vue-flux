@@ -59,7 +59,7 @@
 				autoplay: false,
 				bindKeys: false,
 				enableGestures: false,
-				fullscreen: false,
+				allowFullscreen: false,
 				infinite: true,
 				delay: 5000,
 				width: '100%',
@@ -319,7 +319,7 @@
 			},
 
 			enterFullScreen() {
-				if (this.config.fullscreen === false)
+				if (this.config.allowFullscreen === false)
 					return;
 
 				Display.requestFullScreen(this.$refs.container);
@@ -388,7 +388,7 @@
 	.vue-flux {
 		position: relative;
 
-		&.fullscreen {
+		&.allowFullscreen {
 			width: 100%;
 			height: 100%;
 		}
