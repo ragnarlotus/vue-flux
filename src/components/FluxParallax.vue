@@ -29,7 +29,7 @@
 				height: undefined,
 			},
 
-			properties: {
+			image: {
 				src: undefined,
 				width: undefined,
 				height: undefined,
@@ -133,8 +133,8 @@
 				let img = this.$refs.image;
 
 				if (img.naturalWidth || img.width) {
-					this.properties = {
-						...this.properties,
+					this.image = {
+						...this.image,
 						src: img.src,
 						width: img.naturalWidth || img.width,
 						height: img.naturalHeight || img.height,
@@ -170,7 +170,7 @@
 
 					let css = {
 						width: this.parallax.width +'px',
-						backgroundImage: 'url("'+ this.properties.src +'")',
+						backgroundImage: 'url("'+ this.image.src +'")',
 						backgroundRepeat: 'no-repeat',
 					};
 
@@ -184,8 +184,8 @@
 
 					} else {
 						let image = {
-							width: this.properties.width,
-							height: this.properties.height,
+							width: this.image.width,
+							height: this.image.height,
 						};
 
 						this.background.height = this.backgroundHeight.px;
@@ -211,7 +211,7 @@
 			},
 
 			init() {
-				if (!this.properties.src)
+				if (!this.image.src)
 					return;
 
 				this.resize();
