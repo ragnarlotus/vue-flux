@@ -1,6 +1,11 @@
 <template>
 	<flux-wrapper ref="wrapper">
-		<flux-image :slider="slider" :image-src="image.src" :image-size="image.size" ref="image"></flux-image>
+		<flux-image
+			:slider="slider"
+			:image-src="image.src"
+			:image-size="image.size"
+			ref="image">
+		</flux-image>
 	</flux-wrapper>
 </template>
 
@@ -15,29 +20,29 @@
 
 		components: {
 			FluxWrapper,
-			FluxImage
+			FluxImage,
 		},
 
 		data: () => ({
 			totalDuration: 1400,
 			easing: 'ease-in-out',
 			wrapperCss: {
-				overflow: 'hidden'
+				overflow: 'hidden',
 			},
-			image: {}
+			image: {},
 		}),
 
 		props: {
 			slider: {
 				type: Object,
-				required: true
-			}
+				required: true,
+			},
 		},
 
 		computed: {
 			wrapper: function() {
 				return this.$refs.wrapper;
-			}
+			},
 		},
 
 		created() {
@@ -60,8 +65,8 @@
 					...this.image.css,
 					left: 'auto',
 					right: 0,
-					width: vf.size.width +'px'
-				}
+					width: vf.size.width +'px',
+				};
 			}
 		},
 
@@ -74,12 +79,12 @@
 
 			this.wrapper.transform({
 				transition: 'width '+ this.totalDuration +'ms '+ this.easing,
-				width: 0
+				width: 0,
 			});
 		},
 
 		destroyed() {
 			nextImage.show();
-		}
+		},
 	};
 </script>

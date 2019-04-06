@@ -53,7 +53,7 @@
 				let image = {
 					width: this.properties.size.width,
 					height: this.properties.size.height,
-					src: 'url("'+ this.properties.src +'")'
+					src: 'url("'+ this.properties.src +'")',
 				};
 
 				let thumb = {
@@ -76,7 +76,7 @@
 					backgroundImage: image.src,
 					backgroundSize: image.width +'px '+ image.height +'px',
 					backgroundPosition: image.left +'px '+ image.top +'px',
-					backgroundRepeat: 'no-repeat'
+					backgroundRepeat: 'no-repeat',
 				});
 			},
 

@@ -17,7 +17,7 @@
 		name: 'transitionBlinds2d',
 
 		components: {
-			FluxGrid
+			FluxGrid,
 		},
 
 		data: () => ({
@@ -35,14 +35,14 @@
 		props: {
 			slider: {
 				type: Object,
-				required: true
-			}
+				required: true,
+			},
 		},
 
 		computed: {
 			grid: function() {
 				return this.$refs.grid;
-			}
+			},
 		},
 
 		created() {
@@ -52,7 +52,7 @@
 			let divider = vf.size.width / 10;
 
 			vf.Transitions.setOptions(this, {
-				numCols: Math.floor(vf.size.width / divider)
+				numCols: Math.floor(vf.size.width / divider),
 			});
 
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
@@ -67,7 +67,7 @@
 				tile.transform({
 					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
 					opacity: '0.1',
-					transform: 'scaleX(0)'
+					transform: 'scaleX(0)',
 				});
 			});
 		},
@@ -80,7 +80,7 @@
 					delay = this.numCols - i - 1;
 
 				return delay * this.tileDelay;
-			}
-		}
+			},
+		},
 	};
 </script>

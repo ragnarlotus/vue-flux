@@ -49,8 +49,8 @@ export default class ImagesController {
 				src: img.src,
 				size: {
 					width: img.naturalWidth || img.width,
-					height: img.naturalHeight || img.height
-				}
+					height: img.naturalHeight || img.height,
+				},
 			};
 
 		} else {

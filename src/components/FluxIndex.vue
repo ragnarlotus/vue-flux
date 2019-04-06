@@ -33,7 +33,7 @@
 		props: {
 			slider: {
 				type: Object,
-			}
+			},
 		},
 
 		computed: {
@@ -85,7 +85,7 @@
 					indexClass += ' mouse-over';
 
 				return indexClass;
-			}
+			},
 		},
 
 		methods: {
@@ -164,8 +164,8 @@
 
 			current(index) {
 				return this.vf.Images.current.index === index? 'current' : '';
-			}
-		}
+			},
+		},
 	};
 </script>
 

@@ -17,7 +17,7 @@
 		name: 'transitionWave',
 
 		components: {
-			FluxGrid
+			FluxGrid,
 		},
 
 		data: () => ({
@@ -29,21 +29,21 @@
 			tileDelay: 150,
 			sideColor: '#333',
 			images: {
-				front: {}
+				front: {},
 			},
 		}),
 
 		props: {
 			slider: {
 				type: Object,
-				required: true
-			}
+				required: true,
+			},
 		},
 
 		computed: {
 			grid: function() {
 				return this.$refs.grid;
-			}
+			},
 		},
 
 		created() {
@@ -54,7 +54,7 @@
 			let divider = vf.size.width / 8;
 
 			vf.Transitions.setOptions(this, {
-				numCols: Math.floor(vf.size.width / divider)
+				numCols: Math.floor(vf.size.width / divider),
 			});
 
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
@@ -77,12 +77,12 @@
 			nextImage.hide();
 
 			this.grid.setCss({
-				perspective: '1200px'
+				perspective: '1200px',
 			});
 
 			this.grid.transform((tile, i) => {
 				tile.setCss({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms'
+					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
 				});
 
 				tile.turn(this.direction === 'right'? 'bottom' : 'top');
@@ -101,7 +101,7 @@
 					delay = this.numCols - i - 1;
 
 				return delay * this.tileDelay;
-			}
-		}
+			},
+		},
 	};
 </script>

@@ -11,7 +11,7 @@
 		name: 'transitionFall',
 
 		components: {
-			FluxImage
+			FluxImage,
 		},
 
 		data: () => ({
@@ -23,21 +23,21 @@
 				top: 0,
 				left: 0,
 				transformOrigin: 'center bottom',
-				zIndex: 12
+				zIndex: 12,
 			}
 		}),
 
 		props: {
 			slider: {
 				type: Object,
-				required: true
-			}
+				required: true,
+			},
 		},
 
 		computed: {
 			image: function() {
 				return this.$refs.image;
-			}
+			},
 		},
 
 		created() {
@@ -57,13 +57,13 @@
 
 			this.image.transform({
 				transition: 'transform '+ this.totalDuration +'ms '+ this.easing,
-				transform: 'rotateX(-90deg)'
+				transform: 'rotateX(-90deg)',
 			});
 		},
 
 		destroyed() {
 			nextImage.show();
 			vf.mask.style.perspective = 'none';
-		}
+		},
 	};
 </script>

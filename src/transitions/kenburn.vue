@@ -11,20 +11,20 @@
 		name: 'transitionKenburn',
 
 		components: {
-			FluxImage
+			FluxImage,
 		},
 
 		data: () => ({
 			totalDuration: 1500,
 			easing: 'linear',
-			image: {}
+			image: {},
 		}),
 
 		props: {
 			slider: {
 				type: Object,
-				required: true
-			}
+				required: true,
+			},
 		},
 
 		created() {
@@ -56,7 +56,7 @@
 
 			currentImage.setCss({
 				transition: 'none',
-				opacity: 1
+				opacity: 1,
 			});
 		},
 
@@ -64,7 +64,7 @@
 			focusIn(transform) {
 				this.$refs.image.setCss({
 					transformOrigin: transform.originX +' '+ transform.originY,
-					zIndex: 12
+					zIndex: 12,
 				});
 
 				currentImage.hide();
@@ -72,25 +72,25 @@
 				this.$refs.image.transform({
 					transition: 'all '+ this.totalDuration +'ms '+ this.easing,
 					transform: 'scale('+ transform.scale +') translate('+ transform.translateX +', '+ transform.translateY +')',
-					opacity: 0
+					opacity: 0,
 				});
 			},
 
 			focusOut(transform) {
 				currentImage.setCss({
 					transition: 'opacity '+ this.totalDuration +'ms '+ this.easing,
-					opacity: 0
+					opacity: 0,
 				});
 
 				this.$refs.image.setCss({
 					transform: 'scale('+ transform.scale +') translate('+ transform.translateX +', '+ transform.translateY +')',
 					transformOrigin: transform.originX +' '+ transform.originY,
-					zIndex: 11
+					zIndex: 11,
 				});
 
 				this.$refs.image.transform({
 					transition: 'all '+ this.totalDuration +'ms '+ this.easing,
-					transform: 'scale(1) translate(0, 0)'
+					transform: 'scale(1) translate(0, 0)',
 				});
 			},
 
@@ -103,7 +103,7 @@
 						translateX: '-35%',
 						translateY: '-35%',
 						originX: 'top',
-						originY: 'left'
+						originY: 'left',
 					};
 				}
 
@@ -113,7 +113,7 @@
 						translateX: '35%',
 						translateY: '-35%',
 						originX: 'top',
-						originY: 'right'
+						originY: 'right',
 					};
 				}
 
@@ -123,7 +123,7 @@
 						translateX: '-35%',
 						translateY: '35%',
 						originX: 'bottom',
-						originY: 'left'
+						originY: 'left',
 					};
 				}
 
@@ -132,9 +132,9 @@
 					translateX: '35%',
 					translateY: '35%',
 					originX: 'bottom',
-					originY: 'right'
+					originY: 'right',
 				};
-			}
-		}
+			},
+		},
 	};
 </script>

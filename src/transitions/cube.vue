@@ -22,7 +22,7 @@
 			},
 			totalDuration: 1400,
 			perspective: '1600px',
-			easing: 'ease-out'
+			easing: 'ease-out',
 		}),
 
 		props: {
@@ -35,7 +35,7 @@
 		computed: {
 			cube: function() {
 				return this.$refs.cube;
-			}
+			},
 		},
 
 		created() {
@@ -59,7 +59,7 @@
 			nextImage.hide();
 
 			this.cube.setCss({
-				transition: 'all '+ this.totalDuration +'ms '+ this.easing
+				transition: 'all '+ this.totalDuration +'ms '+ this.easing,
 			});
 
 			this.cube.turn(this.direction);

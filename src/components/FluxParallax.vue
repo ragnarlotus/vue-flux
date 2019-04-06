@@ -213,7 +213,10 @@
 			},
 
 			setCss(css) {
-				this.style = Object.assign({}, this.style, css);
+				this.style = {
+					...this.style,
+					...css,
+				};
 			},
 
 			moveBackgroundByPct(pct) {

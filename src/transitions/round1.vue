@@ -18,7 +18,7 @@
 		name: 'transitionRound1',
 
 		components: {
-			FluxGrid
+			FluxGrid,
 		},
 
 		data: () => ({
@@ -38,14 +38,14 @@
 		props: {
 			slider: {
 				type: Object,
-				required: true
-			}
+				required: true,
+			},
 		},
 
 		computed: {
 			grid: function() {
 				return this.$refs.grid;
-			}
+			},
 		},
 
 		created() {
@@ -57,7 +57,7 @@
 
 			vf.Transitions.setOptions(this, {
 				numRows: Math.floor(vf.size.height / divider),
-				numCols: Math.floor(vf.size.width / divider)
+				numCols: Math.floor(vf.size.width / divider),
 			});
 
 			this.totalDuration = this.tileDelay * (this.numRows > this.numCols? this.numRows : this.numCols) * 2 + this.tileDelay;
@@ -71,12 +71,12 @@
 			nextImage.hide();
 
 			this.grid.setCss({
-				perspective: '800px'
+				perspective: '800px',
 			});
 
 			this.grid.transform((tile, i) => {
 				tile.setCss({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms'
+					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
 				});
 
 				tile.turn('back', this.direction);
@@ -97,7 +97,7 @@
 					delay = this.numRows + this.numCols - delay - 1;
 
 				return delay * this.tileDelay;
-			}
-		}
+			},
+		},
 	};
 </script>

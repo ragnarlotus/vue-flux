@@ -14,7 +14,7 @@ export default class DisplayController {
 	setSize(size) {
 		this.size = {
 			...this.size,
-			...size
+			...size,
 		};
 	}
 
@@ -29,7 +29,7 @@ export default class DisplayController {
 			'fullscreenElement',
 			'webkitFullscreenElement',
 			'mozFullScreenElement',
-			'msFullscreenElement'
+			'msFullscreenElement',
 		];
 
 		return document[props.find(prop => prop in document)];
@@ -40,7 +40,7 @@ export default class DisplayController {
 			'mozRequestFullScreen',
 			'webkitRequestFullscreen',
 			'requestFullscreen',
-			'msRequestFullscreen'
+			'msRequestFullscreen',
 		];
 
 		methods.find((method) => {
@@ -55,7 +55,7 @@ export default class DisplayController {
 			'exitFullscreen',
 			'mozCancelFullScreen',
 			'webkitExitFullscreen',
-			'msExitFullscreen'
+			'msExitFullscreen',
 		];
 
 		methods.find((method) => {
