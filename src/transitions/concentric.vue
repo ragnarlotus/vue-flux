@@ -17,7 +17,7 @@
 		name: 'transitionConcentric',
 
 		components: {
-			FluxVortex
+			FluxVortex,
 		},
 
 		data: () => ({
@@ -33,14 +33,14 @@
 		props: {
 			slider: {
 				type: Object,
-				required: true
-			}
+				required: true,
+			},
 		},
 
 		computed: {
 			vortex: function() {
 				return this.$refs.vortex;
-			}
+			},
 		},
 
 		created() {
@@ -53,7 +53,7 @@
 			let divider = size.width / 8;
 
 			vf.Transitions.setOptions(this, {
-				numCircles: Math.ceil(diag / 2 / divider) + 1
+				numCircles: Math.ceil(diag / 2 / divider) + 1,
 			});
 
 			this.totalDuration = this.tileDelay * this.numCircles + this.tileDuration;
@@ -66,14 +66,14 @@
 			currentImage.hide();
 
 			this.vortex.setCss({
-				overflow: 'hidden'
+				overflow: 'hidden',
 			});
 
 			this.vortex.transform((circle, i) => {
 				circle.transform({
 					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
 					opacity: '0',
-					transform: 'rotateZ('+ this.getDeg() +'deg)'
+					transform: 'rotateZ('+ this.getDeg() +'deg)',
 				});
 			});
 		},
@@ -85,7 +85,7 @@
 
 			getDeg() {
 				return this.direction === 'left'? '-90' : '90';
-			}
-		}
+			},
+		},
 	};
 </script>

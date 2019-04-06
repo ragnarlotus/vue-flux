@@ -17,7 +17,7 @@
 		name: 'transitionBlinds3d',
 
 		components: {
-			FluxGrid
+			FluxGrid,
 		},
 
 		data: () => ({
@@ -36,14 +36,14 @@
 		props: {
 			slider: {
 				type: Object,
-				required: true
-			}
+				required: true,
+			},
 		},
 
 		computed: {
 			grid: function() {
 				return this.$refs.grid;
-			}
+			},
 		},
 
 		created() {
@@ -54,7 +54,7 @@
 			let divider = vf.size.width / 6;
 
 			vf.Transitions.setOptions(this, {
-				numCols: Math.floor(vf.size.width / divider)
+				numCols: Math.floor(vf.size.width / divider),
 			});
 
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
@@ -68,14 +68,14 @@
 			nextImage.hide();
 
 			this.grid.setCss({
-				perspective: '800px'
+				perspective: '800px',
 			});
 
 			let deg = this.getDeg();
 
 			this.grid.transform((tile, i) => {
 				tile.setCss({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms'
+					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
 				});
 
 				tile.turn('back', this.direction);
@@ -98,7 +98,7 @@
 
 			getDeg() {
 				return this.direction === 'right'? '180' : '-180';
-			}
-		}
+			},
+		},
 	};
 </script>

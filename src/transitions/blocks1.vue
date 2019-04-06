@@ -17,7 +17,7 @@
 		name: 'transitionBlocks1',
 
 		components: {
-			FluxGrid
+			FluxGrid,
 		},
 
 		data: () => ({
@@ -35,14 +35,14 @@
 		props: {
 			slider: {
 				type: Object,
-				required: true
-			}
+				required: true,
+			},
 		},
 
 		computed: {
 			grid: function() {
 				return this.$refs.grid;
-			}
+			},
 		},
 
 		created() {
@@ -53,7 +53,7 @@
 
 			vf.Transitions.setOptions(this, {
 				numRows: Math.floor(vf.size.height / divider),
-				numCols: Math.floor(vf.size.width / divider)
+				numCols: Math.floor(vf.size.width / divider),
 			});
 
 			this.totalDuration = this.tileDelay + this.tileDuration;
@@ -68,7 +68,7 @@
 				tile.transform({
 					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay() +'ms',
 					opacity: '0',
-					transform: 'scale(0.4, 0.4)'
+					transform: 'scale(0.4, 0.4)',
 				});
 			});
 		},
@@ -78,7 +78,7 @@
 				let delay = Math.random() * this.tileDelay;
 
 				return Math.floor(delay);
-			}
-		}
+			},
+		},
 	};
 </script>

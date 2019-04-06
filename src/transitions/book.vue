@@ -16,7 +16,7 @@
 
 		components: {
 			FluxCube,
-			FluxImage
+			FluxImage,
 		},
 
 		data: () => ({
@@ -32,21 +32,21 @@
 				left: 0,
 				width: 0,
 				transformOrigin: 'left center',
-				zIndex: 13
+				zIndex: 13,
 			},
 			imageCss: {
 				top: 0,
 				left: 0,
 				width: 0,
-				zIndex: 12
+				zIndex: 12,
 			},
 		}),
 
 		props: {
 			slider: {
 				type: Object,
-				required: true
-			}
+				required: true,
+			},
 		},
 
 		computed: {
@@ -87,7 +87,7 @@
 			this.$nextTick(() => {
 				this.cube.transform({
 					transition: 'transform '+ this.totalDuration +'ms '+ this.easing,
-					transform: 'rotateY('+ this.getDeg() +'deg)'
+					transform: 'rotateY('+ this.getDeg() +'deg)',
 				});
 			});
 		},
@@ -100,7 +100,7 @@
 			setCubeCss() {
 				if (this.direction === 'left') {
 					this.cube.setCss({
-						transformOrigin: 'right center'
+						transformOrigin: 'right center',
 					});
 				}
 			},
@@ -116,21 +116,21 @@
 					backgroundPositionX -= this.pageWidth;
 
 				this.cube.back.setCss({
-					backgroundPositionX: backgroundPositionX +'px'
+					backgroundPositionX: backgroundPositionX +'px',
 				});
 			},
 
 			setImageCss() {
 				if (this.direction === 'right') { 
 					this.image.setCss({
-						left: this.pageWidth +'px'
+						left: this.pageWidth +'px',
 					});
 				}
 			},
 
 			getDeg() {
 				return this.direction !== 'left'? '-180' : '180';
-			}
-		}
+			},
+		},
 	};
 </script>
