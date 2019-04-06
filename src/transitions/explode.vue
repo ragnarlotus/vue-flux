@@ -17,7 +17,7 @@
 		name: 'transitionExplode',
 
 		components: {
-			FluxGrid
+			FluxGrid,
 		},
 
 		data: () => ({
@@ -35,14 +35,14 @@
 		props: {
 			slider: {
 				type: Object,
-				required: true
-			}
+				required: true,
+			},
 		},
 
 		computed: {
 			grid: function() {
 				return this.$refs.grid;
-			}
+			},
 		},
 
 		created() {
@@ -54,7 +54,7 @@
 
 			vf.Transitions.setOptions(this, {
 				numRows: Math.floor(vf.size.height / divider),
-				numCols: Math.floor(vf.size.width / divider)
+				numCols: Math.floor(vf.size.width / divider),
 			});
 
 			this.totalDuration = (this.numCols / 2 + this.numRows / 2) * (this.tileDelay * 2);
@@ -70,7 +70,7 @@
 					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
 					borderRadius: '100%',
 					opacity: '0',
-					transform: 'scale(1.6, 1.6)'
+					transform: 'scale(1.6, 1.6)',
 				});
 			});
 		},
@@ -87,7 +87,7 @@
 				let delay = Math.abs(this.numRows / 2 - 0.5 - row) + Math.abs(this.numCols / 2 - 0.5 - col) - 1;
 
 				return delay * this.tileDelay;
-			}
-		}
+			},
+		},
 	};
 </script>

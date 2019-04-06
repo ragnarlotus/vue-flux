@@ -16,32 +16,32 @@
 
 		components: {
 			FluxWrapper,
-			FluxImage
+			FluxImage,
 		},
 
 		data: () => ({
 			totalDuration: 1400,
 			easing: 'ease-in-out',
 			wrapperCss: {
-				width: '200%'
+				width: '200%',
 			},
 			images: {
 				left: undefined,
-				right: undefined
-			}
+				right: undefined,
+			},
 		}),
 
 		props: {
 			slider: {
 				type: Object,
-				required: true
-			}
+				required: true,
+			},
 		},
 
 		computed: {
 			wrapper: function() {
 				return this.$refs.wrapper;
-			}
+			},
 		},
 
 		created() {
@@ -71,18 +71,18 @@
 			this.wrapper.setCss(this.wrapperCss);
 
 			this.$refs.imageLeft.setCss({
-				width: '50%'
+				width: '50%',
 			});
 
 			this.$refs.imageRight.setCss({
 				left: 'auto',
 				right: 0,
-				width: '50%'
+				width: '50%',
 			});
 
 			this.wrapper.transform({
 				transition: 'transform '+ this.totalDuration +'ms '+ this.easing,
-				transform: 'translateX('+ this.getTx() +'px)'
+				transform: 'translateX('+ this.getTx() +'px)',
 			});
 		},
 
@@ -98,7 +98,7 @@
 					tx = Math.abs(tx);
 
 				return tx;
-			}
-		}
+			},
+		},
 	};
 </script>

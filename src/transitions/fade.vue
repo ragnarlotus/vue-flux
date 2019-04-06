@@ -8,14 +8,14 @@
 
 		data: () => ({
 			totalDuration: 1200,
-			easing: 'ease-in'
+			easing: 'ease-in',
 		}),
 
 		props: {
 			slider: {
 				type: Object,
-				required: true
-			}
+				required: true,
+			},
 		},
 
 		created() {
@@ -29,7 +29,7 @@
 		mounted() {
 			currentImage.setCss({
 				transition: 'opacity '+ this.totalDuration +'ms '+ this.easing,
-				opacity: 0
+				opacity: 0,
 			});
 		},
 
@@ -38,8 +38,8 @@
 
 			currentImage.setCss({
 				transition: 'none',
-				opacity: 1
+				opacity: 1,
 			});
-		}
+		},
 	};
 </script>

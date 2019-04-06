@@ -30,7 +30,7 @@
 			radius: undefined,
 			tile: {
 				top: undefined,
-				left: undefined
+				left: undefined,
 			},
 			style: {
 				position: 'absolute',

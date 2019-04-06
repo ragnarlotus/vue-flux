@@ -17,7 +17,7 @@
 		name: 'transitionZip',
 
 		components: {
-			FluxGrid
+			FluxGrid,
 		},
 
 		data: () => ({
@@ -35,14 +35,14 @@
 		props: {
 			slider: {
 				type: Object,
-				required: true
-			}
+				required: true,
+			},
 		},
 
 		computed: {
 			grid: function() {
 				return this.$refs.grid;
-			}
+			},
 		},
 
 		created() {
@@ -52,7 +52,7 @@
 			let divider = vf.size.width / 10;
 
 			vf.Transitions.setOptions(this, {
-				numCols: Math.floor(vf.size.width / divider)
+				numCols: Math.floor(vf.size.width / divider),
 			});
 
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
@@ -64,14 +64,14 @@
 			currentImage.hide();
 
 			this.grid.setCss({
-				overflow: 'hidden'
+				overflow: 'hidden',
 			});
 
 			this.grid.transform((tile, i) => {
 				tile.transform({
 					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
 					opacity: '0.1',
-					transform: 'translateY('+ (i % 2 === 0? '-' : '') + vf.size.height +'px)'
+					transform: 'translateY('+ (i % 2 === 0? '-' : '') + vf.size.height +'px)',
 				});
 			});
 		},
@@ -84,7 +84,7 @@
 					delay = this.numCols - i - 1;
 
 				return delay * this.tileDelay;
-			}
-		}
+			},
+		},
 	};
 </script>

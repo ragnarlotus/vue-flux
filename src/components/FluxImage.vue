@@ -24,8 +24,8 @@
 				backfaceVisibility: 'hidden',
 				backgroundColor: 'transparent',
 				backgroundImage: 'none',
-				zIndex: 'auto'
-			}
+				zIndex: 'auto',
+			},
 		}),
 
 		props: {
@@ -58,8 +58,8 @@
 				type: Object,
 				default: () => ({
 					top: 0,
-					left: 0
-				})
+					left: 0,
+				}),
 			},
 		},
 
@@ -78,7 +78,7 @@
 
 			color: function() {
 				this.setColor(this.color);
-			}
+			},
 		},
 
 		created() {
@@ -138,7 +138,7 @@
 
 				this.size = {
 					...this.size,
-					...size
+					...size,
 				};
 
 				this.init();
@@ -169,7 +169,7 @@
 					top: 0,
 					left: 0,
 					...this.size,
-					src: 'url("'+ this.src +'")'
+					src: 'url("'+ this.src +'")',
 				};
 
 				if (image.height / image.width >= display.height / display.width) {
@@ -193,7 +193,7 @@
 					backgroundImage: image.src,
 					backgroundSize: image.width +'px '+ image.height +'px',
 					backgroundPosition: image.left +'px '+ image.top +'px',
-					backgroundRepeat: 'no-repeat'
+					backgroundRepeat: 'no-repeat',
 				});
 			},
 
@@ -221,8 +221,8 @@
 				this.setCss({
 					visibility: 'hidden'
 				});
-			}
-		}
+			},
+		},
 	};
 </script>
 

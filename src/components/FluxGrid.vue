@@ -23,7 +23,7 @@
 		name: 'FluxGrid',
 
 		components: {
-			FluxCube
+			FluxCube,
 		},
 
 		data: () => ({
@@ -31,27 +31,27 @@
 			numTiles: 0,
 			tile: {
 				width: 1,
-				height: 1
+				height: 1,
 			},
 			style: {
 				position: 'absolute',
 				width: '100%',
 				height: '100%',
-				zIndex: '12'
-			}
+				zIndex: '12',
+			},
 		}),
 
 		props: {
 			numRows: {
 				type: Number,
 				required: false,
-				default: () => 1
+				default: () => 1,
 			},
 
 			numCols: {
 				type: Number,
 				required: false,
-				default: () => 1
+				default: () => 1,
 			},
 
 			slider: {
@@ -88,20 +88,20 @@
 				type: Object,
 				default: () => ({
 					top: 0,
-					left: 0
-				})
+					left: 0,
+				}),
 			},
 
 			tileCss: {
 				type: Object,
-				required: false
+				required: false,
 			},
 		},
 
 		computed: {
 			tiles: function() {
 				return this.$refs.tiles;
-			}
+			},
 		},
 
 		created() {
@@ -159,7 +159,7 @@
 					height: height +'px',
 					top: top +'px',
 					left: left +'px',
-					zIndex: zIndex
+					zIndex: zIndex,
 				};
 			},
 
@@ -174,7 +174,7 @@
 				this.$nextTick(() => {
 					this.tiles.forEach((tile, i) => func(tile, i));
 				});
-			}
-		}
+			},
+		},
 	};
 </script>

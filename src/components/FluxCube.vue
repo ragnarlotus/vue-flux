@@ -22,7 +22,7 @@
 		name: 'FluxCube',
 
 		components: {
-			FluxImage
+			FluxImage,
 		},
 
 		data: () => ({
@@ -202,7 +202,7 @@
 					rx: '90deg',
 					tx: '0',
 					ty: '-50%',
-					tz: (this.slider.size.height / 2) +'px'
+					tz: (this.slider.size.height / 2) +'px',
 				};
 
 				css.transform = 'rotateX('+ t.rx +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
@@ -222,7 +222,7 @@
 					rx: '-90deg',
 					tx: '0',
 					ty: '50%',
-					tz: (this.slider.size.height / 2) +'px'
+					tz: (this.slider.size.height / 2) +'px',
 				};
 
 				css.transform = 'rotateX('+ t.rx +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
@@ -243,7 +243,7 @@
 					ry: '-90deg',
 					tx: '-50%',
 					ty: '0',
-					tz: (size.width / 2) +'px'
+					tz: (size.width / 2) +'px',
 				};
 
 				css.transform = 'rotateY('+ t.ry +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
@@ -264,7 +264,7 @@
 					ry: '90deg',
 					tx: '50%',
 					ty: '0',
-					tz: (parseFloat(this.style.width) - size.width / 2) +'px'
+					tz: (parseFloat(this.style.width) - size.width / 2) +'px',
 				};
 
 				css.transform = 'rotateY('+ t.ry +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
@@ -287,20 +287,10 @@
 			},
 
 			turn(direction, to) {
-				if (direction === 'top')
-					this.turnTop();
+				direction = direction.charAt(0).toUpperCase() + direction.slice(1);
 
-				else if (direction === 'back')
-					this.turnBack(to);
-
-				else if (direction === 'bottom')
-					this.turnBottom();
-
-				else if (direction === 'left')
-					this.turnLeft();
-
-				else if (direction === 'right')
-					this.turnRight();
+				if (this['turn'+ direction])
+					this['turn'+ direction](to);
 			},
 
 			turnTop() {
@@ -311,7 +301,7 @@
 				};
 
 				this.transform({
-					transform: 'rotateX('+ t.rx +') translate3d(0, '+ t.ty +', '+ t.tz +')'
+					transform: 'rotateX('+ t.rx +') translate3d(0, '+ t.ty +', '+ t.tz +')',
 				});
 			},
 
@@ -322,7 +312,7 @@
 					deg = '-180';
 
 				this.transform({
-					transform: 'rotateY('+ deg +'deg)'
+					transform: 'rotateY('+ deg +'deg)',
 				});
 			},
 
@@ -334,7 +324,7 @@
 				};
 
 				this.transform({
-					transform: 'rotateX('+ t.rx +') translate3d(0, '+ t.ty +', '+ t.tz +')'
+					transform: 'rotateX('+ t.rx +') translate3d(0, '+ t.ty +', '+ t.tz +')',
 				});
 			},
 
@@ -346,7 +336,7 @@
 				};
 
 				this.transform({
-					transform: 'rotateY('+ t.ry +') translate3d('+ t.tx +', 0, '+ t.tz +')'
+					transform: 'rotateY('+ t.ry +') translate3d('+ t.tx +', 0, '+ t.tz +')',
 				});
 			},
 
@@ -354,11 +344,11 @@
 				let t = {
 					ry: '-90deg',
 					tx: '-50%',
-					tz: (this.size.width / 2) +'px'
+					tz: (this.size.width / 2) +'px',
 				};
 
 				this.transform({
-					transform: 'rotateY('+ t.ry +') translate3d('+ t.tx +', 0, '+ t.tz +')'
+					transform: 'rotateY('+ t.ry +') translate3d('+ t.tx +', 0, '+ t.tz +')',
 				});
 			},
 		}
