@@ -1,8 +1,13 @@
 <template>
-	<nav v-if="vf !== undefined" class="flux-pagination">
+	<nav v-if="display" class="flux-pagination">
 		<ul>
-			<li v-for="i in vf.Images.props.length" :key="i" :class="getClass(i - 1)" @click="showImage(i - 1)" @touchend="showImage(i - 1, $event)" :title="getTitle(i - 1)">
-				<span class="pagination-item"></span>
+			<li
+				v-for="i in vf.Images.props.length" :key="i"
+				:class="getClass(i - 1)"
+				:title="getTitle(i - 1)"
+				@click="showImage(i - 1)"
+				@touchend="showImage(i - 1, $event)">
+					<span class="pagination-item"></span>
 			</li>
 		</ul>
 	</nav>
@@ -24,11 +29,18 @@
 					return this.slider;
 
 				if (this.$parent.$options.name === 'VueFlux')
-					return this.$parent.loaded? this.$parent : undefined;
+					return this.$parent;
 
 				console.warn('slider not referenced, check https://github.com/deulos/vue-flux/wiki/FluxPagination for help');
 
 				return undefined;
+			},
+
+			display: function() {
+				if (!this.vf)
+					return false;
+
+				return true;
 			},
 
 			currentTransition: function() {

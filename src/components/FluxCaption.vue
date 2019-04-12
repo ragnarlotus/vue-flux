@@ -20,7 +20,7 @@
 					return this.slider;
 
 				if (this.$parent.$options.name === 'VueFlux')
-					return this.$parent.loaded? this.$parent : undefined;
+					return this.$parent;
 
 				console.warn('slider not referenced, check https://github.com/deulos/vue-flux/wiki/FluxCaption for help');
 
@@ -29,6 +29,9 @@
 
 			caption: function() {
 				if (!this.vf)
+					return '';
+
+				if (this.vf.loaded === false)
 					return '';
 
 				if (this.vf.Transitions.current !== undefined)

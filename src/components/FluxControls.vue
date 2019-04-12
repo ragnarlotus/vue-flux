@@ -24,7 +24,7 @@
 					return this.slider;
 
 				if (this.$parent.$options.name === 'VueFlux')
-					return this.$parent.loaded? this.$parent : undefined;
+					return this.$parent;
 
 				console.warn('slider not referenced, check https://github.com/deulos/vue-flux/wiki/FluxControls for help');
 
@@ -33,6 +33,9 @@
 
 			display: function() {
 				if (!this.vf)
+					return false;
+
+				if (this.vf.loaded === false)
 					return false;
 
 				if (this.vf.mouseOver === false)
