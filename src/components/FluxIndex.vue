@@ -1,5 +1,5 @@
 <template>
-	<div class="flux-index">
+	<div v-if="display" class="flux-index">
 		<transition name="fade">
 			<div v-show="displayButton" class="toggle" @click="toggle"></div>
 		</transition>
@@ -42,7 +42,7 @@
 					return this.slider;
 
 				if (this.$parent.$options.name === 'VueFlux')
-					return this.$parent.loaded? this.$parent : undefined;
+					return this.$parent;
 
 				console.warn('slider not referenced, check https://github.com/deulos/vue-flux/wiki/FluxIndex for help');
 
@@ -56,10 +56,17 @@
 				return this.vf.Images.props;
 			},
 
-			displayButton: function() {
+			display: function() {
 				if (!this.vf)
 					return false;
 
+				if (this.vf.loaded === false)
+					return false;
+
+				return true;
+			},
+
+			displayButton: function() {
 				if (!this.vf.index)
 					return false;
 
@@ -73,9 +80,6 @@
 			},
 
 			indexClass: function() {
-				if (!this.vf)
-					return '';
-
 				let indexClass = '';
 
 				if (this.visible && this.vf.index)
