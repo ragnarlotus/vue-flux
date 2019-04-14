@@ -15,10 +15,16 @@
 			@error="Images.add(index)">
 
 		<div class="mask" :style="sizePx" ref="mask">
-			<component v-if="Transitions.current" :is="Transitions.current" ref="transition" :slider="slider"></component>
+			<flux-transition
+				v-if="Transitions.current"
+				:slider="slider"
+				:transition="Transitions.current"
+				:from="Images.current"
+				:to="Images.next"
+				ref="transition"
+			></flux-transition>
 
-			<flux-image :slider="slider" :display-size="size" ref="image1"></flux-image>
-			<flux-image :slider="slider" :display-size="size" ref="image2"></flux-image>
+			<flux-image :slider="slider" ref="image"></flux-image>
 		</div>
 
 		<slot name="preloader"></slot>
@@ -41,6 +47,7 @@
 	import ImagesController from '@/controllers/Images.js';
 	import TouchesController from '@/controllers/Touches.js';
 	import FluxImage from '@/components/FluxImage.vue';
+	import FluxTransition from '@/components/FluxTransition.js';
 
 	let Display, Timers, Transitions, Images, Touches;
 
@@ -48,7 +55,8 @@
 		name: 'VueFlux',
 
 		components: {
-			FluxImage
+			FluxImage,
+			FluxTransition,
 		},
 
 		data: () => ({
@@ -112,38 +120,23 @@
 			},
 
 			preloader: function() {
-				if (this.$slots['preloader'])
-					return this.$slots['preloader'][0].componentInstance;
-
-				return undefined;
+				return this.getSlot('preloader');
 			},
 
 			caption: function() {
-				if (this.$slots['caption'])
-					return this.$slots['caption'][0].componentInstance;
-
-				return undefined;
+				return this.getSlot('caption');
 			},
 
 			controls: function() {
-				if (this.$slots['controls'])
-					return this.$slots['controls'][0].componentInstance;
-
-				return undefined;
+				return this.getSlot('controls');
 			},
 
 			index: function() {
-				if (this.$slots['index'])
-					return this.$slots['index'][0].componentInstance;
-
-				return undefined;
+				return this.getSlot('index');
 			},
 
 			pagination: function() {
-				if (this.$slots['pagination'])
-					return this.$slots['pagination'][0].componentInstance;
-
-				return undefined;
+				return this.getSlot('pagination');
 			},
 
 			mask: function() {
@@ -204,9 +197,6 @@
 
 		mounted() {
 			this.resize();
-
-			this.$refs.image1.setCss({ zIndex: 11 });
-			this.$refs.image2.setCss({ zIndex: 10 });
 
 			Images.preload();
 
@@ -290,6 +280,13 @@
 					this.$refs.image1.init();
 					this.$refs.image2.init();
 				});
+			},
+
+			getSlot(name) {
+				if (this.$slots[name])
+					return this.$slots[name][0].componentInstance;
+
+				return undefined;
 			},
 
 			init() {
