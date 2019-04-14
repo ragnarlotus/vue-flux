@@ -32,8 +32,6 @@
 <script>
 	import FluxImage from '@/components/FluxImage.vue';
 
-	let Images;
-
 	export default {
 		name: 'FluxPreloader',
 
@@ -42,6 +40,9 @@
 		},
 
 		data: () => ({
+			runningTransition: false,
+			lastSrc: undefined,
+
 			currentImage: {
 				css: {
 					zIndex: 13,
@@ -57,18 +58,6 @@
 
 		props: {
 			slider: {
-				type: Object,
-			},
-
-			imageSrc: {
-				type: String,
-			},
-
-			color: {
-				type: String,
-			},
-
-			transition: {
 				type: Object,
 			},
 
@@ -95,7 +84,7 @@
 				if (!this.vf)
 					return false;
 
-				if (this.vf.loaded === true)
+				if (this.runningTransition === false && this.vf.loaded === true)
 					return false;
 
 				return true;
@@ -109,19 +98,24 @@
 			},
 		},
 
-		created() {
-			if (this.imageSrc) {
-				this.current.src = this.imageSrc;
-			}
+		watch: {
+			display: function() {
+				if (this.display === true) {
+					this.prepareImages();
+				}
+			},
 
-			if (this.color) {
-				this.current.color = this.color;
-			}
+			'vf.Images.current': function() {
+				this.lastSrc = this.vf.Images.current.src;
+			},
+		},
+
+		mounted() {
+			this.prepareImages();
 		},
 
 		methods: {
-			updateImage() {
-
+			prepareImages() {
 			},
 		}
 	};
