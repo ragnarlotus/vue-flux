@@ -1,5 +1,5 @@
 <template>
-	<div :style="style">
+	<div :style="style" ref="grid">
 		<flux-cube
 			v-for="i in numTiles"
 			:key="i"
@@ -114,7 +114,7 @@
 				this.display.setSize(this.displaySize);
 
 			else
-				this.display.setSizeFrom(this.$refs.vortex);
+				this.display.setSizeFrom(this.$refs.grid);
 
 			let size = this.display.size;
 
