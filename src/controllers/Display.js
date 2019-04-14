@@ -18,10 +18,14 @@ export default class DisplayController {
 		};
 	}
 
-	setSizeFrom(element) {
+	static getSizeFrom(element) {
 		element = new DomHelper(element);
 
-		this.size = element.getSize();
+		return element.getSize();
+	}
+
+	setSizeFrom(element) {
+		this.size = DisplayController.getSizeFrom(element);
 	}
 
 	inFullScreen() {
