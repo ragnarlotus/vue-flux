@@ -11,10 +11,8 @@
 		name: 'FluxImage',
 
 		data: () => ({
-			display: undefined,
-			src: undefined,
-			size: undefined,
-			style: {
+			loadSize: undefined,
+			baseStyle: {
 				position: 'absolute',
 				top: 0,
 				left: 0,
@@ -29,12 +27,12 @@
 		}),
 
 		props: {
-			slider: {
+			displaySize: {
 				type: Object,
 				required: false,
 			},
 
-			displaySize: {
+			image: {
 				type: Object,
 				required: false,
 			},
@@ -51,7 +49,7 @@
 
 			color: {
 				type: String,
-				required: false,
+				default: () => 'transparent',
 			},
 
 			css: {
@@ -63,40 +61,55 @@
 			},
 		},
 
-		watch: {
-			displaySize: function(newSize, oldSize) {
-				this.display.setSize(newSize);
+		computed: {
+			display: function() {
+				return this.displaySize || DisplayController.getSizeFrom(this.$el);
 			},
 
-			imageSrc: function(newSrc, oldSrc) {
-				this.setImageSrc(newSrc);
+			src: function() {
+				if (this.image && this.image.src)
+					return this.image.src;
+
+				if (this.imageSrc)
+					return this.imageSrc;
+
+				return undefined;
 			},
 
-			imageSize: function(newSize, oldSize) {
-				this.setImageSize(newSize);
+			size: function() {
+				if (this.image && this.image.size)
+					return this.image.size;
+
+				if (this.imageSize)
+					return this.imageSize;
+
+				if (this.loadSize)
+					return this.loadSize;
+
+				return undefined;
 			},
 
-			color: function() {
-				this.setColor(this.color);
-			},
-		},
+			style: function() {
+				return {
+					position: 'absolute',
+					top: 0,
+					left: 0,
+					width: '100%',
+					height: '100%',
+					overflow: 'hidden',
+					backfaceVisibility: 'hidden',
+					backgroundColor: this.color,
+					backgroundImage: 'none',
+					zIndex: 'auto',
+				};
+			}
+		}
 
 		created() {
 			this.setCss(this.css);
 		},
 
 		mounted() {
-			this.display = new DisplayController(this);
-
-			if (this.slider)
-				this.display.setSize(this.slider.size);
-
-			else if (this.displaySize)
-				this.display.setSize(this.displaySize);
-
-			else
-				this.display.setSizeFrom(this.$refs.image);
-
 			if (this.imageSrc)
 				this.setImageSrc(this.imageSrc);
 
@@ -144,14 +157,6 @@
 				this.init();
 			},
 
-			getColor() {
-				return this.style.backgroundColor;
-			},
-
-			setColor(color) {
-				this.style.backgroundColor = color;
-			},
-
 			getProperties() {
 				return {
 					src: this.src,
@@ -182,7 +187,6 @@
 					image.height = Math.ceil(display.height);
 					image.left = Math.ceil((display.width - image.width) / 2);
 				}
-
 
 				image.top -= parseFloat(this.css.top);
 				image.left -= parseFloat(this.css.left);
