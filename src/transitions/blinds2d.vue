@@ -9,12 +9,15 @@
 </template>
 
 <script>
+	import BaseTransition from '@/mixins/BaseTransition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
-
-	let vf, currentImage;
 
 	export default {
 		name: 'transitionBlinds2d',
+
+		mixins: [
+			BaseTransition,
+		],
 
 		components: {
 			FluxGrid,
@@ -32,13 +35,6 @@
 			},
 		}),
 
-		props: {
-			slider: {
-				type: Object,
-				required: true,
-			},
-		},
-
 		computed: {
 			grid: function() {
 				return this.$refs.grid;
@@ -47,7 +43,6 @@
 
 		created() {
 			vf = this.slider;
-			currentImage = vf.Images.current;
 
 			let divider = vf.size.width / 10;
 
@@ -57,7 +52,7 @@
 
 			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
 
-			this.images.front = currentImage.getProperties();
+			this.images.front = this.from.getProperties();
 		},
 
 		mounted() {
