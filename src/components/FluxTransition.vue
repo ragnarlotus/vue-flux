@@ -1,37 +1,22 @@
 <template>
-	<div>
-		<component
-			:is="transition"
-			:size="displaySize"
-			:from="$refs.from"
-			:to="$refs.to">
-		</component>
-
-		<flux-image :slider="slider" :css="from.css" ref="from"></flux-image>
-		<flux-image :slider="slider" :css="to.css" ref="to"></flux-image>
-	</div>
+	<component
+		:is="componentName"
+		:size="size"
+		:from="from"
+		:to="to"
+		:options="transition.options">
+	</component>
 </template>
 
 <script>
-	import DomHelper from '@/classes/DomHelper.js';
+	import * as transitions from '@/transitions';
 
 	export default {
 		name: 'FluxTransition',
 
-		data: () => ({
-			displaySize: {
-				width: undefined,
-				height: undefined,
-			},
-
-			fromCss: {
-				zIndex: 10,
-			},
-
-			toCss: {
-				zIndex: 11,
-			},
-		}),
+		components: {
+			...transitions,
+		},
 
 		props: {
 			size: {
@@ -40,7 +25,7 @@
 			},
 
 			transition: {
-				type: Object,
+				type: [ String, Object],
 				required: true,
 			},
 
@@ -53,13 +38,31 @@
 				type: [ String, Object ],
 				required: true,
 			},
+
+			options: {
+				type: Object,
+				required: false,
+			},
+		},
+
+		computed: {
+			componentName() {
+				if (this.transition.component)
+					return this.transition.name;
+
+				let name = this.transition.name || this.transition;
+				name = 'transition'+ name[0].toUpperCase() + name.slice(1);
+
+				if (name in transitions === false)
+					return undefined;
+
+				return name;
+			},
 		},
 
 		created() {
-			this.displaySize = this.size;
-
-			if (!this.displaySize)
-				this.displaySize = (new DomHelper(this.$el)).getSize();
-		},
+			if (this.transition.component)
+				Object.assign(this.$options.components, this.transition.component);
+		}
 	}
 </script>
