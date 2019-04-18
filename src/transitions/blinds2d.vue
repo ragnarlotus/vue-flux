@@ -1,6 +1,6 @@
 <template>
 	<flux-grid
-		:num-rows="numRows"
+		:num-rows="1"
 		:num-cols="numCols"
 		:slider="slider"
 		:images="images"
@@ -24,7 +24,6 @@
 		},
 
 		data: () => ({
-			numRows: 1,
 			numCols: 1,
 			tileDuration: 800,
 			totalDuration: 0,
