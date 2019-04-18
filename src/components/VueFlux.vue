@@ -17,14 +17,14 @@
 		<div class="mask" :style="sizePx" ref="mask">
 			<flux-transition
 				v-if="Transitions.current"
-				:slider="slider"
 				:transition="Transitions.current"
 				:from="Images.current"
 				:to="Images.next"
+				:options="Transitions.options"
 				ref="transition"
 			></flux-transition>
 
-			<flux-image :slider="slider" ref="image"></flux-image>
+			<flux-image :size="size" :image="Images.current" ref="image"></flux-image>
 		</div>
 
 		<slot name="preloader"></slot>
@@ -40,14 +40,19 @@
 </template>
 
 <script>
+	// Libraries
 	import DomHelper from '@/classes/DomHelper.js';
+
+	// Controllers
 	import DisplayController from '@/controllers/Display.js';
 	import TimersController from '@/controllers/Timers.js';
 	import TransitionsController from '@/controllers/Transitions.js';
 	import ImagesController from '@/controllers/Images.js';
 	import TouchesController from '@/controllers/Touches.js';
+
+	// Components
 	import FluxImage from '@/components/FluxImage.vue';
-	import FluxTransition from '@/components/FluxTransition.js';
+	import FluxTransition from '@/components/FluxTransition.vue';
 
 	let Display, Timers, Transitions, Images, Touches;
 
@@ -90,7 +95,7 @@
 		props: {
 			options: {
 				type: Object,
-				default: () => {},
+				default: () => ({}),
 			},
 
 			transitions: {
@@ -100,17 +105,17 @@
 
 			transitionOptions: {
 				type: Object,
-				default: () => {},
+				default: () => ({}),
 			},
 
 			images: {
 				type: Array,
-				default: () => [],
+				default: () => ([]),
 			},
 
 			captions: {
 				type: Array,
-				default: () => [],
+				default: () => ([]),
 			},
 		},
 
@@ -183,7 +188,7 @@
 		},
 
 		created() {
-			Display = this.Display = new DisplayController(this, 'container');
+			Display = this.Display = new DisplayController(this);
 			Timers = this.Timers = new TimersController(this);
 			Transitions = this.Transitions = new TransitionsController(this);
 			Images = this.Images = new ImagesController(this);
@@ -192,7 +197,7 @@
 			this.updateOptions();
 			Transitions.update();
 
-			this.$emit('vf-created', this);
+			this.$emit('created');
 		},
 
 		mounted() {
@@ -208,7 +213,7 @@
 			if (this.config.bindKeys)
 				window.addEventListener('keydown', this.keydown);
 
-			this.$emit('vf-mounted', this);
+			this.$emit('mounted');
 		},
 
 		beforeDestroy() {
@@ -219,7 +224,7 @@
 
 			Timers.clear();
 
-			this.$emit('vf-destroyed', this);
+			this.$emit('destroyed');
 		},
 
 		methods: {
@@ -241,7 +246,7 @@
 					this.resize();
 				}
 
-				this.$emit('vf-options-updated', this);
+				this.$emit('options-updated');
 			},
 
 			resize() {
@@ -276,9 +281,6 @@
 					}
 
 					this.size = size;
-
-					this.$refs.image1.init();
-					this.$refs.image2.init();
 				});
 			},
 
@@ -296,7 +298,7 @@
 					if (this.config.autoplay === true)
 						this.play();
 
-					this.$emit('vf-ready', this);
+					this.$emit('ready');
 				});
 			},
 
@@ -304,7 +306,7 @@
 				if (this.config.autohideTime === 0)
 					return;
 
-				Timers.clear('mouse-over');
+				Timers.clear('mouseOver');
 
 				this.mouseOver = over;
 
@@ -341,7 +343,7 @@
 					this.showImage(index);
 				});
 
-				this.$emit('vf-play', this);
+				this.$emit('play');
 			},
 
 			stop() {
@@ -352,7 +354,7 @@
 
 				Timers.clear('image');
 
-				this.$emit('vf-stop', this);
+				this.$emit('stop');
 			},
 
 			toggleAutoplay() {
@@ -360,7 +362,7 @@
 			},
 
 			showImage(index, transition) {
-				if (this.loaded === false || this.$refs.image1 === undefined)
+				if (this.loaded === false || this.$refs.image === undefined)
 					return;
 
 				if (Transitions.current !== undefined)
@@ -369,9 +371,9 @@
 				if (Images.current.index === index)
 					return;
 
-				let next = Images.show(index, transition);
+				Images.show(index, transition);
 
-				this.$emit('vf-show', this, this[next.reference]);
+				this.$emit('show');
 			},
 
 			keydown(event) {
