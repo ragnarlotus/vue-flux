@@ -7,21 +7,15 @@ export default class ImagesController {
 		this.loading = [];
 		this.loaded = 0;
 		this.props = [];
+		this.currentIndex = 0;
 	}
 
 	get current() {
-		let refs = this.vf.$refs;
-
-		if (refs.image1 === undefined)
-			return undefined;
-
-		return refs.image2.style.zIndex === 11? refs.image2 : refs.image1;
+		return this.props[this.currentIndex];
 	}
 
 	get next() {
-		let refs = this.vf.$refs;
-
-		return refs.image1.style.zIndex === 10? refs.image1 : refs.image2;
+		return this.props[this.getIndex('next')];
 	}
 
 	preload() {
@@ -31,9 +25,6 @@ export default class ImagesController {
 		this.count = this.loading.length || 0;
 		this.loaded = 0;
 		this.props = [];
-
-		if (this.count < 2 || vf.Transitions.count === 0)
-			return;
 
 		vf.loaded = false;
 	}
@@ -46,6 +37,7 @@ export default class ImagesController {
 
 		if (img.naturalWidth || img.width) {
 			this.props[index] = {
+				index: index,
 				src: img.src,
 				size: {
 					width: img.naturalWidth || img.width,
@@ -55,18 +47,6 @@ export default class ImagesController {
 
 		} else {
 			console.warn('Image '+ vf.images[index] +' could not be loaded');
-		}
-
-		if (index === 0 && this.props[0]) {
-			vf.$refs.image1.index = 0;
-			vf.$refs.image1.setImageSrc(this.props[0].src);
-			vf.$refs.image1.setImageSize(this.props[0].size);
-		}
-
-		if (index === 1 && this.props[1]) {
-			vf.$refs.image2.index = 1;
-			vf.$refs.image2.setImageSrc(this.props[1].src);
-			vf.$refs.image2.setImageSize(this.props[1].size);
 		}
 
 		if (this.loaded === this.loading.length) {
@@ -81,15 +61,12 @@ export default class ImagesController {
 		if (typeof index === 'number')
 			return index;
 
-		let current = this.current;
-
-		if (current === undefined)
-			return undefined;
+		currentIndex = this.currentIndex;
 
 		if (index === 'previous')
-			return current.index > 0? current.index - 1 : this.count - 1;
+			return currentIndex > 0? currentIndex - 1 : this.count - 1;
 
-		return current.index + 1 < this.count? current.index + 1 : 0;
+		return currentIndex + 1 < this.count? currentIndex + 1 : 0;
 	}
 
 	show(index, transition) {
@@ -97,20 +74,11 @@ export default class ImagesController {
 
 		vf.Timers.clear('image');
 
-		index = this.getIndex(index);
-
-		let next = this.next;
-		next.index = index;
-		next.setImageSrc(this.props[index].src);
-		next.setImageSize(this.props[index].size);
-
-		next.show();
+		vf.Transitions.run(transition);
 
 		vf.$nextTick(() => {
-			vf.Transitions.set(transition);
+			this.current = this.getIndex(index);
 		});
-
-		return next;
 	}
 
 }
