@@ -17,7 +17,7 @@ export default class TimersController {
 		if (timer === undefined || timer === 'transition')
 			clearTimeout(this.transition);
 
-		if (timer === undefined || timer === 'mouse-over')
+		if (timer === undefined || timer === 'mouseOver')
 			clearTimeout(this.mouseOver);
 	}
 
