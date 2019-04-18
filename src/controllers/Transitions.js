@@ -3,10 +3,30 @@ export default class TransitionsController {
 	constructor(vf) {
 		this.vf = vf;
 
-		this.current = undefined;
-		this.last = undefined;
 		this.names = [];
 		this.count = 0;
+		this.current = undefined;
+		this.last = undefined;
+	}
+
+	get next() {
+		let nextIndex = this.names.indexOf(this.last) + 1;
+
+		if (nextIndex >= this.count)
+			nextIndex = 0;
+
+		return this.names[nextIndex];
+	}
+
+	get options() {
+		let options = this.vf.transitionOptions[this.current] || {};
+
+		let currentImage = this.vf.Images.current;
+		let nextImage = this.vf.Images.next;
+
+		options.direction = nextImage.index < currentImage.index? 'left' : 'right';
+
+		return options;
 	}
 
 	update() {
@@ -18,83 +38,44 @@ export default class TransitionsController {
 
 		this.names = Object.keys(transitions);
 		this.count = this.names.length;
+		this.last = this.names[this.count - 1];
 
-		if (this.count > 0)
-			this.last = this.count - 1;
-
-		vf.$emit('vf-transitions-updated', vf);
+		vf.$emit('transitions-updated');
 	}
 
-	next() {
-		if (this.count === 0)
-			return undefined;
-
-		let index = this.last + 1;
-
-		if (index >= this.count)
-			index = 0;
-
-		return this.names[index];
-	}
-
-	set(transition) {
+	run(transition) {
 		if (transition === undefined)
-			transition = this.next();
+			transition = this.next;
 
-		if (transition) {
-			this.last = this.names.indexOf(transition);
-			this.current = transition;
-		}
+		this.current = transition;
 
 		this.vf.$nextTick(() => {
 			this.start(transition);
 		});
 	}
 
-	setOptions(transition, transitionOptions = {}) {
-		let userOptions = {};
-
-		if (this.vf.transitionOptions && this.vf.transitionOptions[this.current])
-			userOptions = this.vf.transitionOptions[this.current];
-
-		if (transitionOptions.direction === undefined) {
-			let currentImage = this.vf.Images.current;
-			let nextImage = this.vf.Images.next;
-
-			transitionOptions.direction = nextImage.index < currentImage.index? 'left' : 'right';
-		}
-
-		Object.assign(transition, transitionOptions, userOptions);
-	}
-
-	start(transition) {
+	start() {
 		let vf = this.vf;
 
-		vf.$emit('vf-transition-start', vf, transition);
+		vf.$emit('transition-start', this.current);
 
-		let timeout = 0;
-
-		if (transition !== undefined)
-			timeout = vf.$refs.transition.totalDuration;
+		let timeout = vf.$refs.transition.totalDuration;
 
 		vf.Timers.set('transition', timeout, () => {
-			this.end(transition);
+			this.end();
 		});
 	}
 
-	end(transition) {
-		let vf = this.vf;
-
-		let currentImage = vf.Images.current;
-		let nextImage = vf.Images.next;
-
-		currentImage.setCss({ zIndex: 10 });
-		nextImage.setCss({ zIndex: 11 });
-
+	end() {
+		this.last = current;
 		this.current = undefined;
 
 		vf.$nextTick(() => {
-			if (vf.config.infinite === false && nextImage.index >= vf.Images.count - 1) {
+			let vf = this.vf;
+			let currentImage = vf.Images.current;
+			let lastImageIndex = vf.Images.count - 1;
+
+			if (vf.config.infinite === false && currentImage.index >= lastImageIndex) {
 				vf.stop();
 				return;
 			}
@@ -105,7 +86,7 @@ export default class TransitionsController {
 				});
 			}
 
-			vf.$emit('vf-transition-end', vf, transition);
+			vf.$emit('transition-end', this.last);
 		});
 	}
 
