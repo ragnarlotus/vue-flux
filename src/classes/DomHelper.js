@@ -5,6 +5,13 @@ export default class DomHelper {
 		this.parent = node.parentNode;
 	}
 
+	get size() {
+		return {
+			width: this.getWidth(),
+			height: this.getHeight()
+		};
+	}
+
 	hasWidth() {
 		return this.parent.clientWidth? true : false;
 	};
@@ -35,13 +42,6 @@ export default class DomHelper {
 			height = window.getComputedStyle(this.parent).height;
 
 		return parseFloat(height);
-	}
-
-	getSize() {
-		return {
-			width: this.getWidth(),
-			height: this.getHeight()
-		};
 	}
 
 }
