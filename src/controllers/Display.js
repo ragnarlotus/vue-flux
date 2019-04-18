@@ -19,9 +19,7 @@ export default class DisplayController {
 	}
 
 	static getSizeFrom(element) {
-		element = new DomHelper(element);
-
-		return element.getSize();
+		return (new DomHelper(this.$el)).size;
 	}
 
 	setSizeFrom(element) {
@@ -51,7 +49,7 @@ export default class DisplayController {
 			return method in element? element[method]() || true : false;
 		});
 
-		this.vm.$emit('vf-enter-fullscreen', this.vm);
+		this.vm.$emit('enter-fullscreen', this.vm);
 	}
 
 	exitFullScreen() {
@@ -66,7 +64,7 @@ export default class DisplayController {
 			return method in document? document[method]() || true : false;
 		});
 
-		this.vm.$emit('vf-exit-fullscreen', this.vm);
+		this.vm.$emit('exit-fullscreen', this.vm);
 	}
 
 }
