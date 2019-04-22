@@ -1,11 +1,10 @@
 <template>
-	<flux-image :slider="slider" :image-src="image.src" :image-size="image.size" ref="image"></flux-image>
+	<flux-image :image="image" :size="size" ref="image"></flux-image>
 </template>
 
 <script>
+	import BaseTransition from '@/mixins/BaseTransition.js';
 	import FluxImage from '@/components/FluxImage.vue';
-
-	let vf, currentImage, nextImage;
 
 	export default {
 		name: 'transitionKenburn',
@@ -14,34 +13,22 @@
 			FluxImage,
 		},
 
+		mixins: [
+			BaseTransition,
+		],
+
 		data: () => ({
 			totalDuration: 1500,
 			easing: 'linear',
-			image: {},
+			image: undefined,
 		}),
 
-		props: {
-			slider: {
-				type: Object,
-				required: true,
-			},
-		},
-
 		created() {
-			vf = this.slider;
-			currentImage = vf.Images.current;
-			nextImage = vf.Images.next;
-
-			vf.Transitions.setOptions(this);
-
-			let image = this.direction === 'left'? nextImage : currentImage;
-
-			this.image = image.getProperties();
+			this.image = this.direction === 'left'? this.to : this.from;
+			this.mask.overflow = 'hidden';
 		},
 
 		mounted() {
-			vf.mask.style.overflow = 'hidden';
-
 			let transform = this.getTransform();
 
 			if (this.direction !== 'left')
@@ -51,23 +38,11 @@
 				this.focusOut(transform);
 		},
 
-		destroyed() {
-			vf.mask.style.overflow = 'visible';
-
-			currentImage.setCss({
-				transition: 'none',
-				opacity: 1,
-			});
-		},
-
 		methods: {
 			focusIn(transform) {
 				this.$refs.image.setCss({
 					transformOrigin: transform.originX +' '+ transform.originY,
-					zIndex: 12,
 				});
-
-				currentImage.hide();
 
 				this.$refs.image.transform({
 					transition: 'all '+ this.totalDuration +'ms '+ this.easing,
@@ -77,15 +52,9 @@
 			},
 
 			focusOut(transform) {
-				currentImage.setCss({
-					transition: 'opacity '+ this.totalDuration +'ms '+ this.easing,
-					opacity: 0,
-				});
-
 				this.$refs.image.setCss({
 					transform: 'scale('+ transform.scale +') translate('+ transform.translateX +', '+ transform.translateY +')',
 					transformOrigin: transform.originX +' '+ transform.originY,
-					zIndex: 11,
 				});
 
 				this.$refs.image.transform({
