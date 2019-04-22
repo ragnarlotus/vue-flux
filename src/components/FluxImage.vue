@@ -5,7 +5,7 @@
 </template>
 
 <script>
-	import DomHelper from '@/classes/DomHelper.js';
+	import DomHelper from '@/libraries/DomHelper.js';
 
 	export default {
 		name: 'FluxImage',
@@ -14,6 +14,8 @@
 			srcSize: undefined,
 			baseStyle: {
 				position: 'absolute',
+				top: 0,
+				left: 0,
 				overflow: 'hidden',
 				backfaceVisibility: 'hidden',
 				backgroundImage: 'none',
@@ -22,11 +24,6 @@
 		}),
 
 		props: {
-			size: {
-				type: Object,
-				default: () => ({}),
-			},
-
 			image: {
 				type: [ String, Object ],
 				default: () => ({}),
@@ -37,22 +34,24 @@
 				default: () => 'transparent',
 			},
 
+			size: {
+				type: Object,
+				default: () => ({}),
+			},
+
 			css: {
 				type: Object,
-				default: () => ({
-					top: 0,
-					left: 0,
-				}),
+				default: () => ({}),
 			},
 		},
 
 		computed: {
 			viewSize() {
-				return this.size || (new DomHelper(this.$el)).size;
+				return this.size || DomHelper.sizeFrom(this.$el);
 			},
 
 			imageSrc() {
-				return typeof this.image === 'string'? this.image : this.image.src;
+				return this.image.src || this.image;
 			},
 
 			imageSize() {
@@ -99,8 +98,8 @@
 					image.left = Math.ceil((view.width - image.width) / 2);
 				}
 
-				image.top -= parseFloat(this.css.top);
-				image.left -= parseFloat(this.css.left);
+				image.top -= parseFloat(this.baseStyle.top);
+				image.left -= parseFloat(this.baseStyle.left);
 
 				return {
 					top: 0,
