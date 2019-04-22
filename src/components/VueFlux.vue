@@ -1,6 +1,7 @@
 <template>
-	<div class="vue-flux"
-		:class="Display.inFullScreen()? 'fullscreen' : ''" ref="container"
+	<div ref="container"
+		:class="containerClass"
+		:style="containerStyle"
 		@mousemove="toggleMouseOver(true)"
 		@mouseleave="toggleMouseOver(false)"
 		@dblclick="toggleFullScreen()"
@@ -14,18 +15,17 @@
 			@load="Images.add(index)"
 			@error="Images.add(index)">
 
-		<div class="mask" :style="sizePx" ref="mask">
-			<flux-transition
-				v-if="Transitions.current"
-				:transition="Transitions.current"
-				:from="Images.current"
-				:to="Images.next"
-				:options="Transitions.options"
-				ref="transition"
-			></flux-transition>
+		<flux-transition
+			v-if="Transitions.current"
+			:transition="Transitions.current"
+			:size="size"
+			:from="Images.previous"
+			:to="Images.current"
+			:options="Transitions.options"
+			ref="transition">
+		</flux-transition>
 
-			<flux-image :size="size" :image="Images.current" ref="image"></flux-image>
-		</div>
+		<flux-image :size="size" :image="Images.current" ref="image"></flux-image>
 
 		<slot name="preloader"></slot>
 
@@ -41,7 +41,7 @@
 
 <script>
 	// Libraries
-	import DomHelper from '@/classes/DomHelper.js';
+	import DomHelper from '@/libraries/DomHelper.js';
 
 	// Controllers
 	import DisplayController from '@/controllers/Display.js';
@@ -51,8 +51,8 @@
 	import TouchesController from '@/controllers/Touches.js';
 
 	// Components
-	import FluxImage from '@/components/FluxImage.vue';
 	import FluxTransition from '@/components/FluxTransition.vue';
+	import FluxImage from '@/components/FluxImage.vue';
 
 	let Display, Timers, Transitions, Images, Touches;
 
@@ -72,8 +72,6 @@
 				allowFullscreen: false,
 				infinite: true,
 				delay: 5000,
-				width: '100%',
-				height: 'auto',
 				autohideTime: 1500,
 				lazyLoad: true,
 				lazyLoadAfter: 3,
@@ -99,13 +97,8 @@
 			},
 
 			transitions: {
-				type: Object,
+				type: Array,
 				required: true,
-			},
-
-			transitionOptions: {
-				type: Object,
-				default: () => ({}),
 			},
 
 			images: {
@@ -120,51 +113,54 @@
 		},
 
 		computed: {
-			slider: function() {
-				return this;
-			},
-
-			preloader: function() {
+			preloader() {
 				return this.getSlot('preloader');
 			},
 
-			caption: function() {
+			caption() {
 				return this.getSlot('caption');
 			},
 
-			controls: function() {
+			controls() {
 				return this.getSlot('controls');
 			},
 
-			index: function() {
+			index() {
 				return this.getSlot('index');
 			},
 
-			pagination: function() {
+			pagination() {
 				return this.getSlot('pagination');
 			},
 
-			mask: function() {
-				return this.$refs.mask;
+			containerClass() {
+				let cc = 'vue-flux';
+
+				if (Display.inFullScreen())
+					cc += ' fullscreen';
+
+				return cc;
 			},
 
-			sizePx: function() {
-				if (typeof this.size.width !== 'number' || typeof this.size.height !== 'number')
-					return {};
+			containerStyle() {
+				let cs = {};
 
-				return {
-					width: this.size.width +'px',
-					height: this.size.height +'px',
-				};
+				if (this.size.width)
+					cs.width = this.size.width +'px';
+
+				if (this.size.height)
+					cs.height = this.size.height +'px';
+
+				return cs;
 			},
 		},
 
 		watch: {
-			options: function() {
+			options() {
 				this.updateOptions();
 			},
 
-			transitions: function() {
+			transitions() {
 				let wasPlaying = this.config.autoplay;
 
 				this.stop();
@@ -174,7 +170,7 @@
 				wasPlaying && this.start();
 			},
 
-			images: function() {
+			images() {
 				let wasPlaying = this.config.autoplay;
 
 				this.stop();
@@ -229,56 +225,21 @@
 
 		methods: {
 			updateOptions() {
-				let currentSize = {
-					width: this.config.width,
-					height: this.config.height,
-				};
+				Object.assign(this.config, this.options);
 
-				this.config = {
-					...this.config,
-					...this.options,
-				};
-
-				if (currentSize.width !== this.config.width || currentSize.height !== this.config.height) {
-					this.size.width = this.config.width;
-					this.size.height = this.config.height;
-
-					this.resize();
-				}
+				this.resize();
 
 				this.$emit('options-updated');
 			},
 
 			resize() {
-				let size = {};
-
-				if (this.config.width.indexOf('px') !== -1)
-					size.width = parseFloat(this.config.width);
-
-				if (this.config.height.indexOf('px') !== -1)
-					size.height = parseFloat(this.config.height);
-
-				if (size.width && size.height) {
-					this.size = size;
-					return;
-				}
+				this.size = {};
 
 				this.$nextTick(() => {
-					let container = new DomHelper(this.$refs.mask);
+					let size = DomHelper.sizeFrom(this.$refs.container);
 
-					// Find width
-					if (!size.width)
-						size.width = container.getWidth();
-
-					// Find height
-					if (this.config.height === 'auto') {
-						let height = size.width / 16 * 9;
-
-						if (container.hasHeight())
-							height = container.getHeight();
-
-						size.height = height;
-					}
+					if (!size.height)
+						size.height = size.width / 16 * 9;
 
 					this.size = size;
 				});
@@ -333,7 +294,7 @@
 			},
 
 			toggleFullScreen() {
-				Display.inFullScreen()? this.exitFullScreen() : this.exitFullScreen();
+				Display.inFullScreen()? this.exitFullScreen() : this.enterFullScreen();
 			},
 
 			play(index = 'next', delay) {
