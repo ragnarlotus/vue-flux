@@ -8,6 +8,11 @@ export default class ImagesController {
 		this.loaded = 0;
 		this.props = [];
 		this.currentIndex = 0;
+		this.previousIndex = undefined;
+	}
+
+	get previous() {
+		return this.props[this.previousIndex];
 	}
 
 	get current() {
@@ -61,7 +66,7 @@ export default class ImagesController {
 		if (typeof index === 'number')
 			return index;
 
-		currentIndex = this.currentIndex;
+		let currentIndex = this.currentIndex;
 
 		if (index === 'previous')
 			return currentIndex > 0? currentIndex - 1 : this.count - 1;
@@ -70,14 +75,14 @@ export default class ImagesController {
 	}
 
 	show(index, transition) {
-		let vf = this.vf;
+		this.vf.Timers.clear('image');
 
-		vf.Timers.clear('image');
+		this.previousIndex = this.currentIndex;
 
-		vf.Transitions.run(transition);
+		this.vf.Transitions.run(transition);
 
-		vf.$nextTick(() => {
-			this.current = this.getIndex(index);
+		this.vf.$nextTick(() => {
+			this.currentIndex = this.getIndex(index);
 		});
 	}
 
