@@ -117,6 +117,9 @@ Check the [Changelog](https://github.com/deulos/vue-flux/wiki/Changelog) for upd
 
 This slider was inspired by [Flux Slider](http://joelambert.co.uk/flux/).
 
+Pictures taken from [dconnolly/chromecast-backgrounds
+](https://github.com/dconnolly/chromecast-backgrounds/blob/master/backgrounds.json).
+
 ## Contributing
 
 Contributions, questions and comments are all welcome and encouraged.
