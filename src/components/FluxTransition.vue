@@ -1,15 +1,17 @@
 <template>
-	<component
-		:is="componentName"
-		:size="size"
-		:from="from"
-		:to="to"
-		:options="transition.options">
-	</component>
+	<div class="mask" :style="maskStyle" ref="mask">
+		<component
+			:is="componentName"
+			:size="size"
+			:from="from"
+			:to="to"
+			:options="transition.options">
+		</component>
+	</div>
 </template>
 
 <script>
-	import * as transitions from '@/transitions';
+	import transitions from '@/transitions';
 
 	export default {
 		name: 'FluxTransition',
@@ -18,6 +20,13 @@
 			...transitions,
 		},
 
+		data: () => ({
+			baseStyle: {
+				position: 'relative',
+				overflow: 'visible',
+			},
+		}),
+
 		props: {
 			size: {
 				type: Object,
@@ -25,7 +34,7 @@
 			},
 
 			transition: {
-				type: [ String, Object],
+				type: [ String, Object ],
 				required: true,
 			},
 
@@ -46,6 +55,14 @@
 		},
 
 		computed: {
+			maskStyle() {
+				return {
+					...this.baseStyle,
+					width: this.size.width +'px' || '100%',
+					height: this.size.height +'px' || '100%',
+				};
+			},
+
 			componentName() {
 				if (this.transition.component)
 					return this.transition.name;
