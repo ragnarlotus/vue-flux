@@ -1,44 +1,34 @@
-<template></template>
+<template>
+	<flux-image :image="from" :size="size" :css="imageCss" ref="from"></flux-image>
+</template>
 
 <script>
-	let vf, currentImage, nextImage;
+	import BaseTransition from '@/mixins/BaseTransition.js';
+	import FluxImage from '@/components/FluxImage.vue';
 
 	export default {
 		name: 'transitionFade',
 
+		components: {
+			FluxImage,
+		},
+
+		mixins: [
+			BaseTransition,
+		],
+
 		data: () => ({
 			totalDuration: 1200,
 			easing: 'ease-in',
+			imageCss: {
+				zIndex: 1,
+			},
 		}),
 
-		props: {
-			slider: {
-				type: Object,
-				required: true,
-			},
-		},
-
-		created() {
-			vf = this.slider;
-			currentImage = vf.Images.current;
-			nextImage = vf.Images.next;
-
-			vf.Transitions.setOptions(this);
-		},
-
 		mounted() {
-			currentImage.setCss({
+			this.$refs.from.transform({
 				transition: 'opacity '+ this.totalDuration +'ms '+ this.easing,
 				opacity: 0,
-			});
-		},
-
-		destroyed() {
-			currentImage.hide();
-
-			currentImage.setCss({
-				transition: 'none',
-				opacity: 1,
 			});
 		},
 	};
