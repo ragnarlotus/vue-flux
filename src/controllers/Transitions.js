@@ -3,26 +3,27 @@ export default class TransitionsController {
 	constructor(vf) {
 		this.vf = vf;
 
-		this.names = [];
-		this.count = 0;
+		this.transitions = [];
 		this.current = undefined;
-		this.last = undefined;
+		this.currentIndex = undefined;
+		this.lastIndex = undefined;
 	}
 
-	get next() {
-		let nextIndex = this.names.indexOf(this.last) + 1;
+	get nextIndex() {
+		let nextIndex = this.lastIndex + 1;
 
-		if (nextIndex >= this.count)
+		if (nextIndex >= this.transitions.length)
 			nextIndex = 0;
 
-		return this.names[nextIndex];
+		return nextIndex;
 	}
 
 	get options() {
-		let options = this.vf.transitionOptions[this.current] || {};
+		let options = this.transitions[this.currentIndex].options || {};
 
-		let currentImage = this.vf.Images.current;
-		let nextImage = this.vf.Images.next;
+		let vf = this.vf;
+		let currentImage = vf.Images.current;
+		let nextImage = vf.Images.next;
 
 		options.direction = nextImage.index < currentImage.index? 'left' : 'right';
 
@@ -30,27 +31,30 @@ export default class TransitionsController {
 	}
 
 	update() {
-		let vf = this.vf;
+		this.transitions = this.vf.transitions;
+		this.lastIndex = this.transitions.length - 1;
 
-		let transitions = vf.transitions;
-
-		Object.assign(vf.$options.components, transitions);
-
-		this.names = Object.keys(transitions);
-		this.count = this.names.length;
-		this.last = this.names[this.count - 1];
-
-		vf.$emit('transitions-updated');
+		this.vf.$emit('transitions-updated');
 	}
 
 	run(transition) {
-		if (transition === undefined)
+		if (transition === undefined) {
+			this.currentIndex = this.nextIndex;
 			transition = this.next;
 
-		this.current = transition;
+		} else {
+			this.currentIndex = this.transitions.indexOf(transition);
+
+			if (this.currentIndex === -1) {
+				console.warn('Transition not found: ', transition);
+				return;
+			}
+		}
+
+		this.current = this.transitions[this.currentIndex];
 
 		this.vf.$nextTick(() => {
-			this.start(transition);
+			this.start();
 		});
 	}
 
@@ -59,7 +63,7 @@ export default class TransitionsController {
 
 		vf.$emit('transition-start', this.current);
 
-		let timeout = vf.$refs.transition.totalDuration;
+		let timeout = vf.$refs.transition.$children[0].totalDuration;
 
 		vf.Timers.set('transition', timeout, () => {
 			this.end();
@@ -67,11 +71,13 @@ export default class TransitionsController {
 	}
 
 	end() {
-		this.last = current;
+		let vf = this.vf;
+
+		this.lastIndex = this.currentIndex;
 		this.current = undefined;
+		this.currentIndex = undefined;
 
 		vf.$nextTick(() => {
-			let vf = this.vf;
 			let currentImage = vf.Images.current;
 			let lastImageIndex = vf.Images.count - 1;
 
@@ -86,7 +92,7 @@ export default class TransitionsController {
 				});
 			}
 
-			vf.$emit('transition-end', this.last);
+			vf.$emit('transition-end', this.transitions[this.lastIndex]);
 		});
 	}
 
