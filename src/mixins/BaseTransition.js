@@ -24,7 +24,7 @@ export default {
 	computed: {
 		mask() {
 			return this.$parent.baseStyle;
-		}
+		},
 	},
 
 	created() {
