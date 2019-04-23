@@ -1,19 +1,18 @@
 <template>
-	<flux-wrapper ref="wrapper">
+	<flux-wrapper :css="wrapperCss" ref="wrapper">
 		<flux-image
-			:slider="slider"
-			:image-src="image.src"
-			:image-size="image.size"
+			:image="from"
+			:size="size"
+			:css="imageCss"
 			ref="image">
 		</flux-image>
 	</flux-wrapper>
 </template>
 
 <script>
+	import BaseTransition from '@/mixins/BaseTransition.js';
 	import FluxWrapper from '@/components/FluxWrapper.vue';
 	import FluxImage from '@/components/FluxImage.vue';
-
-	let vf, currentImage, nextImage;
 
 	export default {
 		name: 'transitionSwipe',
@@ -23,68 +22,37 @@
 			FluxImage,
 		},
 
+		mixins: [
+			BaseTransition,
+		],
+
 		data: () => ({
 			totalDuration: 1400,
 			easing: 'ease-in-out',
-			wrapperCss: {
-				overflow: 'hidden',
-			},
-			image: {},
+			wrapperCss: {},
+			imageCss: {},
 		}),
 
-		props: {
-			slider: {
-				type: Object,
-				required: true,
-			},
-		},
-
-		computed: {
-			wrapper: function() {
-				return this.$refs.wrapper;
-			},
-		},
-
 		created() {
-			vf = this.slider;
-			currentImage = vf.Images.current;
-			nextImage = vf.Images.next;
-
-			this.image = {
-				...this.image,
-				...currentImage.getProperties(),
-			};
-
-			vf.Transitions.setOptions(this);
-
 			if (this.direction === 'left') {
-				this.wrapperCss.left = 'auto';
-				this.wrapperCss.right = 0;
-
-				this.image.css = {
-					...this.image.css,
+				Object.assign(this.wrapperCss, {
 					left: 'auto',
 					right: 0,
-					width: vf.size.width +'px',
-				};
+				});
+
+				Object.assign(this.imageCss, {
+					left: 'auto',
+					right: 0,
+					width: this.size.width +'px',
+				});
 			}
 		},
 
 		mounted() {
-			this.wrapper.setCss(this.wrapperCss);
-
-			currentImage.hide();
-
-			this.$refs.image.setCss(this.image.css);
-
-			this.wrapper.transform({
+			this.$refs.wrapper.transform({
 				transition: 'width '+ this.totalDuration +'ms '+ this.easing,
 				width: 0,
 			});
-		},
-
-		destroyed() {
-			nextImage.show();
-		},
+		}
 	};
 </script>
