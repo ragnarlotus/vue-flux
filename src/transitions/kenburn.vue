@@ -25,44 +25,23 @@
 
 		created() {
 			this.image = this.direction === 'left'? this.to : this.from;
-			this.mask.overflow = 'hidden';
 		},
 
 		mounted() {
 			let transform = this.getTransform();
 
-			if (this.direction !== 'left')
-				this.focusIn(transform);
+			this.$refs.image.setCss({
+				transformOrigin: transform.originX +' '+ transform.originY,
+			});
 
-			else
-				this.focusOut(transform);
+			this.$refs.image.transform({
+				transition: 'all '+ this.totalDuration +'ms '+ this.easing,
+				transform: 'scale('+ transform.scale +') translate('+ transform.translateX +', '+ transform.translateY +')',
+				opacity: 0,
+			});
 		},
 
 		methods: {
-			focusIn(transform) {
-				this.$refs.image.setCss({
-					transformOrigin: transform.originX +' '+ transform.originY,
-				});
-
-				this.$refs.image.transform({
-					transition: 'all '+ this.totalDuration +'ms '+ this.easing,
-					transform: 'scale('+ transform.scale +') translate('+ transform.translateX +', '+ transform.translateY +')',
-					opacity: 0,
-				});
-			},
-
-			focusOut(transform) {
-				this.$refs.image.setCss({
-					transform: 'scale('+ transform.scale +') translate('+ transform.translateX +', '+ transform.translateY +')',
-					transformOrigin: transform.originX +' '+ transform.originY,
-				});
-
-				this.$refs.image.transform({
-					transition: 'all '+ this.totalDuration +'ms '+ this.easing,
-					transform: 'scale(1) translate(0, 0)',
-				});
-			},
-
 			getTransform() {
 				let origin = Math.floor((Math.random() * 4) + 1);
 
