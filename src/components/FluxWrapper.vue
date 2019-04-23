@@ -11,6 +11,7 @@
 		data: () => ({
 			style: {
 				position: 'absolute',
+				overflow: 'hidden',
 				top: 0,
 				left: 0,
 				width: '100%',
@@ -18,6 +19,23 @@
 				zIndex: 12,
 			},
 		}),
+
+		props: {
+			css: {
+				type: Object,
+				default: () => ({}),
+			},
+		},
+
+		watch: {
+			css() {
+				this.setCss(this.css);
+			},
+		},
+
+		created() {
+			this.setCss(this.css);
+		},
 
 		methods: {
 			setCss(css) {
