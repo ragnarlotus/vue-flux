@@ -102,8 +102,8 @@
 				image.left -= parseFloat(this.baseStyle.left);
 
 				return {
-					top: 0,
-					left: 0,
+					top: this.baseStyle.top !== 'auto'? 0 : 'auto',
+					left: this.baseStyle.left !== 'auto'? 0 : 'auto',
 					backgroundImage: image.src,
 					backgroundSize: image.width +'px '+ image.height +'px',
 					backgroundPosition: image.left +'px '+ image.top +'px',
