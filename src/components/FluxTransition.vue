@@ -23,7 +23,8 @@
 		data: () => ({
 			baseStyle: {
 				position: 'relative',
-				overflow: 'visible',
+				overflow: 'hidden',
+				zIndex: 1,
 			},
 		}),
 
