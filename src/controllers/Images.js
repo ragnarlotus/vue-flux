@@ -78,12 +78,9 @@ export default class ImagesController {
 		this.vf.Timers.clear('image');
 
 		this.previousIndex = this.currentIndex;
+		this.currentIndex = this.getIndex(index);
 
 		this.vf.Transitions.run(transition);
-
-		this.vf.$nextTick(() => {
-			this.currentIndex = this.getIndex(index);
-		});
 	}
 
 }
