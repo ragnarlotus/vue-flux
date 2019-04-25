@@ -24,6 +24,7 @@
 			baseStyle: {
 				position: 'relative',
 				overflow: 'hidden',
+				perspective: 'none',
 				zIndex: 1,
 			},
 		}),
