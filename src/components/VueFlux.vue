@@ -1,7 +1,7 @@
 <template>
 	<div ref="container"
-		:class="containerClass"
-		:style="containerStyle"
+		class="vue-flux"
+		:style="style"
 		@mousemove="toggleMouseOver(true)"
 		@mouseleave="toggleMouseOver(false)"
 		@dblclick="toggleFullScreen()"
@@ -113,45 +113,16 @@
 		},
 
 		computed: {
-			preloader() {
-				return this.getSlot('preloader');
-			},
-
-			caption() {
-				return this.getSlot('caption');
-			},
-
-			controls() {
-				return this.getSlot('controls');
-			},
-
-			index() {
-				return this.getSlot('index');
-			},
-
-			pagination() {
-				return this.getSlot('pagination');
-			},
-
-			containerClass() {
-				let cc = 'vue-flux';
-
-				if (Display.inFullScreen())
-					cc += ' fullscreen';
-
-				return cc;
-			},
-
-			containerStyle() {
-				let cs = {};
+			style() {
+				let style = {};
 
 				if (this.size.width)
-					cs.width = this.size.width +'px';
+					style.width = this.size.width +'px';
 
 				if (this.size.height)
-					cs.height = this.size.height +'px';
+					style.height = this.size.height +'px';
 
-				return cs;
+				return style;
 			},
 		},
 
@@ -352,19 +323,9 @@
 	.vue-flux {
 		position: relative;
 
-		&.allowFullscreen {
-			width: 100%;
-			height: 100%;
-		}
-
 		img {
 			position: absolute;
 			visibility: hidden;
 		}
-	}
-
-	.mask {
-		position: relative;
-		overflow: visible;
 	}
 </style>
