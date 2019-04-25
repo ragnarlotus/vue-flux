@@ -1,5 +1,5 @@
 <template>
-	<flux-image :image="image" :size="size" ref="image"></flux-image>
+	<flux-image :image="from" :size="size" ref="image"></flux-image>
 </template>
 
 <script>
@@ -22,10 +22,6 @@
 			easing: 'linear',
 			image: undefined,
 		}),
-
-		created() {
-			this.image = this.direction === 'left'? this.to : this.from;
-		},
 
 		mounted() {
 			let transform = this.getTransform();
