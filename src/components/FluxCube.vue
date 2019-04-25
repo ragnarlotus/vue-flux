@@ -16,8 +16,6 @@
 <script>
 	import FluxImage from '@/components/FluxImage.vue';
 
-	const SIDES = [ 'front', 'top', 'back', 'bottom', 'left', 'right' ];
-
 	export default {
 		name: 'FluxCube',
 
@@ -26,7 +24,7 @@
 		},
 
 		data: () => ({
-			sides: SIDES,
+			sides: [ 'front', 'top', 'back', 'bottom', 'left', 'right' ],
 			style: {
 				position: 'absolute',
 				top: 0,
@@ -111,8 +109,11 @@
 				let css = {};
 
 				if (this.sideDefined(side)) {
-					css.top = this.css.top;
-					css.left = this.css.left;
+					if (this.css.top)
+						css.top = this.css.top;
+
+					if (this.css.left)
+						css.left = this.css.left;
 				}
 
 				side = side.charAt(0).toUpperCase() + side.slice(1);
@@ -159,7 +160,7 @@
 
 			getLeftCss(css) {
 				let size = {
-					width: this.sideDefined('left')? this.size.width : this.size.height,
+					width: this.getImage('left')? this.size.width : this.size.height,
 					height: this.size.height,
 				};
 
@@ -180,7 +181,7 @@
 
 			getRightCss(css) {
 				let size = {
-					width: this.sideDefined('right')? this.size.width : this.size.height,
+					width: this.getImage('right')? this.size.width : this.size.height,
 					height: this.size.height,
 				};
 
