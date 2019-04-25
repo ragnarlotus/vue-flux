@@ -1,15 +1,14 @@
 <template>
-	<flux-wrapper ref="wrapper">
-		<flux-image :slider="slider" :image-src="images.left.src" :image-size="images.left.size" ref="imageLeft"></flux-image>
-		<flux-image :slider="slider" :image-src="images.right.src" :image-size="images.right.size" ref="imageRight"></flux-image>
+	<flux-wrapper :css="wrapperCss" ref="wrapper">
+		<flux-image :image="from" :size="size" ref="left"></flux-image>
+		<flux-image :image="to" :size="size" ref="right"></flux-image>
 	</flux-wrapper>
 </template>
 
 <script>
+	import BaseTransition from '@/mixins/BaseTransition.js';
 	import FluxWrapper from '@/components/FluxWrapper.vue';
 	import FluxImage from '@/components/FluxImage.vue';
-
-	let vf, currentImage, nextImage;
 
 	export default {
 		name: 'transitionSlide',
@@ -19,86 +18,33 @@
 			FluxImage,
 		},
 
+		mixins: [
+			BaseTransition,
+		],
+
 		data: () => ({
 			totalDuration: 1400,
 			easing: 'ease-in-out',
 			wrapperCss: {
 				width: '200%',
 			},
-			images: {
-				left: undefined,
-				right: undefined,
-			},
 		}),
 
-		props: {
-			slider: {
-				type: Object,
-				required: true,
-			},
-		},
-
-		computed: {
-			wrapper: function() {
-				return this.$refs.wrapper;
-			},
-		},
-
-		created() {
-			vf = this.slider;
-			currentImage = vf.Images.current;
-			nextImage = vf.Images.next;
-
-			vf.Transitions.setOptions(this);
-
-			this.images.left = currentImage.getProperties();
-			this.images.right = nextImage.getProperties();
-
-			if (this.direction === 'left') {
-				this.images.left = nextImage.getProperties();
-				this.images.right = currentImage.getProperties();
-
-				this.wrapperCss.left = 'auto';
-				this.wrapperCss.right = 0;
-			}
-		},
-
 		mounted() {
-			currentImage.hide();
-
-			vf.mask.style.overflow = 'hidden';
-
-			this.wrapper.setCss(this.wrapperCss);
-
-			this.$refs.imageLeft.setCss({
+			this.$refs.left.setCss({
 				width: '50%',
 			});
 
-			this.$refs.imageRight.setCss({
+			this.$refs.right.setCss({
 				left: 'auto',
 				right: 0,
 				width: '50%',
 			});
 
-			this.wrapper.transform({
+			this.$refs.wrapper.transform({
 				transition: 'transform '+ this.totalDuration +'ms '+ this.easing,
-				transform: 'translateX('+ this.getTx() +'px)',
+				transform: 'translateX('+ -this.size.width +'px)',
 			});
-		},
-
-		destroyed() {
-			vf.mask.style.overflow = 'visible';
-		},
-
-		methods: {
-			getTx() {
-				let tx = -vf.size.width;
-
-				if (this.direction === 'left')
-					tx = Math.abs(tx);
-
-				return tx;
-			},
 		},
 	};
 </script>
