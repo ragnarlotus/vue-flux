@@ -109,6 +109,12 @@ If you find yourself running into issues during installation or running the slid
 
 You can view the full documentation at the project's [Wiki](https://github.com/deulos/vue-flux/wiki) with examples and detailed information.
 
+## To do
+
+* CSS mask-image transitions
+* SVG animated transitions
+* Displacement transitions
+
 ## Changelog
 
 Check the [Changelog](https://github.com/deulos/vue-flux/wiki/Changelog) for update info.
