@@ -19,15 +19,7 @@ export default class TransitionsController {
 	}
 
 	get options() {
-		let options = this.transitions[this.currentIndex].options || {};
-
-		let vf = this.vf;
-		let currentImage = vf.Images.current;
-		let nextImage = vf.Images.next;
-
-		options.direction = nextImage.index < currentImage.index? 'left' : 'right';
-
-		return options;
+		return this.transitions[this.currentIndex].options || {};
 	}
 
 	update() {
