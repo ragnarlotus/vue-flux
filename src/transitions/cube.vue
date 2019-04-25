@@ -1,11 +1,10 @@
 <template>
-	<flux-cube :slider="slider" :images="images" ref="cube"></flux-cube>
+	<flux-cube :images="images" :size="size" ref="cube"></flux-cube>
 </template>
 
 <script>
+	import BaseTransition from '@/mixins/BaseTransition.js';
 	import FluxCube from '@/components/FluxCube.vue';
-
-	let vf, currentImage, nextImage;
 
 	export default {
 		name: 'transitionCube',
@@ -14,61 +13,35 @@
 			FluxCube
 		},
 
+		mixins: [
+			BaseTransition,
+		],
+
 		data: () => ({
 			images: {
 				front: {},
-				left: {},
 				right: {},
 			},
-			totalDuration: 1400,
+			totalDuration: 1400000,
 			perspective: '1600px',
 			easing: 'ease-out',
 		}),
 
-		props: {
-			slider: {
-				type: Object,
-				required: true,
-			},
-		},
-
-		computed: {
-			cube: function() {
-				return this.$refs.cube;
-			},
-		},
-
 		created() {
-			vf = this.slider;
-			currentImage = vf.Images.current;
-			nextImage = vf.Images.next;
-
-			vf.Transitions.setOptions(this);
-
 			this.images = {
-				front: currentImage.getProperties(),
-				left: nextImage.getProperties(),
-				right: nextImage.getProperties(),
+				front: this.from,
+				right: this.to,
 			};
 		},
-
+ 
 		mounted() {
-			vf.mask.style.perspective = this.perspective;
+			this.mask.perspective = this.perspective;
 
-			currentImage.hide();
-			nextImage.hide();
-
-			this.cube.setCss({
+			this.$refs.cube.transform({
 				transition: 'all '+ this.totalDuration +'ms '+ this.easing,
 			});
 
-			this.cube.turn(this.direction);
-		},
-
-		destroyed() {
-			vf.mask.style.perspective = 'none';
-
-			nextImage.show();
+			this.$refs.cube.turnRight();
 		},
 	};
 </script>
