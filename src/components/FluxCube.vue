@@ -4,12 +4,10 @@
 			v-for="side in sides"
 			v-if="sideDefined(side)"
 			:key="side"
-			:slider="slider"
-			:display-size="displaySize"
-			:image-src="getSideSrc(side)"
-			:image-size="getSideSize(side)"
-			:color="getSideColor(side)"
-			:css="getSideCss(side)"
+			:size="getSize(side)"
+			:image="getImage(side)"
+			:color="getColor(side)"
+			:css="getCss(side)"
 			:ref="side">
 		</flux-image>
 	</div>
@@ -17,6 +15,8 @@
 
 <script>
 	import FluxImage from '@/components/FluxImage.vue';
+
+	const SIDES = [ 'front', 'top', 'back', 'bottom', 'left', 'right' ];
 
 	export default {
 		name: 'FluxCube',
@@ -26,15 +26,7 @@
 		},
 
 		data: () => ({
-			sides: [
-				'front',
-				'top',
-				'back',
-				'bottom',
-				'left',
-				'right',
-			],
-
+			sides: SIDES,
 			style: {
 				position: 'absolute',
 				top: 0,
@@ -47,75 +39,24 @@
 		}),
 
 		props: {
-			slider: {
-				type: Object,
-				required: false,
-			},
-
-			displaySize: {
+			size: {
 				type: Object,
 				required: false,
 			},
 
 			images: {
 				type: Object,
-				required: false,
-			},
-
-			imageSrc: {
-				type: Object,
-				required: false,
-			},
-
-			imageSize: {
-				type: Object,
-				required: false,
+				default: () => ({}),
 			},
 
 			color: {
-				type: String,
-				required: false,
+				type: [ String, Object ],
+				default: () => ({}),
 			},
 
 			css: {
 				type: Object,
-				default: () => ({
-					top: 0,
-					left: 0,
-				}),
-			},
-		},
-
-		computed: {
-			front: function() {
-				return this.$refs.front[0];
-			},
-
-			top: function() {
-				return this.$refs.top[0];
-			},
-
-			back: function() {
-				return this.$refs.back[0];
-			},
-
-			bottom: function() {
-				return this.$refs.bottom[0];
-			},
-
-			left: function() {
-				return this.$refs.left[0];
-			},
-
-			right: function() {
-				return this.$refs.right[0];
-			},
-
-			size: function() {
-				return {
-					width: parseFloat(this.style.width),
-					height: parseFloat(this.style.height),
-				};
+				default: () => ({}),
 			},
 		},
 
@@ -135,69 +76,55 @@
 
 		methods: {
 			sideDefined(side) {
-				if (this.imageSrc && this.imageSrc[side] !== undefined)
-					return true;
-
-				if (this.images[side] && (this.images[side].src !== undefined || this.images[side].color !== undefined))
-					return true;
-
-				if (this.color && this.color[side] !== undefined)
+				if (this.images[side] || this.color[side])
 					return true;
 
 				return false;
 			},
 
-			getSideSrc(side) {
-				if (this.imageSrc && this.imageSrc[side])
-					return this.imageSrc[side];
+			getSide(side) {
+				return this.sideDefined(side)? this.$refs[side] : undefined;
+			},
 
-				if (this.images[side] && this.images[side].src)
-					return this.images[side].src;
+			getImage(side) {
+				if (this.images[side])
+					return this.images[side];
 
 				return undefined;
 			},
 
-			getSideSize(side) {
-				if (this.imageSize && this.imageSize[side])
-					return this.imageSize[side];
-
-				if (this.images[side] && this.images[side].size)
-					return this.images[side].size;
-
-				return undefined;
+			getSize(side) {
+				return this.size;
 			},
 
-			getSideColor(side) {
+			getColor(side) {
 				if (this.color && typeof this.color === 'string')
 					return this.color;
 
 				if (this.color && this.color[side])
 					return this.color[side];
 
-				if (this.images[side] && this.images[side].color)
-					return this.images[side].color;
-
 				return undefined;
 			},
 
-			getSideCss(side) {
+			getCss(side) {
 				let css = {};
 
-				if (this.getSideSrc(side)) {
+				if (this.sideDefined(side)) {
 					css.top = this.css.top;
 					css.left = this.css.left;
 				}
 
 				side = side.charAt(0).toUpperCase() + side.slice(1);
 
-				return this['get'+ side +'SideCss'](css);
+				return this['get'+ side +'Css'](css);
 			},
 
-			getFrontSideCss(css) {
+			getFrontCss(css) {
 				return css;
 			},
 
-			getTopSideCss(css) {
+			getTopCss(css) {
 				let t = {
 					rx: '90deg',
 					tx: '0',
@@ -210,14 +137,14 @@
 				return css;
 			},
 
-			getBackSideCss(css) {
+			getBackCss(css) {
 				css.transform = 'rotateY(180deg)';
 				//css.backfaceVisibility = 'hidden';
 
 				return css;
 			},
 
-			getBottomSideCss(css) {
+			getBottomCss(css) {
 				let t = {
 					rx: '-90deg',
 					tx: '0',
@@ -230,9 +157,9 @@
 				return css;
 			},
 
-			getLeftSideCss(css) {
+			getLeftCss(css) {
 				let size = {
-					width: this.getSideSrc('left')? this.size.width : this.size.height,
+					width: this.sideDefined('left')? this.size.width : this.size.height,
 					height: this.size.height,
 				};
 
@@ -251,9 +178,9 @@
 				return css;
 			},
 
-			getRightSideCss(css) {
+			getRightCss(css) {
 				let size = {
-					width: this.getSideSrc('right')? this.size.width : this.size.height,
+					width: this.sideDefined('right')? this.size.width : this.size.height,
 					height: this.size.height,
 				};
 
