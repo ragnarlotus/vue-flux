@@ -4,10 +4,10 @@
 			v-for="side in sides"
 			v-if="sideDefined(side)"
 			:key="side"
-			:size="getSize(side)"
-			:image="getImage(side)"
-			:color="getColor(side)"
-			:css="getCss(side)"
+			:size="getSideSize(side)"
+			:image="getSideImage(side)"
+			:color="getSideColor(side)"
+			:css="getSideCss(side)"
 			:ref="side">
 		</flux-image>
 	</div>
@@ -25,12 +25,10 @@
 
 		data: () => ({
 			sides: [ 'front', 'top', 'back', 'bottom', 'left', 'right' ],
-			style: {
+			baseStyle: {
 				position: 'absolute',
 				top: 0,
 				left: 0,
-				width: 0,
-				height: 0,
 				overflow: 'visible',
 				transformStyle: 'preserve-3d',
 			},
@@ -58,18 +56,21 @@
 			},
 		},
 
-		created() {
-			let css = this.css;
+		computed: {
+			sizeStyle() {
+				return {
+					width: this.size.width +'px' || '100%',
+					height: this.size.height +'px' || '100%',
+				};
+			},
 
-			if (this.slider) {
-				if (!css.width)
-					css.width = this.slider.size.width +'px';
-
-				if (!css.height)
-					css.height = this.slider.size.height +'px';
-			}
-
-			this.setCss(css);
+			style() {
+				return {
+					...this.baseStyle,
+					...this.sizeStyle,
+					...this.css,
+				};
+			},
 		},
 
 		methods: {
@@ -84,18 +85,18 @@
 				return this.sideDefined(side)? this.$refs[side] : undefined;
 			},
 
-			getImage(side) {
+			getSideImage(side) {
 				if (this.images[side])
 					return this.images[side];
 
 				return undefined;
 			},
 
-			getSize(side) {
+			getSideSize(side) {
 				return this.size;
 			},
 
-			getColor(side) {
+			getSideColor(side) {
 				if (this.color && typeof this.color === 'string')
 					return this.color;
 
@@ -105,7 +106,7 @@
 				return undefined;
 			},
 
-			getCss(side) {
+			getSideCss(side) {
 				let css = {};
 
 				if (this.sideDefined(side)) {
@@ -116,93 +117,56 @@
 						css.left = this.css.left;
 				}
 
-				side = side.charAt(0).toUpperCase() + side.slice(1);
+				let rotate = {
+					x: {
+						top: '90',
+						bottom: '-90',
+					},
 
-				return this['get'+ side +'Css'](css);
-			},
-
-			getFrontCss(css) {
-				return css;
-			},
-
-			getTopCss(css) {
-				let t = {
-					rx: '90deg',
-					tx: '0',
-					ty: '-50%',
-					tz: (this.slider.size.height / 2) +'px',
+					y: {
+						back: '180',
+						left: '-90',
+						right: '90',
+					},
 				};
 
-				css.transform = 'rotateX('+ t.rx +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
+				let translate = {
+					x: {
+						left: '-50',
+						right: '50',
+					},
 
-				return css;
-			},
+					y: {
+						top: '-50',
+						bottom: '50',
+					},
 
-			getBackCss(css) {
-				css.transform = 'rotateY(180deg)';
-				//css.backfaceVisibility = 'hidden';
-
-				return css;
-			},
-
-			getBottomCss(css) {
-				let t = {
-					rx: '-90deg',
-					tx: '0',
-					ty: '50%',
-					tz: (this.slider.size.height / 2) +'px',
+					z: {
+						top: this.size.height,
+						bottom: this.size.height,
+						left: this.size.width,
+						right: this.size.width,
+					},
 				};
 
-				css.transform = 'rotateX('+ t.rx +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
+				css.transform = this.getTransform(rotate, translate, side);
 
 				return css;
 			},
 
-			getLeftCss(css) {
-				let size = {
-					width: this.getImage('left')? this.size.width : this.size.height,
-					height: this.size.height,
-				};
+			getTransform(rotate, translate, side) {
+				let rx = rotate.x[side] || '0';
+				let ry = rotate.y[side] || '0';
+				let tx = translate.x[side] || '0';
+				let ty = translate.y[side] || '0';
+				let tz = translate.z[side] / 2 || '0';
 
-				css.width = size.width +'px';
-				css.height = size.height +'px';
-
-				let t = {
-					ry: '-90deg',
-					tx: '-50%',
-					ty: '0',
-					tz: (size.width / 2) +'px',
-				};
-
-				css.transform = 'rotateY('+ t.ry +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
-
-				return css;
-			},
-
-			getRightCss(css) {
-				let size = {
-					width: this.getImage('right')? this.size.width : this.size.height,
-					height: this.size.height,
-				};
-
-				css.width = size.width +'px';
-				css.height = size.height +'px';
-
-				let t = {
-					ry: '90deg',
-					tx: '50%',
-					ty: '0',
-					tz: (parseFloat(this.style.width) - size.width / 2) +'px',
-				};
-
-				css.transform = 'rotateY('+ t.ry +') translate3d('+ t.tx +', '+ t.ty +', '+ t.tz +')';
-
-				return css;
+				return 'rotateX('+ rx +'deg) rotateY('+ ry +'deg) translate3d('+ tx +'%, '+ ty +'%, '+ tz +'px)';
 			},
 
 			setCss(css) {
-				this.style = {
-					...this.style,
+				this.baseStyle = {
+					...this.baseStyle,
 					...css,
 				};
 			},
@@ -214,70 +178,57 @@
 				});
 			},
 
-			turn(direction, to) {
-				direction = direction.charAt(0).toUpperCase() + direction.slice(1);
+			turn(side) {
+				let rotate = {
+					x: {
+						top: '90',
+						bottom: '-90',
+					},
 
-				if (this['turn'+ direction])
-					this['turn'+ direction](to);
+					y: {
+						left: '-90',
+						right: '90',
+					},
+				};
+
+				let translate = {
+					x: {
+						left: '-50',
+						right: '50',
+					},
+
+					y: {
+						top: '-50',
+						bottom: '50',
+					},
+
+					z: {
+						top: this.size.height,
+						bottom: this.size.height,
+						left: this.size.width,
+						right: this.size.width,
+					},
+				};
+
+				this.transform({
+					transform: this.getTransform(rotate, translate, side),
+				});
 			},
 
 			turnTop() {
-				let t = {
-					rx: '90deg',
-					ty: '-50%',
-					tz: (this.size.height / 2) +'px',
-				};
-
-				this.transform({
-					transform: 'rotateX('+ t.rx +') translate3d(0, '+ t.ty +', '+ t.tz +')',
-				});
-			},
-
-			turnBack(to) {
-				let deg = '180';
-
-				if (to === 'left')
-					deg = '-180';
-
-				this.transform({
-					transform: 'rotateY('+ deg +'deg)',
-				});
+				this.turn('top');
 			},
 
 			turnBottom() {
-				let t = {
-					rx: '-90deg',
-					ty: '50%',
-					tz: (this.size.height / 2) +'px',
-				};
-
-				this.transform({
-					transform: 'rotateX('+ t.rx +') translate3d(0, '+ t.ty +', '+ t.tz +')',
-				});
+				this.turn('bottom');
 			},
 
 			turnLeft() {
-				let t = {
-					ry: '90deg',
-					tx: '50%',
-					tz: (this.size.width / 2) +'px',
-				};
-
-				this.transform({
-					transform: 'rotateY('+ t.ry +') translate3d('+ t.tx +', 0, '+ t.tz +')',
-				});
+				this.turn('left');
 			},
 
 			turnRight() {
-				let t = {
-					ry: '-90deg',
-					tx: '-50%',
-					tz: (this.size.width / 2) +'px',
-				};
-
-				this.transform({
-					transform: 'rotateY('+ t.ry +') translate3d('+ t.tx +', 0, '+ t.tz +')',
-				});
+				this.turn('right');
 			},
 		}
 	};
