@@ -23,7 +23,7 @@
 				right: {},
 				left: {},
 			},
-			totalDuration: 14000,
+			totalDuration: 1400,
 			perspective: '1600px',
 			easing: 'ease-out',
 		}),
@@ -35,16 +35,24 @@
 				left: this.to,
 			};
 		},
- 
+
 		mounted() {
 			this.mask.perspective = this.perspective;
 			this.mask.overflow = 'visible';
+
+			if (this.current)
+				this.current.hide();
 
 			this.$refs.cube.transform({
 				transition: 'all '+ this.totalDuration +'ms '+ this.easing,
 			});
 
-			this.$refs.cube.turnRight();
+			this.$refs.cube.turnLeft();
+		},
+
+		beforeDestroy() {
+			if (this.current)
+				this.current.show();
 		},
 	};
 </script>
