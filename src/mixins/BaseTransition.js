@@ -25,6 +25,13 @@ export default {
 		mask() {
 			return this.$parent.baseStyle;
 		},
+
+		current() {
+			if (this.$parent.$parent)
+				return this.$parent.$parent.$refs.image;
+
+			return undefined;
+		}
 	},
 
 	created() {
