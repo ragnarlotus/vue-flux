@@ -11,6 +11,7 @@
 		name: 'FluxImage',
 
 		data: () => ({
+			mounted: false,
 			srcSize: undefined,
 			baseStyle: {
 				position: 'absolute',
@@ -47,7 +48,18 @@
 
 		computed: {
 			viewSize() {
-				return this.size || DomHelper.sizeFrom(this.$el);
+				if (this.size.width && this.size.height)
+					return this.size;
+
+				if (!this.mounted)
+					return undefined;
+
+				let parentSize = DomHelper.sizeFrom(this.$el.parentNode);
+
+				return {
+					width: this.size.width || parentSize.width,
+					height: this.size.height || parentSize.height,
+				};
 			},
 
 			imageSrc() {
@@ -60,8 +72,7 @@
 
 			sizeStyle() {
 				let size = {
-					width: this.size.width || '100%',
-					height: this.size.height || '100%',
+					...this.viewSize,
 				};
 
 				if (/[0-9]$/.test(size.width))
@@ -80,13 +91,16 @@
 			},
 
 			imageStyle() {
-				if (!this.imageSize) {
+				if (!this.imageSrc) {
 					return {
 						backgroundImage: 'none',
 					};
 				}
 
 				let view = this.viewSize;
+
+				if (!view)
+					return {};
 
 				let image = {
 					...this.imageSize,
@@ -120,7 +134,6 @@
 			},
 
 			style() {
-				console.log(this.sizeStyle);
 				return {
 					...this.baseStyle,
 					...this.sizeStyle,
@@ -138,6 +151,10 @@
 
 		created() {
 			this.setCss(this.css);
+		},
+
+		mounted() {
+			this.mounted = true;
 		},
 
 		methods: {
