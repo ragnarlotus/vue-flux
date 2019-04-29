@@ -16,6 +16,31 @@
 <script>
 	import FluxImage from '@/components/FluxImage.vue';
 
+	const rotate = {
+		x: {
+			top: '90',
+			bottom: '-90',
+		},
+
+		y: {
+			back: '180',
+			left: '-90',
+			right: '90',
+		},
+	};
+
+	const translate = {
+		x: {
+			left: '-50',
+			right: '50',
+		},
+
+		y: {
+			top: '-50',
+			bottom: '50',
+		},
+	};
+
 	export default {
 		name: 'FluxCube',
 
@@ -24,6 +49,7 @@
 		},
 
 		data: () => ({
+			mounted: false,
 			sides: [ 'front', 'top', 'back', 'bottom', 'left', 'right' ],
 			baseStyle: {
 				position: 'absolute',
@@ -37,7 +63,7 @@
 		props: {
 			size: {
 				type: Object,
-				required: false,
+				default: () => ({}),
 			},
 
 			images: {
@@ -57,10 +83,25 @@
 		},
 
 		computed: {
+			viewSize() {
+				if (this.size.width && this.size.height)
+					return this.size;
+
+				if (!this.mounted)
+					return undefined;
+
+				let parentSize = DomHelper.sizeFrom(this.$el.parentNode);
+
+				return {
+					width: this.size.width || parentSize.width,
+					height: this.size.height || parentSize.height,
+				};
+			},
+
 			sizeStyle() {
 				let size = {
-					width: this.size.width || '100%',
-					height: this.size.height || '100%',
+					width: this.viewSize.width || '100%',
+					height: this.viewSize.height || '100%',
 				};
 
 				if (/[0-9]$/.test(size.width))
@@ -79,6 +120,10 @@
 					...this.css,
 				};
 			},
+		},
+
+		mounted() {
+			this.mounted = true;
 		},
 
 		methods: {
@@ -101,7 +146,7 @@
 			},
 
 			getSideSize(side) {
-				return this.size;
+				return this.viewSize;
 			},
 
 			getSideColor(side) {
@@ -125,49 +170,31 @@
 						css.left = this.css.left;
 				}
 
-				let rotate = {
-					x: {
-						top: '90',
-						bottom: '-90',
-					},
-
-					y: {
-						back: '180',
-						left: '-90',
-						right: '90',
-					},
+				translate.z = {
+					top: this.size.height,
+					bottom: this.size.height,
+					left: this.size.width,
+					right: this.size.width,
 				};
 
-				let translate = {
-					x: {
-						left: '-50',
-						right: '50',
-					},
-
-					y: {
-						top: '-50',
-						bottom: '50',
-					},
-
-					z: {
-						top: this.size.height,
-						bottom: this.size.height,
-						left: this.size.width,
-						right: this.size.width,
-					},
-				};
-
-				css.transform = this.getTransform(rotate, translate, side);
+				css.transform = this.getTransform(side);
 
 				return css;
 			},
 
-			getTransform(rotate, translate, side) {
+			getTransform(side) {
+				let translateZ = {
+					top: this.viewSize.height,
+					bottom: this.viewSize.height,
+					left: this.viewSize.width,
+					right: this.viewSize.width,
+				};
+
 				let rx = rotate.x[side] || '0';
 				let ry = rotate.y[side] || '0';
 				let tx = translate.x[side] || '0';
 				let ty = translate.y[side] || '0';
-				let tz = translate.z[side] / 2 || '0';
+				let tz = translateZ[side] / 2 || '0';
 
 				return 'rotateX('+ rx +'deg) rotateY('+ ry +'deg) translate3d('+ tx +'%, '+ ty +'%, '+ tz +'px)';
 			},
@@ -187,39 +214,8 @@
 			},
 
 			turn(side) {
-				let rotate = {
-					x: {
-						top: '90',
-						bottom: '-90',
-					},
-
-					y: {
-						left: '-90',
-						right: '90',
-					},
-				};
-
-				let translate = {
-					x: {
-						left: '-50',
-						right: '50',
-					},
-
-					y: {
-						top: '-50',
-						bottom: '50',
-					},
-
-					z: {
-						top: this.size.height,
-						bottom: this.size.height,
-						left: this.size.width,
-						right: this.size.width,
-					},
-				};
-
 				this.transform({
-					transform: this.getTransform(rotate, translate, side),
+					transform: this.getTransform(side),
 				});
 			},
 
