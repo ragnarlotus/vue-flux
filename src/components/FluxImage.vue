@@ -59,10 +59,18 @@
 			},
 
 			sizeStyle() {
-				return {
-					width: this.size.width +'px' || '100%',
-					height: this.size.height +'px' || '100%',
+				let size = {
+					width: this.size.width || '100%',
+					height: this.size.height || '100%',
 				};
+
+				if (/[0-9]$/.test(size.width))
+					size.width += 'px';
+
+				if (/[0-9]$/.test(size.height))
+					size.height += 'px';
+
+				return size;
 			},
 
 			colorStyle() {
@@ -112,6 +120,7 @@
 			},
 
 			style() {
+				console.log(this.sizeStyle);
 				return {
 					...this.baseStyle,
 					...this.sizeStyle,
