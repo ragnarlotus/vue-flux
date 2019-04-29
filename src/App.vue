@@ -21,59 +21,59 @@
 
 					<ul class="list-reset flex mb-2">
 						<li class="flex-1 mr-2">
-							<a :class="transitionClass('transitionFade')" @click="showNext('fade')">Fade</a>
+							<a @click="showNext('fade')" :class="transitionClass('transitionFade')">Fade</a>
 						</li>
 
 						<li class="flex-1">
-							<a :class="transitionClass('transitionKenburn')" @click="showNext('kenburn')">Kenburn</a>
+							<a @click="showNext('kenburn')" :class="transitionClass('transitionKenburn')">Kenburn</a>
 						</li>
 					</ul>
 
 					<ul class="list-reset flex mb-2">
 						<li class="flex-1 mr-2">
-							<a :class="transitionClass('transitionSwipe')" @click="showNext('swipe')">Swipe</a>
+							<a @click="showNext('swipe')" :class="transitionClass('transitionSwipe')">Swipe</a>
 						</li>
 
 						<li class="flex-1">
-							<a :class="transitionClass('transitionSlide')" @click="showNext('slide')">Slide</a>
+							<a @click="showNext('slide')" :class="transitionClass('transitionSlide')">Slide</a>
 						</li>
 					</ul>
 
 					<ul class="list-reset flex mb-2">
 						<li class="flex-1 mr-2">
-							<a @click="showNext('transitionWaterfall')" :class="transitionClass('waterfall')">Waterfall</a>
+							<a @click="showNext('waterfall')" :class="transitionClass('transitionWaterfall')">Waterfall</a>
 						</li>
 
 						<li class="flex-1 mr-2">
-							<a @click="showNext('transitionZip')" :class="transitionClass('zip')">Zip</a>
+							<a @click="showNext('zip')" :class="transitionClass('transitionZip')">Zip</a>
 						</li>
 
 						<li class="flex-1">
-							<a @click="showNext('transitionBlinds2d')" :class="transitionClass('blinds2d')">Blinds 2D</a>
+							<a @click="showNext('blinds2d')" :class="transitionClass('transitionBlinds2d')">Blinds 2D</a>
 						</li>
 					</ul>
 
 					<ul class="list-reset flex mb-2">
 						<li class="flex-1 mr-2">
-							<a @click="showNext('transitionBlocks1')" :class="transitionClass('blocks1')">Blocks 1</a>
+							<a @click="showNext('blocks1')" :class="transitionClass('transitionBlocks1')">Blocks 1</a>
 						</li>
 
 						<li class="flex-1">
-							<a @click="showNext('transitionBlocks2')" :class="transitionClass('blocks2')">Blocks 2</a>
+							<a @click="showNext('blocks2')" :class="transitionClass('transitionBlocks2')">Blocks 2</a>
 						</li>
 					</ul>
 
 					<ul class="list-reset flex mb-2">
 						<li class="flex-1 mr-2">
-							<a @click="showNext('transitionConcentric')" :class="transitionClass('concentric')">Concentric</a>
+							<a @click="showNext('concentric')" :class="transitionClass('transitionConcentric')">Concentric</a>
 						</li>
 
 						<li class="flex-1 mr-2">
-							<a @click="showNext('transitionWarp')" :class="transitionClass('warp')">Warp</a>
+							<a @click="showNext('warp')" :class="transitionClass('transitionWarp')">Warp</a>
 						</li>
 
 						<li class="flex-1">
-							<a @click="showNext('transitionCamera')" :class="transitionClass('camera')">Camera</a>
+							<a @click="showNext('camera')" :class="transitionClass('transitionCamera')">Camera</a>
 						</li>
 					</ul>
 
@@ -81,39 +81,39 @@
 
 					<ul class="list-reset flex mb-2">
 						<li class="flex-1 mr-2">
-							<a :class="transitionClass('transitionCube')" @click="showNext('cube')">Cube</a>
+							<a @click="showNext('cube')" :class="transitionClass('transitionCube')">Cube</a>
 						</li>
 
 						<li class="flex-1 mr-2">
-							<a @click="showNext('transitionBook')" :class="transitionClass('book')">Book</a>
+							<a @click="showNext('book')" :class="transitionClass('transitionBook')">Book</a>
 						</li>
 
 						<li class="flex-1">
-							<a @click="showNext('transitionFall')" :class="transitionClass('fall')">Fall</a>
+							<a @click="showNext('fall')" :class="transitionClass('transitionFall')">Fall</a>
 						</li>
 					</ul>
 
 					<ul class="list-reset flex mb-2">
 						<li class="flex-1 mr-2">
-							<a @click="showNext('transitionWave')" :class="transitionClass('wave')">Wave</a>
+							<a @click="showNext('wave')" :class="transitionClass('transitionWave')">Wave</a>
 						</li>
 
 						<li class="flex-1">
-							<a @click="showNext('transitionBlinds3d')" :class="transitionClass('blinds3d')">Blinds 3D</a>
+							<a @click="showNext('blinds3d')" :class="transitionClass('transitionBlinds3d')">Blinds 3D</a>
 						</li>
 					</ul>
 
 					<ul class="list-reset flex">
 						<li class="flex-1 mr-2">
-							<a @click="showNext('transitionRound1')" :class="transitionClass('round1')">Round 1</a>
+							<a @click="showNext('round1')" :class="transitionClass('transitionRound1')">Round 1</a>
 						</li>
 
 						<li class="flex-1 mr-2">
-							<a @click="showNext('transitionRound2')" :class="transitionClass('round2')">Round 2</a>
+							<a @click="showNext('round2')" :class="transitionClass('transitionRound2')">Round 2</a>
 						</li>
 
 						<li class="flex-1">
-							<a @click="showNext('transitionExplode')" :class="transitionClass('explode')">Explode</a>
+							<a @click="showNext('explode')" :class="transitionClass('transitionExplode')">Explode</a>
 						</li>
 					</ul>
 				</div>
@@ -245,7 +245,15 @@
 
 		methods: {
 			loadImages() {
-				this.fluxImages = [];
+				this.fluxImages = [
+/*					'slides/1.jpg',
+					'slides/2.jpg',
+					'slides/3.jpg',
+					'slides/4.jpg',
+					'slides/5.jpg',
+					'slides/6.jpg'*/
+				];
+
 				this.fluxCaptions = [];
 
 				// https://github.com/dconnolly/chromecast-backgrounds/blob/master/backgrounds.json
@@ -257,7 +265,7 @@
 				}).then((data) => {
 					let index, entry;
 
-					for (var i = 0; i < 12; i++) {
+					for (var i = 0; i < 3; i++) {
 						index = Math.floor(Math.random() * data.length);
 						entry = data.splice(index, 1)[0];
 
