@@ -26,6 +26,7 @@
 			totalDuration: 1200,
 			easing: 'ease-out',
 			pageWidth: 0,
+			perspective: '1600px',
 			images: {
 				front: {},
 				back: {},
@@ -47,10 +48,11 @@
 		},
 
 		mounted() {
-			this.mask.perspective = '1600px';
+			this.mask.perspective = this.perspective;
+			this.mask.overflow = 'visible';
 
 			this.$nextTick(() => {
-				this.cube.transform({
+				this.$refs.cube.transform({
 					transition: 'transform '+ this.totalDuration +'ms '+ this.easing,
 					transform: 'rotateY(180deg)',
 				});
@@ -59,7 +61,7 @@
 
 		methods: {
 			setCubeBackCss() {
-				let [backgroundPositionX] = this.cube.back.style.backgroundPosition.split(' ');
+				let [backgroundPositionX] = this.$refs.cube.back.style.backgroundPosition.split(' ');
 				backgroundPositionX = parseFloat(backgroundPositionX);
 
 				backgroundPositionX -= this.pageWidth;
