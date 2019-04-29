@@ -14,6 +14,7 @@
 </template>
 
 <script>
+	import DomHelper from '@/libraries/DomHelper.js';
 	import FluxImage from '@/components/FluxImage.vue';
 
 	const rotate = {
@@ -88,7 +89,7 @@
 					return this.size;
 
 				if (!this.mounted)
-					return undefined;
+					return {};
 
 				let parentSize = DomHelper.sizeFrom(this.$el.parentNode);
 
