@@ -2,7 +2,6 @@ export default class DomHelper {
 
 	constructor(node) {
 		this.node = node;
-		this.parent = node.parentNode;
 	}
 
 	get size() {
