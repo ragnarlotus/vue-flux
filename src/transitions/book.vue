@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<flux-cube :images="images" :css="cubeCss" ref="cube"></flux-cube>
-		<flux-image :imagea="images" :css="imageCss" ref="image"></flux-image>
+		<flux-image :image="images.front" :size="componentsSize" :css="imageCss" ref="image"></flux-image>
+		<flux-cube :images="images" :size="componentsSize" :css="cubeCss" ref="cube"></flux-cube>
 	</div>
 </template>
 
@@ -23,7 +23,7 @@
 		],
 
 		data: () => ({
-			totalDuration: 1200,
+			totalDuration: 120000,
 			easing: 'ease-out',
 			pageWidth: 0,
 			perspective: '1600px',
@@ -38,11 +38,17 @@
 			},
 		}),
 
+		computed: {
+			componentsSize() {
+				return {
+					...this.size,
+					width: this.size.width / 2,
+				};
+			},
+		},
+
 		created() {
-			let pageWidth = this.size.width / 2;
-
-			this.cubeCss.width = this.imageCss.width = pageWidth +'px';
-
+			this.cubeCss.left = this.componentsSize.width +'px';
 			this.images.front = this.from;
 			this.images.back = this.to;
 		},
@@ -51,23 +57,32 @@
 			this.mask.perspective = this.perspective;
 			this.mask.overflow = 'visible';
 
+			this.setCubeCss();
+			this.setCubeBackCss();
+/*
 			this.$nextTick(() => {
 				this.$refs.cube.transform({
 					transition: 'transform '+ this.totalDuration +'ms '+ this.easing,
-					transform: 'rotateY(180deg)',
+					transform: 'rotateY(-180deg)',
 				});
-			});
+			});*/
 		},
 
 		methods: {
+			setCubeCss() {
+				this.$refs.cube.setCss({
+					transformOrigin: 'right center',
+				});
+			},
+
 			setCubeBackCss() {
-				let [backgroundPositionX] = this.$refs.cube.back.style.backgroundPosition.split(' ');
-				backgroundPositionX = parseFloat(backgroundPositionX);
+				let backSide = this.$refs.cube.$refs.back[0];
 
-				backgroundPositionX -= this.pageWidth;
+				let backgroundPosition = backSide.style.backgroundPosition;
+				let positionX = parseFloat(backgroundPosition.split(' ')[0]);
 
-				this.cube.back.setCss({
-					backgroundPositionX: backgroundPositionX +'px',
+				backSide.setCss({
+					backgroundPositionX: (positionX + this.pageWidth) +'px',
 				});
 			},
 		},
