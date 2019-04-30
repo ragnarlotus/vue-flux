@@ -135,8 +135,8 @@
 
 			style() {
 				return {
-					...this.baseStyle,
 					...this.sizeStyle,
+					...this.baseStyle,
 					...this.colorStyle,
 					...this.imageStyle,
 				};

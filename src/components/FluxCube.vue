@@ -116,8 +116,8 @@
 
 			style() {
 				return {
-					...this.baseStyle,
 					...this.sizeStyle,
+					...this.baseStyle,
 					...this.css,
 				};
 			},
