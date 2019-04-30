@@ -19,7 +19,6 @@
 				left: 0,
 				overflow: 'hidden',
 				backfaceVisibility: 'hidden',
-				backgroundImage: 'none',
 				zIndex: 'auto',
 			},
 		}),
@@ -120,12 +119,12 @@
 					image.left = Math.ceil((view.width - image.width) / 2);
 				}
 
-				image.top -= parseFloat(this.baseStyle.top);
-				image.left -= parseFloat(this.baseStyle.left);
+				image.top -= parseFloat(this.css.top) || 0;
+				image.left -= parseFloat(this.css.left) || 0;
 
 				return {
-					top: this.baseStyle.top !== 'auto'? 0 : 'auto',
-					left: this.baseStyle.left !== 'auto'? 0 : 'auto',
+					top: this.css.top !== 'auto'? 0 : 'auto',
+					left: this.css.left !== 'auto'? 0 : 'auto',
 					backgroundImage: image.src,
 					backgroundSize: image.width +'px '+ image.height +'px',
 					backgroundPosition: image.left +'px '+ image.top +'px',
@@ -135,22 +134,13 @@
 
 			style() {
 				return {
-					...this.sizeStyle,
 					...this.baseStyle,
+					...this.sizeStyle,
+					...this.css,
 					...this.colorStyle,
 					...this.imageStyle,
 				};
 			},
-		},
-
-		watch: {
-			css() {
-				this.setCss(this.css);
-			},
-		},
-
-		created() {
-			this.setCss(this.css);
 		},
 
 		mounted() {
