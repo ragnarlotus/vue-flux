@@ -19,9 +19,9 @@ export default class DisplayController {
 
 	requestFullScreen(element) {
 		let methods = [
+			'requestFullscreen',
 			'mozRequestFullScreen',
 			'webkitRequestFullscreen',
-			'requestFullscreen',
 			'msRequestFullscreen',
 		];
 
