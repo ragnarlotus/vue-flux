@@ -1,136 +1,130 @@
 <template>
 	<div :style="style" ref="grid">
-		<flux-cube
+		<component
+			:is="component"
 			v-for="i in numTiles"
 			:key="i"
-			:slider="slider"
-			:display-size="display.size"
+			:size="tileSize"
+			:image="image"
 			:images="images"
-			:image-src="imageSrc"
-			:image-size="imageSize"
 			:color="color"
 			:css="getTileCss(i)"
 			ref="tiles">
-		</flux-cube>
+		</component>
 	</div>
 </template>
 
 <script>
-	import DisplayController from '@/controllers/Display.js';
+	import DomHelper from '@/libraries/DomHelper.js';
 	import FluxCube from '@/components/FluxCube.vue';
+	import FluxImage from '@/components/FluxImage.vue';
 
 	export default {
 		name: 'FluxGrid',
 
 		components: {
 			FluxCube,
+			FluxImage,
 		},
 
 		data: () => ({
-			display: undefined,
-			numTiles: 0,
-			tile: {
-				width: 1,
-				height: 1,
-			},
+			mounted: false,
 			style: {
 				position: 'absolute',
+				top: 0,
+				left: 0,
 				width: '100%',
 				height: '100%',
-				zIndex: '12',
 			},
 		}),
 
 		props: {
-			numRows: {
+			rows: {
 				type: Number,
 				required: false,
 				default: () => 1,
 			},
 
-			numCols: {
+			cols: {
 				type: Number,
 				required: false,
 				default: () => 1,
 			},
 
-			slider: {
+			size: {
 				type: Object,
-				required: false,
+				default: () => ({}),
 			},
 
-			displaySize: {
-				type: Object,
-				required: false,
+			image: {
+				type: [ String, Object ],
+				default: () => ({}),
 			},
 
 			images: {
 				type: Object,
-				required: false,
-			},
-
-			imageSrc: {
-				type: String,
-				required: false,
-			},
-
-			imageSize: {
-				type: Object,
-				required: false,
+				default: () => ({}),
 			},
 
 			color: {
-				type: String,
-				required: false,
+				type: [ String, Object ],
+				default: () => 'transparent',
 			},
 
 			css: {
 				type: Object,
-				default: () => ({
-					top: 0,
-					left: 0,
-				}),
+				default: () => ({}),
 			},
 
 			tileCss: {
 				type: Object,
-				required: false,
+				default: () => ({}),
 			},
 		},
 
 		computed: {
-			tiles: function() {
-				return this.$refs.tiles;
+			component() {
+				return Object.keys(this.images).length? 'FluxCube' : 'FluxImage';
 			},
+
+			viewSize() {
+				if (this.size.width && this.size.height)
+					return this.size;
+
+				if (!this.mounted)
+					return {};
+
+				let parentSize = DomHelper.sizeFrom(this.$el.parentNode);
+
+				return {
+					width: this.size.width || parentSize.width,
+					height: this.size.height || parentSize.height,
+				};
+			},
+
+			numTiles() {
+				return this.rows * this.cols;
+			},
+
+			tileSize() {
+				return {
+					width: Math.ceil(this.viewSize.width / this.cols),
+					height: Math.ceil(this.viewSize.height / this.rows),
+				};
+			}
 		},
 
-		created() {
-			this.display = new DisplayController(this);
-
-			if (this.slider)
-				this.display.setSize(this.slider.size);
-
-			else if (this.displaySize)
-				this.display.setSize(this.displaySize);
-
-			else
-				this.display.setSizeFrom(this.$refs.grid);
-
-			let size = this.display.size;
-
-			this.tile.width = Math.ceil(size.width / this.numCols);
-			this.tile.height = Math.ceil(size.height / this.numRows);
-
-			this.numTiles = this.numRows * this.numCols;
+		mounted() {
+			this.mounted = true;
 		},
 
 		methods: {
 			getRowNumber(i) {
-				return Math.floor(i / this.numCols);
+				return Math.floor(i / this.cols);
 			},
 
 			getColNumber(i) {
-				return i % this.numCols;
+				return i % this.cols;
 			},
 
 			getTileCss(i) {
@@ -139,26 +133,26 @@
 				let row = this.getRowNumber(i);
 				let col = this.getColNumber(i);
 
-				let width = this.tile.width;
-				let height = this.tile.height;
+				let width = this.tileSize.width;
+				let height = this.tileSize.height;
 
-				if (col + 1 == this.numCols)
-					width = this.display.size.width - col * this.tile.width;
+				let top = row * height;
+				let left = col * width;
 
-				if (row + 1 == this.numRows)
-					height = this.display.size.height - row * this.tile.height;
+				if (row + 1 === this.rows)
+					height = this.viewSize.height - row * height;
 
-				let top = row * this.tile.height;
-				let left = col * this.tile.width;
+				if (col + 1 === this.cols)
+					width = this.viewSize.width - col * width;
 
-				let zIndex = i + 1 < this.numCols / 2? 13 + i : 13 + this.numCols - i;
+				let zIndex = i + 1 < this.cols / 2? i + 1 : this.cols - i;
 
 				return {
 					...this.tileCss,
-					width: width +'px',
-					height: height +'px',
 					top: top +'px',
 					left: left +'px',
+					width: width +'px',
+					height: height +'px',
 					zIndex: zIndex,
 				};
 			},
@@ -172,7 +166,7 @@
 
 			transform(func) {
 				this.$nextTick(() => {
-					this.tiles.forEach((tile, i) => func(tile, i));
+					this.$refs.tiles.forEach((tile, i) => func(tile, i));
 				});
 			},
 		},

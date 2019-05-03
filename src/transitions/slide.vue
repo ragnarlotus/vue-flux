@@ -1,7 +1,7 @@
 <template>
 	<flux-wrapper :css="wrapperCss" ref="wrapper">
-		<flux-image :image="from" :size="size" ref="left"></flux-image>
-		<flux-image :image="to" :size="size" ref="right"></flux-image>
+		<flux-image :image="from" :size="size" :css="leftCss" ref="left"></flux-image>
+		<flux-image :image="to" :size="size" :css="rightCss" ref="right"></flux-image>
 	</flux-wrapper>
 </template>
 
@@ -28,19 +28,17 @@
 			wrapperCss: {
 				width: '200%',
 			},
-		}),
-
-		mounted() {
-			this.$refs.left.setCss({
+			leftCss: {
 				width: '50%',
-			});
-
-			this.$refs.right.setCss({
+			},
+			rightCss: {
 				left: 'auto',
 				right: 0,
 				width: '50%',
-			});
+			},
+		}),
 
+		mounted() {
 			this.$refs.wrapper.transform({
 				transition: 'transform '+ this.totalDuration +'ms '+ this.easing,
 				transform: 'translateX('+ -this.size.width +'px)',

@@ -12,6 +12,7 @@
 
 		data: () => ({
 			mounted: false,
+			parent: {},
 			srcSize: undefined,
 			baseStyle: {
 				position: 'absolute',
@@ -24,6 +25,11 @@
 		}),
 
 		props: {
+			size: {
+				type: Object,
+				default: () => ({}),
+			},
+
 			image: {
 				type: [ String, Object ],
 				default: () => ({}),
@@ -32,11 +38,6 @@
 			color: {
 				type: String,
 				default: () => 'transparent',
-			},
-
-			size: {
-				type: Object,
-				default: () => ({}),
 			},
 
 			css: {
@@ -98,7 +99,7 @@
 
 				let view = this.viewSize;
 
-				if (!view)
+				if (!view || !this.imageSize)
 					return {};
 
 				let image = {
@@ -122,13 +123,25 @@
 				image.top -= parseFloat(this.css.top) || 0;
 				image.left -= parseFloat(this.css.left) || 0;
 
+				const equals = (val1, val2) => (new RegExp('^-?'+ val1 +'$')).test(val2);
+
+				view.top = 0;
+
+				if (this.css.top && !equals(this.parent.top, this.css.top))
+					view.top = this.css.top;
+
+				view.left = 0;
+
+				if (this.css.left && !equals(this.parent.left, this.css.left))
+					view.left = this.css.left;
+
 				return {
-					top: this.css.top !== 'auto'? 0 : 'auto',
-					left: this.css.left !== 'auto'? 0 : 'auto',
+					top: view.top,
+					left: view.left,
 					backgroundImage: image.src,
 					backgroundSize: image.width +'px '+ image.height +'px',
 					backgroundPosition: image.left +'px '+ image.top +'px',
-					backgroundRepeat: 'no-repeat',
+					backgroundRepeat: this.css.backgroundRepeat || 'no-repeat',
 				};
 			},
 
@@ -145,6 +158,13 @@
 
 		mounted() {
 			this.mounted = true;
+
+			let parentStyle = this.$el.parentNode.style;
+
+			Object.assign(this.parent, {
+				top: parentStyle.top || 0,
+				left: parentStyle.left || 0,
+			});
 		},
 
 		methods: {

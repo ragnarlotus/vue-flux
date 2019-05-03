@@ -1,17 +1,16 @@
 <template>
 	<flux-grid
-		:num-rows="numRows"
-		:num-cols="numCols"
-		:slider="slider"
-		:images="images"
+		:rows="rows"
+		:cols="cols"
+		:size="size"
+		:image="from"
 		ref="grid">
 	</flux-grid>
 </template>
 
 <script>
+	import BaseTransition from '@/mixins/BaseTransition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
-
-	let vf, currentImage;
 
 	export default {
 		name: 'transitionWaterfall',
@@ -20,70 +19,36 @@
 			FluxGrid,
 		},
 
+		mixins: [
+			BaseTransition,
+		],
+
 		data: () => ({
-			numRows: 1,
-			numCols: 1,
+			rows: 1,
+			cols: 10,
 			tileDuration: 600,
 			totalDuration: 0,
-			easing: 'ease-in',
-			tileDelay: 80,
-			images: {
-				front: {},
-			},
+			easing: 'cubic-bezier(0.55, 0.055, 0.675, 0.19)',
+			tileDelay: 90,
 		}),
 
-		props: {
-			slider: {
-				type: Object,
-				required: true,
-			},
-		},
-
-		computed: {
-			grid: function() {
-				return this.$refs.grid;
-			},
-		},
-
 		created() {
-			vf = this.slider;
-			currentImage = vf.Images.current;
-
-			let divider = vf.size.width / 10;
-
-			vf.Transitions.setOptions(this, {
-				numCols: Math.floor(vf.size.width / divider),
-			});
-
-			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
-
-			this.images.front = currentImage.getProperties();
+			this.totalDuration = this.tileDelay * this.cols + this.tileDuration;
 		},
 
 		mounted() {
-			currentImage.hide();
-
-			this.grid.setCss({
-				overflow: 'hidden'
-			});
-
-			this.grid.transform((tile, i) => {
+			this.$refs.grid.transform((tile, i) => {
 				tile.transform({
 					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
 					opacity: '0.1',
-					transform: 'translateY('+ vf.size.height +'px)',
+					transform: 'translateY('+ this.size.height +'px)',
 				});
 			});
 		},
 
 		methods: {
 			getDelay(i) {
-				let delay = i;
-
-				if (this.direction === 'left')
-					delay = this.numCols - i - 1;
-
-				return delay * this.tileDelay;
+				return i * this.tileDelay;
 			},
 		},
 	};

@@ -56,7 +56,6 @@
 				position: 'absolute',
 				top: 0,
 				left: 0,
-				overflow: 'visible',
 				transformStyle: 'preserve-3d',
 			},
 		}),
@@ -164,18 +163,20 @@
 				let css = {};
 
 				if (this.sideDefined(side)) {
+					const opposite = val => val[0] === '-'? val.substr(1) : '-'+ val;
+
 					if (this.css.top) {
 						css.top = this.css.top;
 
 						if (side === 'back')
-							css.top = css.top[0] === '-'? css.top.substr(1) : '-'+ css.top;
+							css.top = opposite(css.top);
 					}
 
 					if (this.css.left) {
 						css.left = this.css.left;
 
 						if (side === 'back')
-							css.left = css.left[0] === '-'? css.left.substr(1) : '-'+ css.left;
+							css.left = opposite(css.left);
 					}
 				}
 
