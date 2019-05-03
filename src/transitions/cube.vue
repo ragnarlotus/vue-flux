@@ -18,21 +18,16 @@
 		],
 
 		data: () => ({
-			images: {
-				front: {},
-				right: {},
-				left: {},
-			},
 			totalDuration: 1400,
 			perspective: '1600px',
 			easing: 'ease-out',
+			images: {},
 		}),
 
 		created() {
 			this.images = {
 				front: this.from,
 				right: this.to,
-				left: this.to,
 			};
 		},
 

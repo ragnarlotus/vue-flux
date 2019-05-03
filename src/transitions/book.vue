@@ -25,12 +25,8 @@
 		data: () => ({
 			totalDuration: 1200,
 			easing: 'ease-out',
-			pageWidth: 0,
 			perspective: '1600px',
-			images: {
-				front: {},
-				back: {},
-			},
+			images: {},
 			imageCss: {},
 			cubeCss: {
 				transformOrigin: 'left center',
