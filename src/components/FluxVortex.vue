@@ -1,12 +1,11 @@
 <template>
 	<div :style="style" ref="vortex">
 		<flux-image
-			v-for="i in numCircles"
+			v-for="i in circles"
 			:key="i"
-			:slider="slider"
-			:display-size="displaySize"
-			:image-src="imageSrc"
-			:image-size="imageSize"
+			:size="size"
+			:image="image"
+			:color="color"
 			:css="getTileCss(i)"
 			ref="tiles">
 		</flux-image>
@@ -14,7 +13,7 @@
 </template>
 
 <script>
-	import DisplayController from '@/controllers/Display.js';
+	import DomHelper from '@/libraries/DomHelper.js';
 	import FluxImage from '@/components/FluxImage.vue';
 
 	export default {
@@ -25,45 +24,29 @@
 		},
 
 		data: () => ({
-			display: undefined,
-			diag: undefined,
-			radius: undefined,
-			tile: {
-				top: undefined,
-				left: undefined,
-			},
+			mounted: false,
+			tile: {},
 			style: {
 				position: 'absolute',
 				width: '100%',
 				height: '100%',
-				zIndex: '12',
 			},
 		}),
 
 		props: {
-			numCircles: {
+			circles: {
 				type: Number,
 				default: 1,
 			},
 
-			slider: {
+			size: {
 				type: Object,
-				required: false,
+				default: () => ({}),
 			},
 
-			displaySize: {
-				type: Object,
-				required: false,
-			},
-
-			imageSrc: {
-				type: String,
-				required: false,
-			},
-
-			imageSize: {
-				type: Object,
-				required: false,
+			image: {
+				type: [ String, Object ],
+				default: () => ({}),
 			},
 
 			color: {
@@ -73,80 +56,69 @@
 
 			css: {
 				type: Object,
-				default: () => ({
-					top: 0,
-					left: 0,
-				}),
+				default: () => ({}),
 			},
 
 			tileCss: {
 				type: Object,
-				required: false,
+				default: () => ({}),
 			},
 		},
 
 		computed: {
-			tiles: function() {
-				return this.$refs.tiles;
+			viewSize() {
+				if (this.size.width && this.size.height)
+					return this.size;
+
+				if (!this.mounted)
+					return {};
+
+				let parentSize = DomHelper.sizeFrom(this.$el.parentNode);
+
+				return {
+					width: this.size.width || parentSize.width,
+					height: this.size.height || parentSize.height,
+				};
 			},
-		},
 
-		created() {
-			this.display = new DisplayController(this);
+			diag() {
+				let size = this.viewSize;
 
-			if (this.slider)
-				this.display.setSize(this.slider.size);
+				return Math.ceil(Math.sqrt(size.width * size.width + size.height * size.height));
+			},
 
-			else if (this.displaySize)
-				this.display.setSize(this.displaySize);
+			radius() {
+				return Math.ceil(this.diag / 2 / this.circles);
+			},
 
-			else
-				this.display.setSizeFrom(this.$refs.vortex);
+			topGap() {
+				return Math.ceil(this.viewSize.height / 2 - this.radius * this.circles);
+			},
 
-			let width = this.display.size.width;
-			let height = this.display.size.height;
-
-			this.diag = Math.ceil(Math.sqrt(width * width + height * height));
-			this.radius = Math.ceil(this.diag / 2 / this.numCircles);
-
-			this.tile.top = Math.ceil(height / 2 - this.radius * this.numCircles);
-			this.tile.left = Math.ceil(width / 2 - this.radius * this.numCircles);
+			leftGap() {
+				return Math.ceil(this.viewSize.width / 2 - this.radius * this.circles);
+			},
 		},
 
 		mounted() {
-			this.tiles.forEach((tile, i) => {
-				tile.setCss({
-					top: this.getTileTop(i) +'px',
-					left: this.getTileLeft(i) +'px',
-					backgroundRepeat: 'repeat'
-				});
-			});
+			this.mounted = true;
 		},
 
 		methods: {
-			getTileTop(i) {
-				return this.tile.top + this.radius * i;
-			},
-
-			getTileLeft(i) {
-				return this.tile.left + this.radius * i;
-			},
-
 			getTileCss(i) {
 				i--;
 
-				let width = (this.numCircles - i) * this.radius * 2;
-				let height = width;
-				let zIndex = 13 + i;
+				let width = (this.circles - i) * this.radius * 2;
 
 				return {
 					...this.tileCss,
-					top: this.getTileTop(i) +'px',
-					left: this.getTileLeft(i) +'px',
+					top: (this.topGap + this.radius * i) +'px',
+					left: (this.leftGap + this.radius * i) +'px',
 					width: width +'px',
-					height: height +'px',
-					borderRadius: Math.ceil(width / 2) +'px',
-					zIndex: zIndex,
+					height: width +'px',
+					backgroundRepeat: 'repeat',
+					borderRadius: '50%',
+					zIndex: i,
 				};
 			},
 
@@ -159,7 +131,7 @@
 
 			transform(func) {
 				this.$nextTick(() => {
-					this.tiles.forEach((tile, i) => func(tile, i));
+					this.$refs.tiles.forEach((tile, i) => func(tile, i));
 				});
 			},
 		},
