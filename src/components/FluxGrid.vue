@@ -41,24 +41,22 @@
 		props: {
 			rows: {
 				type: [ String, Number ],
-				required: false,
-				default: () => 1,
+				default: 1,
 			},
 
 			cols: {
 				type: [ String, Number ],
-				required: false,
-				default: () => 1,
+				default: 1,
 			},
 
 			size: {
 				type: Object,
-				default: () => ({}),
+				default: undefined,
 			},
 
 			image: {
 				type: [ String, Object ],
-				default: () => ({}),
+				default: () => undefined,
 			},
 
 			images: {
@@ -68,17 +66,17 @@
 
 			color: {
 				type: [ String, Object ],
-				default: () => 'transparent',
+				default: 'transparent',
 			},
 
 			css: {
 				type: Object,
-				default: () => ({}),
+				default: () => undefined,
 			},
 
 			tileCss: {
 				type: Object,
-				default: () => ({}),
+				default: () => undefined,
 			},
 		},
 
