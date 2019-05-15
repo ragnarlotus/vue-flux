@@ -1,7 +1,7 @@
 <template>
 	<div :style="style" ref="vortex">
 		<flux-image
-			v-for="i in circles"
+			v-for="i in numCircles"
 			:key="i"
 			:size="size"
 			:image="image"
@@ -35,18 +35,18 @@
 
 		props: {
 			circles: {
-				type: Number,
+				type: [ String, Number ],
 				default: 1,
 			},
 
 			size: {
 				type: Object,
-				default: () => ({}),
+				default: undefined,
 			},
 
 			image: {
 				type: [ String, Object ],
-				default: () => ({}),
+				default: undefined,
 			},
 
 			color: {
@@ -56,12 +56,12 @@
 
 			css: {
 				type: Object,
-				default: () => ({}),
+				default: undefined,
 			},
 
 			tileCss: {
 				type: Object,
-				default: () => ({}),
+				default: undefined,
 			},
 		},
 
@@ -81,6 +81,10 @@
 				};
 			},
 
+			numCircles() {
+				return Math.round(parseFloat(this.circles));
+			},
+
 			diag() {
 				let size = this.viewSize;
 
@@ -88,15 +92,15 @@
 			},
 
 			radius() {
-				return Math.ceil(this.diag / 2 / this.circles);
+				return Math.ceil(this.diag / 2 / this.numCircles);
 			},
 
 			topGap() {
-				return Math.ceil(this.viewSize.height / 2 - this.radius * this.circles);
+				return Math.ceil(this.viewSize.height / 2 - this.radius * this.numCircles);
 			},
 
 			leftGap() {
-				return Math.ceil(this.viewSize.width / 2 - this.radius * this.circles);
+				return Math.ceil(this.viewSize.width / 2 - this.radius * this.numCircles);
 			},
 		},
 
@@ -108,7 +112,7 @@
 			getTileCss(i) {
 				i--;
 
-				let width = (this.circles - i) * this.radius * 2;
+				let width = (this.numCircles - i) * this.radius * 2;
 
 				return {
 					...this.tileCss,
