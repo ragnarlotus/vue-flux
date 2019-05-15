@@ -4,7 +4,7 @@
 			:is="component"
 			v-for="i in numTiles"
 			:key="i"
-			:size="tileSize"
+			:size="size"
 			:image="image"
 			:images="images"
 			:color="color"
@@ -40,13 +40,13 @@
 
 		props: {
 			rows: {
-				type: Number,
+				type: [ String, Number ],
 				required: false,
 				default: () => 1,
 			},
 
 			cols: {
-				type: Number,
+				type: [ String, Number ],
 				required: false,
 				default: () => 1,
 			},
@@ -63,7 +63,7 @@
 
 			images: {
 				type: Object,
-				default: () => ({}),
+				default: () => undefined,
 			},
 
 			color: {
@@ -84,7 +84,7 @@
 
 		computed: {
 			component() {
-				return Object.keys(this.images).length? 'FluxCube' : 'FluxImage';
+				return this.images? 'FluxCube' : 'FluxImage';
 			},
 
 			viewSize() {
@@ -102,14 +102,22 @@
 				};
 			},
 
+			numRows() {
+				return Math.round(parseFloat(this.rows));
+			},
+
+			numCols() {
+				return Math.round(parseFloat(this.cols));
+			},
+
 			numTiles() {
-				return this.rows * this.cols;
+				return this.numRows * this.numCols;
 			},
 
 			tileSize() {
 				return {
-					width: Math.ceil(this.viewSize.width / this.cols),
-					height: Math.ceil(this.viewSize.height / this.rows),
+					width: Math.ceil(this.viewSize.width / this.numCols),
+					height: Math.ceil(this.viewSize.height / this.numRows),
 				};
 			}
 		},
@@ -120,11 +128,11 @@
 
 		methods: {
 			getRowNumber(i) {
-				return Math.floor(i / this.cols);
+				return Math.floor(i / this.numCols);
 			},
 
 			getColNumber(i) {
-				return i % this.cols;
+				return i % this.numCols;
 			},
 
 			getTileCss(i) {
@@ -139,13 +147,13 @@
 				let top = row * height;
 				let left = col * width;
 
-				if (row + 1 === this.rows)
+				if (row + 1 === this.numRows)
 					height = this.viewSize.height - row * height;
 
-				if (col + 1 === this.cols)
+				if (col + 1 === this.numCols)
 					width = this.viewSize.width - col * width;
 
-				let zIndex = i + 1 < this.cols / 2? i + 1 : this.cols - i;
+				let zIndex = i + 1 < this.numCols / 2? i + 1 : this.numCols - i;
 
 				return {
 					...this.tileCss,
