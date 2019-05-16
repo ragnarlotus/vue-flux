@@ -29,7 +29,7 @@
 
 		data: () => ({
 			mounted: false,
-			style: {
+			baseStyle: {
 				position: 'absolute',
 				top: 0,
 				left: 0,
@@ -51,17 +51,14 @@
 
 			size: {
 				type: Object,
-				default: undefined,
 			},
 
 			image: {
 				type: [ String, Object ],
-				default: () => undefined,
 			},
 
 			images: {
 				type: Object,
-				default: () => undefined,
 			},
 
 			color: {
@@ -71,12 +68,10 @@
 
 			css: {
 				type: Object,
-				default: () => undefined,
 			},
 
 			tileCss: {
 				type: Object,
-				default: () => undefined,
 			},
 		},
 
@@ -117,7 +112,14 @@
 					width: Math.ceil(this.viewSize.width / this.numCols),
 					height: Math.ceil(this.viewSize.height / this.numRows),
 				};
-			}
+			},
+
+			style() {
+				return {
+					...this.baseStyle,
+					...this.css,
+				};
+			},
 		},
 
 		mounted() {
