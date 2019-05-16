@@ -5,6 +5,7 @@
 		:size="size"
 		:images="images"
 		:color="color"
+		:css="gridCss"
 		ref="grid">
 	</flux-grid>
 </template>
@@ -27,16 +28,24 @@
 		data: () => ({
 			rows: 1,
 			cols: 8,
-			tileDuration: 80000,
+			tileDuration: 800,
 			totalDuration: 0,
 			perspective: '1200px',
 //			easing: 'ease-out',
 			easing: 'cubic-bezier(0.6, -0.28, 0.735, 0.045)',
-			tileDelay: 15000,
+			tileDelay: 150,
 			sideColor: '#333',
 			images: {},
 			color: {},
 		}),
+
+		computed: {
+			gridCss() {
+				return {
+					perspective: this.perspective,
+				};
+			}
+		},
 
 		created() {
 			this.totalDuration = this.tileDelay * this.cols + this.tileDuration;
@@ -53,7 +62,6 @@
 		},
 
 		mounted() {
-			this.mask.perspective = this.perspective;
 			this.mask.overflow = 'visible';
 
 			if (this.current)
