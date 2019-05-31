@@ -8,6 +8,7 @@
 			:image="getSideImage(side)"
 			:color="getSideColor(side)"
 			:css="getSideCss(side)"
+			:offset="getSideOffset(side)"
 			:ref="side">
 		</flux-image>
 	</div>
@@ -84,11 +85,28 @@
 
 		computed: {
 			viewSize() {
-				if (this.size.width && this.size.height)
-					return this.size;
+				let size = {
+					...this.imageFinalSize,
+				};
+
+				if (this.css.width)
+					size.width = parseFloat(this.css.width);
+
+				if (this.css.height)
+					size.height = parseFloat(this.css.height);
+
+				return size;
+			},
+
+			imageFinalSize() {
+				if (this.size.width && this.size.height) {
+					return {
+						...this.size,
+					};
+				}
 
 				if (!this.mounted)
-					return {};
+					return undefined;
 
 				let parentSize = DomHelper.sizeFrom(this.$el.parentNode);
 
@@ -100,15 +118,9 @@
 
 			sizeStyle() {
 				let size = {
-					width: this.viewSize.width || '100%',
-					height: this.viewSize.height || '100%',
+					width: `${this.viewSize.width}px` || '100%',
+					height: `${this.viewSize.height}px` || '100%',
 				};
-
-				if (/[0-9]$/.test(size.width))
-					size.width += 'px';
-
-				if (/[0-9]$/.test(size.height))
-					size.height += 'px';
 
 				return size;
 			},
@@ -146,7 +158,7 @@
 			},
 
 			getSideSize(side) {
-				return this.viewSize;
+				return this.imageFinalSize;
 			},
 
 			getSideColor(side) {
@@ -162,34 +174,26 @@
 			getSideCss(side) {
 				let css = {};
 
-				if (this.sideDefined(side)) {
-					const opposite = val => val[0] === '-'? val.substr(1) : '-'+ val;
-
-					if (this.css.top) {
-						css.top = this.css.top;
-
-						if (side === 'back')
-							css.top = opposite(css.top);
-					}
-
-					if (this.css.left) {
-						css.left = this.css.left;
-
-						if (side === 'back')
-							css.left = opposite(css.left);
-					}
-				}
-
-				translate.z = {
-					top: this.size.height,
-					bottom: this.size.height,
-					left: this.size.width,
-					right: this.size.width,
-				};
+				css.width = `${this.viewSize.width}px`;
+				css.height = `${this.viewSize.height}px`;
 
 				css.transform = this.getTransform(side);
 
 				return css;
+			},
+
+			getSideOffset(side) {
+				let offset = {};
+
+				const opposite = val => val[0] === '-'? val.substr(1) : `-${val}`;
+
+				if (this.css.top)
+					offset.top = side === 'back'? this.css.top : opposite(this.css.top);
+
+				if (this.css.left)
+					offset.left = side === 'back'? this.css.left : opposite(this.css.left);
+
+				return offset;
 			},
 
 			getTransform(side) {
@@ -206,7 +210,7 @@
 				let ty = translate.y[side] || '0';
 				let tz = translateZ[side] / 2 || '0';
 
-				return 'rotateX('+ rx +'deg) rotateY('+ ry +'deg) translate3d('+ tx +'%, '+ ty +'%, '+ tz +'px)';
+				return `rotateX(${rx}deg) rotateY(${ry}deg) translate3d(${tx}%, ${ty}%, ${tz}px)`;
 			},
 
 			setCss(css) {

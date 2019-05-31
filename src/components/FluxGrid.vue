@@ -81,8 +81,11 @@
 			},
 
 			viewSize() {
-				if (this.size.width && this.size.height)
-					return this.size;
+				if (this.size.width && this.size.height) {
+					return {
+						...this.size,
+					};
+				}
 
 				if (!this.mounted)
 					return {};
