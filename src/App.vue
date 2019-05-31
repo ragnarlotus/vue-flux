@@ -5,8 +5,8 @@
 
 			<p>You can use arrow keys to show next image (when no transition running). Double click to switch full screen mode.</p>
 
-			<div class="sm:block md:block lg:flex xl:flex">
-				<div class="lg:w-3/5 px-2 mb-4">
+			<div class="block sm:block md:block lg:flex">
+				<div class="lg:w-4/6 px-2 mb-4">
 					<vue-flux :options="fluxOptions" :images="fluxImages" :transitions="fluxTransitions" :captions="fluxCaptions" ref="slider">
 <!--						<flux-preloader slot="preloader"></flux-preloader>
 						<flux-caption slot="caption"></flux-caption>
@@ -16,10 +16,10 @@
 					</vue-flux>
 				</div>
 
-				<div class="lg:w-2/5 px-2 mb-4 transitions">
+				<div class="lg:w-2/6 px-2 mb-4 transitions">
 					<h4 class="mb-2">2D Transitions</h4>
 
-					<ul class="list-reset flex mb-2">
+					<ul class="flex mb-2">
 						<li class="flex-1 mr-2">
 							<a @click="showNext('fade')" :class="transitionClass('transitionFade')">Fade</a>
 						</li>
@@ -29,7 +29,7 @@
 						</li>
 					</ul>
 
-					<ul class="list-reset flex mb-2">
+					<ul class="flex mb-2">
 						<li class="flex-1 mr-2">
 							<a @click="showNext('swipe')" :class="transitionClass('transitionSwipe')">Swipe</a>
 						</li>
@@ -39,7 +39,7 @@
 						</li>
 					</ul>
 
-					<ul class="list-reset flex mb-2">
+					<ul class="flex mb-2">
 						<li class="flex-1 mr-2">
 							<a @click="showNext('waterfall')" :class="transitionClass('transitionWaterfall')">Waterfall</a>
 						</li>
@@ -53,7 +53,7 @@
 						</li>
 					</ul>
 
-					<ul class="list-reset flex mb-2">
+					<ul class="flex mb-2">
 						<li class="flex-1 mr-2">
 							<a @click="showNext('blocks1')" :class="transitionClass('transitionBlocks1')">Blocks 1</a>
 						</li>
@@ -63,7 +63,7 @@
 						</li>
 					</ul>
 
-					<ul class="list-reset flex mb-2">
+					<ul class="flex mb-2">
 						<li class="flex-1 mr-2">
 							<a @click="showNext('concentric')" :class="transitionClass('transitionConcentric')">Concentric</a>
 						</li>
@@ -79,7 +79,7 @@
 
 					<h4 class="mt-5 mb-2">3D Transitions</h4>
 
-					<ul class="list-reset flex mb-2">
+					<ul class="flex mb-2">
 						<li class="flex-1 mr-2">
 							<a @click="showNext('cube')" :class="transitionClass('transitionCube')">Cube</a>
 						</li>
@@ -93,7 +93,7 @@
 						</li>
 					</ul>
 
-					<ul class="list-reset flex mb-2">
+					<ul class="flex mb-2">
 						<li class="flex-1 mr-2">
 							<a @click="showNext('wave')" :class="transitionClass('transitionWave')">Wave</a>
 						</li>
@@ -103,7 +103,7 @@
 						</li>
 					</ul>
 
-					<ul class="list-reset flex">
+					<ul class="flex">
 						<li class="flex-1 mr-2">
 							<a @click="showNext('round1')" :class="transitionClass('transitionRound1')">Round 1</a>
 						</li>
@@ -206,7 +206,7 @@
 			rendered: false,
 			baseTransitionClass: 'text-center whitespace-no-wrap block border border-grey-light rounded text-white cursor-pointer py-2 px-4 shadow-md',
 			activeTransitionClass: 'bg-black',
-			inactiveTransitionClass: 'bg-grey-darkest hover:bg-black',
+			inactiveTransitionClass: 'bg-gray-800 hover:bg-black',
 			fluxOptions: {
 				autoplay: false,
 				bindKeys: true,
@@ -246,16 +246,16 @@
 		methods: {
 			loadImages() {
 				this.fluxImages = [
-/*					'slides/1.jpg',
-					'slides/2.jpg',
-					'slides/3.jpg',
-					'slides/4.jpg',
 					'slides/5.jpg',
-					'slides/6.jpg'*/
+					'slides/3.jpg',
+//					'slides/2.jpg',
+//					'slides/1.jpg',
+//					'slides/4.jpg',
+//					'slides/6.jpg'
 				];
 
 				this.fluxCaptions = [];
-
+/*
 				// https://github.com/dconnolly/chromecast-backgrounds/blob/master/backgrounds.json
 				let url = 'photos.json';
 
@@ -271,7 +271,7 @@
 
 						this.addImage(entry.url, entry.author);
 					}
-				});
+				});*/
 			},
 
 			addImage(url, author) {
