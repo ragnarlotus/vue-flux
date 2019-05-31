@@ -37,19 +37,49 @@
 
 			color: {
 				type: String,
-				default: () => 'transparent',
+				default: 'transparent',
 			},
 
 			css: {
 				type: Object,
 				default: () => ({}),
 			},
+
+			offset: {
+				type: [ String, Object],
+				default: 'auto',
+			},
 		},
 
 		computed: {
 			viewSize() {
-				if (this.size.width && this.size.height)
-					return this.size;
+				let size = {
+					...this.imageFinalSize,
+				};
+
+				if (/px$/i.test(this.css.width))
+					size.width = parseFloat(this.css.width);
+
+				if (/px$/i.test(this.css.height))
+					size.height = parseFloat(this.css.height);
+
+				return size;
+			},
+
+			imageSrc() {
+				return this.image.src || this.image;
+			},
+
+			imageOriginalSize() {
+				return this.image.size || this.srcSize;
+			},
+
+			imageFinalSize() {
+				if (this.size.width && this.size.height) {
+					return {
+						...this.size,
+					};
+				}
 
 				if (!this.mounted)
 					return undefined;
@@ -62,24 +92,13 @@
 				};
 			},
 
-			imageSrc() {
-				return this.image.src || this.image;
-			},
-
-			imageSize() {
-				return this.image.size || this.srcSize;
-			},
-
 			sizeStyle() {
 				let size = {
 					...this.viewSize,
 				};
 
-				if (/[0-9]$/.test(size.width))
-					size.width += 'px';
-
-				if (/[0-9]$/.test(size.height))
-					size.height += 'px';
+				size.width += 'px';
+				size.height += 'px';
 
 				return size;
 			},
@@ -97,50 +116,69 @@
 					};
 				}
 
-				let view = this.viewSize;
+				let originalSize = this.imageOriginalSize;
+				let finalSize = this.imageFinalSize;
 
-				if (!view || !this.imageSize)
+				if (!originalSize || !finalSize)
 					return {};
 
 				let image = {
-					...this.imageSize,
+					...originalSize,
 					top: 0,
 					left: 0,
-					src: 'url("'+ this.imageSrc +'")',
+					src: `url("${this.imageSrc}")`,
 				};
 
-				if (image.height / image.width >= view.height / view.width) {
-					image.height = Math.ceil(view.width * image.height / image.width);
-					image.width = Math.ceil(view.width);
-					image.top = Math.ceil((view.height - image.height) / 2);
+				if (image.height / image.width >= finalSize.height / finalSize.width) {
+					image.height = finalSize.width * image.height / image.width;
+					image.width = finalSize.width;
+					image.top = (finalSize.height - image.height) / 2;
 
 				} else {
-					image.width = Math.ceil(view.height * image.width / image.height);
-					image.height = Math.ceil(view.height);
-					image.left = Math.ceil((view.width - image.width) / 2);
+					image.width = finalSize.height * image.width / image.height;
+					image.height = finalSize.height;
+					image.left = (finalSize.width - image.width) / 2;
 				}
 
-				image.top -= parseFloat(this.css.top) || 0;
-				image.left -= parseFloat(this.css.left) || 0;
+				for (let prop of ['width', 'height', 'top', 'left'])
+					image[prop] = Math.ceil(image[prop]);
 
-				const equals = (val1, val2) => (new RegExp('^-?'+ val1 +'$')).test(val2);
+				let offset;
 
-				view.top = 0;
+				for (let side of ['top', 'left']) {
+					offset = 0;
 
-				if (this.css.top && !equals(this.parent.top, this.css.top))
-					view.top = this.css.top;
+					if (this.offset === 'auto' || this.offset[side] === 'auto')
+						offset = '-'+ (this.css[side] || 0);
 
-				view.left = 0;
+					else if ((typeof this.offset).includes('string', 'number'))
+						offset = this.offset;
 
-				if (this.css.left && !equals(this.parent.left, this.css.left))
-					view.left = this.css.left;
+					else if (this.offset[side])
+						offset = this.offset[side];
+
+					image[side] += parseFloat(offset);
+				}
+
+				let position = {
+					top: 0,
+					left: 0,
+				};
+
+				const equalAbs = (val1, val2) => (new RegExp('^-?'+ val1 +'$')).test(val2);
+
+				if (this.css.top && !equalAbs(this.parent.top, this.css.top))
+					position.top = this.css.top;
+
+				if (this.css.left && !equalAbs(this.parent.left, this.css.left))
+					position.left = this.css.left;
 
 				return {
-					top: view.top,
-					left: view.left,
+					top: position.top,
+					left: position.left,
 					backgroundImage: image.src,
-					backgroundSize: image.width +'px '+ image.height +'px',
-					backgroundPosition: image.left +'px '+ image.top +'px',
+					backgroundSize: `${image.width}px ${image.height}px`,
+					backgroundPosition: `${image.left}px ${image.top}px`,
 					backgroundRepeat: this.css.backgroundRepeat || 'no-repeat',
 				};
 			},
