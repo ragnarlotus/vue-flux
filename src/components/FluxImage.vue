@@ -32,7 +32,6 @@
 
 			image: {
 				type: [ String, Object ],
-				default: () => ({}),
 			},
 
 			color: {
@@ -67,10 +66,16 @@
 			},
 
 			imageSrc() {
+				if (!this.image)
+					return;
+
 				return this.image.src || this.image;
 			},
 
 			imageOriginalSize() {
+				if (!this.image)
+					return;
+
 				return this.image.size || this.srcSize;
 			},
 

@@ -118,9 +118,15 @@
 
 			sizeStyle() {
 				let size = {
-					width: `${this.viewSize.width}px` || '100%',
-					height: `${this.viewSize.height}px` || '100%',
+					width: this.imageFinalSize.width || '100%',
+					height: this.imageFinalSize.height || '100%',
 				};
+
+				if (/[0-9]$/.test(size.width))
+					size.width += 'px';
+
+				if (/[0-9]$/.test(size.height))
+					size.height += 'px';
 
 				return size;
 			},
@@ -151,10 +157,7 @@
 			},
 
 			getSideImage(side) {
-				if (this.images[side])
-					return this.images[side];
-
-				return undefined;
+				return this.images[side];
 			},
 
 			getSideSize(side) {
@@ -172,10 +175,15 @@
 			},
 
 			getSideCss(side) {
-				let css = {};
-
-				css.width = `${this.viewSize.width}px`;
-				css.height = `${this.viewSize.height}px`;
+				let css = {
+					...this.viewSize,
+				};
+/*
+				if (!this.images[side] && ['left', 'right'].includes(side))
+					css.width = this.size.width;
+*/
+				css.width += 'px';
+				css.height += 'px';
 
 				css.transform = this.getTransform(side);
 
@@ -197,18 +205,20 @@
 			},
 
 			getTransform(side) {
+				let size = this.viewSize;
+
 				let translateZ = {
-					top: this.viewSize.height,
-					bottom: this.viewSize.height,
-					left: this.viewSize.width,
-					right: this.viewSize.width,
+					top: size.height,
+					bottom: size.height,
+					left: size.width,
+					right: size.width,
 				};
 
-				let rx = rotate.x[side] || '0';
-				let ry = rotate.y[side] || '0';
-				let tx = translate.x[side] || '0';
-				let ty = translate.y[side] || '0';
-				let tz = translateZ[side] / 2 || '0';
+				let rx = rotate.x[side] || 0;
+				let ry = rotate.y[side] || 0;
+				let tx = translate.x[side] || 0;
+				let ty = translate.y[side] || 0;
+				let tz = translateZ[side] / 2 || 0;
 
 				return `rotateX(${rx}deg) rotateY(${ry}deg) translate3d(${tx}%, ${ty}%, ${tz}px)`;
 			},
