@@ -75,6 +75,7 @@
 				autohideTime: 1500,
 				lazyLoad: true,
 				lazyLoadAfter: 3,
+				allowToSkipTransition: true,
 				path: '',
 			},
 			size: {
