@@ -14,13 +14,13 @@
 </template>
 
 <script>
+	import VueFlux from '@/components/VueFlux.vue';
+
 	export default {
 		name: 'FluxPagination',
 
 		props: {
-			slider: {
-				type: Object,
-			},
+			slider: VueFlux,
 		},
 
 		computed: {

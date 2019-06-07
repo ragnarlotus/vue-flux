@@ -27,7 +27,7 @@
 
 		mounted() {
 			this.$refs.from.transform({
-				transition: 'opacity '+ this.totalDuration +'ms '+ this.easing,
+				transition: `opacity ${this.totalDuration}ms ${this.easing}`,
 				opacity: 0,
 			});
 		},

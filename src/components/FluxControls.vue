@@ -13,9 +13,7 @@
 		name: 'FluxControls',
 
 		props: {
-			slider: {
-				type: Object,
-			},
+			slider: Object,
 		},
 
 		computed: {

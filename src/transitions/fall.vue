@@ -31,7 +31,7 @@
 			this.mask.overflow = 'visible';
 
 			this.$refs.image.transform({
-				transition: 'transform '+ this.totalDuration +'ms '+ this.easing,
+				transition: `transform ${this.totalDuration}ms ${this.easing}`,
 				transform: 'rotateX(-90deg)',
 			});
 		},

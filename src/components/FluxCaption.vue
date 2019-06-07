@@ -9,9 +9,7 @@
 		name: 'FluxCaption',
 
 		props: {
-			slider: {
-				type: Object,
-			},
+			slider: Object,
 		},
 
 		computed: {

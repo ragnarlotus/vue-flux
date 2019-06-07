@@ -8,6 +8,7 @@
 			:image="image"
 			:images="images"
 			:color="color"
+			:depth="depth"
 			:css="getTileCss(i)"
 			ref="tiles">
 		</component>
@@ -40,39 +41,31 @@
 
 		props: {
 			rows: {
-				type: [ String, Number ],
+				type: Number,
 				default: 1,
 			},
 
 			cols: {
-				type: [ String, Number ],
+				type: Number,
 				default: 1,
 			},
 
-			size: {
-				type: Object,
-			},
+			size: Object,
 
-			image: {
-				type: [ String, Object ],
-			},
+			image: [ String, Object ],
 
-			images: {
-				type: Object,
-			},
+			images: Object,
 
 			color: {
 				type: [ String, Object ],
 				default: 'transparent',
 			},
 
-			css: {
-				type: Object,
-			},
+			depth: Number,
 
-			tileCss: {
-				type: Object,
-			},
+			css: Object,
+
+			tileCss: Object,
 		},
 
 		computed: {
