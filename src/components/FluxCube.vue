@@ -77,6 +77,8 @@
 				default: () => ({}),
 			},
 
+			depth: Number,
+
 			css: {
 				type: Object,
 				default: () => ({}),
@@ -138,6 +140,17 @@
 					...this.css,
 				};
 			},
+
+			translateZ() {
+				let size = this.viewSize;
+
+				return {
+					top: size.height / 2,
+					bottom: size.height / 2,
+					left: (this.depth || size.width) / 2,
+					right: -(this.depth || size.width) / 2 + this.viewSize.width,
+				};
+			}
 		},
 
 		mounted() {
@@ -178,10 +191,10 @@
 				let css = {
 					...this.viewSize,
 				};
-/*
-				if (!this.images[side] && ['left', 'right'].includes(side))
-					css.width = this.size.width;
-*/
+
+				if (this.depth && ['left', 'right'].includes(side))
+					css.width = this.depth;
+
 				css.width += 'px';
 				css.height += 'px';
 
@@ -205,20 +218,11 @@
 			},
 
 			getTransform(side) {
-				let size = this.viewSize;
-
-				let translateZ = {
-					top: size.height,
-					bottom: size.height,
-					left: size.width,
-					right: size.width,
-				};
-
 				let rx = rotate.x[side] || 0;
 				let ry = rotate.y[side] || 0;
 				let tx = translate.x[side] || 0;
 				let ty = translate.y[side] || 0;
-				let tz = translateZ[side] / 2 || 0;
+				let tz = this.translateZ[side] || 0;
 
 				return `rotateX(${rx}deg) rotateY(${ry}deg) translate3d(${tx}%, ${ty}%, ${tz}px)`;
 			},

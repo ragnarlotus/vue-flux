@@ -32,7 +32,7 @@
 
 		mounted() {
 			this.$refs.wrapper.transform({
-				transition: 'width '+ this.totalDuration +'ms '+ this.easing,
+				transition: `width ${this.totalDuration}ms ${this.easing}`,
 				width: 0,
 			});
 		}

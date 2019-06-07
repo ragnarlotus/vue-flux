@@ -76,7 +76,7 @@
 
 			this.grid.transform((tile, i) => {
 				tile.setCss({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
+					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
 				});
 
 				tile.turn('back', this.direction);

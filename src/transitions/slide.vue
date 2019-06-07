@@ -40,8 +40,8 @@
 
 		mounted() {
 			this.$refs.wrapper.transform({
-				transition: 'transform '+ this.totalDuration +'ms '+ this.easing,
-				transform: 'translateX('+ -this.size.width +'px)',
+				transition: `transform ${this.totalDuration}ms ${this.easing}`,
+				transform: `translateX(${-this.size.width}px)`,
 			});
 		},
 	};

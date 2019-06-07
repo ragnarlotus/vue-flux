@@ -31,8 +31,8 @@
 			});
 
 			this.$refs.image.transform({
-				transition: 'all '+ this.totalDuration +'ms '+ this.easing,
-				transform: 'scale('+ transform.scale +') translate('+ transform.translateX +', '+ transform.translateY +')',
+				transition: `all ${this.totalDuration}ms ${this.easing}`,
+				transform: `scale(${transform.scale}) translate(${transform.translateX}, ${transform.translateY})`,
 				opacity: 0,
 			});
 		},

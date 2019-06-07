@@ -67,7 +67,7 @@
 
 			this.grid.transform((tile, i) => {
 				tile.front.transform({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
+					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
 					borderRadius: '100%',
 					opacity: '0',
 					transform: 'scale(1.6, 1.6)',

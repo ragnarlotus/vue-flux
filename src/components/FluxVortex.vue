@@ -35,34 +35,19 @@
 
 		props: {
 			circles: {
-				type: [ String, Number ],
+				type: Number,
 				default: 1,
 			},
 
-			size: {
-				type: Object,
-				default: undefined,
-			},
+			size: Object,
 
-			image: {
-				type: [ String, Object ],
-				default: undefined,
-			},
+			image: [ String, Object ],
 
-			color: {
-				type: String,
-				required: false,
-			},
+			color: String,
 
-			css: {
-				type: Object,
-				default: undefined,
-			},
+			css: Object,
 
-			tileCss: {
-				type: Object,
-				default: undefined,
-			},
+			tileCss: Object,
 		},
 
 		computed: {

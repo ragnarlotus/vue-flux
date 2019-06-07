@@ -31,6 +31,7 @@
 
 <script>
 	import FluxImage from '@/components/FluxImage.vue';
+	import VueFlux from '@/components/VueFlux.vue';
 
 	export default {
 		name: 'FluxPreloader',
@@ -57,9 +58,7 @@
 		}),
 
 		props: {
-			slider: {
-				type: Object,
-			},
+			slider: VueFlux,
 
 			showSpinner: {
 				type: Boolean,

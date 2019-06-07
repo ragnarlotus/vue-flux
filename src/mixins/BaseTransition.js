@@ -1,9 +1,6 @@
 export default {
 	props: {
-		size: {
-			type: Object,
-			required: false,
-		},
+		size: Object,
 
 		from: {
 			type: [ String, Object ],
@@ -15,10 +12,7 @@ export default {
 			required: false,
 		},
 
-		options: {
-			type: Object,
-			required: false,
-		},
+		options: Object,
 	},
 
 	computed: {
