@@ -53,7 +53,7 @@
 
 			this.$nextTick(() => {
 				this.$refs.cube.transform({
-					transition: 'transform '+ this.totalDuration +'ms '+ this.easing,
+					transition: `transform ${this.totalDuration}ms ${this.easing}`,
 					transform: 'rotateY(-180deg)',
 				});
 			});

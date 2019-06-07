@@ -167,7 +167,7 @@
 
 					let css = {
 						width: this.parallax.width +'px',
-						backgroundImage: 'url("'+ this.image.src +'")',
+						backgroundImage: `url("${this.image.src}")`,
 						backgroundRepeat: 'no-repeat',
 					};
 
@@ -194,8 +194,8 @@
 						}
 
 						Object.assign(css, {
-							backgroundSize: this.background.width +'px '+ this.background.height +'px',
-							backgroundPosition: 'center '+ this.background.top +'px',
+							backgroundSize: `${this.background.width}px ${this.background.height}px`,
+							backgroundPosition: `center ${this.background.top}px`,
 						});
 					}
 

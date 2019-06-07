@@ -5,6 +5,7 @@
 		:size="size"
 		:images="images"
 		:color="color"
+		:depth="size.height"
 		:css="gridCss"
 		ref="grid">
 	</flux-grid>
@@ -31,7 +32,6 @@
 			tileDuration: 900,
 			totalDuration: 0,
 			perspective: '1200px',
-//			easing: 'ease-out',
 			easing: 'cubic-bezier(0.3, -0.3, 0.735, 0.285)',
 			tileDelay: 110,
 			sideColor: '#333',
@@ -69,7 +69,7 @@
 
 			this.$refs.grid.transform((tile, i) => {
 				tile.setCss({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
+					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
 				});
 
 				tile.turnBottom();

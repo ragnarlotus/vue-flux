@@ -16,6 +16,7 @@
 
 <script>
 	import FluxThumb from '@/components/FluxThumb.vue';
+	import VueFlux from '@/components/VueFlux.vue';
 
 	export default {
 		name: 'FluxIndex',
@@ -31,9 +32,7 @@
 		}),
 
 		props: {
-			slider: {
-				type: Object,
-			},
+			slider: VueFlux,
 		},
 
 		computed: {

@@ -37,9 +37,9 @@
 		mounted() {
 			this.$refs.vortex.transform((circle, i) => {
 				circle.transform({
-					transition: 'all '+ this.tileDuration +'ms '+ this.easing +' '+ this.getDelay(i) +'ms',
+					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
 					opacity: '0',
-					transform: 'rotateZ('+ this.getDeg(i) +'deg)',
+					transform: `rotateZ(${this.getDeg(i)}deg)`,
 				});
 			});
 		},

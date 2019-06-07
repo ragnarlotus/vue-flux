@@ -30,9 +30,7 @@
 				default: () => ({}),
 			},
 
-			image: {
-				type: [ String, Object ],
-			},
+			image: [ String, Object ],
 
 			color: {
 				type: String,
@@ -170,7 +168,7 @@
 					left: 0,
 				};
 
-				const equalAbs = (val1, val2) => (new RegExp('^-?'+ val1 +'$')).test(val2);
+				const equalAbs = (val1, val2) => (new RegExp(`^-?${val1}$`)).test(val2);
 
 				if (this.css.top && !equalAbs(this.parent.top, this.css.top))
 					position.top = this.css.top;

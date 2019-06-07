@@ -51,7 +51,7 @@ export default class ImagesController {
 			};
 
 		} else {
-			console.warn('Image '+ vf.images[index] +' could not be loaded');
+			console.warn(`Image ${vf.images[index]} could not be loaded`);
 		}
 
 		if (this.loaded === this.loading.length) {

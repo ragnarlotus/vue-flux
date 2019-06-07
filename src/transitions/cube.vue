@@ -39,7 +39,7 @@
 				this.current.hide();
 
 			this.$refs.cube.transform({
-				transition: 'all '+ this.totalDuration +'ms '+ this.easing,
+				transition: `all ${this.totalDuration}ms ${this.easing}`,
 			});
 
 			this.$refs.cube.turnLeft();
