@@ -162,8 +162,8 @@
 			},
 
 			setCss(css) {
-				this.style = {
-					...this.style,
+				this.baseStyle = {
+					...this.baseStyle,
 					...css,
 				};
 			},
