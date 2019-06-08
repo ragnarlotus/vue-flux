@@ -43,7 +43,7 @@
 			},
 
 			offset: {
-				type: [ String, Object],
+				type: [ Number, String, Object ],
 				default: 'auto',
 			},
 		},
@@ -151,7 +151,7 @@
 				for (let side of ['top', 'left']) {
 					offset = 0;
 
-					if (this.offset === 'auto' || this.offset[side] === 'auto')
+					if ((this.offset === 'auto' || this.offset[side] === 'auto') && /^[0-9]/.test(this.css[side]))
 						offset = '-'+ (this.css[side] || 0);
 
 					else if ((typeof this.offset).includes('string', 'number'))
