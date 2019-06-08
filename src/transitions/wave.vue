@@ -64,8 +64,7 @@
 		mounted() {
 			this.mask.overflow = 'visible';
 
-			if (this.current)
-				this.current.hide();
+			this.current.hide();
 
 			this.$refs.grid.transform((tile, i) => {
 				tile.setCss({
@@ -77,8 +76,7 @@
 		},
 
 		beforeDestroy() {
-			if (this.current)
-				this.current.show();
+			this.current.show();
 		},
 
 		methods: {

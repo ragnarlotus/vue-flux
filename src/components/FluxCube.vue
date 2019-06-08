@@ -52,7 +52,7 @@
 
 		data: () => ({
 			mounted: false,
-			sides: [ 'front', 'top', 'back', 'bottom', 'left', 'right' ],
+			sides: [ 'front', 'back', 'top', 'bottom', 'left', 'right' ],
 			baseStyle: {
 				position: 'absolute',
 				top: 0,
@@ -206,13 +206,11 @@
 			getSideOffset(side) {
 				let offset = {};
 
-				const opposite = val => val[0] === '-'? val.substr(1) : `-${val}`;
-
 				if (this.css.top)
-					offset.top = side === 'back'? this.css.top : opposite(this.css.top);
+					offset.top = -parseFloat(this.css.top);
 
 				if (this.css.left)
-					offset.left = side === 'back'? this.css.left : opposite(this.css.left);
+					offset.left = -parseFloat(this.css.left);
 
 				return offset;
 			},
@@ -249,6 +247,10 @@
 
 			turnTop() {
 				this.turn('top');
+			},
+
+			turnBack() {
+				this.turn('back');
 			},
 
 			turnBottom() {

@@ -1,17 +1,17 @@
 <template>
 	<flux-grid
-		:num-rows="numRows"
-		:num-cols="numCols"
-		:slider="slider"
+		:rows="rows"
+		:cols="cols"
+		:size="size"
 		:images="images"
+		:css="gridCss"
 		ref="grid">
 	</flux-grid>
 </template>
 
 <script>
+	import BaseTransition from '@/mixins/BaseTransition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
-
-	let vf, currentImage, nextImage;
 
 	export default {
 		name: 'transitionBlinds3d',
@@ -20,84 +20,59 @@
 			FluxGrid,
 		},
 
+		mixins: [
+			BaseTransition,
+		],
+
 		data: () => ({
-			numRows: 1,
-			numCols: 1,
+			rows: 1,
+			cols: 6,
 			tileDuration: 800,
 			totalDuration: 0,
+			perspective: '800px',
 			easing: 'ease-out',
 			tileDelay: 150,
-			images: {
-				front: {},
-				back: {},
-			},
+			images: {},
 		}),
 
-		props: {
-			slider: {
-				type: Object,
-				required: true,
-			},
-		},
-
 		computed: {
-			grid: function() {
-				return this.$refs.grid;
-			},
+			gridCss() {
+				return {
+					perspective: this.perspective,
+				};
+			}
 		},
 
 		created() {
-			vf = this.slider;
-			currentImage = vf.Images.current;
-			nextImage = vf.Images.next;
+			this.totalDuration = this.tileDelay * this.cols + this.tileDuration;
 
-			let divider = vf.size.width / 6;
-
-			vf.Transitions.setOptions(this, {
-				numCols: Math.floor(vf.size.width / divider),
-			});
-
-			this.totalDuration = this.tileDelay * this.numCols + this.tileDuration;
-
-			this.images.front = currentImage.getProperties();
-			this.images.back = nextImage.getProperties();
+			this.images = {
+				front: this.from,
+				back: this.to,
+			};
 		},
 
 		mounted() {
-			currentImage.hide();
-			nextImage.hide();
+			this.mask.overflow = 'visible';
 
-			this.grid.setCss({
-				perspective: '800px',
-			});
+			this.current.hide();
 
-			let deg = this.getDeg();
-
-			this.grid.transform((tile, i) => {
+			this.$refs.grid.transform((tile, i) => {
 				tile.setCss({
 					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
 				});
 
-				tile.turn('back', this.direction);
+				tile.turnBack();
 			});
 		},
 
-		destroyed() {
-			nextImage.show();
+		beforeDestroy() {
+			this.current.show();
 		},
 
 		methods: {
 			getDelay(i) {
-				let delay = i;
-
-				if (this.direction === 'left')
-					delay = this.numCols - i - 1;
-
-				return delay * this.tileDelay;
-			},
-
-			getDeg() {
-				return this.direction === 'right'? '180' : '-180';
+				return i * this.tileDelay;
 			},
 		},
 	};
