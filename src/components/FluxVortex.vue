@@ -25,8 +25,7 @@
 
 		data: () => ({
 			mounted: false,
-			tile: {},
-			style: {
+			baseStyle: {
 				position: 'absolute',
 				width: '100%',
 				height: '100%',
@@ -52,8 +51,11 @@
 
 		computed: {
 			viewSize() {
-				if (this.size.width && this.size.height)
-					return this.size;
+				if (this.size.width && this.size.height) {
+					return {
+						...this.size,
+					};
+				}
 
 				if (!this.mounted)
 					return {};
@@ -112,8 +114,8 @@
 			},
 
 			setCss(css) {
-				this.style = {
-					...this.style,
+				this.baseStyle = {
+					...this.baseStyle,
 					...css,
 				};
 			},
