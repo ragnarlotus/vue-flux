@@ -151,8 +151,8 @@
 				for (let side of ['top', 'left']) {
 					offset = 0;
 
-					if ((this.offset === 'auto' || this.offset[side] === 'auto') && /^[0-9]/.test(this.css[side]))
-						offset = '-'+ (this.css[side] || 0);
+					if ((this.offset === 'auto' || this.offset[side] === 'auto'))
+						offset = /^[0-9]/.test(this.css[side])? '-'+ this.css[side] : 0;
 
 					else if ((typeof this.offset).includes('string', 'number'))
 						offset = this.offset;
