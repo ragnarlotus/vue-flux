@@ -1,18 +1,17 @@
 <template>
 	<flux-grid
-		:slider="slider"
-		:num-rows="numRows"
-		:num-cols="numCols"
+		:rows="rows"
+		:cols="cols"
+		:size="size"
 		:images="images"
-		:tile-css="tileCss"
+		:css="gridCss"
 		ref="grid">
 	</flux-grid>
 </template>
 
 <script>
+	import BaseTransition from '@/mixins/BaseTransition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
-
-	let vf, currentImage, nextImage;
 
 	export default {
 		name: 'transitionRound1',
@@ -21,81 +20,68 @@
 			FluxGrid,
 		},
 
+		mixins: [
+			BaseTransition,
+		],
+
 		data: () => ({
-			numRows: 1,
-			numCols: 1,
+			rows: 6,
+			cols: 6,
 			tileDuration: 800,
 			totalDuration: 0,
+			perspective: '800px',
 			easing: 'ease-out',
 			tileDelay: 150,
-			tileCss: {},
-			images: {
-				front: {},
-				back: {},
-			},
+			images: {},
 		}),
 
-		props: {
-			slider: {
-				type: Object,
-				required: true,
-			},
-		},
-
 		computed: {
-			grid: function() {
-				return this.$refs.grid;
-			},
+			gridCss() {
+				return {
+					perspective: this.perspective,
+				};
+			}
 		},
 
 		created() {
-			vf = this.slider;
-			currentImage = vf.Images.current;
-			nextImage = vf.Images.next;
+			let divider = this.size.width / this.cols;
+			this.rows = Math.floor(this.size.height / divider);
 
-			let divider = vf.size.width / 6;
+			let multiplier = this.rows > this.cols? this.rows : this.cols;
+			this.totalDuration = this.tileDelay * multiplier * 2;
 
-			vf.Transitions.setOptions(this, {
-				numRows: Math.floor(vf.size.height / divider),
-				numCols: Math.floor(vf.size.width / divider),
-			});
-
-			this.totalDuration = this.tileDelay * (this.numRows > this.numCols? this.numRows : this.numCols) * 2 + this.tileDelay;
-
-			this.images.front = currentImage.getProperties();
-			this.images.back = nextImage.getProperties();
+			this.images = {
+				front: this.from,
+				back: this.to,
+			};
 		},
 
 		mounted() {
-			currentImage.hide();
-			nextImage.hide();
+			this.mask.overflow = 'visible';
 
-			this.grid.setCss({
-				perspective: '800px',
-			});
+			this.current.hide();
 
-			this.grid.transform((tile, i) => {
+			this.$refs.grid.transform((tile, i) => {
 				tile.setCss({
 					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
 				});
 
-				tile.turn('back', this.direction);
+				tile.turnBack();
 			});
 		},
 
 		destroyed() {
-			nextImage.show();
+			this.current.show();
 		},
 
 		methods: {
 			getDelay(i) {
-				let row = this.grid.getRowNumber(i);
-				let col = this.grid.getColNumber(i);
+				let grid = this.$refs.grid;
+
+				let row = grid.getRowNumber(i);
+				let col = grid.getColNumber(i);
+
 				let delay = col + row;
-
-				if (this.direction === 'left')
-					delay = this.numRows + this.numCols - delay - 1;
-
 				return delay * this.tileDelay;
 			},
 		},

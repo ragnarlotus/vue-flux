@@ -9,7 +9,6 @@ export default {
 
 		to: {
 			type: [ String, Object ],
-			required: false,
 		},
 
 		options: Object,

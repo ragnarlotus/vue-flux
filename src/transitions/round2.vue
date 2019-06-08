@@ -1,17 +1,17 @@
 <template>
 	<flux-grid
-		:slider="slider"
-		:num-rows="numRows"
-		:num-cols="numCols"
-		:images="images"
+		:rows="rows"
+		:cols="cols"
+		:size="size"
+		:image="from"
+		:css="gridCss"
 		ref="grid">
 	</flux-grid>
 </template>
 
 <script>
+	import BaseTransition from '@/mixins/BaseTransition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
-
-	let vf, currentImage, nextImage;
 
 	export default {
 		name: 'transitionRound2',
@@ -20,70 +20,58 @@
 			FluxGrid,
 		},
 
+		mixins: [
+			BaseTransition,
+		],
+
 		data: () => ({
-			numRows: 1,
-			numCols: 1,
+			rows: 9,
+			cols: 9,
 			tileDuration: 800,
 			totalDuration: 0,
+			perspective: '1200px',
+			rotateX: '-540',
 			easing: 'linear',
 			tileDelay: 100,
-			images: {
-				front: {},
-			},
 		}),
 
-		props: {
-			slider: {
-				type: Object,
-				required: true,
-			}
-		},
-
 		computed: {
-			grid: function() {
-				return this.$refs.grid;
+			gridCss() {
+				return {
+					perspective: this.perspective,
+				};
 			}
 		},
 
 		created() {
-			vf = this.slider;
-			currentImage = vf.Images.current;
-			nextImage = vf.Images.next;
+			let divider = this.size.width / this.cols;
+			this.rows = Math.floor(this.size.height / divider);
 
-			let divider = vf.size.width / 9;
-
-			vf.Transitions.setOptions(this, {
-				numRows: Math.floor(vf.size.height / divider),
-				numCols: Math.floor(vf.size.width / divider),
-			});
-
-			this.totalDuration = (this.numCols / 2 + this.numRows) * (this.tileDelay * 2);
-
-			this.images.front = currentImage.getProperties();
+			this.totalDuration = (this.cols / 2 + this.rows) * (this.tileDelay * 2);
 		},
 
 		mounted() {
-			currentImage.hide();
+			this.mask.overflow = 'visible';
 
-			this.grid.setCss({
-				perspective: '1200px',
-			});
-
-			this.grid.transform((tile, i) => {
-				tile.front.transform({
+			this.$refs.grid.transform((tile, i) => {
+				tile.transform({
 					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
 					opacity: '0',
-					transform: 'rotateX(-540deg)',
+					transform: `rotateX(${this.rotateX}deg)`,
 				});
 			});
 		},
 
 		methods: {
 			getDelay(i) {
-				let row = this.grid.getRowNumber(i);
-				let col = this.grid.getColNumber(i);
+				let grid = this.$refs.grid;
 
-				let delay = Math.abs(this.numRows - row) + Math.abs(this.numCols / 2 - 0.5 - col) - 1;
+				let row = grid.getRowNumber(i);
+				let col = grid.getColNumber(i);
+
+				let rowDelay = Math.abs(this.rows - row);
+				let colDelay = Math.abs(this.cols / 2 - 0.5 - col);
+				let delay = rowDelay + colDelay - 1;
 
 				return delay * this.tileDelay;
 			},
