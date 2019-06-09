@@ -27,6 +27,8 @@
 			mounted: false,
 			baseStyle: {
 				position: 'absolute',
+				top: 0,
+				left: 0,
 				width: '100%',
 				height: '100%',
 			},
@@ -42,7 +44,10 @@
 
 			image: [ String, Object ],
 
-			color: String,
+			color: {
+				type: [ String, Object ],
+				default: 'transparent',
+			},
 
 			css: Object,
 
@@ -88,6 +93,13 @@
 
 			leftGap() {
 				return Math.ceil(this.viewSize.width / 2 - this.radius * this.numCircles);
+			},
+
+			style() {
+				return {
+					...this.baseStyle,
+					...this.css,
+				};
 			},
 		},
 
