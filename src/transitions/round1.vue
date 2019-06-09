@@ -25,8 +25,8 @@
 		],
 
 		data: () => ({
-			rows: 6,
-			cols: 6,
+			rows: 8,
+			cols: 8,
 			tileDuration: 800,
 			totalDuration: 0,
 			perspective: '800px',
