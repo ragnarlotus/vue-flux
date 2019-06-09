@@ -152,7 +152,7 @@
 					offset = 0;
 
 					if ((this.offset === 'auto' || this.offset[side] === 'auto'))
-						offset = /^[0-9]/.test(this.css[side])? '-'+ this.css[side] : 0;
+						offset = /^-?[0-9]/.test(this.css[side])? -parseFloat(this.css[side]) : 0;
 
 					else if ((typeof this.offset).includes('string', 'number'))
 						offset = this.offset;
@@ -170,10 +170,10 @@
 
 				const equalAbs = (val1, val2) => (new RegExp(`^-?${val1}$`)).test(val2);
 
-				if (this.css.top && !equalAbs(this.parent.top, this.css.top))
+				if (this.css.top)
 					position.top = this.css.top;
 
-				if (this.css.left && !equalAbs(this.parent.left, this.css.left))
+				if (this.css.left)
 					position.left = this.css.left;
 
 				return {
