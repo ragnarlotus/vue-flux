@@ -1,6 +1,7 @@
 <template>
 	<div class="mask" :style="maskStyle" ref="mask">
 		<component
+			v-if="componentName"
 			:is="componentName"
 			:size="size"
 			:from="from"
@@ -58,10 +59,12 @@
 
 		computed: {
 			maskStyle() {
+				let size = this.size;
+
 				return {
 					...this.baseStyle,
-					width: this.size.width +'px' || '100%',
-					height: this.size.height +'px' || '100%',
+					width: size.width? size.width +'px' : '100%',
+					height: size.height? size.height +'px' : '100%',
 				};
 			},
 
@@ -72,8 +75,10 @@
 				let name = this.transition.name || this.transition;
 				name = 'transition'+ name[0].toUpperCase() + name.slice(1);
 
-				if (name in transitions === false)
+				if (name in transitions === false) {
+					throw new ReferenceError (`Transition ${name} not found`);
 					return undefined;
+				}
 
 				return name;
 			},

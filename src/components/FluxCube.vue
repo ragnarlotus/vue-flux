@@ -8,7 +8,7 @@
 			:image="getSideImage(side)"
 			:color="getSideColor(side)"
 			:css="getSideCss(side)"
-			:offset="getSideOffset(side)"
+			:offset="offset || getSideOffset(side)"
 			:ref="side">
 		</flux-image>
 	</div>
@@ -82,6 +82,14 @@
 			css: {
 				type: Object,
 				default: () => ({}),
+			},
+
+			sidesCss: {
+				type: Object,
+			},
+
+			offset: {
+				type: [ Number, String, Object ],
 			},
 		},
 
@@ -199,6 +207,9 @@
 				css.height += 'px';
 
 				css.transform = this.getTransform(side);
+
+				if (this.sidesCss && this.sideDefined(side))
+					Object.assign(css, this.sidesCss[side]);
 
 				return css;
 			},

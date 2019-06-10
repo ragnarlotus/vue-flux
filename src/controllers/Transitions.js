@@ -38,7 +38,7 @@ export default class TransitionsController {
 			this.currentIndex = this.transitions.indexOf(transition);
 
 			if (this.currentIndex === -1) {
-				console.warn('Transition not found: ', transition);
+				throw new ReferenceError(`Transition ${transition} not found`);
 				return;
 			}
 		}
