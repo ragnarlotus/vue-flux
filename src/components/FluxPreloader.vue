@@ -74,7 +74,7 @@
 				if (this.$parent.$options.name === 'VueFlux')
 					return this.$parent;
 
-				console.warn('slider not referenced, check https://github.com/deulos/vue-flux/wiki/FluxPreloader for help');
+				throw new ReferenceError('slider not referenced, check https://github.com/deulos/vue-flux/wiki/FluxPreloader for help');
 
 				return undefined;
 			},
