@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<flux-image :image="images.front" :size="size" :css="imageCss" ref="image"></flux-image>
-		<flux-cube :images="images" :size="size" :css="cubeCss" ref="cube"></flux-cube>
+		<flux-cube :images="images" :size="size" :css="cubeCss" :sides-css="cubeSidesCss" ref="cube"></flux-cube>
 	</div>
 </template>
 
@@ -31,6 +31,11 @@
 			cubeCss: {
 				transformOrigin: 'left center',
 			},
+			cubeSidesCss: {
+				back: {
+					backgroundPositionX: 0,
+				},
+			},
 		}),
 
 		created() {
@@ -43,8 +48,10 @@
 				width: widthPx,
 			});
 
-			this.images.front = this.from;
-			this.images.back = this.to;
+			this.images = {
+				front: this.from,
+				back: this.to,
+			};
 		},
 
 		mounted() {

@@ -168,14 +168,6 @@
 					left: 0,
 				};
 
-				const equalAbs = (val1, val2) => (new RegExp(`^-?${val1}$`)).test(val2);
-
-				if (this.css.top)
-					position.top = this.css.top;
-
-				if (this.css.left)
-					position.left = this.css.left;
-
 				return {
 					top: position.top,
 					left: position.left,
@@ -190,9 +182,9 @@
 				return {
 					...this.baseStyle,
 					...this.sizeStyle,
-					...this.css,
 					...this.colorStyle,
 					...this.imageStyle,
+					...this.css,
 				};
 			},
 		},
