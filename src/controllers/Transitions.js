@@ -29,6 +29,12 @@ export default class TransitionsController {
 		this.vf.$emit('transitions-updated');
 	}
 
+	reset() {
+		this.lastIndex = this.currentIndex;
+		this.current = undefined;
+		this.currentIndex = undefined;
+	}
+
 	run(transition) {
 		if (transition === undefined) {
 			this.currentIndex = this.nextIndex;
@@ -62,12 +68,18 @@ export default class TransitionsController {
 		});
 	}
 
+	cancel() {
+		let vf = this.vf;
+
+		vf.$emit('transition-cancel', this.current);
+		vf.Timers.clear('transition');
+		this.reset();
+	}
+
 	end() {
 		let vf = this.vf;
 
-		this.lastIndex = this.currentIndex;
-		this.current = undefined;
-		this.currentIndex = undefined;
+		this.reset();
 
 		vf.$nextTick(() => {
 			let currentImage = vf.Images.current;
