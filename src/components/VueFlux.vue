@@ -298,8 +298,17 @@
 				if (this.loaded === false || this.$refs.image === undefined)
 					return;
 
-				if (Transitions.current !== undefined)
+				if (Transitions.current !== undefined) {
+					if (this.config.allowToSkipTransition) {
+						Transitions.cancel();
+
+						this.$nextTick(() => {
+							this.showImage(index, transition);
+						});
+					}
+
 					return;
+				}
 
 				if (Images.current.index === index)
 					return;
