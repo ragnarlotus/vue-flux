@@ -283,7 +283,7 @@
 				this.config.autoplay = false;
 
 				if (Transitions.current)
-					Transitions.current = undefined;
+					Transitions.cancel();
 
 				Timers.clear('image');
 
