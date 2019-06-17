@@ -3,10 +3,13 @@ export default class ImagesController {
 	constructor(vf) {
 		this.vf = vf;
 
-		this.count = 0;
+		this.srcs = [];
 		this.loading = [];
-		this.loaded = 0;
 		this.props = [];
+
+		this.preloading = false;
+		this.lazyloading = false;
+
 		this.currentIndex = 0;
 		this.previousIndex = undefined;
 	}
@@ -23,18 +26,35 @@ export default class ImagesController {
 		return this.props[this.getIndex('next')];
 	}
 
-	preload() {
-		let vf = this.vf;
-
-		this.loading = vf.images.slice(0);
-		this.count = this.loading.length || 0;
-		this.loaded = 0;
+	load(images) {
+		this.srcs = this.vf.images.slice(0);
 		this.props = [];
 
-		vf.loaded = false;
+		this.vf.loaded = false;
+
+		this.preload();
 	}
 
-	add(index) {
+	preload() {
+		let preload;
+
+		if (this.vf.config.lazyLoad)
+			preload = this.vf.config.lazyLoadAfter;
+
+		this.loading = this.srcs.slice(0, preload);
+		this.preloading = true;
+	}
+
+	lazyLoad() {
+		if (this.props.length === this.srcs.length)
+			return;
+
+		this.loading = this.srcs.slice(this.props.length - 1);
+
+		this.lazyloading = true;
+	}
+
+	addProperties(index) {
 		this.loaded++;
 
 		let vf = this.vf;
@@ -54,11 +74,18 @@ export default class ImagesController {
 			console.warn(`Image ${vf.images[index]} could not be loaded`);
 		}
 
-		if (this.loaded === this.loading.length) {
+		if (this.props.length === this.loading.length && this.preloading) {
 			this.loading = [];
+			this.preloading = false;
 
 			if (vf.loaded !== true)
 				vf.init();
+
+			this.lazyLoad();
+
+		} else if (this.props.length === this.srcs.length && this.lazyloading) {
+			this.loading = [];
+			this.lazyloading = false;
 		}
 	}
 
