@@ -12,8 +12,8 @@
 			v-for="(url, index) in Images.loading" :key="index"
 			v-if="Images.loading[index]"
 			:src="config.path + url"
-			@load="Images.add(index)"
-			@error="Images.add(index)">
+			@load="Images.addProperties(index)"
+			@error="Images.addProperties(index)">
 
 		<flux-transition
 			v-if="Transitions.current"
@@ -148,7 +148,7 @@
 				this.stop();
 
 				this.$nextTick(() => {
-					Images.preload();
+					Images.preload(this.images);
 
 					this.config.autoplay = wasPlaying;
 				});
@@ -171,7 +171,7 @@
 		mounted() {
 			this.resize();
 
-			Images.preload();
+			Images.preload(this.images);
 
 			if (this.config.autohideTime === 0)
 				this.mouseOver = true;

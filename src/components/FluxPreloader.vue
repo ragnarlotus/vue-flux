@@ -8,36 +8,34 @@
 		</slot>
 
 		<flux-image
-			:slider="vf"
-			:display-size="vf.size"
-			:img-src="currentImage.src"
-			:image-size="currentImage.size"
+			:size="vf.size"
+			:image="currentImage"
 			:color="currentImage.color"
 			:css="currentImage.css"
 			ref="currentImage">
 		</flux-image>
 
-		<flux-image
-			:slider="vf"
-			:display-size="vf.size"
-			:img-src="nextImage.src"
-			:image-size="nextImage.size"
-			:color="nextImage.color"
-			:css="nextImage.css"
-			ref="nextImage">
-		</flux-image>
+		<flux-transition
+			:size="vf.size"
+			:transition="vf.Transitions.current"
+			:from="currentImage"
+			:to="nextImage"
+			:options="vf.Transitions.options"
+		></flux-transition>
 	</div>
 </template>
 
 <script>
 	import FluxImage from '@/components/FluxImage.vue';
+	import FluxTransition from '@/components/FluxTransition.vue';
 	import VueFlux from '@/components/VueFlux.vue';
 
 	export default {
 		name: 'FluxPreloader',
 
 		components: {
-			FluxImage
+			FluxTransition,
+			FluxImage,
 		},
 
 		data: () => ({
