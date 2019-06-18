@@ -8,19 +8,21 @@
 		</slot>
 
 		<flux-image
+			v-if="vf.Images.lastShown"
 			:size="vf.size"
-			:image="currentImage"
-			:color="currentImage.color"
-			:css="currentImage.css"
-			ref="currentImage">
+			:image="vf.Images.lastShown"
+			:css="lastShown.css"
+			ref="lastShown">
 		</flux-image>
 
 		<flux-transition
+			v-if="!vf.Images.preloading"
 			:size="vf.size"
-			:transition="vf.Transitions.current"
-			:from="currentImage"
-			:to="nextImage"
+			:transition="runningTransition"
+			:from="vf.Images.lastShown"
+			:to="vf.Images.current"
 			:options="vf.Transitions.options"
+			ref="transition"
 		></flux-transition>
 	</div>
 </template>
@@ -39,18 +41,11 @@
 		},
 
 		data: () => ({
-			runningTransition: false,
-			lastSrc: undefined,
+			runningTransition: undefined,
 
-			currentImage: {
+			lastShown: {
 				css: {
 					zIndex: 13,
-				},
-			},
-
-			nextImage: {
-				css: {
-					zIndex: 12,
 				},
 			},
 		}),
@@ -62,6 +57,8 @@
 				type: Boolean,
 				default: true,
 			},
+
+			transition: String
 		},
 
 		computed: {
@@ -81,7 +78,7 @@
 				if (!this.vf)
 					return false;
 
-				if (this.runningTransition === false && this.vf.loaded === true)
+				if (!this.vf.Images.preloading && !this.runningTransition)
 					return false;
 
 				return true;
@@ -91,29 +88,43 @@
 				if (this.vf === undefined)
 					return 0;
 
-				return Math.ceil(this.vf.Images.loaded * 100 / this.vf.Images.count) || 0;
+				let loading = this.vf.Images.loading.length;
+				let loaded = this.vf.Images.props.length;
+
+				return Math.ceil(loaded * 100 / loading) || 0;
 			},
 		},
 
 		watch: {
-			display: function() {
-				if (this.display === true) {
-					this.prepareImages();
-				}
-			},
+			'vf.Images.preloading': function(preloading) {
+				if (preloading || !vf.Images.lastShown)
+					return;
 
-			'vf.Images.current': function() {
-				this.lastSrc = this.vf.Images.current.src;
-			},
-		},
-
-		mounted() {
-			this.prepareImages();
+				this.transitionStart();
+			}
 		},
 
 		methods: {
-			prepareImages() {
+			transitionStart() {
+				let Transitions = this.vf.Transitions;
+
+				this.runningTransition = this.transition || Transitions.transitions[Transitions.nextIndex];
+
+				let timeout = vf.$refs.transition.getDuration();
+
+				setTimeout(() => {
+					this.transitionEnd();
+				}, timeout);
 			},
+
+			transitionEnd() {
+				let Transitions = this.vf.Transitions;
+
+				if (!this.transition)
+					Transitions.lastIndex = Transitions.nextIndex;
+
+				this.runningTransition = undefined;
+			}
 		}
 	};
 </script>

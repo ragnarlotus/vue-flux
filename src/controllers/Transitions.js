@@ -38,7 +38,7 @@ export default class TransitionsController {
 	run(transition) {
 		if (transition === undefined) {
 			this.currentIndex = this.nextIndex;
-			transition = this.next;
+			transition = this.transitions[this.currentIndex];
 
 		} else {
 			this.currentIndex = this.transitions.indexOf(transition);
@@ -61,7 +61,7 @@ export default class TransitionsController {
 
 		vf.$emit('transition-start', this.current);
 
-		let timeout = vf.$refs.transition.$children[0].totalDuration;
+		let timeout = vf.$refs.transition.getDuration();
 
 		vf.Timers.set('transition', timeout, () => {
 			this.end();
