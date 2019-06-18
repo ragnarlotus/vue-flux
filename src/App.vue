@@ -246,7 +246,7 @@
 
 		methods: {
 			loadImages() {
-				this.fluxImages = [
+/*				this.fluxImages = [
 					'slides/1.jpg',
 					'slides/2.jpg',
 					'slides/3.jpg',
@@ -257,7 +257,7 @@
 				];
 
 				this.fluxCaptions = [];
-/*
+*/
 				// https://github.com/dconnolly/chromecast-backgrounds/blob/master/backgrounds.json
 				let url = 'photos.json';
 
@@ -273,7 +273,7 @@
 
 						this.addImage(entry.url, entry.author);
 					}
-				});*/
+				});
 			},
 
 			addImage(url, author) {

@@ -1,7 +1,7 @@
 <template>
 	<div v-if="display" class="preloader">
 		<slot name="spinner">
-			<div v-if="showSpinner" class="spinner">
+			<div v-if="showSpinner && vf.Images.preloading" class="spinner">
 				<div class="pct">{{ loadPct }}%</div>
 				<div class="border"></div>
 			</div>
@@ -16,7 +16,7 @@
 		</flux-image>
 
 		<flux-transition
-			v-if="!vf.Images.preloading"
+			v-if="!runningTransition"
 			:size="vf.size"
 			:transition="runningTransition"
 			:from="vf.Images.lastShown"
@@ -31,6 +31,8 @@
 	import FluxImage from '@/components/FluxImage.vue';
 	import FluxTransition from '@/components/FluxTransition.vue';
 	import VueFlux from '@/components/VueFlux.vue';
+
+	let Images, Transitions;
 
 	export default {
 		name: 'FluxPreloader',
@@ -78,7 +80,7 @@
 				if (!this.vf)
 					return false;
 
-				if (!this.vf.Images.preloading && !this.runningTransition)
+				if (!Images.preloading && !this.runningTransition)
 					return false;
 
 				return true;
@@ -88,8 +90,8 @@
 				if (this.vf === undefined)
 					return 0;
 
-				let loading = this.vf.Images.loading.length;
-				let loaded = this.vf.Images.props.length;
+				let loading = Images.loading.length;
+				let loaded = Images.props.length;
 
 				return Math.ceil(loaded * 100 / loading) || 0;
 			},
@@ -97,20 +99,26 @@
 
 		watch: {
 			'vf.Images.preloading': function(preloading) {
-				if (preloading || !vf.Images.lastShown)
+				if (preloading || !Images.lastShown)
 					return;
 
 				this.transitionStart();
 			}
 		},
 
+		created() {
+			if (!this.vf)
+				return;
+
+			Images = this.vf.Images;
+			Transitions = this.vf.Transitions;
+		},
+
 		methods: {
 			transitionStart() {
-				let Transitions = this.vf.Transitions;
-
 				this.runningTransition = this.transition || Transitions.transitions[Transitions.nextIndex];
 
-				let timeout = vf.$refs.transition.getDuration();
+				let timeout = this.$refs.transition.getDuration();
 
 				setTimeout(() => {
 					this.transitionEnd();
@@ -118,8 +126,6 @@
 			},
 
 			transitionEnd() {
-				let Transitions = this.vf.Transitions;
-
 				if (!this.transition)
 					Transitions.lastIndex = Transitions.nextIndex;
 

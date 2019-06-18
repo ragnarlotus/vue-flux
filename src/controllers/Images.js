@@ -50,20 +50,24 @@ export default class ImagesController {
 	}
 
 	preloadEnd() {
-		this.loading = [];
 		this.preloading = false;
-
-		if (this.vf.loaded !== true)
-			this.vf.init();
 
 		if (this.props.length < this.srcs.length)
 			this.lazyLoadStart();
+
+		else
+			this.loading = [];
+
+		if (this.vf.loaded !== true)
+			this.vf.init();
 
 		this.vf.$emit('images-preload-end');
 	}
 
 	lazyLoadStart() {
-		this.loading = this.srcs.slice(this.props.length);
+		let remaining = this.srcs.slice(this.props.length);
+
+		this.loading = this.loading.concat(remaining);
 
 		this.lazyloading = true;
 
@@ -79,6 +83,7 @@ export default class ImagesController {
 
 	addProperties(index) {
 		let vf = this.vf;
+
 		let img = vf.$refs.loading[index];
 
 		if (img.naturalWidth || img.width) {
@@ -95,11 +100,13 @@ export default class ImagesController {
 			console.warn(`Image ${vf.images[index]} could not be loaded`);
 		}
 
-		if (this.props.length === this.loading.length && this.preloading)
-			this.preloadEnd();
+		if (this.props.length === this.loading.length) {
+			if (this.preloading)
+				this.preloadEnd();
 
-		else if (this.props.length === this.srcs.length && this.lazyloading)
-			this.lazyLoadEnd();
+			else if (this.lazyloading)
+				this.lazyLoadEnd();
+		}
 	}
 
 	getIndex(index) {
