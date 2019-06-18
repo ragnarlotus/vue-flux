@@ -182,12 +182,13 @@
 
 <script>
 	import VueFlux from './components/VueFlux.vue';
-	import FluxPreloader from './components/FluxPreloader.vue';
-	import FluxCaption from './components/FluxCaption.vue';
-	import FluxControls from './components/FluxControls.vue';
-	import FluxIndex from './components/FluxIndex.vue';
-	import FluxPagination from './components/FluxPagination.vue';
 	import FluxParallax from './components/FluxParallax.vue';
+
+	import FluxPreloader from './components/complements/FluxPreloader.vue';
+	import FluxCaption from './components/complements/FluxCaption.vue';
+	import FluxControls from './components/complements/FluxControls.vue';
+	import FluxIndex from './components/complements/FluxIndex.vue';
+	import FluxPagination from './components/complements/FluxPagination.vue';
 
 	export default {
 		name: 'app',

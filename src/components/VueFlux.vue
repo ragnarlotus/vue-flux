@@ -148,7 +148,7 @@
 				this.stop();
 
 				this.$nextTick(() => {
-					Images.preload(this.images);
+					Images.load(this.images);
 
 					this.config.autoplay = wasPlaying;
 				});
@@ -171,7 +171,7 @@
 		mounted() {
 			this.resize();
 
-			Images.preload(this.images);
+			Images.load(this.images);
 
 			if (this.config.autohideTime === 0)
 				this.mouseOver = true;

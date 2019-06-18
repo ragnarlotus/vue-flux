@@ -12,6 +12,8 @@ export default class ImagesController {
 
 		this.currentIndex = 0;
 		this.previousIndex = undefined;
+
+		this.lastShown = undefined;
 	}
 
 	get previous() {
@@ -32,10 +34,10 @@ export default class ImagesController {
 
 		this.vf.loaded = false;
 
-		this.preload();
+		this.preloadStart();
 	}
 
-	preload() {
+	preloadStart() {
 		let preload;
 
 		if (this.vf.config.lazyLoad)
@@ -43,20 +45,39 @@ export default class ImagesController {
 
 		this.loading = this.srcs.slice(0, preload);
 		this.preloading = true;
+
+		this.vf.$emit('images-preload-start');
 	}
 
-	lazyLoad() {
-		if (this.props.length === this.srcs.length)
-			return;
+	preloadEnd() {
+		this.loading = [];
+		this.preloading = false;
 
-		this.loading = this.srcs.slice(this.props.length - 1);
+		if (this.vf.loaded !== true)
+			this.vf.init();
+
+		if (this.props.length < this.srcs.length)
+			this.lazyLoadStart();
+
+		this.vf.$emit('images-preload-end');
+	}
+
+	lazyLoadStart() {
+		this.loading = this.srcs.slice(this.props.length);
 
 		this.lazyloading = true;
+
+		this.vf.$emit('images-lazy-load-start');
+	}
+
+	lazyLoadEnd() {
+		this.loading = [];
+		this.lazyloading = false;
+
+		this.vf.$emit('images-lazy-load-end');
 	}
 
 	addProperties(index) {
-		this.loaded++;
-
 		let vf = this.vf;
 		let img = vf.$refs.loading[index];
 
@@ -74,19 +95,11 @@ export default class ImagesController {
 			console.warn(`Image ${vf.images[index]} could not be loaded`);
 		}
 
-		if (this.props.length === this.loading.length && this.preloading) {
-			this.loading = [];
-			this.preloading = false;
+		if (this.props.length === this.loading.length && this.preloading)
+			this.preloadEnd();
 
-			if (vf.loaded !== true)
-				vf.init();
-
-			this.lazyLoad();
-
-		} else if (this.props.length === this.srcs.length && this.lazyloading) {
-			this.loading = [];
-			this.lazyloading = false;
-		}
+		else if (this.props.length === this.srcs.length && this.lazyloading)
+			this.lazyLoadEnd();
 	}
 
 	getIndex(index) {
@@ -96,16 +109,25 @@ export default class ImagesController {
 		let currentIndex = this.currentIndex;
 
 		if (index === 'previous')
-			return currentIndex > 0? currentIndex - 1 : this.count - 1;
+			return currentIndex > 0? currentIndex - 1 : this.srcs.length - 1;
 
-		return currentIndex + 1 < this.count? currentIndex + 1 : 0;
+		return currentIndex + 1 < this.srcs.length? currentIndex + 1 : 0;
 	}
 
 	show(index, transition) {
 		this.vf.Timers.clear('image');
 
+		index = this.getIndex(index);
+
+		if (!this.props[index])
+			return;
+
 		this.previousIndex = this.currentIndex;
 		this.currentIndex = this.getIndex(index);
+
+		this.lastShown = {
+			...this.current,
+		};
 
 		this.vf.Transitions.run(transition);
 	}

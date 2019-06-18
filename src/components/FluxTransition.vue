@@ -87,6 +87,12 @@
 		created() {
 			if (this.transition.component)
 				Object.assign(this.$options.components, this.transition.component);
+		},
+
+		methods: {
+			getDuration() {
+				return this.$children[0].totalDuration;
+			},
 		}
 	}
 </script>
