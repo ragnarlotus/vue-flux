@@ -8,12 +8,12 @@
 		@touchstart="Touches.start"
 		@touchend="Touches.end">
 
-		<img alt="" ref="loading"
+		<img alt=""
 			v-for="(url, index) in Images.loading" :key="index"
 			v-if="Images.loading[index]"
 			:src="config.path + url"
-			@load="Images.addProperties(index)"
-			@error="Images.addProperties(index)">
+			@load="Images.addProperties(index, $event)"
+			@error="Images.addProperties(index, $event)">
 
 		<flux-transition
 			v-if="Transitions.current"
@@ -21,7 +21,6 @@
 			:size="size"
 			:from="Images.previous"
 			:to="Images.current"
-			:options="Transitions.options"
 			ref="transition">
 		</flux-transition>
 
