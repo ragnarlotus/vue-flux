@@ -8,11 +8,13 @@
 			<div class="block sm:block md:block lg:flex">
 				<div class="lg:w-4/6 px-2 mb-4">
 					<vue-flux :options="fluxOptions" :images="fluxImages" :transitions="fluxTransitions" :captions="fluxCaptions" ref="slider">
-<!--						<flux-preloader slot="preloader"></flux-preloader>
+						<flux-preloader slot="preloader"></flux-preloader>
+<!--
 						<flux-caption slot="caption"></flux-caption>
 						<flux-controls slot="controls"></flux-controls>
 						<flux-index slot="index"></flux-index>
-						<flux-pagination slot="pagination"></flux-pagination>-->
+						<flux-pagination slot="pagination"></flux-pagination>
+-->
 					</vue-flux>
 				</div>
 
@@ -212,6 +214,7 @@
 				autoplay: false,
 				bindKeys: true,
 				allowFullscreen: true,
+				lazyLoadAfter: 5,
 			},
 			fluxImages: [],
 			fluxTransitions: [
@@ -246,39 +249,17 @@
 
 		methods: {
 			loadImages() {
-/*				this.fluxImages = [
-					'slides/1.jpg',
-					'slides/2.jpg',
-					'slides/3.jpg',
-					'slides/4.jpg',
-					'slides/5.jpg',
-					'slides/6.jpg',
-					'slides/7.jpg',
-				];
+				this.fluxImages = [];
+
+				for (let i = 1; i <= 10; i++)
+					this.fluxImages.push(`slides/${i.toString().padStart(2, '0')}.jpg`);
 
 				this.fluxCaptions = [];
-*/
-				// https://github.com/dconnolly/chromecast-backgrounds/blob/master/backgrounds.json
-				let url = 'photos.json';
-
-				fetch(url).then((response) => {
-					return response.json();
-
-				}).then((data) => {
-					let index, entry;
-
-					for (var i = 0; i < 3; i++) {
-						index = Math.floor(Math.random() * data.length);
-						entry = data.splice(index, 1)[0];
-
-						this.addImage(entry.url, entry.author);
-					}
-				});
 			},
 
-			addImage(url, author) {
+			addImage(url, author, location) {
 				this.fluxImages.push(url);
-				this.fluxCaptions.push(author);
+				this.fluxCaptions.push(location +' - '+ author);
 			},
 
 			showNext(transition) {
