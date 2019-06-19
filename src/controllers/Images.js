@@ -9,6 +9,7 @@ export default class ImagesController {
 
 		this.preloading = false;
 		this.lazyloading = false;
+		this.progress = 0;
 
 		this.currentIndex = 0;
 		this.previousIndex = undefined;
@@ -81,10 +82,8 @@ export default class ImagesController {
 		this.vf.$emit('images-lazy-load-end');
 	}
 
-	addProperties(index) {
-		let vf = this.vf;
-
-		let img = vf.$refs.loading[index];
+	addProperties(index, event) {
+		let img = event.target || event.path[0];
 
 		if (img.naturalWidth || img.width) {
 			this.props[index] = {
@@ -97,8 +96,10 @@ export default class ImagesController {
 			};
 
 		} else {
-			console.warn(`Image ${vf.images[index]} could not be loaded`);
+			console.warn(`Image ${this.vf.images[index]} could not be loaded`);
 		}
+
+		this.updateProgress();
 
 		if (this.props.length === this.loading.length) {
 			if (this.preloading)
@@ -107,6 +108,10 @@ export default class ImagesController {
 			else if (this.lazyloading)
 				this.lazyLoadEnd();
 		}
+	}
+
+	updateProgress() {
+		this.progress = Math.ceil(this.props.length * 100 / this.loading.length) || 0;
 	}
 
 	getIndex(index) {
