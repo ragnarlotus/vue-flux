@@ -9,11 +9,11 @@
 				<div class="lg:w-4/6 px-2 mb-4">
 					<vue-flux :options="fluxOptions" :images="fluxImages" :transitions="fluxTransitions" :captions="fluxCaptions" ref="slider">
 						<flux-preloader slot="preloader"></flux-preloader>
-<!--
 						<flux-caption slot="caption"></flux-caption>
 						<flux-controls slot="controls"></flux-controls>
-						<flux-index slot="index"></flux-index>
+<!--
 						<flux-pagination slot="pagination"></flux-pagination>
+						<flux-index slot="index"></flux-index>
 -->
 					</vue-flux>
 				</div>
@@ -250,11 +250,16 @@
 		methods: {
 			loadImages() {
 				this.fluxImages = [];
-
-				for (let i = 1; i <= 10; i++)
-					this.fluxImages.push(`slides/${i.toString().padStart(2, '0')}.jpg`);
-
 				this.fluxCaptions = [];
+
+				let src;
+
+				for (let i = 1; i <= 10; i++) {
+					src = `slides/${i.toString().padStart(2, '0')}.jpg`;
+
+					this.fluxCaptions.push(src);
+					this.fluxImages.push(src);
+				}
 			},
 
 			addImage(url, author, location) {
