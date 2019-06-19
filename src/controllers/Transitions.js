@@ -18,10 +18,6 @@ export default class TransitionsController {
 		return nextIndex;
 	}
 
-	get options() {
-		return this.transitions[this.currentIndex].options || {};
-	}
-
 	update() {
 		this.transitions = this.vf.transitions;
 		this.lastIndex = this.transitions.length - 1;
