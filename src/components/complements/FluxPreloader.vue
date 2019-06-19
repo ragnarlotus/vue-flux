@@ -2,7 +2,7 @@
 	<div v-if="display" class="preloader">
 		<slot name="spinner">
 			<div v-if="showSpinner && vf.Images.preloading" class="spinner">
-				<div class="pct">{{ loadPct }}%</div>
+				<div class="pct">{{ vf.Images.progress }}%</div>
 				<div class="border"></div>
 			</div>
 		</slot>
@@ -16,12 +16,11 @@
 		</flux-image>
 
 		<flux-transition
-			v-if="!runningTransition"
+			v-if="transitionName"
 			:size="vf.size"
-			:transition="runningTransition"
+			:transition="transitionName"
 			:from="vf.Images.lastShown"
 			:to="vf.Images.current"
-			:options="vf.Transitions.options"
 			ref="transition"
 		></flux-transition>
 	</div>
@@ -43,7 +42,7 @@
 		},
 
 		data: () => ({
-			runningTransition: undefined,
+			transitionName: undefined,
 
 			lastShown: {
 				css: {
@@ -80,20 +79,10 @@
 				if (!this.vf)
 					return false;
 
-				if (!Images.preloading && !this.runningTransition)
+				if (!Images.preloading && !this.transitionName)
 					return false;
 
 				return true;
-			},
-
-			loadPct: function() {
-				if (this.vf === undefined)
-					return 0;
-
-				let loading = Images.loading.length;
-				let loaded = Images.props.length;
-
-				return Math.ceil(loaded * 100 / loading) || 0;
 			},
 		},
 
@@ -103,7 +92,7 @@
 					return;
 
 				this.transitionStart();
-			}
+			},
 		},
 
 		created() {
@@ -116,7 +105,7 @@
 
 		methods: {
 			transitionStart() {
-				this.runningTransition = this.transition || Transitions.transitions[Transitions.nextIndex];
+				this.transitionName = this.transition || Transitions.transitions[Transitions.nextIndex];
 
 				let timeout = this.$refs.transition.getDuration();
 
@@ -129,7 +118,7 @@
 				if (!this.transition)
 					Transitions.lastIndex = Transitions.nextIndex;
 
-				this.runningTransition = undefined;
+				this.transitionName = undefined;
 			}
 		}
 	};
