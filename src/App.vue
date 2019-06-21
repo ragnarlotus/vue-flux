@@ -11,14 +11,13 @@
 						<flux-preloader slot="preloader"></flux-preloader>
 						<flux-caption slot="caption"></flux-caption>
 						<flux-controls slot="controls"></flux-controls>
-<!--
 						<flux-pagination slot="pagination"></flux-pagination>
 						<flux-index slot="index"></flux-index>
--->
 					</vue-flux>
 				</div>
 
 				<div class="lg:w-2/6 px-2 mb-4 transitions">
+					<button @click="loadImages()">Load images</button>
 					<h4 class="mb-2">2D Transitions</h4>
 
 					<ul class="flex mb-2">
@@ -249,13 +248,20 @@
 
 		methods: {
 			loadImages() {
+				// https://unsplash.com/t/nature
+
+				let srcs = [];
+				for (let i = 1; i <= 32; i++) {
+					srcs.push(`slides/${i.toString().padStart(2, '0')}.jpg`);
+				}
+
 				this.fluxImages = [];
 				this.fluxCaptions = [];
 
-				let src;
-
+				let index, src;
 				for (let i = 1; i <= 10; i++) {
-					src = `slides/${i.toString().padStart(2, '0')}.jpg`;
+					index = Math.floor(Math.random() * srcs.length);
+					src = srcs.splice(index, 1)[0];
 
 					this.fluxCaptions.push(src);
 					this.fluxImages.push(src);
