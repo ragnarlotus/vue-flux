@@ -56,32 +56,17 @@
 			},
 
 			display: function() {
-				if (!this.vf)
-					return false;
-
-				if (this.vf.loaded === false)
-					return false;
-
-				return true;
+				return this.vf && this.vf.loaded;
 			},
 
 			displayButton: function() {
-				if (!this.vf.index)
-					return false;
-
-				if (this.vf.mouseOver === false)
-					return false;
-
-				if (this.vf.Transitions.current !== undefined)
-					return false;
-
-				return true;
+				return this.vf.mouseOver && !this.vf.Transitions.current;
 			},
 
 			indexClass: function() {
 				let indexClass = '';
 
-				if (this.visible && this.vf.index)
+				if (this.visible)
 					indexClass += 'visible';
 
 				if (this.vf.mouseOver)
@@ -124,14 +109,7 @@
 			},
 
 			toggle() {
-				if (!this.vf.index)
-					return;
-
-				if (!this.visible)
-					this.show();
-
-				else
-					this.hide();
+				this.visible? this.hide() : this.show();
 			},
 
 			show() {
@@ -145,7 +123,7 @@
 			},
 
 			showImage(index) {
-				if (this.vf.index && this.visible) {
+				if (this.visible) {
 					this.hide(index);
 					return;
 				}
@@ -160,13 +138,13 @@
 				setTimeout(() => {
 					this.visible = false;
 
-					if (typeof index !== 'undefined')
+					if (index !== undefined)
 						this.showImage(index);
 				}, this.delay);
 			},
 
 			current(index) {
-				return this.vf.Images.current.index === index? 'current' : '';
+				return this.vf.Images.currentIndex === index? 'current' : '';
 			},
 		},
 	};

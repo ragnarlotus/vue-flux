@@ -2,7 +2,7 @@
 	<nav v-if="display" class="flux-pagination">
 		<ul>
 			<li
-				v-for="i in vf.Images.props.length" :key="i"
+				v-for="i in vf.Images.srcs.length" :key="i"
 				:class="getClass(i - 1)"
 				:title="getTitle(i - 1)"
 				@click="showImage(i - 1)"
@@ -65,10 +65,10 @@
 
 		methods: {
 			getClass(i) {
-				if (this.currentTransition !== undefined && this.nextImageIndex === i)
+				if (this.currentTransition !== undefined && this.vf.Images.previousIndex === i)
 					return 'active';
 
-				if (this.currentTransition === undefined && this.currentImageIndex === i)
+				if (this.currentTransition === undefined && this.vf.Images.currentIndex === i)
 					return 'active';
 
 				return '';

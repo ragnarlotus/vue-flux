@@ -3,8 +3,6 @@
 </template>
 
 <script>
-	import VueFlux from '@/components/VueFlux.vue';
-
 	export default {
 		name: 'FluxThumb',
 
@@ -16,7 +14,7 @@
 
 		props: {
 			slider: {
-				type: VueFlux,
+				type: Object,
 				required: true,
 			},
 
