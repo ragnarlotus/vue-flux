@@ -12,6 +12,7 @@
 			v-for="(url, index) in Images.loading" :key="index"
 			v-if="Images.loading[index]"
 			:src="config.path + url"
+			:time="Images.time"
 			@load="Images.addProperties(index, $event)"
 			@error="Images.addProperties(index, $event)">
 
@@ -24,7 +25,7 @@
 			ref="transition">
 		</flux-transition>
 
-		<flux-image :size="size" :image="Images.current" ref="image"></flux-image>
+		<flux-image :size="size" :image="Images.props[Images.currentIndex]" ref="image"></flux-image>
 
 		<slot name="preloader"></slot>
 

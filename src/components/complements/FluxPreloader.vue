@@ -1,22 +1,21 @@
 <template>
-	<div v-if="display" class="preloader">
+	<div class="preloader">
 		<slot name="spinner">
-			<div v-if="showSpinner && vf.Images.preloading" class="spinner">
+			<div v-if="displaySpinner" class="spinner">
 				<div class="pct">{{ vf.Images.progress }}%</div>
 				<div class="border"></div>
 			</div>
 		</slot>
 
 		<flux-image
-			v-if="vf.Images.lastShown"
+			v-if="displayLast"
 			:size="vf.size"
 			:image="vf.Images.lastShown"
-			:css="lastShown.css"
-			ref="lastShown">
+			:css="lastShownCss">
 		</flux-image>
 
 		<flux-transition
-			v-if="transitionName"
+			v-if="displayTransition"
 			:size="vf.size"
 			:transition="transitionName"
 			:from="vf.Images.lastShown"
@@ -29,7 +28,6 @@
 <script>
 	import FluxImage from '@/components/FluxImage.vue';
 	import FluxTransition from '@/components/FluxTransition.vue';
-	import VueFlux from '@/components/VueFlux.vue';
 
 	let Images, Transitions;
 
@@ -42,19 +40,18 @@
 		},
 
 		data: () => ({
+			displayTransition: false,
 			transitionName: undefined,
 
-			lastShown: {
-				css: {
-					zIndex: 13,
-				},
+			lastShownCss: {
+				zIndex: 13,
 			},
 		}),
 
 		props: {
-			slider: VueFlux,
+			slider: Object,
 
-			showSpinner: {
+			spinner: {
 				type: Boolean,
 				default: true,
 			},
@@ -75,43 +72,49 @@
 				return undefined;
 			},
 
-			display: function() {
-				if (!this.vf)
-					return false;
+			display() {
+				return this.vf? true : false;
+			},
 
-				if (!Images.preloading && !this.transitionName)
-					return false;
+			displaySpinner() {
+				return this.vf.Images.preloading;
+			},
 
-				return true;
+			displayLast() {
+				if (Images.lastShown && Images.preloading)
+					return true;
+
+				return false;
 			},
 		},
 
 		watch: {
 			'vf.Images.preloading': function(preloading) {
-				if (preloading || !Images.lastShown)
-					return;
-
-				this.transitionStart();
+				if (!preloading && Images.props[0] && Images.lastShown.src !== Images.props[0].src)
+					this.transitionStart();
 			},
 		},
 
 		created() {
-			if (!this.vf)
-				return;
-
 			Images = this.vf.Images;
 			Transitions = this.vf.Transitions;
 		},
 
 		methods: {
 			transitionStart() {
+				if (!Images.current)
+					return;
+
 				this.transitionName = this.transition || Transitions.transitions[Transitions.nextIndex];
+				this.displayTransition = true;
 
-				let timeout = this.$refs.transition.getDuration();
+				this.$nextTick(() => {
+					let timeout = this.$refs.transition.getDuration();
 
-				setTimeout(() => {
-					this.transitionEnd();
-				}, timeout);
+					setTimeout(() => {
+						this.transitionEnd();
+					}, timeout);
+				});
 			},
 
 			transitionEnd() {
@@ -119,6 +122,8 @@
 					Transitions.lastIndex = Transitions.nextIndex;
 
 				this.transitionName = undefined;
+				this.displayTransition = false;
+				Images.updateLastShown(Images.current);
 			}
 		}
 	};
