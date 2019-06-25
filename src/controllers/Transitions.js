@@ -29,6 +29,8 @@ export default class TransitionsController {
 		this.lastIndex = this.currentIndex;
 		this.current = undefined;
 		this.currentIndex = undefined;
+
+		this.vf.Images.updateLastShown(this.vf.Images.current);
 	}
 
 	run(transition) {
