@@ -7,3 +7,5 @@ export { FluxTransition } from './FluxTransition.vue';
 export { FluxVortex } from './FluxVortex.vue';
 export { FluxWrapper } from './FluxWrapper.vue';
 export { VueFlux } from './VueFlux.vue';
+
+export * from './complements';
