@@ -1,6 +1,8 @@
 <template>
 	<transition name="fade">
-		<div v-if="caption" class="flux-caption">{{ caption }}</div>
+		<slot :caption="caption">
+			<div v-if="caption" class="flux-caption">{{ text }}</div>
+		</slot>
 	</transition>
 </template>
 
@@ -13,7 +15,7 @@
 		},
 
 		computed: {
-			vf: function() {
+			vf() {
 				if (this.slider)
 					return this.slider;
 
@@ -25,7 +27,17 @@
 				return undefined;
 			},
 
-			caption: function() {
+			text() {
+				if (typeof this.caption === 'string')
+					return this.caption;
+
+				if (this.caption.text)
+					return this.caption.text;
+
+				return '';
+			},
+
+			caption() {
 				if (!this.vf)
 					return '';
 
@@ -40,10 +52,7 @@
 				if (currentImage === undefined)
 					return '';
 
-				if (this.captions[currentImage.index] === undefined)
-					return '';
-
-				return this.captions[currentImage.index];
+				return this.captions[currentImage.index] || '';
 			},
 
 			captions: function() {
