@@ -13,7 +13,9 @@
 						</template>
 
 						<template v-slot:caption>
-							<custom-caption :slider="$refs.slider"></custom-caption>
+							<flux-caption v-slot="captionProps">
+								<a href="#" class="flux-caption">{{ captionProps.text }}</a>
+							</flux-caption>
 						</template>
 
 						<template v-slot:controls>
@@ -163,7 +165,6 @@
 	import FluxControls from './components/complements/FluxControls.vue';
 	import FluxIndex from './components/complements/FluxIndex.vue';
 	import FluxPagination from './components/complements/FluxPagination.vue';
-	import CustomCaption from './CustomCaption.vue';
 
 	export default {
 		name: 'app',
@@ -176,7 +177,6 @@
 			FluxIndex,
 			FluxPagination,
 			FluxParallax,
-			CustomCaption,
 		},
 
 		data: () => ({
