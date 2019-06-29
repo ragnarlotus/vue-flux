@@ -1,6 +1,6 @@
 <template>
 	<transition name="fade">
-		<slot :caption="caption">
+		<slot :caption="caption" :text="text">
 			<div v-if="caption" class="flux-caption">{{ text }}</div>
 		</slot>
 	</transition>
