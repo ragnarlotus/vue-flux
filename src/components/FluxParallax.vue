@@ -242,8 +242,8 @@
 
 				let positionY = scrollTop - this.parallax.top + this.view.height;
 
-				if (this.type === 'static') {
-					this.handleStatic(positionY);
+				if (this.type === 'visible') {
+					this.handleVisible(positionY);
 					return;
 				}
 
@@ -253,7 +253,7 @@
 				}
 			},
 
-			handleStatic(positionY) {
+			handleVisible(positionY) {
 				let pct = 0;
 
 				if (positionY < this.parallax.height)
