@@ -7,7 +7,7 @@
 
 			<div class="block sm:block md:block lg:flex">
 				<div class="lg:w-4/6 px-2 mb-4">
-					<vue-flux :options="fluxOptions" :images="fluxImages" :transitions="fluxTransitions" :captions="fluxCaptions" ref="slider">
+					<vue-flux :options="vfOptions" :images="vfImages" :transitions="vfTransitions" :captions="vfCaptions" ref="slider">
 						<template v-slot:preloader>
 							<flux-preloader></flux-preloader>
 						</template>
@@ -184,14 +184,14 @@
 			baseTransitionClass: 'text-center whitespace-no-wrap block border border-grey-light rounded text-white cursor-pointer py-2 px-4 shadow-md',
 			activeTransitionClass: 'bg-black',
 			inactiveTransitionClass: 'bg-gray-800 hover:bg-black',
-			fluxOptions: {
+			vfOptions: {
 				autoplay: false,
 				bindKeys: true,
 				allowFullscreen: true,
 				lazyLoadAfter: 5,
 			},
-			fluxImages: [],
-			fluxTransitions: [
+			vfImages: [],
+			vfTransitions: [
 				'fade', 'kenburn',
 				'swipe', 'slide',
 				'waterfall', 'zip', 'blinds2d',
@@ -201,7 +201,7 @@
 				'wave', 'blinds3d',
 				'round1', 'round2', 'explode',
 			],
-			fluxCaptions: []
+			vfCaptions: []
 		}),
 
 		computed: {
@@ -230,22 +230,22 @@
 					srcs.push(`slides/${i.toString().padStart(2, '0')}.jpg`);
 				}
 
-				this.fluxImages = [];
-				this.fluxCaptions = [];
+				this.vfImages = [];
+				this.vfCaptions = [];
 
 				let index, src;
 				for (let i = 1; i <= 10; i++) {
 					index = Math.floor(Math.random() * srcs.length);
 					src = srcs.splice(index, 1)[0];
 
-					this.fluxCaptions.push(src);
-					this.fluxImages.push(src);
+					this.vfCaptions.push(src);
+					this.vfImages.push(src);
 				}
 			},
 
 			addImage(url, author, location) {
-				this.fluxImages.push(url);
-				this.fluxCaptions.push(location +' - '+ author);
+				this.vfImages.push(url);
+				this.vfCaptions.push(location +' - '+ author);
 			},
 
 			showNext(transition) {
