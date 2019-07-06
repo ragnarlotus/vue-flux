@@ -1,17 +1,21 @@
+# This is the version 6 README
+
+Version 6 is still in beta stage, for documentation of the version 5 check [Wiki](https://github.com/deulos/vue-flux/wiki)
+
 ## Overview
 
 This is an image slider developed with [Vuejs](https://vuejs.org/) 2 which comes with 20 cool transitions out of the box.
 
-[![npm](https://img.shields.io/npm/v/vue-flux.svg?style=flat-square)](https://www.npmjs.com/package/vue-flux)
-[![npm](https://img.shields.io/npm/dt/vue-flux.svg?style=flat-square)](https://www.npmjs.com/package/vue-flux)
-[![npm bundle size (minified)](https://img.shields.io/bundlephobia/min/vue-flux.svg?style=flat-square)](https://www.npmjs.com/package/vue-flux)
-[![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/vue-flux.svg?style=flat-square)](https://www.npmjs.com/package/vue-flux)
-[![GitHub issues](https://img.shields.io/github/issues-raw/deulos/vue-flux.svg?style=flat-square)](https://www.npmjs.com/package/vue-flux)
-[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](https://www.npmjs.com/package/vue-flux)
+![npm](https://img.shields.io/npm/v/vue-flux/beta.svg?style=flat-square)
+![npm](https://img.shields.io/npm/dt/vue-flux.svg?style=flat-square)
+![npm bundle size (minified)](https://img.shields.io/bundlephobia/min/vue-flux/beta.svg?style=flat-square)
+![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/vue-flux/beta.svg?style=flat-square)
+![GitHub issues](https://img.shields.io/github/issues-raw/deulos/vue-flux.svg?style=flat-square)
+![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)
 
 ## Demo
 
-You can view a [demo here](https://deulos.github.io/vue-flux/).
+You can view a [demo here](https://deulos.github.io/vue-flux-docs/).
 
 ## Features
 | Feature | Description |
@@ -26,46 +30,86 @@ You can view a [demo here](https://deulos.github.io/vue-flux/).
 
 ## Quickstart
 
+Install and save the package.
+
 ``` bash
-npm install --save vue-flux
+npm install --save vue-flux@stable-6
 ```
+
+Add the component to the template. This one has all the complements, so you can remove the ones you don't want.
 
 ``` html
 <vue-flux
-   :options="fluxOptions"
-   :images="fluxImages"
-   :transitions="fluxTransitions"
+   :options="vfOptions"
+   :images="vfImages"
+   :transitions="vfTransitions"
+   :captions="vfCaptions"
    ref="slider">
-      <flux-pagination slot="pagination"></flux-pagination>
+
+   <template v-slot:preloader>
+      <flux-preloader></flux-preloader>
+   </template>
+
+   <template v-slot:caption>
+      <flux-caption></flux-caption>
+   </template>
+
+   <template v-slot:controls>
+      <flux-controls></flux-controls>
+   </template>
+
+   <template v-slot:pagination>
+      <flux-pagination></flux-pagination>
+   </template>
+
+   <template v-slot:index>
+      <flux-index></flux-index>
+   </template>
 </vue-flux>
 
 <button @click="$refs.slider.showImage('next')">NEXT</button>
 ```
 
+Add it to the component, and like before you can remove the complements you don't use.
+
 ``` javascript
-import { VueFlux, FluxPagination, Transitions } from 'vue-flux';
+import VueFlux from 'vue-flux';
+import {
+   FluxCaption,
+   FluxControls,
+   FluxIndex,
+   FluxPagination,
+   FluxPreloader
+} from 'vue-flux/complements';
 
 export default {
    components: {
       VueFlux,
-      FluxPagination
+      FluxCaption,
+      FluxControls,
+      FluxIndex,
+      FluxPagination,
+      FluxPreloader,
    },
 
    data: () => ({
-      fluxOptions: {
+      vfOptions: {
          autoplay: true
       },
-      fluxImages: [ 'URL1', 'URL2', 'URL3' ],
-      fluxTransitions: {
-         transitionBook: Transitions.transitionBook
-      }
-   })
+      vfImages: [ 'URL1', 'URL2', 'URL3' ],
+      vfTransitions: [ 'fade', 'cube', 'book', 'wave' ],
+      vfCaptions: [
+         'Caption for image 1',
+         'Caption for image 2',
+         'Caption for image 3',
+      ],
+   }),
 }
 ```
 
 ## Performance
 
-Weight is just 97KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
+Weight is just 102KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
 
 ## Included transitions
 
@@ -95,36 +139,29 @@ Weight is just 97KB so is pretty light having only the essential CSS. It also do
 
 ## Parallax
 
+As simple as this.
+
 ``` html
-<flux-parallax src="slides/1.jpg" height="300px" offset="80%" type="relative">
+<flux-parallax src="url" height="300px" offset="80%">
    <div>CONTENT</div>
 </flux-parallax>
 ```
 
 ## Troubleshooting
 
-If you find yourself running into issues during installation or running the slider, please check our [Wiki](https://github.com/deulos/vue-flux/wiki). If still needs help open an [issue](https://github.com/deulos/vue-flux/issues/new). We would be happy to discuss how they can be solved.
+If you find yourself running into issues during installation or running the slider, please check our [documentation](https://deulos.github.io/vue-flux-docs/documentation-6). If still needs help open an [issue](https://github.com/deulos/vue-flux/issues/new). We would be happy to discuss how they can be solved.
 
 ## Documentation
 
-You can view the full documentation at the project's [Wiki](https://github.com/deulos/vue-flux/wiki) with examples and detailed information.
-
-## To do
-
-* CSS mask-image transitions
-* SVG animated transitions
-* Displacement transitions
+You can view the full documentation at the project's [documentation](https://deulos.github.io/vue-flux-docs/documentation-6) with examples and detailed information.
 
 ## Changelog
 
-Check the [Changelog](https://github.com/deulos/vue-flux/wiki/Changelog) for update info.
+Check the [changelog](Changelog) for update info.
 
 ## Inspiration
 
 This slider was inspired by [Flux Slider](http://joelambert.co.uk/flux/).
-
-Pictures taken from [dconnolly/chromecast-backgrounds
-](https://github.com/dconnolly/chromecast-backgrounds/blob/master/backgrounds.json).
 
 ## Contributing
 
