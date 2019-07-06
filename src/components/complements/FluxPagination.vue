@@ -1,13 +1,10 @@
 <template>
 	<nav v-if="display" class="flux-pagination">
 		<ul>
-			<li
-				v-for="i in vf.Images.srcs.length" :key="i"
-				:class="getClass(i - 1)"
-				:title="getTitle(i - 1)"
-				@click="showImage(i - 1)"
-				@touchend="showImage(i - 1, $event)">
-					<span class="pagination-item"></span>
+			<li v-for="i in vf.Images.srcs.length" :key="i">
+				<slot item="getItem(i - 1)">
+					<span :title="getTitle(i - 1)" @click="showImage(i - 1)" @touchend="showImage(i - 1, $event)" :class="getClass(i - 1)" class="pagination-item"></span>
+				</slot>
 			</li>
 		</ul>
 	</nav>
@@ -64,6 +61,15 @@
 		},
 
 		methods: {
+			getItem(i) {
+				return {
+					index: i,
+					title: this.getTitle(i),
+					onClick: this.showImage,
+					active: this.getClass(i) === 'active',
+				};
+			},
+
 			getClass(i) {
 				if (this.currentTransition !== undefined && this.vf.Images.previousIndex === i)
 					return 'active';
@@ -108,25 +114,25 @@
 			display: inline-block;
 			margin: 0 8px;
 			cursor: pointer;
-		}
 
-		li span.pagination-item {
-			display: inline-block;
-			width: 16px;
-			height: 16px;
-			border: 2px solid #fff;
-			border-radius: 50%;
-			background-color: rgba(0, 0, 0, 0.7);
-			transition: background-color 0.2s ease-in, border 0.2s ease-in;
-		}
+			span.pagination-item {
+				display: inline-block;
+				width: 16px;
+				height: 16px;
+				border: 2px solid #fff;
+				border-radius: 50%;
+				background-color: rgba(0, 0, 0, 0.7);
+				transition: background-color 0.2s ease-in, border 0.2s ease-in;
 
-		li span.pagination-item:hover {
-			border: 2px solid black;
-			background-color: white;
-		}
+				&:hover {
+					border: 2px solid black;
+					background-color: white;
+				}
 
-		li.active span.pagination-item {
-			background-color: white;
+				&.active {
+					background-color: white;
+				}
+			}
 		}
 	}
 </style>
