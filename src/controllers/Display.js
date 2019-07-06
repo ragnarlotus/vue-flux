@@ -29,7 +29,7 @@ export default class DisplayController {
 			return method in element? element[method]() || true : false;
 		});
 
-		this.vm.$emit('enter-fullscreen');
+		this.vm.$emit('fullscreen-enter');
 	}
 
 	exitFullScreen() {
@@ -44,7 +44,7 @@ export default class DisplayController {
 			return method in document? document[method]() || true : false;
 		});
 
-		this.vm.$emit('exit-fullscreen');
+		this.vm.$emit('fullscreen-exit');
 	}
 
 }

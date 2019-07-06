@@ -326,7 +326,7 @@
 					this.showImage('next');
 			},
 		},
-	}
+	};
 </script>
 
 <style lang="scss">
