@@ -68,7 +68,7 @@
 			config: {
 				allowFullscreen: false,
 				allowToSkipTransition: true,
-				autohideTime: 1500,
+				autohideTime: 1000,
 				autoplay: false,
 				bindKeys: false,
 				delay: 5000,
