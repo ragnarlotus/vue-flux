@@ -1,43 +1,20 @@
-import transitionFade from './fade.vue';
-import transitionKenburn from './kenburn.vue';
-import transitionSwipe from './swipe.vue';
-import transitionSlide from './slide.vue';
-import transitionWaterfall from './waterfall.vue';
-import transitionZip from './zip.vue';
-import transitionBlinds2d from './blinds2d.vue';
-import transitionBlocks1 from './blocks1.vue';
-import transitionBlocks2 from './blocks2.vue';
-import transitionConcentric from './concentric.vue';
-import transitionWarp from './warp.vue';
-import transitionCamera from './camera.vue';
-import transitionCube from './cube.vue';
-import transitionBook from './book.vue';
-import transitionFall from './fall.vue';
-import transitionWave from './wave.vue';
-import transitionBlinds3d from './blinds3d.vue';
-import transitionRound1 from './round1.vue';
-import transitionRound2 from './round2.vue';
-import transitionExplode from './explode.vue';
-
-export default {
-	transitionFade,
-	transitionKenburn,
-	transitionSwipe,
-	transitionSlide,
-	transitionWaterfall,
-	transitionZip,
-	transitionBlinds2d,
-	transitionBlocks1,
-	transitionBlocks2,
-	transitionConcentric,
-	transitionWarp,
-	transitionCamera,
-	transitionCube,
-	transitionBook,
-	transitionFall,
-	transitionWave,
-	transitionBlinds3d,
-	transitionRound1,
-	transitionRound2,
-	transitionExplode,
-};
+export { default as transitionFade } from './fade.vue';
+export { default as transitionKenburn } from './kenburn.vue';
+export { default as transitionSwipe } from './swipe.vue';
+export { default as transitionSlide } from './slide.vue';
+export { default as transitionWaterfall } from './waterfall.vue';
+export { default as transitionZip } from './zip.vue';
+export { default as transitionBlinds2d } from './blinds2d.vue';
+export { default as transitionBlocks1 } from './blocks1.vue';
+export { default as transitionBlocks2 } from './blocks2.vue';
+export { default as transitionConcentric } from './concentric.vue';
+export { default as transitionWarp } from './warp.vue';
+export { default as transitionCamera } from './camera.vue';
+export { default as transitionCube } from './cube.vue';
+export { default as transitionBook } from './book.vue';
+export { default as transitionFall } from './fall.vue';
+export { default as transitionWave } from './wave.vue';
+export { default as transitionBlinds3d } from './blinds3d.vue';
+export { default as transitionRound1 } from './round1.vue';
+export { default as transitionRound2 } from './round2.vue';
+export { default as transitionExplode } from './explode.vue';

@@ -1,6 +1,6 @@
 # This is the version 6 README
 
-Version 6 is still in beta stage, for documentation of the version 5 check [Wiki](https://github.com/deulos/vue-flux/wiki)
+**Version 6 is still in beta stage, for documentation of the version 5 check new [documentation](https://deulos.github.io/vue-flux-docs/documentation-5)**
 
 ## Overview
 
@@ -157,7 +157,7 @@ You can view the full documentation at the project's [documentation](https://deu
 
 ## Changelog
 
-Check the [changelog](Changelog) for update info.
+Check the version 6 [changelog](Changelog) for update info.
 
 ## Inspiration
 

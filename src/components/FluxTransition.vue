@@ -12,7 +12,7 @@
 </template>
 
 <script>
-	import transitions from '@/transitions';
+	import * as transitions from '@/transitions';
 
 	export default {
 		name: 'FluxTransition',
