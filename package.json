@@ -1,6 +1,6 @@
 {
   "name": "vue-flux",
-  "version": "6.0.0-beta.3",
+  "version": "6.0.0-beta.4",
   "description": "Vue image slider",
   "author": "ragnar lotus",
   "repository": {
@@ -75,12 +75,6 @@
       "jest-watch-typeahead/filename",
       "jest-watch-typeahead/testname"
     ]
-  },
-  "vue": {
-    "publicPath": "/vue-flux/",
-    "css": {
-      "extract": false
-    }
   },
   "browserslist": [
     "> 1%",
