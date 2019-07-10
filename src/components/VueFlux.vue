@@ -117,6 +117,13 @@
 			style() {
 				let style = {};
 
+				if (Display.inFullScreen()) {
+					return {
+						width: '100%',
+						height: '100%',
+					};
+				}
+
 				if (this.size.width)
 					style.width = this.size.width +'px';
 

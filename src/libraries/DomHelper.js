@@ -22,7 +22,7 @@ export default class DomHelper {
 	getWidth() {
 		let width;
 
-		if (this.node.style.width)
+		if (/^[0-9]+px$/.test(this.node.style.width))
 			width = this.node.style.width;
 
 		else
@@ -38,7 +38,7 @@ export default class DomHelper {
 	getHeight() {
 		let height;
 
-		if (this.node.style.height)
+		if (/^[0-9]+px$/.test(this.node.style.height))
 			height = this.node.style.height;
 
 		else

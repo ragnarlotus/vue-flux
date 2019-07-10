@@ -29,6 +29,8 @@ export default class DisplayController {
 			return method in element? element[method]() || true : false;
 		});
 
+		this.vm.resize();
+
 		this.vm.$emit('fullscreen-enter');
 	}
 
@@ -43,6 +45,8 @@ export default class DisplayController {
 		methods.find((method) => {
 			return method in document? document[method]() || true : false;
 		});
+
+		this.vm.resize();
 
 		this.vm.$emit('fullscreen-exit');
 	}
