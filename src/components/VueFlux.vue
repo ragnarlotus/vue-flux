@@ -66,16 +66,16 @@
 
 		data: () => ({
 			config: {
+				allowFullscreen: false,
+				allowToSkipTransition: true,
+				autohideTime: 1500,
 				autoplay: false,
 				bindKeys: false,
-				enableGestures: false,
-				allowFullscreen: false,
-				infinite: true,
 				delay: 5000,
-				autohideTime: 1500,
+				enableGestures: false,
+				infinite: true,
 				lazyLoad: true,
 				lazyLoadAfter: 3,
-				allowToSkipTransition: true,
 				path: '',
 			},
 			size: {
