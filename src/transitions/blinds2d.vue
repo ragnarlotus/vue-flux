@@ -13,7 +13,7 @@
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	export default {
-		name: 'transitionBlinds2d',
+		name: 'TransitionBlinds2d',
 
 		components: {
 			FluxGrid,

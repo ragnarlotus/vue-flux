@@ -7,7 +7,7 @@
 	import FluxImage from '@/components/FluxImage.vue';
 
 	export default {
-		name: 'transitionKenburn',
+		name: 'TransitionKenburn',
 
 		components: {
 			FluxImage,

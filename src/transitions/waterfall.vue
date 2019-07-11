@@ -13,7 +13,7 @@
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	export default {
-		name: 'transitionWaterfall',
+		name: 'TransitionWaterfall',
 
 		components: {
 			FluxGrid,

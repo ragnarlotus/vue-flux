@@ -7,7 +7,7 @@
 	import FluxImage from '@/components/FluxImage.vue';
 
 	export default {
-		name: 'transitionFall',
+		name: 'TransitionFall',
 
 		components: {
 			FluxImage,

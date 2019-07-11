@@ -12,7 +12,7 @@
 	import FluxVortex from '@/components/FluxVortex.vue';
 
 	export default {
-		name: 'transitionWarp',
+		name: 'TransitionWarp',
 
 		components: {
 			FluxVortex,

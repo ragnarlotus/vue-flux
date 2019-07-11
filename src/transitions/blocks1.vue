@@ -13,7 +13,7 @@
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	export default {
-		name: 'transitionBlocks1',
+		name: 'TransitionBlocks1',
 
 		components: {
 			FluxGrid,
