@@ -79,10 +79,11 @@
 				}
 
 				let name = this.transition.name || this.transition;
-				name = 'transition'+ name[0].toUpperCase() + name.slice(1);
+				name = 'Transition'+ name[0].toUpperCase() + name.slice(1);
 
 				if (name in transitions === false) {
-					throw new ReferenceError (`Transition ${name} not found`);
+					name = this.transition.name || this.transition;
+					throw new ReferenceError (`Transition ${name} does not exist`);
 					return undefined;
 				}
 

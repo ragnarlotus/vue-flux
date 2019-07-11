@@ -14,7 +14,7 @@
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	export default {
-		name: 'transitionRound1',
+		name: 'TransitionRound1',
 
 		components: {
 			FluxGrid,

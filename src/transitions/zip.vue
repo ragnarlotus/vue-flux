@@ -13,7 +13,7 @@
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	export default {
-		name: 'transitionZip',
+		name: 'TransitionZip',
 
 		components: {
 			FluxGrid,

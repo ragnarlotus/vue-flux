@@ -14,7 +14,7 @@
 	import FluxImage from '@/components/FluxImage.vue';
 
 	export default {
-		name: 'transitionSwipe',
+		name: 'TransitionSwipe',
 
 		components: {
 			FluxWrapper,

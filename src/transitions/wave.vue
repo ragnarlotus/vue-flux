@@ -16,7 +16,7 @@
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	export default {
-		name: 'transitionWave',
+		name: 'TransitionWave',
 
 		components: {
 			FluxGrid,

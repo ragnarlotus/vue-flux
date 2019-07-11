@@ -11,7 +11,7 @@
 	import FluxImage from '@/components/FluxImage.vue';
 
 	export default {
-		name: 'transitionBook',
+		name: 'TransitionBook',
 
 		components: {
 			FluxCube,

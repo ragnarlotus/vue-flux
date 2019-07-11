@@ -7,7 +7,7 @@
 	import FluxCube from '@/components/FluxCube.vue';
 
 	export default {
-		name: 'transitionCube',
+		name: 'TransitionCube',
 
 		components: {
 			FluxCube
