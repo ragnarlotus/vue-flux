@@ -157,7 +157,7 @@ You can view the full documentation at the project's [documentation](https://deu
 
 ## Changelog
 
-Check the version 6 [changelog](changelog) for update info.
+Check the version 6 [changelog](https://deulos.github.io/vue-flux-docs/v6/changelog) for update info.
 
 ## Inspiration
 
