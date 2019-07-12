@@ -1,6 +1,6 @@
 # This is the version 6 README
 
-**Version 6 is still in beta stage, for documentation of the version 5 check new [documentation](https://deulos.github.io/vue-flux-docs/documentation-5)**
+**Version 6 is still in beta stage, for documentation of the version 5 check new [documentation](https://deulos.github.io/vue-flux-docs/v5/)**
 
 ## Overview
 
@@ -149,15 +149,15 @@ As simple as this.
 
 ## Troubleshooting
 
-If you find yourself running into issues during installation or running the slider, please check our [documentation](https://deulos.github.io/vue-flux-docs/documentation-6). If still needs help open an [issue](https://github.com/deulos/vue-flux/issues/new). We would be happy to discuss how they can be solved.
+If you find yourself running into issues during installation or running the slider, please check our [documentation](https://deulos.github.io/vue-flux-docs/v6/). If still needs help open an [issue](https://github.com/deulos/vue-flux/issues/new). We would be happy to discuss how they can be solved.
 
 ## Documentation
 
-You can view the full documentation at the project's [documentation](https://deulos.github.io/vue-flux-docs/documentation-6) with examples and detailed information.
+You can view the full documentation at the project's [documentation](https://deulos.github.io/vue-flux-docs/v6/) with examples and detailed information.
 
 ## Changelog
 
-Check the version 6 [changelog](Changelog) for update info.
+Check the version 6 [changelog](changelog) for update info.
 
 ## Inspiration
 
