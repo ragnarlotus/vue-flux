@@ -33,7 +33,7 @@ You can view a [demo here](https://deulos.github.io/vue-flux-docs/).
 Install and save the package.
 
 ``` bash
-npm install --save vue-flux@stable-6
+npm install --save vue-flux@beta
 ```
 
 Add the component to the template. This one has all the complements, so you can remove the ones you don't want.
