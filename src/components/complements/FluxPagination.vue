@@ -11,40 +11,28 @@
 </template>
 
 <script>
-	import VueFlux from '@/components/VueFlux.vue';
+	import BaseComplement from '@/mixins/BaseComplement.js';
 
 	export default {
 		name: 'FluxPagination',
 
-		props: {
-			slider: VueFlux,
-		},
+		mixins: [
+			BaseComplement,
+		],
 
 		computed: {
-			vf: function() {
-				if (this.slider)
-					return this.slider;
-
-				if (this.$parent.$options.name === 'VueFlux')
-					return this.$parent;
-
-				throw new ReferenceError('slider not referenced, check https://github.com/deulos/vue-flux/wiki/FluxPagination for help');
-
-				return undefined;
-			},
-
-			display: function() {
+			display() {
 				if (!this.vf)
 					return false;
 
 				return true;
 			},
 
-			currentTransition: function() {
+			currentTransition() {
 				return this.vf.Transitions.current;
 			},
 
-			currentImageIndex: function() {
+			currentImageIndex() {
 				let currentImage = this.vf.Images.current;
 
 				if (currentImage === undefined)
@@ -53,7 +41,7 @@
 				return currentImage.index;
 			},
 
-			nextImageIndex: function() {
+			nextImageIndex() {
 				let nextImage = this.vf.Images.next;
 
 				return nextImage.index;

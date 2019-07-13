@@ -26,6 +26,7 @@
 </template>
 
 <script>
+	import BaseComplement from '@/mixins/BaseComplement.js';
 	import FluxImage from '@/components/FluxImage.vue';
 	import FluxTransition from '@/components/FluxTransition.vue';
 
@@ -39,39 +40,28 @@
 			FluxImage,
 		},
 
+		mixins: [
+			BaseComplement,
+		],
+
 		data: () => ({
 			displayTransition: false,
 			transitionName: undefined,
-
 			lastShownCss: {
 				zIndex: 13,
 			},
 		}),
 
 		props: {
-			slider: Object,
-
 			spinner: {
 				type: Boolean,
 				default: true,
 			},
 
-			transition: String
+			transition: String,
 		},
 
 		computed: {
-			vf: function() {
-				if (this.slider)
-					return this.slider;
-
-				if (this.$parent.$options.name === 'VueFlux')
-					return this.$parent;
-
-				throw new ReferenceError('slider not referenced, check https://github.com/deulos/vue-flux/wiki/FluxPreloader for help');
-
-				return undefined;
-			},
-
 			display() {
 				return this.vf? true : false;
 			},

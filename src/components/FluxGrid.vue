@@ -16,7 +16,7 @@
 </template>
 
 <script>
-	import DomHelper from '@/libraries/DomHelper.js';
+	import BaseComponent from '@/mixins/BaseComponent.js';
 	import FluxCube from '@/components/FluxCube.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
@@ -27,6 +27,10 @@
 			FluxCube,
 			FluxImage,
 		},
+
+		mixins: [
+			BaseComponent,
+		],
 
 		data: () => ({
 			mounted: false,
@@ -50,20 +54,11 @@
 				default: 1,
 			},
 
-			size: Object,
-
 			image: [ String, Object ],
 
 			images: Object,
 
-			color: {
-				type: [ String, Object ],
-				default: 'transparent',
-			},
-
 			depth: Number,
-
-			css: Object,
 
 			tileCss: Object,
 		},
@@ -71,24 +66,6 @@
 		computed: {
 			component() {
 				return this.images? 'FluxCube' : 'FluxImage';
-			},
-
-			viewSize() {
-				if (this.size.width && this.size.height) {
-					return {
-						...this.size,
-					};
-				}
-
-				if (!this.mounted)
-					return {};
-
-				let parentSize = DomHelper.sizeFrom(this.$el.parentNode);
-
-				return {
-					width: this.size.width || parentSize.width,
-					height: this.size.height || parentSize.height,
-				};
 			},
 
 			numRows() {
@@ -116,10 +93,6 @@
 					...this.css,
 				};
 			},
-		},
-
-		mounted() {
-			this.mounted = true;
 		},
 
 		methods: {
@@ -158,13 +131,6 @@
 					width: width +'px',
 					height: height +'px',
 					zIndex: zIndex,
-				};
-			},
-
-			setCss(css) {
-				this.baseStyle = {
-					...this.baseStyle,
-					...css,
 				};
 			},
 
