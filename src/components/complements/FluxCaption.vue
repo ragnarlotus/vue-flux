@@ -7,26 +7,16 @@
 </template>
 
 <script>
+	import BaseComplement from '@/mixins/BaseComplement.js';
+
 	export default {
 		name: 'FluxCaption',
 
-		props: {
-			slider: Object,
-		},
+		mixins: [
+			BaseComplement,
+		],
 
 		computed: {
-			vf() {
-				if (this.slider)
-					return this.slider;
-
-				if (this.$parent.$options.name === 'VueFlux')
-					return this.$parent;
-
-				throw new ReferenceError('slider not referenced, check https://github.com/deulos/vue-flux/wiki/FluxCaption for help');
-
-				return undefined;
-			},
-
 			text() {
 				if (typeof this.caption === 'string')
 					return this.caption;
@@ -55,7 +45,7 @@
 				return this.captions[currentImage.index] || '';
 			},
 
-			captions: function() {
+			captions() {
 				return this.vf? this.vf.captions : {};
 			},
 		},

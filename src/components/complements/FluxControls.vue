@@ -9,27 +9,17 @@
 </template>
 
 <script>
+	import BaseComplement from '@/mixins/BaseComplement.js';
+
 	export default {
 		name: 'FluxControls',
 
-		props: {
-			slider: Object,
-		},
+		mixins: [
+			BaseComplement,
+		],
 
 		computed: {
-			vf: function() {
-				if (this.slider)
-					return this.slider;
-
-				if (this.$parent.$options.name === 'VueFlux')
-					return this.$parent;
-
-				throw new ReferenceError('slider not referenced, check https://github.com/deulos/vue-flux/wiki/FluxControls for help');
-
-				return undefined;
-			},
-
-			display: function() {
+			display() {
 				if (!this.vf)
 					return false;
 
@@ -45,7 +35,7 @@
 				return true;
 			},
 
-			autoplayClass: function() {
+			autoplayClass() {
 				return this.vf && this.vf.config.autoplay? 'pause' : 'play';
 			},
 		},

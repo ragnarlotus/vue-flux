@@ -13,7 +13,7 @@
 </template>
 
 <script>
-	import DomHelper from '@/libraries/DomHelper.js';
+	import BaseComponent from '@/mixins/BaseComponent.js';
 	import FluxImage from '@/components/FluxImage.vue';
 
 	export default {
@@ -23,16 +23,9 @@
 			FluxImage,
 		},
 
-		data: () => ({
-			mounted: false,
-			baseStyle: {
-				position: 'absolute',
-				top: 0,
-				left: 0,
-				width: '100%',
-				height: '100%',
-			},
-		}),
+		mixins: [
+			BaseComponent,
+		],
 
 		props: {
 			circles: {
@@ -40,39 +33,12 @@
 				default: 1,
 			},
 
-			size: Object,
-
 			image: [ String, Object ],
-
-			color: {
-				type: [ String, Object ],
-				default: 'transparent',
-			},
-
-			css: Object,
 
 			tileCss: Object,
 		},
 
 		computed: {
-			viewSize() {
-				if (this.size.width && this.size.height) {
-					return {
-						...this.size,
-					};
-				}
-
-				if (!this.mounted)
-					return {};
-
-				let parentSize = DomHelper.sizeFrom(this.$el.parentNode);
-
-				return {
-					width: this.size.width || parentSize.width,
-					height: this.size.height || parentSize.height,
-				};
-			},
-
 			numCircles() {
 				return Math.round(parseFloat(this.circles));
 			},
@@ -103,10 +69,6 @@
 			},
 		},
 
-		mounted() {
-			this.mounted = true;
-		},
-
 		methods: {
 			getTileCss(i) {
 				i--;
@@ -122,13 +84,6 @@
 					backgroundRepeat: 'repeat',
 					borderRadius: '50%',
 					zIndex: i,
-				};
-			},
-
-			setCss(css) {
-				this.baseStyle = {
-					...this.baseStyle,
-					...css,
 				};
 			},
 

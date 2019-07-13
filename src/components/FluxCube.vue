@@ -15,7 +15,7 @@
 </template>
 
 <script>
-	import DomHelper from '@/libraries/DomHelper.js';
+	import BaseComponent from '@/mixins/BaseComponent.js';
 	import FluxImage from '@/components/FluxImage.vue';
 
 	const rotate = {
@@ -50,39 +50,24 @@
 			FluxImage,
 		},
 
+		mixins: [
+			BaseComponent,
+		],
+
 		data: () => ({
-			mounted: false,
 			sides: [ 'front', 'back', 'top', 'bottom', 'left', 'right' ],
 			baseStyle: {
-				position: 'absolute',
-				top: 0,
-				left: 0,
 				transformStyle: 'preserve-3d',
 			},
 		}),
 
 		props: {
-			size: {
-				type: Object,
-				default: () => ({}),
-			},
-
 			images: {
 				type: Object,
 				default: () => ({}),
 			},
 
-			color: {
-				type: [ String, Object ],
-				default: () => ({}),
-			},
-
 			depth: Number,
-
-			css: {
-				type: Object,
-				default: () => ({}),
-			},
 
 			sidesCss: {
 				type: Object,
@@ -94,53 +79,6 @@
 		},
 
 		computed: {
-			viewSize() {
-				let size = {
-					...this.imageFinalSize,
-				};
-
-				if (this.css.width)
-					size.width = parseFloat(this.css.width);
-
-				if (this.css.height)
-					size.height = parseFloat(this.css.height);
-
-				return size;
-			},
-
-			imageFinalSize() {
-				if (this.size.width && this.size.height) {
-					return {
-						...this.size,
-					};
-				}
-
-				if (!this.mounted)
-					return undefined;
-
-				let parentSize = DomHelper.sizeFrom(this.$el.parentNode);
-
-				return {
-					width: this.size.width || parentSize.width,
-					height: this.size.height || parentSize.height,
-				};
-			},
-
-			sizeStyle() {
-				let size = {
-					width: this.imageFinalSize.width || '100%',
-					height: this.imageFinalSize.height || '100%',
-				};
-
-				if (/[0-9]$/.test(size.width))
-					size.width += 'px';
-
-				if (/[0-9]$/.test(size.height))
-					size.height += 'px';
-
-				return size;
-			},
-
 			style() {
 				return {
 					...this.baseStyle,
@@ -161,10 +99,6 @@
 			}
 		},
 
-		mounted() {
-			this.mounted = true;
-		},
-
 		methods: {
 			sideDefined(side) {
 				if (this.images[side] || this.color[side])
@@ -182,7 +116,7 @@
 			},
 
 			getSideSize(side) {
-				return this.imageFinalSize;
+				return this.finalSize;
 			},
 
 			getSideColor(side) {
@@ -236,13 +170,6 @@
 				return `rotateX(${rx}deg) rotateY(${ry}deg) translate3d(${tx}%, ${ty}%, ${tz}px)`;
 			},
 
-			setCss(css) {
-				this.baseStyle = {
-					...this.baseStyle,
-					...css,
-				};
-			},
-
 			transform(css) {
 				this.$nextTick(() => {
 					this.$refs.cube.clientHeight;
@@ -275,6 +202,6 @@
 			turnRight() {
 				this.turn('right');
 			},
-		}
+		},
 	};
 </script>

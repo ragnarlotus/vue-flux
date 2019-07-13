@@ -183,10 +183,15 @@
 			if (this.config.autohideTime === 0)
 				this.mouseOver = true;
 
-			window.addEventListener('resize', this.resize);
+			window.addEventListener('resize', this.resize, {
+				passive: true,
+			});
 
-			if (this.config.bindKeys)
-				window.addEventListener('keydown', this.keydown);
+			if (this.config.bindKeys) {
+				window.addEventListener('keydown', this.keydown, {
+					passive: true,
+				});
+			}
 
 			this.$emit('mounted');
 		},

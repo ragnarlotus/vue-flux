@@ -15,8 +15,8 @@
 </template>
 
 <script>
+	import BaseComplement from '@/mixins/BaseComplement.js';
 	import FluxThumb from '@/components/FluxThumb.vue';
-	import VueFlux from '@/components/VueFlux.vue';
 
 	export default {
 		name: 'FluxIndex',
@@ -25,45 +25,33 @@
 			FluxThumb,
 		},
 
+		mixins: [
+			BaseComplement,
+		],
+
 		data: () => ({
 			visible: false,
 			delay: 500,
 			touchStartTime: 0,
 		}),
 
-		props: {
-			slider: VueFlux,
-		},
-
 		computed: {
-			vf: function() {
-				if (this.slider)
-					return this.slider;
-
-				if (this.$parent.$options.name === 'VueFlux')
-					return this.$parent;
-
-				throw new ReferenceError('slider not referenced, check https://github.com/deulos/vue-flux/wiki/FluxIndex for help');
-
-				return undefined;
-			},
-
-			images: function() {
+			images() {
 				if (!this.vf)
 					return [];
 
 				return this.vf.Images.props;
 			},
 
-			display: function() {
+			display() {
 				return this.vf && this.vf.loaded;
 			},
 
-			displayButton: function() {
+			displayButton() {
 				return this.vf.mouseOver && !this.vf.Transitions.current;
 			},
 
-			indexClass: function() {
+			indexClass() {
 				let indexClass = '';
 
 				if (this.visible)

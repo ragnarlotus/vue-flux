@@ -5,45 +5,31 @@
 </template>
 
 <script>
+	import BaseComponent from '@/mixins/BaseComponent.js';
+
 	export default {
 		name: 'FluxWrapper',
 
+		mixins: [
+			BaseComponent,
+		],
+
 		data: () => ({
-			style: {
-				position: 'absolute',
+			baseStyle: {
 				overflow: 'hidden',
-				top: 0,
-				left: 0,
-				width: '100%',
-				height: '100%',
 			},
 		}),
 
-		props: {
-			css: {
-				type: Object,
-				default: () => ({}),
+		computed: {
+			style() {
+				return {
+					...this.baseStyle,
+					...this.css,
+				};
 			},
-		},
-
-		watch: {
-			css() {
-				this.setCss(this.css);
-			},
-		},
-
-		created() {
-			this.setCss(this.css);
 		},
 
 		methods: {
-			setCss(css) {
-				this.style = {
-					...this.style,
-					...css,
-				};
-			},
-
 			transform(css) {
 				this.$nextTick(() => {
 					this.$refs.wrapper.clientHeight;

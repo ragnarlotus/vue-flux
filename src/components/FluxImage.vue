@@ -5,19 +5,19 @@
 </template>
 
 <script>
-	import DomHelper from '@/libraries/DomHelper.js';
+	import BaseComponent from '@/mixins/BaseComponent.js';
 
 	export default {
 		name: 'FluxImage',
 
+		mixins: [
+			BaseComponent,
+		],
+
 		data: () => ({
-			mounted: false,
 			parent: {},
 			srcSize: undefined,
 			baseStyle: {
-				position: 'absolute',
-				top: 0,
-				left: 0,
 				overflow: 'hidden',
 				backfaceVisibility: 'hidden',
 				zIndex: 'auto',
@@ -25,16 +25,10 @@
 		}),
 
 		props: {
-			size: {
-				type: Object,
-				default: () => ({}),
-			},
-
 			image: [ String, Object ],
 
 			color: {
 				type: String,
-				default: 'transparent',
 			},
 
 			css: {
@@ -49,20 +43,6 @@
 		},
 
 		computed: {
-			viewSize() {
-				let size = {
-					...this.imageFinalSize,
-				};
-
-				if (/px$/i.test(this.css.width))
-					size.width = parseFloat(this.css.width);
-
-				if (/px$/i.test(this.css.height))
-					size.height = parseFloat(this.css.height);
-
-				return size;
-			},
-
 			imageSrc() {
 				if (!this.image)
 					return;
@@ -75,35 +55,6 @@
 					return;
 
 				return this.image.size || this.srcSize;
-			},
-
-			imageFinalSize() {
-				if (this.size.width && this.size.height) {
-					return {
-						...this.size,
-					};
-				}
-
-				if (!this.mounted)
-					return undefined;
-
-				let parentSize = DomHelper.sizeFrom(this.$el.parentNode);
-
-				return {
-					width: this.size.width || parentSize.width,
-					height: this.size.height || parentSize.height,
-				};
-			},
-
-			sizeStyle() {
-				let size = {
-					...this.viewSize,
-				};
-
-				size.width += 'px';
-				size.height += 'px';
-
-				return size;
 			},
 
 			colorStyle() {
@@ -120,7 +71,7 @@
 				}
 
 				let originalSize = this.imageOriginalSize;
-				let finalSize = this.imageFinalSize;
+				let finalSize = this.finalSize;
 
 				if (!originalSize || !finalSize)
 					return {};
@@ -132,16 +83,7 @@
 					src: `url("${this.imageSrc}")`,
 				};
 
-				if (image.height / image.width >= finalSize.height / finalSize.width) {
-					image.height = finalSize.width * image.height / image.width;
-					image.width = finalSize.width;
-					image.top = (finalSize.height - image.height) / 2;
-
-				} else {
-					image.width = finalSize.height * image.width / image.height;
-					image.height = finalSize.height;
-					image.left = (finalSize.width - image.width) / 2;
-				}
+				this.calcRatioSizes(image, finalSize);
 
 				for (let prop of ['width', 'height', 'top', 'left'])
 					image[prop] = Math.ceil(image[prop]);
@@ -190,8 +132,6 @@
 		},
 
 		mounted() {
-			this.mounted = true;
-
 			let parentStyle = this.$el.parentNode.style;
 
 			Object.assign(this.parent, {
@@ -220,13 +160,6 @@
 				this.srcSize = {
 					width: img.naturalWidth || img.width,
 					height: img.naturalHeight || img.height,
-				};
-			},
-
-			setCss(css) {
-				this.baseStyle = {
-					...this.baseStyle,
-					...css,
 				};
 			},
 

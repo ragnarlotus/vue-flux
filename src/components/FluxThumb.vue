@@ -1,13 +1,19 @@
 <template>
-	<div :style="style" :title="caption" class="flux-thumb" ref="thumb"></div>
+	<div :style="baseStyle" :title="caption" class="flux-thumb" ref="thumb"></div>
 </template>
 
 <script>
+	import BaseComponent from '@/mixins/BaseComponent.js';
+
 	export default {
 		name: 'FluxThumb',
 
+		mixins: [
+			BaseComponent,
+		],
+
 		data: () => ({
-			style: {
+			baseStyle: {
 				overflow: 'hidden',
 			},
 		}),
@@ -21,11 +27,6 @@
 			index: {
 				type: Number,
 				required: true,
-			},
-
-			css: {
-				type: Object,
-				default: () => ({}),
 			},
 		},
 
@@ -58,19 +59,10 @@
 
 				let thumb = {
 					width: this.$refs.thumb.clientWidth,
-					height: this.$refs.thumb.clientHeight
+					height: this.$refs.thumb.clientHeight,
 				};
 
-				if (image.height / image.width >= thumb.height / thumb.width) {
-					image.height = thumb.width * image.height / image.width;
-					image.width = thumb.width;
-					image.top = (thumb.height - image.height) / 2;
-
-				} else {
-					image.width = thumb.height * image.width / image.height;
-					image.height = thumb.height;
-					image.left = (thumb.width - image.width) / 2;
-				}
+				this.calcRatioSizes(image, thumb);
 
 				this.setCss({
 					backgroundImage: image.src,
@@ -78,13 +70,6 @@
 					backgroundPosition: `${image.left}px ${image.top}px`,
 					backgroundRepeat: 'no-repeat',
 				});
-			},
-
-			setCss(css) {
-				this.style = {
-					...this.style,
-					...css,
-				};
 			},
 		},
 	};
