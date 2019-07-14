@@ -1,7 +1,13 @@
 <template>
 	<div class="flux-parallax" :style="style" ref="parallax">
-		<img v-if="loaded === false" :src="src" alt="" @load="setProperties" @error="setProperties" ref="image">
-		<slot></slot>
+		<img
+			v-if="loaded === false"
+			:src="src"
+			alt=""
+			@load="setProperties"
+			@error="setProperties"
+			ref="image" />
+		<slot />
 	</div>
 </template>
 

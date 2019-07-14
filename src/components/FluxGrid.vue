@@ -10,8 +10,7 @@
 			:color="color"
 			:depth="depth"
 			:css="getTileCss(i)"
-			ref="tiles">
-		</component>
+			ref="tiles" />
 	</div>
 </template>
 
@@ -31,17 +30,6 @@
 		mixins: [
 			BaseComponent,
 		],
-
-		data: () => ({
-			mounted: false,
-			baseStyle: {
-				position: 'absolute',
-				top: 0,
-				left: 0,
-				width: '100%',
-				height: '100%',
-			},
-		}),
 
 		props: {
 			rows: {

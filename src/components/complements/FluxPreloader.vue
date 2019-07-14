@@ -3,7 +3,7 @@
 		<slot name="spinner">
 			<div v-if="displaySpinner" class="spinner">
 				<div class="pct">{{ vf.Images.progress }}%</div>
-				<div class="border"></div>
+				<div class="border" />
 			</div>
 		</slot>
 
@@ -11,8 +11,7 @@
 			v-if="displayLast"
 			:size="vf.size"
 			:image="vf.Images.lastShown"
-			:css="lastShownCss">
-		</flux-image>
+			:css="lastShownCss" />
 
 		<flux-transition
 			v-if="displayTransition"
@@ -20,8 +19,7 @@
 			:transition="transitionName"
 			:from="vf.Images.lastShown"
 			:to="vf.Images.current"
-			ref="transition"
-		></flux-transition>
+			ref="transition" />
 	</div>
 </template>
 

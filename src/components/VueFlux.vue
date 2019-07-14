@@ -14,7 +14,7 @@
 			:src="config.path + url"
 			:time="Images.time"
 			@load="Images.addProperties(index, $event)"
-			@error="Images.addProperties(index, $event)">
+			@error="Images.addProperties(index, $event)" />
 
 		<flux-transition
 			v-if="Transitions.current"
@@ -22,20 +22,22 @@
 			:size="size"
 			:from="Images.previous"
 			:to="Images.current"
-			ref="transition">
-		</flux-transition>
+			ref="transition" />
 
-		<flux-image :size="size" :image="Images.props[Images.currentIndex]" ref="image"></flux-image>
+		<flux-image
+			:size="size"
+			:image="Images.props[Images.currentIndex]"
+			ref="image" />
 
-		<slot name="preloader"></slot>
+		<slot name="preloader" />
 
-		<slot name="caption"></slot>
+		<slot name="caption" />
 
-		<slot name="controls"></slot>
+		<slot name="controls" />
 
-		<slot name="index"></slot>
+		<slot name="index" />
 
-		<slot v-if="loaded" name="pagination"></slot>
+		<slot v-if="loaded" name="pagination" />
 	</div>
 </template>
 
@@ -293,9 +295,6 @@
 
 			stop() {
 				this.config.autoplay = false;
-
-				if (Transitions.current)
-					Transitions.cancel();
 
 				Timers.clear('image');
 

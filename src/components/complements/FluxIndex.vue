@@ -1,13 +1,25 @@
 <template>
 	<div v-if="display" class="flux-index">
 		<transition name="fade">
-			<div v-show="displayButton" class="toggle" @click="toggle"></div>
+			<button v-if="displayButton" @click="toggle">
+				<svg class="toggle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
+					<rect fill="white" x="15" y="15" width="14" height="14" />
+					<rect fill="white" x="43" y="15" width="14" height="14" />
+					<rect fill="white" x="71" y="15" width="14" height="14" />
+					<rect fill="white" x="15" y="43" width="14" height="14" />
+					<rect fill="white" x="43" y="43" width="14" height="14" />
+					<rect fill="white" x="71" y="43" width="14" height="14" />
+					<rect fill="white" x="15" y="71" width="14" height="14" />
+					<rect fill="white" x="43" y="71" width="14" height="14" />
+					<rect fill="white" x="71" y="71" width="14" height="14" />
+				</svg>
+			</button>
 		</transition>
 
-		<nav :class="indexClass" @click="click" @touchstart.passive="touchStart" @touchend.passive="touchEnd">
+		<nav :class="listClass" @click="click" @touchstart.passive="touchStart" @touchend.passive="touchEnd">
 			<ul ref="thumbs">
 				<li v-for="(image, index) in images" :key="index" :class="current(index)" @click="click($event, index)">
-					<flux-thumb :slider="vf" :index="index"></flux-thumb>
+					<flux-thumb :image="images[index]" :caption="vf.cations && vf.captions[index]" />
 				</li>
 			</ul>
 		</nav>
@@ -35,6 +47,16 @@
 			touchStartTime: 0,
 		}),
 
+		props: {
+			thumbSize: {
+				type: Object,
+				default: () => ({
+					width: 160,
+					height: 90,
+				})
+			},
+		},
+
 		computed: {
 			images() {
 				if (!this.vf)
@@ -48,19 +70,19 @@
 			},
 
 			displayButton() {
-				return this.vf.mouseOver && !this.vf.Transitions.current;
+				return this.vf.mouseOver;
 			},
 
-			indexClass() {
-				let indexClass = '';
+			listClass() {
+				let listClass = '';
 
 				if (this.visible)
-					indexClass += 'visible';
+					listClass += 'visible';
 
 				if (this.vf.mouseOver)
-					indexClass += ' mouse-over';
+					listClass += ' mouse-over';
 
-				return indexClass;
+				return listClass;
 			},
 		},
 
@@ -149,60 +171,48 @@
 		}
 
 		$size: 50px;
+		$smSize: $size * 0.55;
+		$mdSize: $size * 0.70;
+		$lgSize: $size * 0.85;
 
 		.toggle {
 			position: absolute;
 			left: 50%;
-			bottom: 55px;
+			bottom: 65px;
+			padding: 14px;
 			margin-left: -($size / 2);
 			width: $size;
 			height: $size;
 			cursor: pointer;
 			border-radius: 50%;
 			background-color: rgba(0, 0, 0, 0.6);
-			background-repeat: no-repeat;
-			background-position: center center;
-			background-size: 40%;
-			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC0AAAAtCAYAAAA6GuKaAAAA6ElEQVRYhe2ZUQ2DMBRFK6ESkFAJSEBCJSABB0iYBCRUAlKQcPexLtlHW+4Ly7Ju9yTvj3ffCQktUAdgBZCIurkCADyAjcyIlYxI9icAwcHGWBi4GPqPinQyZCyfloakSSQt6QaSlnSDUBgYDf17RXozZMwOwIjH3TqrqTQwD53JjKHS78n+ueYgRPfkh/GsfKN/YDJOHAKRMTwv3sml5iiJ5zCWtSK8GjKmv9hcJC3pBpKWdANJX5Hub0d8GdzPu4cQvwZ6/Bo3LDXAF/33sDAWBmpHJJA0haRJJC3pBlel33Zi293Z+B2f9cNhdwgb0QAAAABJRU5ErkJggg==');
 			z-index: 101;
-		}
 
-		.toggle:hover {
-			transition: background-color 0.2s ease-in;
-			background-color: rgba(0, 0, 0, 0.9);
-		}
-
-		@media (max-width: 576px) {
-			$smSize: $size * 0.55;
-
-			.toggle {
+			@media (max-width: 576px) {
 				width: $smSize;
 				height: $smSize;
 				margin-left: -($smSize / 2);
 				background-size: 31%;
 			}
-		}
 
-		@media (min-width: 577px) and (max-width: 768px) {
-			$mdSize: $size * 0.70;
-
-			.toggle {
+			@media (min-width: 577px) and (max-width: 768px) {
 				width: $mdSize;
 				height: $mdSize;
 				margin-left: -($mdSize / 2);
 				background-size: 34%;
 			}
-		}
 
-		@media (min-width: 769px) and (max-width: 992px) {
-			$lgSize: $size * 0.85;
-
-			.toggle {
+			@media (min-width: 769px) and (max-width: 992px) {
 				width: $lgSize;
 				height: $lgSize;
 				margin-left: -($lgSize / 2);
 				background-size: 37%;
 			}
+		}
+
+		.toggle:hover {
+			transition: background-color 0.2s ease-in;
+			background-color: rgba(0, 0, 0, 0.9);
 		}
 
 		nav {
@@ -235,15 +245,31 @@
 			transition: all 0.5s linear;
 		}
 
+		$width: 160px;
+		$height: 90px;
+
 		li {
 			position: relative;
 			display: inline-block;
+			box-sizing: content-box;
 			margin: 8px 8px;
+			width: $width;
+			height: $height;
 			cursor: pointer;
 			transition: all 0.3s ease;
+
+			@media (max-width: 386px) {
+				width: $width * 0.5;
+				height: $height * 0.5;
+			}
+
+			@media (min-width: 387px) and (max-width: 576px) {
+				width: $width * 0.7;
+				height: $height * 0.7;
+			}
 		}
 
-		.mouse-over li:hover {
+		li:hover {
 			box-shadow: 0px 0px 3px 2px rgba(255,255,255,0.6);
 		}
 
@@ -251,10 +277,6 @@
 			cursor: auto;
 			border: 1px solid white;
 			box-shadow: none;
-		}
-
-		ul > li:last-child {
-			margin-bottom: 26px;
 		}
 	}
 </style>

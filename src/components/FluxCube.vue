@@ -9,8 +9,7 @@
 			:color="getSideColor(side)"
 			:css="getSideCss(side)"
 			:offset="offset || getSideOffset(side)"
-			:ref="side">
-		</flux-image>
+			:ref="side" />
 	</div>
 </template>
 

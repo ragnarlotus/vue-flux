@@ -3,7 +3,12 @@
 		<ul>
 			<li v-for="i in vf.Images.srcs.length" :key="i">
 				<slot item="getItem(i - 1)">
-					<span :title="getTitle(i - 1)" @click="showImage(i - 1)" @touchend="showImage(i - 1, $event)" :class="getClass(i - 1)" class="pagination-item"></span>
+					<span
+						:title="getTitle(i - 1)"
+						@click="showImage(i - 1)"
+						@touchend="showImage(i - 1, $event)"
+						:class="getClass(i - 1)"
+						class="pagination-item" />
 				</slot>
 			</li>
 		</ul>
