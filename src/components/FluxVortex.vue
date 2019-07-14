@@ -7,8 +7,7 @@
 			:image="image"
 			:color="color"
 			:css="getTileCss(i)"
-			ref="tiles">
-		</flux-image>
+			ref="tiles" />
 	</div>
 </template>
 

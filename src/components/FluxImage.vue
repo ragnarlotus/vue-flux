@@ -1,6 +1,10 @@
 <template>
 	<div :style="style">
-		<img v-if="imageSrc && !srcSize" :src="imageSrc" @load="setSrcSize()" @error="setSrcSize()">
+		<img
+			v-if="imageSrc && !srcSize"
+			:src="imageSrc"
+			@load="setSrcSize()"
+			@error="setSrcSize()" />
 	</div>
 </template>
 

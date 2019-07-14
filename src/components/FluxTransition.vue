@@ -6,8 +6,7 @@
 			:size="size"
 			:from="from"
 			:to="to"
-			:options="transition.options">
-		</component>
+			:options="transition.options" />
 	</div>
 </template>
 

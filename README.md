@@ -47,23 +47,23 @@ Add the component to the template. This one has all the complements, so you can 
    ref="slider">
 
    <template v-slot:preloader>
-      <flux-preloader></flux-preloader>
+      <flux-preloader />
    </template>
 
    <template v-slot:caption>
-      <flux-caption></flux-caption>
+      <flux-caption />
    </template>
 
    <template v-slot:controls>
-      <flux-controls></flux-controls>
+      <flux-controls />
    </template>
 
    <template v-slot:pagination>
-      <flux-pagination></flux-pagination>
+      <flux-pagination />
    </template>
 
    <template v-slot:index>
-      <flux-index></flux-index>
+      <flux-index />
    </template>
 </vue-flux>
 
