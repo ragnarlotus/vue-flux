@@ -345,7 +345,7 @@
 	.vue-flux {
 		position: relative;
 
-		img {
+		& > img {
 			position: absolute;
 			visibility: hidden;
 		}
