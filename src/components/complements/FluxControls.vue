@@ -7,13 +7,13 @@
 				</svg>
 			</button>
 
-			<button class="play" v-if="!vf.config.autoplay" @click="vf.toggleAutoplay()">
+			<button class="play" v-if="!vf.config.autoplay" @click="vf.play('next', 1)">
 				<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
 					<polygon fill="white" stroke="white" stroke-width="14" stroke-linejoin="round" stroke-linecap="round" points="32,12 78,50 32,88" />
 				</svg>
 			</button>
 
-			<button class="pause" v-if="vf.config.autoplay" @click="vf.toggleAutoplay()">
+			<button class="pause" v-if="vf.config.autoplay" @click="vf.stop()">
 				<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
 					<line fill="none" stroke="white" stroke-width="14" stroke-linejoin="round" stroke-linecap="round" x1="32" y1="12" x2="32" y2="88" />
 					<line fill="none" stroke="white" stroke-width="14" stroke-linejoin="round" stroke-linecap="round" x1="68" y1="12" x2="68" y2="88" />

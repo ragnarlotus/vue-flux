@@ -301,10 +301,6 @@
 				this.$emit('stop');
 			},
 
-			toggleAutoplay() {
-				this.config.autoplay? this.stop() : this.play(undefined, 1);
-			},
-
 			showImage(index, transition) {
 				if (this.loaded === false || this.$refs.image === undefined)
 					return;
