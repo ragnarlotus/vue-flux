@@ -178,7 +178,7 @@
 		.toggle {
 			position: absolute;
 			left: 50%;
-			bottom: 65px;
+			bottom: 70px;
 			padding: 14px;
 			margin-left: -($size / 2);
 			width: $size;

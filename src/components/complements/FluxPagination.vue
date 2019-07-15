@@ -92,7 +92,7 @@
 		position: absolute;
 		left: 50px;
 		right: 50px;
-		bottom: 20px;
+		bottom: 10px;
 		z-index: 100;
 
 		ul {
