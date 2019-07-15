@@ -1,27 +1,27 @@
 <template>
 	<transition name="fade">
 		<div v-if="display" class="flux-controls">
-			<button @click="vf.showImage('previous')">
-				<svg class="previous" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
+			<button class="previous" @click="vf.showImage('previous')">
+				<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
 					<polyline fill="none" stroke="white" stroke-width="14" stroke-linejoin="round" stroke-linecap="round" points="68,12 22,50 68,88" />
 				</svg>
 			</button>
 
-			<button v-if="!vf.config.autoplay" @click="vf.toggleAutoplay()">
-				<svg class="play" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
+			<button class="play" v-if="!vf.config.autoplay" @click="vf.toggleAutoplay()">
+				<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
 					<polygon fill="white" stroke="white" stroke-width="14" stroke-linejoin="round" stroke-linecap="round" points="32,12 78,50 32,88" />
 				</svg>
 			</button>
 
-			<button v-if="vf.config.autoplay" @click="vf.toggleAutoplay()">
-				<svg class="pause" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
+			<button class="pause" v-if="vf.config.autoplay" @click="vf.toggleAutoplay()">
+				<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
 					<line fill="none" stroke="white" stroke-width="14" stroke-linejoin="round" stroke-linecap="round" x1="32" y1="12" x2="32" y2="88" />
 					<line fill="none" stroke="white" stroke-width="14" stroke-linejoin="round" stroke-linecap="round" x1="68" y1="12" x2="68" y2="88" />
 				</svg>
 			</button>
 
-			<button @click="vf.showImage('next')">
-				<svg class="next" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
+			<button class="next" @click="vf.showImage('next')">
+				<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
 					<polyline fill="none" stroke="white" stroke-width="14" stroke-linejoin="round" stroke-linecap="round" points="32,12 78,50 32,88" />
 				</svg>
 			</button>
@@ -83,10 +83,7 @@
 			transition: opacity 0.3s ease-in;
 		}
 
-		.previous,
-		.play,
-		.pause,
-		.next {
+		& > button {
 			position: absolute;
 			top: 0;
 			width: $size;
@@ -95,6 +92,7 @@
 			cursor: pointer;
 			border-radius: 50%;
 			background-color: rgba(0, 0, 0, 0.6);
+			border: none;
 
 			&:hover {
 				background-color: rgba(0, 0, 0, 0.9);
