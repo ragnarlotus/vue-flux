@@ -59,13 +59,6 @@
 			leftGap() {
 				return Math.ceil(this.viewSize.width / 2 - this.radius * this.numCircles);
 			},
-
-			style() {
-				return {
-					...this.baseStyle,
-					...this.css,
-				};
-			},
 		},
 
 		methods: {

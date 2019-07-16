@@ -19,23 +19,5 @@
 				overflow: 'hidden',
 			},
 		}),
-
-		computed: {
-			style() {
-				return {
-					...this.baseStyle,
-					...this.css,
-				};
-			},
-		},
-
-		methods: {
-			transform(css) {
-				this.$nextTick(() => {
-					this.$refs.wrapper.clientHeight;
-					this.setCss(css);
-				});
-			},
-		},
 	};
 </script>
