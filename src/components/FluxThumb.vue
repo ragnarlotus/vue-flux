@@ -1,6 +1,6 @@
 <template>
 	<flux-image
-		:title="caption"
+		:title="caption.text | caption"
 		:image="image"
 		:size="size"
 		ref="thumb" />

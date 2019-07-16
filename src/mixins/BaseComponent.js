@@ -79,6 +79,13 @@ export default {
 
 			return size;
 		},
+
+		style() {
+			return {
+				...this.baseStyle,
+				...this.css,
+			};
+		},
 	},
 
 	mounted() {
@@ -91,6 +98,13 @@ export default {
 				...this.baseStyle,
 				...css,
 			};
+		},
+
+		transform(css) {
+			this.$nextTick(() => {
+				this.$el.clientHeight;
+				this.setCss(css);
+			});
 		},
 	},
 }

@@ -169,13 +169,6 @@
 				return `rotateX(${rx}deg) rotateY(${ry}deg) translate3d(${tx}%, ${ty}%, ${tz}px)`;
 			},
 
-			transform(css) {
-				this.$nextTick(() => {
-					this.$refs.cube.clientHeight;
-					this.setCss(css);
-				});
-			},
-
 			turn(side) {
 				this.transform({
 					transform: this.getTransform(side),

@@ -31,15 +31,6 @@
 		props: {
 			image: [ String, Object ],
 
-			color: {
-				type: String,
-			},
-
-			css: {
-				type: Object,
-				default: () => ({}),
-			},
-
 			offset: {
 				type: [ Number, String, Object ],
 				default: 'auto',
@@ -174,13 +165,6 @@
 					width: img.naturalWidth || img.width,
 					height: img.naturalHeight || img.height,
 				};
-			},
-
-			transform(css) {
-				this.$nextTick(() => {
-					this.$el.clientHeight;
-					this.setCss(css);
-				});
 			},
 
 			show() {

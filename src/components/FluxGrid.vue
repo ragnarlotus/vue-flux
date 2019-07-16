@@ -74,13 +74,6 @@
 					height: Math.ceil(this.viewSize.height / this.numRows),
 				};
 			},
-
-			style() {
-				return {
-					...this.baseStyle,
-					...this.css,
-				};
-			},
 		},
 
 		methods: {
