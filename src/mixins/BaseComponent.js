@@ -86,19 +86,6 @@ export default {
 	},
 
 	methods: {
-		calcRatioSizes(origin, target) {
-			if (origin.height / origin.width >= target.height / target.width) {
-				origin.height = target.width * origin.height / origin.width;
-				origin.width = target.width;
-				origin.top = (target.height - origin.height) / 2;
-
-			} else {
-				origin.width = target.height * origin.width / origin.height;
-				origin.height = target.height;
-				origin.left = (target.width - origin.width) / 2;
-			}
-		},
-
 		setCss(css) {
 			this.baseStyle = {
 				...this.baseStyle,

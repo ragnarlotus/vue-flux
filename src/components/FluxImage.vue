@@ -87,7 +87,16 @@
 					src: `url("${this.imageSrc}")`,
 				};
 
-				this.calcRatioSizes(image, finalSize);
+				if (image.height / image.width >= finalSize.height / finalSize.width) {
+					image.height = finalSize.width * image.height / image.width;
+					image.width = finalSize.width;
+					image.top = (finalSize.height - image.height) / 2;
+
+				} else {
+					image.width = finalSize.height * image.width / image.height;
+					image.height = finalSize.height;
+					image.left = (finalSize.width - image.width) / 2;
+				}
 
 				for (let prop of ['width', 'height', 'top', 'left'])
 					image[prop] = Math.ceil(image[prop]);
@@ -100,7 +109,7 @@
 					if ((this.offset === 'auto' || this.offset[side] === 'auto'))
 						offset = /^-?[0-9]/.test(this.css[side])? -parseFloat(this.css[side]) : 0;
 
-					else if ((typeof this.offset).includes('string', 'number'))
+					else if (typeof this.offset === 'number')
 						offset = this.offset;
 
 					else if (this.offset[side])
