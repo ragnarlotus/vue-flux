@@ -1,7 +1,7 @@
 <template>
 	<transition name="fade">
-		<slot v-if="caption" :caption="caption" :text="text">
-			<div class="flux-caption">{{ text }}</div>
+		<slot v-if="caption" :caption="caption" :text="getCaptionText()">
+			<div class="flux-caption">{{ getCaptionText() }}</div>
 		</slot>
 	</transition>
 </template>
@@ -17,36 +17,17 @@
 		],
 
 		computed: {
-			text() {
-				if (typeof this.caption === 'string')
-					return this.caption;
-
-				if (this.caption.text)
-					return this.caption.text;
-
-				return '';
-			},
-
 			caption() {
 				if (!this.vf)
 					return '';
 
-				if (this.vf.loaded === false)
+				if (!this.vf.loaded)
 					return '';
 
-				if (this.vf.Transitions.current !== undefined)
+				if (this.vf.Transitions.current)
 					return '';
 
-				let currentImage = this.vf.Images.current;
-
-				if (currentImage === undefined)
-					return '';
-
-				return this.captions[currentImage.index] || '';
-			},
-
-			captions() {
-				return this.vf? this.vf.captions : {};
+				return this.getCaption();
 			},
 		},
 	};

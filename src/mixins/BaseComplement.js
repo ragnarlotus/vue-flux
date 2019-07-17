@@ -15,5 +15,46 @@ export default {
 
 			return undefined;
 		},
+
+		captions() {
+			return this.vf && this.vf.captions? this.vf.captions : {};
+		},
+
+		currentTransition() {
+			return this.vf.Transitions.current;
+		},
+
+		previousImageIndex() {
+			return this.vf.Images.previousIndex;
+		},
+
+		currentImageIndex() {
+			return this.vf.Images.currentIndex;
+		},
+
+		nextImageIndex() {
+			return this.vf.Images.next.index;
+		},
+	},
+
+	methods: {
+		getCaption(index) {
+			if (index === undefined)
+				index = this.currentImageIndex;
+
+			return this.captions[index] || '';
+		},
+
+		getCaptionText(index) {
+			let caption = this.getCaption(index);
+
+			if (typeof caption === 'string')
+				return caption;
+
+			if (caption.text)
+				return caption.text;
+
+			return '';
+		},
 	},
 };

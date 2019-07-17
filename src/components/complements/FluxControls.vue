@@ -44,10 +44,10 @@
 				if (!this.vf)
 					return false;
 
-				if (this.vf.loaded === false)
+				if (!this.vf.loaded)
 					return false;
 
-				if (this.vf.mouseOver === false)
+				if (!this.vf.mouseOver)
 					return false;
 
 				return true;

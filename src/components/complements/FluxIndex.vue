@@ -19,7 +19,7 @@
 		<nav :class="listClass" @click="click" @touchstart.passive="touchStart" @touchend.passive="touchEnd">
 			<ul ref="thumbs">
 				<li v-for="(image, index) in images" :key="index" :class="current(index)" @click="click($event, index)">
-					<flux-thumb :image="images[index]" :caption="vf.cations && vf.captions[index]" />
+					<flux-thumb :image="images[index]" :description="getCaptionText(index)" />
 				</li>
 			</ul>
 		</nav>
@@ -46,16 +46,6 @@
 			delay: 500,
 			touchStartTime: 0,
 		}),
-
-		props: {
-			thumbSize: {
-				type: Object,
-				default: () => ({
-					width: 160,
-					height: 90,
-				})
-			},
-		},
 
 		computed: {
 			images() {
@@ -154,7 +144,7 @@
 			},
 
 			current(index) {
-				return this.vf.Images.currentIndex === index? 'current' : '';
+				return this.currentImageIndex === index? 'current' : '';
 			},
 		},
 	};

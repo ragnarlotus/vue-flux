@@ -1,6 +1,6 @@
 <template>
 	<flux-image
-		:title="caption.text | caption"
+		:title="description"
 		:image="image"
 		:size="size"
 		ref="thumb" />
@@ -21,7 +21,7 @@
 
 			image: [ String, Object ],
 
-			caption: String,
+			description: String,
 		},
 	};
 </script>
