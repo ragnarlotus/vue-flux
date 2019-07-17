@@ -4,7 +4,7 @@
 			<li v-for="i in vf.Images.srcs.length" :key="i">
 				<slot item="getItem(i - 1)">
 					<span
-						:title="getTitle(i - 1)"
+						:title="getCaptionText(i - 1)"
 						@click="showImage(i - 1)"
 						@touchend="showImage(i - 1, $event)"
 						:class="getClass(i - 1)"
@@ -32,49 +32,26 @@
 
 				return true;
 			},
-
-			currentTransition() {
-				return this.vf.Transitions.current;
-			},
-
-			currentImageIndex() {
-				let currentImage = this.vf.Images.current;
-
-				if (currentImage === undefined)
-					return undefined;
-
-				return currentImage.index;
-			},
-
-			nextImageIndex() {
-				let nextImage = this.vf.Images.next;
-
-				return nextImage.index;
-			},
 		},
 
 		methods: {
 			getItem(i) {
 				return {
 					index: i,
-					title: this.getTitle(i),
+					title: this.getCaptionText(i),
 					onClick: this.showImage,
 					active: this.getClass(i) === 'active',
 				};
 			},
 
 			getClass(i) {
-				if (this.currentTransition !== undefined && this.vf.Images.previousIndex === i)
+				if (this.currentTransition !== undefined && this.previousImageIndex === i)
 					return 'active';
 
-				if (this.currentTransition === undefined && this.vf.Images.currentIndex === i)
+				if (this.currentTransition === undefined && this.currentImageIndex === i)
 					return 'active';
 
 				return '';
-			},
-
-			getTitle(i) {
-				return this.vf.captions[i] || '';
 			},
 
 			showImage(index, event) {
@@ -107,24 +84,24 @@
 			display: inline-block;
 			margin: 0 8px;
 			cursor: pointer;
+		}
 
-			span.pagination-item {
-				display: inline-block;
-				width: 16px;
-				height: 16px;
-				border: 2px solid #fff;
-				border-radius: 50%;
-				background-color: rgba(0, 0, 0, 0.7);
-				transition: background-color 0.2s ease-in, border 0.2s ease-in;
+		.pagination-item {
+			display: inline-block;
+			width: 16px;
+			height: 16px;
+			border: 2px solid #fff;
+			border-radius: 50%;
+			background-color: rgba(0, 0, 0, 0.7);
+			transition: background-color 0.2s ease-in, border 0.2s ease-in;
 
-				&:hover {
-					border: 2px solid black;
-					background-color: white;
-				}
+			&:hover {
+				border-color: black;
+				background-color: white;
+			}
 
-				&.active {
-					background-color: white;
-				}
+			&.active {
+				background-color: white;
 			}
 		}
 	}
