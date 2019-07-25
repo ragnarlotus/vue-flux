@@ -1,4 +1,5 @@
 **[Version 5 documentation](https://deulos.github.io/vue-flux-docs/v5/)**
+
 **[Version 5 demo](https://deulos.github.io/vue-flux/)**
 
 # This is the version 6 README
