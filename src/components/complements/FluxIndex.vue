@@ -1,8 +1,8 @@
 <template>
 	<div v-if="display" class="flux-index">
 		<transition name="fade">
-			<button v-if="displayButton" @click="toggle">
-				<svg class="toggle" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
+			<button v-if="displayButton" @click="toggle" class="toggle">
+				<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
 					<rect fill="white" x="15" y="15" width="14" height="14" />
 					<rect fill="white" x="43" y="15" width="14" height="14" />
 					<rect fill="white" x="71" y="15" width="14" height="14" />
@@ -176,7 +176,11 @@
 			cursor: pointer;
 			border-radius: 50%;
 			background-color: rgba(0, 0, 0, 0.6);
-			z-index: 101;
+			z-index: 100;
+
+			&:hover {
+				background-color: rgba(0, 0, 0, 0.9);
+			}
 
 			@media (max-width: 576px) {
 				width: $smSize;
@@ -198,11 +202,6 @@
 				margin-left: -($lgSize / 2);
 				background-size: 37%;
 			}
-		}
-
-		.toggle:hover {
-			transition: background-color 0.2s ease-in;
-			background-color: rgba(0, 0, 0, 0.9);
 		}
 
 		nav {
