@@ -1,7 +1,7 @@
 <template>
 	<div class="flux-parallax" :style="style" ref="parallax">
 		<img
-			v-if="loaded === false"
+			v-if="!loaded"
 			:src="src"
 			alt=""
 			@load="setProperties"
@@ -56,29 +56,29 @@
 
 			type: {
 				type: String,
-				default: () => 'relative',
+				default: 'relative',
 			},
 
 			height: {
 				type: String,
-				default: () => 'auto',
+				default: 'auto',
 			},
 
 			offset: {
 				type: [Number, String],
-				default: () => '60%',
+				default: '100%',
 			},
 		},
 
 		computed: {
-			parallaxHeight: function() {
+			parallaxHeight() {
 				if (/^[0-9]+px$/.test(this.height) === true)
 					return parseFloat(this.height);
 
 				return this.$refs.parallax.clientHeight;
 			},
 
-			offsetHeight: function() {
+			offsetHeight() {
 				let height = {
 					px: 0
 				};
@@ -94,7 +94,7 @@
 				return height;
 			},
 
-			backgroundHeight: function() {
+			backgroundHeight() {
 				let height = {
 					px: this.parallaxHeight + this.offsetHeight.px
 				};
@@ -104,7 +104,7 @@
 				return height;
 			},
 
-			remainderHeight: function() {
+			remainderHeight() {
 				let height = {
 					px: this.background.height - this.backgroundHeight.px
 				};

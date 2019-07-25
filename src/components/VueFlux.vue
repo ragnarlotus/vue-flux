@@ -29,19 +29,19 @@
 			:image="Images.props[Images.currentIndex]"
 			ref="image" />
 
-		<slot name="preloader" />
+		<slot v-if="size.height" name="preloader" />
 
-		<slot name="caption" />
+		<slot v-if="size.height" name="caption" />
 
-		<slot name="controls" />
+		<slot v-if="size.height" name="controls" />
 
-		<slot name="index" />
+		<slot v-if="size.height" name="index" />
 
-		<slot v-if="loaded" name="pagination" />
+		<slot v-if="loaded && size.height" name="pagination" />
 	</div>
 </template>
 
-<script>
+<script type="module">
 	// Libraries
 	import DomHelper from '@/libraries/DomHelper.js';
 
@@ -55,8 +55,6 @@
 	// Components
 	import FluxTransition from '@/components/FluxTransition.vue';
 	import FluxImage from '@/components/FluxImage.vue';
-
-	let Display, Timers, Transitions, Images, Touches;
 
 	export default {
 		name: 'VueFlux',
@@ -119,7 +117,7 @@
 			style() {
 				let style = {};
 
-				if (Display.inFullScreen()) {
+				if (this.Display.inFullScreen()) {
 					return {
 						width: '100% !important',
 						height: '100% !important',
@@ -146,7 +144,7 @@
 
 				this.stop();
 
-				Transitions.update();
+				this.Transitions.update();
 
 				wasPlaying && this.start();
 			},
@@ -157,7 +155,7 @@
 				this.stop();
 
 				this.$nextTick(() => {
-					Images.load(this.images);
+					this.Images.load(this.images);
 
 					this.config.autoplay = wasPlaying;
 				});
@@ -165,14 +163,14 @@
 		},
 
 		created() {
-			Display = this.Display = new DisplayController(this);
-			Timers = this.Timers = new TimersController(this);
-			Transitions = this.Transitions = new TransitionsController(this);
-			Images = this.Images = new ImagesController(this);
-			Touches = this.Touches = new TouchesController(this);
+			this.Display = new DisplayController(this);
+			this.Timers = new TimersController(this);
+			this.Transitions = new TransitionsController(this);
+			this.Images = new ImagesController(this);
+			this.Touches = new TouchesController(this);
 
 			this.updateOptions();
-			Transitions.update();
+			this.Transitions.update();
 
 			this.$emit('created');
 		},
@@ -180,31 +178,16 @@
 		mounted() {
 			this.resize();
 
-			Images.load(this.images);
-
-			if (this.config.autohideTime === 0)
-				this.mouseOver = true;
-
-			window.addEventListener('resize', this.resize, {
-				passive: true,
-			});
-
-			if (this.config.bindKeys) {
-				window.addEventListener('keydown', this.keydown, {
-					passive: true,
-				});
-			}
+			this.Images.load(this.images);
 
 			this.$emit('mounted');
 		},
 
 		beforeDestroy() {
 			window.removeEventListener('resize', this.resize);
+			window.removeEventListener('keydown', this.keydown);
 
-			if (this.config.bindKeys)
-				window.removeEventListener('keydown', this.keydown);
-
-			Timers.clear();
+			this.Timers.clear();
 
 			this.$emit('destroyed');
 		},
@@ -214,6 +197,19 @@
 				Object.assign(this.config, this.options);
 
 				this.resize();
+
+				if (this.config.autohideTime === 0)
+					this.mouseOver = true;
+
+				window.addEventListener('resize', this.resize, {
+					passive: true,
+				});
+
+				if (this.config.bindKeys) {
+					window.addEventListener('keydown', this.keydown, {
+						passive: true,
+					});
+				}
 
 				this.$emit('options-updated');
 			},
@@ -253,18 +249,18 @@
 				if (this.config.autohideTime === 0)
 					return;
 
-				Timers.clear('mouseOver');
+				this.Timers.clear('mouseOver');
 
 				this.mouseOver = over;
 
 				if (this.mouseOver) {
-					Timers.set('mouseOver', this.config.autohideTime, () => {
+					this.Timers.set('mouseOver', this.config.autohideTime, () => {
 						this.mouseOver = false;
 					});
 
 				} else {
 					this.mouseOver = false;
-					Timers.clear('mouseOver');
+					this.Timers.clear('mouseOver');
 				}
 			},
 
@@ -272,21 +268,21 @@
 				if (this.config.allowFullscreen === false)
 					return;
 
-				Display.requestFullScreen(this.$refs.container);
+				this.Display.requestFullScreen(this.$refs.container);
 			},
 
 			exitFullScreen() {
-				Display.exitFullScreen();
+				this.Display.exitFullScreen();
 			},
 
 			toggleFullScreen() {
-				Display.inFullScreen()? this.exitFullScreen() : this.enterFullScreen();
+				this.Display.inFullScreen()? this.exitFullScreen() : this.enterFullScreen();
 			},
 
 			play(index = 'next', delay) {
 				this.config.autoplay = true;
 
-				Timers.set('image', delay || this.config.delay, () => {
+				this.Timers.set('image', delay || this.config.delay, () => {
 					this.showImage(index);
 				});
 
@@ -296,7 +292,7 @@
 			stop() {
 				this.config.autoplay = false;
 
-				Timers.clear('image');
+				this.Timers.clear('image');
 
 				this.$emit('stop');
 			},
@@ -305,9 +301,9 @@
 				if (this.loaded === false || this.$refs.image === undefined)
 					return;
 
-				if (Transitions.current !== undefined) {
+				if (this.Transitions.current !== undefined) {
 					if (this.config.allowToSkipTransition) {
-						Transitions.cancel();
+						this.Transitions.cancel();
 
 						this.$nextTick(() => {
 							this.showImage(index, transition);
@@ -317,10 +313,10 @@
 					return;
 				}
 
-				if (Images.current.index === index)
+				if (this.Images.current.index === index)
 					return;
 
-				Images.show(index, transition);
+				this.Images.show(index, transition);
 
 				this.$emit('show');
 			},

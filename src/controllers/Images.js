@@ -29,6 +29,7 @@ export default class ImagesController {
 		this.progress = 0;
 
 		this.preloading = false;
+		this.lazyloading = false;
 
 		this.currentIndex = 0;
 		this.previousIndex = undefined;
