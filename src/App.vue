@@ -223,6 +223,7 @@
 			activeTransitionClass: 'bg-black',
 			inactiveTransitionClass: 'bg-gray-800 hover:bg-black',
 			vfOptions: {
+				autohideTime: 0,
 				autoplay: false,
 				bindKeys: true,
 				allowFullscreen: true,

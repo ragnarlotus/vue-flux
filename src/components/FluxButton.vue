@@ -23,9 +23,11 @@
 
 	.vue-flux .flux-button {
 		position: absolute;
+		margin: 0;
+		padding: 0;
 		width: $size;
 		height: $size;
-		border: none;
+		border: 0;
 		background-color: transparent;
 
 		&:focus {
