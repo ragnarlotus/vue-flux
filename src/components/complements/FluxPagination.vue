@@ -69,7 +69,7 @@
 		position: absolute;
 		left: 50px;
 		right: 50px;
-		bottom: 10px;
+		bottom: 2%;
 		z-index: 100;
 
 		ul {
@@ -86,10 +86,15 @@
 			cursor: pointer;
 		}
 
+		$size: 16px;
+		$smSize: $size * 0.70;
+		$mdSize: $size * 0.80;
+		$lgSize: $size * 0.90;
+
 		.pagination-item {
 			display: inline-block;
-			width: 16px;
-			height: 16px;
+			width: $size;
+			height: $size;
 			border: 2px solid #fff;
 			border-radius: 50%;
 			background-color: rgba(0, 0, 0, 0.7);
@@ -102,6 +107,21 @@
 
 			&.active {
 				background-color: white;
+			}
+
+			@media (max-width: 576px) {
+				width: $smSize;
+				height: $smSize;
+			}
+
+			@media (min-width: 577px) and (max-width: 768px) {
+				width: $mdSize;
+				height: $mdSize;
+			}
+
+			@media (min-width: 769px) and (max-width: 992px) {
+				width: $lgSize;
+				height: $lgSize;
 			}
 		}
 	}
