@@ -165,10 +165,6 @@
 			top: 70%;
 			cursor: pointer;
 			z-index: 100;
-
-			rect {
-				stroke-width: 0;
-			}
 		}
 
 		nav {

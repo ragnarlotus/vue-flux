@@ -6,12 +6,12 @@
 			</flux-button>
 
 			<flux-button v-if="!vf.config.autoplay" class="play top" @click="vf.play('next', 1)">
-				<polygon points="32,12 78,50 32,88" />
+				<polygon points="32,12 82,50 32,88" />
 			</flux-button>
 
 			<flux-button v-if="vf.config.autoplay" class="pause top" @click="vf.stop()">
-				<line x1="32" y1="12" x2="32" y2="88" />
-				<line x1="68" y1="12" x2="68" y2="88" />
+				<line x1="32" y1="22" x2="32" y2="78" />
+				<line x1="68" y1="22" x2="68" y2="78" />
 			</flux-button>
 
 			<flux-button class="next top right" @click="vf.showImage('next')">

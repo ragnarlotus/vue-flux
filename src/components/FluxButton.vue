@@ -130,6 +130,7 @@
 
 			rect, polygon {
 				fill: white;
+				stroke-width: 0;
 			}
 		}
 	}
