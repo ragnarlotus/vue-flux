@@ -5,8 +5,8 @@
 		@mousemove="toggleMouseOver(true)"
 		@mouseleave="toggleMouseOver(false)"
 		@dblclick="toggleFullScreen()"
-		@touchstart="Touches.start"
-		@touchend="Touches.end">
+		@touchstart="Touches.start($event)"
+		@touchend="Touches.end($event)">
 
 		<img alt=""
 			v-for="(url, index) in Images.loading" :key="index"
@@ -68,7 +68,7 @@
 			config: {
 				allowFullscreen: false,
 				allowToSkipTransition: true,
-				autohideTime: 1000,
+				autohideTime: 1500,
 				autoplay: false,
 				bindKeys: false,
 				delay: 5000,

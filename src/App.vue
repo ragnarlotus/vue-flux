@@ -272,7 +272,7 @@
 				this.vfCaptions = [];
 
 				let index, src;
-				for (let i = 1; i <= 30; i++) {
+				for (let i = 1; i <= 6; i++) {
 					index = Math.floor(Math.random() * srcs.length);
 					src = srcs.splice(index, 1)[0];
 
