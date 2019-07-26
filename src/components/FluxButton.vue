@@ -26,6 +26,7 @@
 		width: $size;
 		height: $size;
 		border: none;
+		background-color: transparent;
 
 		&:focus {
 			outline: 0;
