@@ -1,19 +1,17 @@
 <template>
 	<div v-if="display" class="flux-index">
 		<transition name="fade">
-			<button v-if="displayButton" @click="toggle" class="toggle">
-				<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
-					<rect fill="white" x="15" y="15" width="14" height="14" />
-					<rect fill="white" x="43" y="15" width="14" height="14" />
-					<rect fill="white" x="71" y="15" width="14" height="14" />
-					<rect fill="white" x="15" y="43" width="14" height="14" />
-					<rect fill="white" x="43" y="43" width="14" height="14" />
-					<rect fill="white" x="71" y="43" width="14" height="14" />
-					<rect fill="white" x="15" y="71" width="14" height="14" />
-					<rect fill="white" x="43" y="71" width="14" height="14" />
-					<rect fill="white" x="71" y="71" width="14" height="14" />
-				</svg>
-			</button>
+			<flux-button v-if="displayButton" @click="toggle" class="toggle bottom left">
+				<rect x="15" y="15" width="14px" height="14px" />
+				<rect x="43" y="15" width="14px" height="14px" />
+				<rect x="71" y="15" width="14px" height="14px" />
+				<rect x="15" y="43" width="14px" height="14px" />
+				<rect x="43" y="43" width="14px" height="14px" />
+				<rect x="71" y="43" width="14px" height="14px" />
+				<rect x="15" y="71" width="14px" height="14px" />
+				<rect x="43" y="71" width="14px" height="14px" />
+				<rect x="71" y="71" width="14px" height="14px" />
+			</flux-button>
 		</transition>
 
 		<nav :class="listClass" @click="click" @touchstart.passive="touchStart" @touchend.passive="touchEnd">
@@ -28,12 +26,14 @@
 
 <script>
 	import BaseComplement from '@/mixins/BaseComplement.js';
+	import FluxButton from '@/components/FluxButton.vue';
 	import FluxThumb from '@/components/FluxThumb.vue';
 
 	export default {
 		name: 'FluxIndex',
 
 		components: {
+			FluxButton,
 			FluxThumb,
 		},
 
@@ -160,47 +160,14 @@
 			transition: opacity 0.3s ease-in;
 		}
 
-		$size: 50px;
-		$smSize: $size * 0.55;
-		$mdSize: $size * 0.70;
-		$lgSize: $size * 0.85;
-
 		.toggle {
-			position: absolute;
 			left: 50%;
-			bottom: 70px;
-			padding: 14px;
-			margin-left: -($size / 2);
-			width: $size;
-			height: $size;
+			top: 70%;
 			cursor: pointer;
-			border-radius: 50%;
-			background-color: rgba(0, 0, 0, 0.6);
 			z-index: 100;
 
-			&:hover {
-				background-color: rgba(0, 0, 0, 0.9);
-			}
-
-			@media (max-width: 576px) {
-				width: $smSize;
-				height: $smSize;
-				margin-left: -($smSize / 2);
-				background-size: 31%;
-			}
-
-			@media (min-width: 577px) and (max-width: 768px) {
-				width: $mdSize;
-				height: $mdSize;
-				margin-left: -($mdSize / 2);
-				background-size: 34%;
-			}
-
-			@media (min-width: 769px) and (max-width: 992px) {
-				width: $lgSize;
-				height: $lgSize;
-				margin-left: -($lgSize / 2);
-				background-size: 37%;
+			rect {
+				stroke-width: 0;
 			}
 		}
 
@@ -256,16 +223,16 @@
 				width: $width * 0.7;
 				height: $height * 0.7;
 			}
-		}
 
-		li:hover {
-			box-shadow: 0px 0px 3px 2px rgba(255,255,255,0.6);
-		}
+			&:hover {
+				box-shadow: 0px 0px 3px 2px rgba(255,255,255,0.6);
+			}
 
-		li.current {
-			cursor: auto;
-			border: 1px solid white;
-			box-shadow: none;
+			&.current {
+				cursor: auto;
+				border: 1px solid white;
+				box-shadow: none;
+			}
 		}
 	}
 </style>
