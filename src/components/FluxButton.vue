@@ -28,6 +28,7 @@
 		width: $size;
 		height: $size;
 		border: 0;
+		cursor: pointer;
 		background-color: transparent;
 
 		&:focus {
@@ -116,7 +117,6 @@
 		> svg {
 			> circle {
 				fill: rgba(0, 0, 0, 0.7);
-				cursor: pointer;
 			}
 
 			&:hover > circle {
