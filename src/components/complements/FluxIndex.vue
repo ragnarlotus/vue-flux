@@ -2,20 +2,19 @@
 	<div v-if="display" class="flux-index">
 		<transition name="fade">
 			<flux-button v-if="displayButton" @click="show()" class="toggle bottom left">
-				<rect x="15" y="15" width="14px" height="14px" />
-				<rect x="43" y="15" width="14px" height="14px" />
-				<rect x="71" y="15" width="14px" height="14px" />
-				<rect x="15" y="43" width="14px" height="14px" />
-				<rect x="43" y="43" width="14px" height="14px" />
-				<rect x="71" y="43" width="14px" height="14px" />
-				<rect x="15" y="71" width="14px" height="14px" />
-				<rect x="43" y="71" width="14px" height="14px" />
-				<rect x="71" y="71" width="14px" height="14px" />
+				<rect
+					v-for="(coord, index) in coords"
+					:key="index"
+					:x="coord.x"
+					:y="coord.y"
+					:width="buttonRectSize +'px'"
+					:height="buttonRectSize +'px'"
+				/>
 			</flux-button>
 		</transition>
 
 		<nav :class="listClass" @click="hide()">
-			<ul ref="thumbs">
+			<ul>
 				<li v-for="(image, index) in images" :key="index" :class="current(index)" @click="showImage(index)">
 					<flux-thumb :image="images[index]" :description="getCaptionText(index)" />
 				</li>
@@ -43,9 +42,41 @@
 
 		data: () => ({
 			visible: false,
+			rectSize: 14,
 			delay: 500,
-			touchStartTime: 0,
+			coords: [],
 		}),
+
+		props: {
+			buttonRows: {
+				type: Number,
+				default: 3,
+			},
+
+			buttonCols: {
+				type: Number,
+				default: 3,
+			},
+
+			buttonRectSize: {
+				type: Number,
+				default: 14,
+			},
+		},
+
+		created() {
+			let rowsGap = (100 - this.rectSize * this.buttonRows) / (this.buttonRows + 1);
+			let colsGap = (100 - this.rectSize * this.buttonCols) / (this.buttonCols + 1);
+
+			for (let r = 0; r < this.buttonRows; r++) {
+				for (let c = 0; c < this.buttonCols; c++) {
+					this.coords.push({
+						x: rowsGap + rowsGap * r + this.rectSize * r,
+						y: colsGap + colsGap * c + this.rectSize * c,
+					});
+				}
+			}
+		},
 
 		computed: {
 			images() {
