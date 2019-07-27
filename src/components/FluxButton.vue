@@ -2,7 +2,7 @@
 	<button type="button" class="flux-button" @click="$emit('click')">
 		<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
 			<circle cx="50" cy="50" r="50" />
-			<svg viewBox="-28 -28 156 156">
+			<svg viewBox="-20 -20 140 140">
 				<slot></slot>
 			</svg>
 		</svg>
