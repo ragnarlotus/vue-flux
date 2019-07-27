@@ -42,6 +42,8 @@
 			},
 
 			style: {},
+
+			chromeMobile: false,
 		}),
 
 		props: {
@@ -115,12 +117,20 @@
 			},
 		},
 
+		created() {
+			let ua = navigator.userAgent;
+			let chrome = /Chrome|Chromium\W\d/.test(ua);
+			let mobile = /iphone|ip[oa]d|android|mobile|tablet/i.test(ua);
+
+			this.chromeMobile = (chrome && mobile);
+		},
+
 		mounted() {
 			window.addEventListener('resize', this.resize, {
 				passive: true,
 			});
 
-			if (this.type !== 'fixed') {
+			if (this.type !== 'fixed' || this.chromeMobile) {
 				this.holder.addEventListener('scroll', this.handleScroll, {
 					passive: true,
 				});
@@ -130,7 +140,7 @@
 		beforeDestroy() {
 			window.removeEventListener('resize', this.resize);
 
-			if (this.type !== 'fixed')
+			if (this.type !== 'fixed' || this.chromeMobile)
 				this.holder.removeEventListener('scroll', this.handleScroll);
 		},
 
@@ -177,37 +187,65 @@
 						backgroundRepeat: 'no-repeat',
 					};
 
-					if (this.type === 'fixed') {
-						Object.assign(css, {
-							backgroundPosition: 'center',
-							backgroundAttachment: 'fixed',
-							backgroundSize: 'cover',
-						});
+					let image = {
+						width: this.image.width,
+						height: this.image.height,
+					};
 
-					} else {
-						let image = {
-							width: this.image.width,
-							height: this.image.height,
-						};
-
-						this.background.height = this.backgroundHeight.px;
-						this.background.width = Math.floor(this.background.height * image.width / image.height);
+					if (this.type !== 'fixed') {
 						this.background.top = 0;
 
 						if (this.background.width < this.parallax.width) {
 							this.background.width = this.parallax.width;
 							this.background.height = Math.floor(this.parallax.width * image.height / image.width);
+
+						} else {
+							this.background.height = this.backgroundHeight.px;
+							this.background.width = Math.floor(this.background.height * image.width / image.height);
 						}
 
 						Object.assign(css, {
 							backgroundSize: `${this.background.width}px ${this.background.height}px`,
 							backgroundPosition: `center ${this.background.top}px`,
 						});
+
+						this.handleScroll();
+
+					} else if (this.chromeMobile) {
+						this.background.top = 0;
+
+						let browserSize = {
+							width: window.innerWidth,
+							height: window.innerHeight,
+						};
+
+						if (image.height / image.width >= browserSize.height / browserSize.width) {
+							this.background.height = browserSize.width * image.height / image.width;
+							this.background.width = browserSize.width;
+							this.background.top = (browserSize.height - image.height) / 2;
+
+						} else {
+							this.background.width = browserSize.height * image.width / image.height;
+							this.background.height = browserSize.height;
+							this.background.left = (browserSize.width - image.width) / 2;
+						}
+
+						Object.assign(css, {
+							backgroundSize: `${this.background.width}px ${this.background.height}px`,
+							backgroundPosition: `center ${this.background.top}px`,
+						});
+
+						this.handleScroll();
+
+					} else {
+						Object.assign(css, {
+							backgroundPosition: 'center',
+							backgroundAttachment: 'fixed',
+							backgroundSize: 'cover',
+						});
 					}
 
 					this.setCss(css);
-
-					this.handleScroll();
 				});
 			},
 
@@ -246,17 +284,18 @@
 				if (scrollTop > this.parallax.top + this.parallax.height)
 					return;
 
+				if (this.type === 'fixed') {
+					this.handleFixed(scrollTop - this.parallax.top);
+					return;
+				}
+
 				let positionY = scrollTop - this.parallax.top + this.view.height;
 
-				if (this.type === 'visible') {
+				if (this.type === 'visible')
 					this.handleVisible(positionY);
-					return;
-				}
 
-				if (this.type === 'relative') {
+				else if (this.type === 'relative')
 					this.handleRelative(positionY);
-					return;
-				}
 			},
 
 			handleVisible(positionY) {
@@ -280,6 +319,12 @@
 				pct = positionY * 100 / (this.view.height + this.parallax.height);
 
 				this.moveBackgroundByPct(pct);
+			},
+
+			handleFixed(positionY) {
+				this.setCss({
+					backgroundPositionY: positionY +'px',
+				});
 			},
 		},
 	};
