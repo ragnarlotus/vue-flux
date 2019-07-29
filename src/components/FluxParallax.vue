@@ -1,5 +1,10 @@
 <template>
 	<div class="flux-parallax" :style="style" ref="parallax">
+		<div v-if="chromeMobile" style="position: absolute; top: 0; left: 0; width: 100%; height: 300px; clip: rect(auto auto auto auto);">
+			<div style="position: absolute; top: 0; left: 0; bottom: 0; right: 0;">
+				<div ref="chromeFixChild" :style="fixChildStyle" style="height: 100%; top: 0; bottom: 0; left: 0; right: 0; position: fixed; background: url('slides/01.jpg') no-repeat;"></div>
+			</div>
+		</div>
 		<img
 			v-if="!loaded"
 			:src="src"
@@ -42,6 +47,8 @@
 			},
 
 			style: {},
+			fixParentStyle: {},
+			fixChildStyle: {},
 
 			chromeMobile: false,
 		}),
@@ -122,7 +129,7 @@
 			let chrome = /Chrome|Chromium\W\d/.test(ua);
 			let mobile = /iphone|ip[oa]d|android|mobile|tablet/i.test(ua);
 
-			this.chromeMobile = (chrome && mobile);
+			this.chromeMobile = true || (chrome && mobile);
 		},
 
 		mounted() {
@@ -130,7 +137,7 @@
 				passive: true,
 			});
 
-			if (this.type !== 'fixed' || this.chromeMobile) {
+			if (this.type !== 'fixed') {
 				this.holder.addEventListener('scroll', this.handleScroll, {
 					passive: true,
 				});
@@ -140,7 +147,7 @@
 		beforeDestroy() {
 			window.removeEventListener('resize', this.resize);
 
-			if (this.type !== 'fixed' || this.chromeMobile)
+			if (this.type !== 'fixed')
 				this.holder.removeEventListener('scroll', this.handleScroll);
 		},
 
@@ -212,6 +219,12 @@
 						this.handleScroll();
 
 					} else if (this.chromeMobile) {
+						this.setCss({
+							position: 'relative',
+							overflow: 'hidden',
+							height: this.parallax.height +'px',
+						});
+
 						this.background.top = 0;
 
 						let browserSize = {
@@ -230,12 +243,10 @@
 							this.background.left = (browserSize.width - image.width) / 2;
 						}
 
-						Object.assign(css, {
+						Object.assign(this.fixChildStyle, {
 							backgroundSize: `${this.background.width}px ${this.background.height}px`,
 							backgroundPosition: `center ${this.background.top}px`,
 						});
-
-						this.handleScroll();
 
 					} else {
 						Object.assign(css, {
@@ -284,11 +295,6 @@
 				if (scrollTop > this.parallax.top + this.parallax.height)
 					return;
 
-				if (this.type === 'fixed') {
-					this.handleFixed(scrollTop - this.parallax.top);
-					return;
-				}
-
 				let positionY = scrollTop - this.parallax.top + this.view.height;
 
 				if (this.type === 'visible')
@@ -319,12 +325,6 @@
 				pct = positionY * 100 / (this.view.height + this.parallax.height);
 
 				this.moveBackgroundByPct(pct);
-			},
-
-			handleFixed(positionY) {
-				this.setCss({
-					backgroundPositionY: positionY +'px',
-				});
 			},
 		},
 	};
