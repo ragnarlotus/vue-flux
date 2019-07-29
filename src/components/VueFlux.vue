@@ -196,8 +196,6 @@
 			updateOptions() {
 				Object.assign(this.config, this.options);
 
-				this.resize();
-
 				if (this.config.autohideTime === 0)
 					this.mouseOver = true;
 
