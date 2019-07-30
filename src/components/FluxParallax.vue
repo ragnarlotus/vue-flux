@@ -1,14 +1,11 @@
 <template>
-	<div class="flux-parallax" :style="style" ref="parallax">
-		<div v-if="chromeMobile" style="position: absolute; top: 0; left: 0; width: 100%; height: 300px; clip: rect(auto auto auto auto);">
-			<div style="position: absolute; top: 0; left: 0; bottom: 0; right: 0;">
-				<div ref="chromeFixChild" :style="fixChildStyle" style="height: 100%; top: 0; bottom: 0; left: 0; right: 0; position: fixed; background: url('slides/01.jpg') no-repeat;"></div>
-			</div>
+	<div :style="style" ref="parallax">
+		<div v-if="type === 'fixed'" :style="fixedParentStyle">
+			<div :style="fixedChildStyle" />
 		</div>
 		<img
-			v-if="!loaded"
+			v-if="type !== 'fixed' && !loaded"
 			:src="src"
-			alt=""
 			@load="setProperties"
 			@error="setProperties"
 			ref="image" />
@@ -46,11 +43,18 @@
 				height: undefined,
 			},
 
-			style: {},
-			fixParentStyle: {},
-			fixChildStyle: {},
+			style: {
+				position: 'relative',
+			},
 
-			chromeMobile: false,
+			fixedParentStyle: {
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				bottom: 0,
+				right: 0,
+				clip: 'rect(auto auto auto auto)',
+			},
 		}),
 
 		props: {
@@ -68,11 +72,6 @@
 				default: 'relative',
 			},
 
-			height: {
-				type: String,
-				default: 'auto',
-			},
-
 			offset: {
 				type: [Number, String],
 				default: '100%',
@@ -80,75 +79,78 @@
 		},
 
 		computed: {
-			parallaxHeight() {
-				if (/^[0-9]+px$/.test(this.height) === true)
-					return parseFloat(this.height);
-
-				return this.$refs.parallax.clientHeight;
+			parallaxSize() {
+				return {
+					width: this.$refs.parallax.clientWidth,
+					height: this.$refs.parallax.clientHeight,
+				};
 			},
 
 			offsetHeight() {
-				let height = {
-					px: 0
-				};
+				let height;
 
-				if (/^[0-9]+px$/.test(this.offset) === true)
-					height.px = parseFloat(this.offset);
+				if (/^[0-9]+px$/.test(this.offset)) {
+					height = {
+						px: parseFloat(this.offset),
+						pct: height.px * 100 / this.background.height,
+					};
 
-				if (/^[0-9]+%$/.test(this.offset) === true)
-					height.px = Math.ceil(this.parallaxHeight * parseFloat(this.offset) / 100);
-
-				height.pct = height.px * 100 / this.background.height;
+				} else if (/^[0-9]+%$/.test(this.offset)) {
+					height = {
+						px: Math.ceil(this.parallaxSize.height * parseFloat(this.offset) / 100),
+						pct: parseFloat(parseFloat(this.offset)),
+					};
+				}
 
 				return height;
 			},
 
 			backgroundHeight() {
-				let height = {
-					px: this.parallaxHeight + this.offsetHeight.px
-				};
-
-				height.pct = height.px * 100 / this.background.height;
-
-				return height;
+				return this.parallaxSize.height + this.offsetHeight.px;
 			},
 
 			remainderHeight() {
-				let height = {
-					px: this.background.height - this.backgroundHeight.px
-				};
-
-				height.pct = height.px * 100 / this.background.height;
-
-				return height;
+				return this.background.height - this.backgroundHeight;
 			},
-		},
 
-		created() {
-			let ua = navigator.userAgent;
-			let chrome = /Chrome|Chromium\W\d/.test(ua);
-			let mobile = /iphone|ip[oa]d|android|mobile|tablet/i.test(ua);
+			fixedChildStyle() {
+				if (this.type !== 'fixed')
+					return;
 
-			this.chromeMobile = true || (chrome && mobile);
+				return {
+					position: 'fixed',
+					top: 0,
+					bottom: 0,
+					left: 0,
+					right: 0,
+					background: `url("${this.src}") no-repeat center center fixed`,
+				};
+			}
 		},
 
 		mounted() {
+			if (this.type === 'fixed')
+				return;
+
+			this.setCss({
+				background: `url("${this.src}") no-repeat`,
+			});
+
 			window.addEventListener('resize', this.resize, {
 				passive: true,
 			});
 
-			if (this.type !== 'fixed') {
-				this.holder.addEventListener('scroll', this.handleScroll, {
-					passive: true,
-				});
-			}
+			this.holder.addEventListener('scroll', this.handleScroll, {
+				passive: true,
+			});
 		},
 
 		beforeDestroy() {
-			window.removeEventListener('resize', this.resize);
+			if (this.type === 'fixed')
+				return;
 
-			if (this.type !== 'fixed')
-				this.holder.removeEventListener('scroll', this.handleScroll);
+			window.removeEventListener('resize', this.resize);
+			this.holder.removeEventListener('scroll', this.handleScroll);
 		},
 
 		methods: {
@@ -164,107 +166,38 @@
 				}
 
 				this.loaded = true;
-				this.init();
+				this.resize();
 			},
 
 			resize() {
-				let parallax = this.$refs.parallax;
-
 				this.view.height = this.holder.innerHeight;
 
-				Object.assign(this.parallax, {
-					width: 'auto',
-					height: this.parallaxHeight,
-				});
-
-				this.setCss({
-					width: this.parallax.width,
-					height: this.parallax.height +'px',
-				});
+				this.parallax = {
+					...this.parallax,
+					...this.parallaxSize,
+					top: this.$refs.parallax.offsetTop,
+				};
 
 				this.$nextTick(() => {
-					Object.assign(this.parallax, {
-						top: parallax.offsetTop,
-						width: parallax.clientWidth,
-					});
+					let imageRatio = this.image.height / this.image.width;
+					let parallaxRatio = this.parallax.height / this.parallax.width;
 
-					let css = {
-						width: this.parallax.width +'px',
-						backgroundImage: `url("${this.image.src}")`,
-						backgroundRepeat: 'no-repeat',
-					};
-
-					let image = {
-						width: this.image.width,
-						height: this.image.height,
-					};
-
-					if (this.type !== 'fixed') {
-						this.background.top = 0;
-
-						if (this.background.width < this.parallax.width) {
-							this.background.width = this.parallax.width;
-							this.background.height = Math.floor(this.parallax.width * image.height / image.width);
-
-						} else {
-							this.background.height = this.backgroundHeight.px;
-							this.background.width = Math.floor(this.background.height * image.width / image.height);
-						}
-
-						Object.assign(css, {
-							backgroundSize: `${this.background.width}px ${this.background.height}px`,
-							backgroundPosition: `center ${this.background.top}px`,
-						});
-
-						this.handleScroll();
-
-					} else if (this.chromeMobile) {
-						this.setCss({
-							position: 'relative',
-							overflow: 'hidden',
-							height: this.parallax.height +'px',
-						});
-
-						this.background.top = 0;
-
-						let browserSize = {
-							width: window.innerWidth,
-							height: window.innerHeight,
-						};
-
-						if (image.height / image.width >= browserSize.height / browserSize.width) {
-							this.background.height = browserSize.width * image.height / image.width;
-							this.background.width = browserSize.width;
-							this.background.top = (browserSize.height - image.height) / 2;
-
-						} else {
-							this.background.width = browserSize.height * image.width / image.height;
-							this.background.height = browserSize.height;
-							this.background.left = (browserSize.width - image.width) / 2;
-						}
-
-						Object.assign(this.fixChildStyle, {
-							backgroundSize: `${this.background.width}px ${this.background.height}px`,
-							backgroundPosition: `center ${this.background.top}px`,
-						});
+					if (imageRatio >= parallaxRatio) {
+						this.background.width = this.parallax.width;
+						this.background.height = Math.floor(this.parallax.width * this.image.height / this.image.width);
 
 					} else {
-						Object.assign(css, {
-							backgroundPosition: 'center',
-							backgroundAttachment: 'fixed',
-							backgroundSize: 'cover',
-						});
+						this.background.height = this.backgroundHeight;
+						this.background.width = Math.floor(this.background.height * this.image.width / this.image.height);
 					}
 
-					this.setCss(css);
+					this.setCss({
+						backgroundSize: `${this.background.width}px ${this.background.height}px`,
+						backgroundPosition: `center 0`,
+					});
+
+					this.handleScroll();
 				});
-			},
-
-			init() {
-				if (!this.image.src)
-					return;
-
-				this.resize();
 			},
 
 			setCss(css) {
@@ -275,7 +208,7 @@
 			},
 
 			moveBackgroundByPct(pct) {
-				if (this.remainderHeight.px > 0)
+				if (this.remainderHeight > 0)
 					pct = pct * this.offsetHeight.pct / 100 + 50 - this.offsetHeight.pct / 2;
 
 				this.setCss({
