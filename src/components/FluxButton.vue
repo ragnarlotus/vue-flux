@@ -115,6 +115,10 @@
 		}
 
 		> svg {
+			& * {
+				cursor: pointer;
+			}
+
 			> circle {
 				fill: rgba(0, 0, 0, 0.7);
 			}
