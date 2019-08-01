@@ -114,9 +114,6 @@
 			},
 
 			fixedChildStyle() {
-				if (this.type !== 'fixed')
-					return;
-
 				return {
 					position: 'fixed',
 					top: 0,
@@ -140,8 +137,10 @@
 				passive: true,
 			});
 
-			this.holder.addEventListener('scroll', this.handleScroll, {
-				passive: true,
+			setTimeout(() => {
+				this.holder.addEventListener('scroll', this.handleScroll, {
+					passive: true,
+				});
 			});
 		},
 
@@ -170,7 +169,7 @@
 			},
 
 			resize() {
-				this.view.height = this.holder.innerHeight;
+				this.view.height = this.holder.scrollHeight || this.holder.innerHeight;
 
 				this.parallax = {
 					...this.parallax,
@@ -178,26 +177,24 @@
 					top: this.$refs.parallax.offsetTop,
 				};
 
-				this.$nextTick(() => {
-					let imageRatio = this.image.height / this.image.width;
-					let parallaxRatio = this.parallax.height / this.parallax.width;
+				let imageRatio = this.image.height / this.image.width;
+				let parallaxRatio = this.parallax.height / this.parallax.width;
 
-					if (imageRatio >= parallaxRatio) {
-						this.background.width = this.parallax.width;
-						this.background.height = Math.floor(this.parallax.width * this.image.height / this.image.width);
+				if (imageRatio >= parallaxRatio) {
+					this.background.width = this.parallax.width;
+					this.background.height = Math.floor(this.parallax.width * this.image.height / this.image.width);
 
-					} else {
-						this.background.height = this.backgroundHeight;
-						this.background.width = Math.floor(this.background.height * this.image.width / this.image.height);
-					}
+				} else {
+					this.background.height = this.backgroundHeight;
+					this.background.width = Math.floor(this.background.height * this.image.width / this.image.height);
+				}
 
-					this.setCss({
-						backgroundSize: `${this.background.width}px ${this.background.height}px`,
-						backgroundPosition: `center 0`,
-					});
-
-					this.handleScroll();
+				this.setCss({
+					backgroundSize: `${this.background.width}px ${this.background.height}px`,
+					backgroundPosition: `center 0`,
 				});
+
+				this.handleScroll();
 			},
 
 			setCss(css) {
@@ -221,6 +218,9 @@
 					return;
 
 				let scrollTop = this.holder.scrollY || this.holder.scrollTop || this.holder.pageYOffset || 0;
+
+				if (this.holder !== window)
+					return this.handleRelative(scrollTop);
 
 				if (scrollTop + this.view.height < this.parallax.top)
 					return;
@@ -255,7 +255,11 @@
 			handleRelative(positionY) {
 				let pct;
 
-				pct = positionY * 100 / (this.view.height + this.parallax.height);
+				if (this.holder === window)
+					pct = positionY * 100 / (this.view.height + this.parallax.height);
+
+				else
+					pct = positionY * 100 / (this.view.height - this.holder.clientHeight);
 
 				this.moveBackgroundByPct(pct);
 			},
