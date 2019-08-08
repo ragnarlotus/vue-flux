@@ -30,10 +30,7 @@
 		border: 0;
 		cursor: pointer;
 		background-color: transparent;
-
-		&:focus {
-			outline: 0;
-		}
+		outline: 0;
 
 		@media (max-width: 576px) {
 			width: $smSize;
