@@ -14,8 +14,12 @@
 		</transition>
 
 		<nav :class="listClass" @click="hide()">
-			<ul>
-				<li v-for="(image, index) in images" :key="index" :class="current(index)" @click="showImage(index)">
+			<ul ref="thumbs">
+				<li
+					v-for="(image, index) in images"
+					:key="index" :class="current(index)"
+					@click="showImage(index)">
+
 					<flux-thumb :image="images[index]" :description="getCaptionText(index)" />
 				</li>
 			</ul>
