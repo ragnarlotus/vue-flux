@@ -2,7 +2,7 @@
 	<transition name="fade">
 		<div v-if="display" class="flux-controls">
 			<flux-button class="previous top left" @click="vf.showImage('previous')">
-				<polyline points="68,12 22,50 68,88" />
+				<polyline points="68,18 22,50 68,82" />
 			</flux-button>
 
 			<flux-button v-if="!vf.config.autoplay" class="play top" @click="vf.play('next', 1)">
@@ -15,7 +15,7 @@
 			</flux-button>
 
 			<flux-button class="next top right" @click="vf.showImage('next')">
-				<polyline points="32,12 78,50 32,88" />
+				<polyline points="32,18 78,50 32,82" />
 			</flux-button>
 		</div>
 	</transition>
