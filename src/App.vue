@@ -157,19 +157,19 @@
 
 			<h2>Relative</h2>
 
-			<flux-parallax src="slides/01.jpg" height="300px" type="relative">
+			<flux-parallax src="slides/01.jpg" style="height: 200px;">
 				<div>CONTENT</div>
 			</flux-parallax>
 
 			<h2 class="mt-4">Visible</h2>
 
-			<flux-parallax src="slides/01.jpg" height="300px" type="visible">
+			<flux-parallax src="slides/01.jpg" type="visible" style="height: 200px;">
 				<div>CONTENT</div>
 			</flux-parallax>
 
 			<h2 class="mt-4">Fixed</h2>
 
-			<flux-parallax src="slides/01.jpg" height="300px" type="fixed">
+			<flux-parallax src="slides/01.jpg" type="fixed" style="height: 200px;">
 				<div>CONTENT</div>
 			</flux-parallax>
 
