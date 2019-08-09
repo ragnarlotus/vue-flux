@@ -64,19 +64,24 @@
 
 			buttonRectSize: {
 				type: Number,
-				default: 14,
+				default: 12,
+			},
+
+			buttonPadding: {
+				type: Number,
+				default: 6,
 			},
 		},
 
 		created() {
-			let rowsGap = (100 - this.rectSize * this.buttonRows) / (this.buttonRows + 1);
-			let colsGap = (100 - this.rectSize * this.buttonCols) / (this.buttonCols + 1);
+			let rowsGap = (100 - this.buttonPadding * 2 - this.rectSize * this.buttonRows) / (this.buttonRows + 1);
+			let colsGap = (100 - this.buttonPadding * 2 - this.rectSize * this.buttonCols) / (this.buttonCols + 1);
 
 			for (let r = 0; r < this.buttonRows; r++) {
 				for (let c = 0; c < this.buttonCols; c++) {
 					this.coords.push({
-						x: rowsGap + rowsGap * r + this.rectSize * r,
-						y: colsGap + colsGap * c + this.rectSize * c,
+						x: this.buttonPadding + rowsGap + rowsGap * r + this.rectSize * r,
+						y: this.buttonPadding + colsGap + colsGap * c + this.rectSize * c,
 					});
 				}
 			}
