@@ -225,13 +225,6 @@
 				});
 			},
 
-			getSlot(name) {
-				if (this.$slots[name])
-					return this.$slots[name][0].componentInstance;
-
-				return undefined;
-			},
-
 			init() {
 				this.loaded = true;
 
