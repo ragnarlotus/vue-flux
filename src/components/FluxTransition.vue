@@ -1,7 +1,7 @@
 <template>
 	<div class="mask" :style="maskStyle" ref="mask">
 		<component
-			v-if="componentName"
+			v-if="false && componentName"
 			:is="componentName"
 			:size="size"
 			:from="from"
@@ -91,12 +91,22 @@
 		},
 
 		created() {
-			if (this.transition.component)
-				Object.assign(this.$options.components, this.transition.component);
+			Object.assign(this.$options.components, this.transition.component);
+		},
+
+		mounted() {
+			this.$emit('start');
+
+			setTimeout(() => {
+				this.$emit('end');
+			}, this.getDuration());
 		},
 
 		methods: {
 			getDuration() {
+				if (!this.$children[0])
+					return 1;
+
 				return this.$children[0].totalDuration;
 			},
 		}

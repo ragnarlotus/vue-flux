@@ -6,6 +6,8 @@ export default class TransitionsController {
 		this.transitions = [];
 		this.current = undefined;
 		this.currentIndex = undefined;
+		this.from = undefined;
+		this.to = undefined;
 		this.lastIndex = undefined;
 	}
 
@@ -26,14 +28,16 @@ export default class TransitionsController {
 	}
 
 	reset() {
+		this.vf.Images.updateLastShown(this.to);
+
 		this.lastIndex = this.currentIndex;
 		this.current = undefined;
 		this.currentIndex = undefined;
-
-		this.vf.Images.updateLastShown(this.vf.Images.current);
+		this.from = undefined;
+		this.to = undefined;
 	}
 
-	run(transition) {
+	run(transition, from, to) {
 		if (transition === undefined) {
 			this.currentIndex = this.nextIndex;
 			transition = this.transitions[this.currentIndex];
@@ -47,23 +51,17 @@ export default class TransitionsController {
 			}
 		}
 
+		this.from = from;
+		this.to = to;
 		this.current = this.transitions[this.currentIndex];
-
-		this.vf.$nextTick(() => {
-			this.start();
-		});
 	}
 
 	start() {
 		let vf = this.vf;
 
+		vf.Images.setCurrentIndex(this.to.index);
+
 		vf.$emit('transition-start', this.current);
-
-		let timeout = vf.$refs.transition.getDuration();
-
-		vf.Timers.set('transition', timeout, () => {
-			this.end();
-		});
 	}
 
 	cancel() {
@@ -81,7 +79,7 @@ export default class TransitionsController {
 
 		vf.$nextTick(() => {
 			let currentImage = vf.Images.current;
-			let lastImageIndex = vf.Images.count - 1;
+			let lastImageIndex = vf.Images.props.length - 1;
 
 			if (vf.config.infinite === false && currentImage.index >= lastImageIndex) {
 				vf.stop();
@@ -90,7 +88,7 @@ export default class TransitionsController {
 
 			if (vf.config.autoplay === true) {
 				vf.Timers.set('image', vf.config.delay, () => {
-					vf.showImage('next');
+					vf.show('next');
 				});
 			}
 

@@ -20,13 +20,15 @@
 			v-if="Transitions.current"
 			:transition="Transitions.current"
 			:size="size"
-			:from="Images.previous"
-			:to="Images.current"
+			:from="Transitions.from"
+			:to="Transitions.to"
+			@start="Transitions.start()"
+			@end="Transitions.end()"
 			ref="transition" />
 
 		<flux-image
 			:size="size"
-			:image="Images.props[Images.currentIndex]"
+			:image="Images.current"
 			ref="image" />
 
 		<slot v-if="size.height" name="preloader" />
@@ -274,7 +276,7 @@
 				this.config.autoplay = true;
 
 				this.Timers.set('image', delay || this.config.delay, () => {
-					this.showImage(index);
+					this.show(index);
 				});
 
 				this.$emit('play');
@@ -288,7 +290,7 @@
 				this.$emit('stop');
 			},
 
-			showImage(index, transition) {
+			show(index, transition) {
 				if (this.loaded === false || this.$refs.image === undefined)
 					return;
 
@@ -296,28 +298,28 @@
 					if (this.config.allowToSkipTransition) {
 						this.Transitions.cancel();
 
-						this.$nextTick(() => {
-							this.showImage(index, transition);
-						});
+						this.$nextTick(() => this.show(index, transition));
 					}
 
 					return;
 				}
 
-				if (this.Images.current.index === index)
-					return;
+				index = this.Images.getIndex(index);
 
-				this.Images.show(index, transition);
+				let from = this.Images.current;
+				let to = this.Images.props[index];
+
+				this.Transitions.run(transition, from, to);
 
 				this.$emit('show');
 			},
 
 			keydown(event) {
 				if (/ArrowLeft|Left/.test(event.key))
-					this.showImage('previous');
+					this.show('previous');
 
 				else if (/ArrowRight|Right/.test(event.key))
-					this.showImage('next');
+					this.show('next');
 			},
 		},
 	};

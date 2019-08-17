@@ -19,7 +19,6 @@
 		],
 
 		data: () => ({
-			parent: {},
 			srcSize: undefined,
 			baseStyle: {
 				overflow: 'hidden',
@@ -89,13 +88,16 @@
 					image.left = (finalSize.width - image.width) / 2;
 				}
 
-				for (let prop of ['width', 'height', 'top', 'left'])
+				let cssProps = ['width', 'height', 'top', 'left'];
+
+				cssProps.forEach(prop => {
 					image[prop] = Math.ceil(image[prop]);
+				});
 
-				let offset;
+				let cssSides = ['top', 'left'];
 
-				for (let side of ['top', 'left']) {
-					offset = 0;
+				cssSides.forEach(side => {
+					let offset = 0;
 
 					if ((this.offset === 'auto' || this.offset[side] === 'auto'))
 						offset = /^-?[0-9]/.test(this.css[side])? -parseFloat(this.css[side]) : 0;
@@ -107,16 +109,11 @@
 						offset = this.offset[side];
 
 					image[side] += parseFloat(offset);
-				}
-
-				let position = {
-					top: 0,
-					left: 0,
-				};
+				});
 
 				return {
-					top: position.top,
-					left: position.left,
+					top: 0,
+					left: 0,
 					backgroundImage: image.src,
 					backgroundSize: `${image.width}px ${image.height}px`,
 					backgroundPosition: `${image.left}px ${image.top}px`,
@@ -133,15 +130,6 @@
 					...this.css,
 				};
 			},
-		},
-
-		mounted() {
-			let parentStyle = this.$el.parentNode.style;
-
-			Object.assign(this.parent, {
-				top: parentStyle.top || 0,
-				left: parentStyle.left || 0,
-			});
 		},
 
 		methods: {

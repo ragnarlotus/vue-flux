@@ -125,7 +125,7 @@ export default class ImagesController {
 	}
 
 	updateProgress() {
-		this.progress = Math.ceil(this.props.length * 100 / this.loading.length) || 0;
+		this.progress = Math.ceil(this.loaded * 100 / this.loading.length) || 0;
 	}
 
 	getIndex(index) {
@@ -140,18 +140,9 @@ export default class ImagesController {
 		return currentIndex + 1 < this.srcs.length? currentIndex + 1 : 0;
 	}
 
-	show(index, transition) {
-		this.vf.Timers.clear('image');
-
-		index = this.getIndex(index);
-
-		if (!this.props[index])
-			return;
-
+	setCurrentIndex(index) {
 		this.previousIndex = this.currentIndex;
-		this.currentIndex = this.getIndex(index);
-
-		this.vf.Transitions.run(transition);
+		this.currentIndex = index;
 	}
 
 	updateLastShown(image) {

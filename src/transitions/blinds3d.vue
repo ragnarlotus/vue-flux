@@ -55,8 +55,6 @@
 		mounted() {
 			this.mask.overflow = 'visible';
 
-			this.current.hide();
-
 			this.$refs.grid.transform((tile, i) => {
 				tile.setCss({
 					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
@@ -64,6 +62,9 @@
 
 				tile.turnBack();
 			});
+
+			if (this.current)
+				this.current.hide();
 		},
 
 		beforeDestroy() {

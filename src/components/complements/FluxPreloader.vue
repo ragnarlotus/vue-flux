@@ -19,6 +19,7 @@
 			:transition="transitionName"
 			:from="vf.Images.lastShown"
 			:to="vf.Images.current"
+			@end="transitionEnd()"
 			ref="transition" />
 	</div>
 </template>
@@ -27,8 +28,6 @@
 	import BaseComplement from '@/mixins/BaseComplement.js';
 	import FluxImage from '@/components/FluxImage.vue';
 	import FluxTransition from '@/components/FluxTransition.vue';
-
-	let Images, Transitions;
 
 	export default {
 		name: 'FluxPreloader',
@@ -60,16 +59,14 @@
 		},
 
 		computed: {
-			display() {
-				return this.vf? true : false;
-			},
-
 			displaySpinner() {
-				return this.vf.Images.preloading;
+				return this.spinner && this.vf.Images.preloading;
 			},
 
 			displayLast() {
-				if (Images.lastShown && Images.preloading)
+				let Images = this.vf.Images;
+
+				if (Images.preloading && Images.lastShown && Images.lastShown.src !== Images.props[0].src)
 					return true;
 
 				return false;
@@ -78,40 +75,29 @@
 
 		watch: {
 			'vf.Images.preloading': function(preloading) {
-				if (!preloading && Images.props[0] && Images.lastShown.src !== Images.props[0].src)
+				let Images = this.vf.Images;
+
+				if (!preloading && Images.props[0] && Images.lastShown && Images.lastShown.src !== Images.props[0].src)
 					this.transitionStart();
 			},
 		},
 
-		created() {
-			Images = this.vf.Images;
-			Transitions = this.vf.Transitions;
-		},
-
 		methods: {
 			transitionStart() {
-				if (!Images.current)
+				if (!this.vf.Images.current)
 					return;
 
-				this.transitionName = this.transition || Transitions.transitions[Transitions.nextIndex];
+				this.transitionName = this.transition || this.vf.Transitions.transitions[this.vf.Transitions.nextIndex];
 				this.displayTransition = true;
-
-				this.$nextTick(() => {
-					let timeout = this.$refs.transition.getDuration();
-
-					setTimeout(() => {
-						this.transitionEnd();
-					}, timeout);
-				});
 			},
 
 			transitionEnd() {
 				if (!this.transition)
-					Transitions.lastIndex = Transitions.nextIndex;
+					this.vf.Transitions.lastIndex = this.vf.Transitions.nextIndex;
 
 				this.transitionName = undefined;
 				this.displayTransition = false;
-				Images.updateLastShown(Images.current);
+				this.vf.Images.updateLastShown(this.vf.Images.current);
 			}
 		}
 	};
