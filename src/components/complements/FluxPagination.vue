@@ -5,8 +5,8 @@
 				<slot item="getItem(i - 1)">
 					<span
 						:title="getCaptionText(i - 1)"
-						@click="showImage(i - 1)"
-						@touchend="showImage(i - 1, $event)"
+						@click="show(i - 1)"
+						@touchend="show(i - 1, $event)"
 						:class="getClass(i - 1)"
 						class="pagination-item" />
 				</slot>
@@ -39,7 +39,7 @@
 				return {
 					index: i,
 					title: this.getCaptionText(i),
-					onClick: this.showImage,
+					onClick: this.show,
 					active: this.getClass(i) === 'active',
 				};
 			},
@@ -54,8 +54,8 @@
 				return '';
 			},
 
-			showImage(index, event) {
-				this.vf.showImage(index);
+			show(index, event) {
+				this.vf.show(index);
 
 				if (event)
 					event.preventDefault();

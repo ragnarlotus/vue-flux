@@ -71,7 +71,7 @@ Add the component to the template. This one has all the complements, so you can 
    </template>
 </vue-flux>
 
-<button @click="$refs.slider.showImage('next')">NEXT</button>
+<button @click="$refs.slider.show('next')">NEXT</button>
 ```
 
 Add it to the component, and like before you can remove the complements you don't use.

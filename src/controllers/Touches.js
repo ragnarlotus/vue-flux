@@ -58,10 +58,10 @@ export default class TouchesController {
 		event.preventDefault();
 
 		if (this.slideRight(offsetX)) {
-			vf.showImage('previous');
+			vf.show('previous');
 
 		} else if (this.slideLeft(offsetX)) {
-			vf.showImage('next');
+			vf.show('next');
 
 		} else if (vf.index !== undefined && this.slideUp(offsetY)) {
 			vf.index.show();

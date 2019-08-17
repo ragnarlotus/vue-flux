@@ -35,14 +35,14 @@
 			this.mask.perspective = this.perspective;
 			this.mask.overflow = 'visible';
 
-			if (this.current)
-				this.current.hide();
-
 			this.$refs.cube.transform({
 				transition: `all ${this.totalDuration}ms ${this.easing}`,
 			});
 
 			this.$refs.cube.turnLeft();
+
+			if (this.current)
+				this.current.hide();
 		},
 
 		beforeDestroy() {
