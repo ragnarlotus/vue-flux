@@ -29,19 +29,13 @@
 			cols: 8,
 			tileDuration: 800,
 			totalDuration: 0,
-			perspective: '800px',
 			easing: 'ease-out',
 			tileDelay: 150,
 			images: {},
+			gridCss: {
+				perspective: '800px',
+			},
 		}),
-
-		computed: {
-			gridCss() {
-				return {
-					perspective: this.perspective,
-				};
-			}
-		},
 
 		created() {
 			let divider = this.size.width / this.cols;

@@ -18,7 +18,6 @@
 		],
 
 		data: () => ({
-			perspective: '1600px',
 			totalDuration: 1600,
 			easing: 'ease-in',
 			imageCss: {
@@ -27,8 +26,10 @@
 		}),
 
 		mounted() {
-			this.mask.perspective = this.perspective;
-			this.mask.overflow = 'visible';
+			Object.assign(this.mask, {
+				perspective: '1600px',
+				overflow: 'visible',
+			});
 
 			this.$refs.image.transform({
 				transition: `transform ${this.totalDuration}ms ${this.easing}`,

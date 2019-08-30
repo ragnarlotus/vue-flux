@@ -141,8 +141,10 @@ export default class ImagesController {
 	}
 
 	setCurrentIndex(index) {
-		this.previousIndex = this.currentIndex;
-		this.currentIndex = index;
+		setTimeout(() => {
+			this.previousIndex = this.currentIndex;
+			this.currentIndex = index;
+		});
 	}
 
 	updateLastShown(image) {

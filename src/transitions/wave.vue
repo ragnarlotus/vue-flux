@@ -31,21 +31,15 @@
 			cols: 8,
 			tileDuration: 900,
 			totalDuration: 0,
-			perspective: '1200px',
 			easing: 'cubic-bezier(0.3, -0.3, 0.735, 0.285)',
 			tileDelay: 110,
 			sideColor: '#333',
+			gridCss: {
+				perspective: '1200px',
+			},
 			images: {},
 			color: {},
 		}),
-
-		computed: {
-			gridCss() {
-				return {
-					perspective: this.perspective,
-				};
-			}
-		},
 
 		created() {
 			this.totalDuration = this.tileDelay * this.cols + this.tileDuration;

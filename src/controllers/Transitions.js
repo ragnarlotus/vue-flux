@@ -57,18 +57,14 @@ export default class TransitionsController {
 	}
 
 	start() {
-		let vf = this.vf;
+		this.vf.Images.setCurrentIndex(this.to.index);
 
-		vf.Images.setCurrentIndex(this.to.index);
-
-		vf.$emit('transition-start', this.current);
+		this.vf.$emit('transition-start', this.current);
 	}
 
 	cancel() {
-		let vf = this.vf;
-
-		vf.$emit('transition-cancel', this.current);
-		vf.Timers.clear('transition');
+		this.vf.$emit('transition-cancel', this.current);
+		this.vf.Timers.clear('transition');
 		this.reset();
 	}
 

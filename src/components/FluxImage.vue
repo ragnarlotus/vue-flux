@@ -162,8 +162,10 @@
 			},
 
 			hide() {
-				this.setCss({
-					visibility: 'hidden'
+				setTimeout(() => {
+					this.setCss({
+						visibility: 'hidden'
+					});
 				});
 			},
 		},

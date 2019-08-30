@@ -19,7 +19,6 @@
 
 		data: () => ({
 			totalDuration: 1400,
-			perspective: '1600px',
 			easing: 'ease-out',
 			images: {},
 		}),
@@ -32,8 +31,10 @@
 		},
 
 		mounted() {
-			this.mask.perspective = this.perspective;
-			this.mask.overflow = 'visible';
+			Object.assign(this.mask, {
+				perspective: '1600px',
+				overflow: 'visible',
+			});
 
 			this.$refs.cube.transform({
 				transition: `all ${this.totalDuration}ms ${this.easing}`,

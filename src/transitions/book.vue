@@ -25,7 +25,6 @@
 		data: () => ({
 			totalDuration: 1200,
 			easing: 'ease-out',
-			perspective: '1600px',
 			images: {},
 			imageCss: {},
 			cubeCss: {
@@ -55,8 +54,10 @@
 		},
 
 		mounted() {
-			this.mask.perspective = this.perspective;
-			this.mask.overflow = 'visible';
+			Object.assign(this.mask, {
+				perspective: '1600px',
+				overflow: 'visible',
+			});
 
 			this.$nextTick(() => {
 				this.$refs.cube.transform({
