@@ -3,6 +3,7 @@
 		<flux-image
 			v-for="side in sides"
 			v-if="sideDefined(side)"
+			v-show="mounted"
 			:key="side"
 			:size="getSideSize(side)"
 			:image="getSideImage(side)"
@@ -54,6 +55,7 @@
 		],
 
 		data: () => ({
+			mounted: false,
 			sides: [ 'front', 'back', 'top', 'bottom', 'left', 'right' ],
 			baseStyle: {
 				transformStyle: 'preserve-3d',
@@ -96,6 +98,10 @@
 					right: -(this.depth || size.width) / 2 + this.viewSize.width,
 				};
 			}
+		},
+
+		mounted() {
+			this.mounted = true;
 		},
 
 		methods: {

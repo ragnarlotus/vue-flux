@@ -1,4 +1,8 @@
 export default {
+	data: () => ({
+		totalDuration: 1,
+	}),
+
 	props: {
 		size: Object,
 
@@ -7,9 +11,7 @@ export default {
 			required: true,
 		},
 
-		to: {
-			type: [ String, Object ],
-		},
+		to: [ String, Object ],
 
 		options: Object,
 	},
