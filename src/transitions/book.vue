@@ -1,7 +1,18 @@
 <template>
 	<div>
-		<flux-image :image="images.front" :size="size" :css="imageCss" ref="image"></flux-image>
-		<flux-cube :images="images" :size="size" :css="cubeCss" :sides-css="cubeSidesCss" ref="cube"></flux-cube>
+		<flux-image
+			ref="image"
+			:image="images.front"
+			:size="size"
+			:css="imageCss"
+		/>
+		<flux-cube
+			ref="cube"
+			:images="images"
+			:size="size"
+			:css="cubeCss"
+			:sides-css="cubeSidesCss"
+		/>
 	</div>
 </template>
 

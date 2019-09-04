@@ -288,7 +288,7 @@
 			},
 
 			showNext(transition) {
-				this.$refs.slider.showImage('next', transition);
+				this.$refs.slider.show('next', transition);
 			},
 
 			transitionClass(transition) {

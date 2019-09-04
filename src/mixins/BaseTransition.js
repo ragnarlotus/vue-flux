@@ -26,10 +26,10 @@ export default {
 				return this.$parent.$parent.$refs.image;
 
 			return undefined;
-		}
+		},
 	},
 
 	created() {
 		Object.assign(this, this.options);
 	},
-}
+};

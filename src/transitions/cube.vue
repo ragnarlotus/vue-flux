@@ -1,5 +1,9 @@
 <template>
-	<flux-cube :images="images" :size="size" ref="cube"></flux-cube>
+	<flux-cube
+		ref="cube"
+		:images="images"
+		:size="size"
+	/>
 </template>
 
 <script>

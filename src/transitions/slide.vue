@@ -1,7 +1,17 @@
 <template>
-	<flux-wrapper :css="wrapperCss" ref="wrapper">
-		<flux-image :image="from" :size="size" :css="leftCss" ref="left"></flux-image>
-		<flux-image :image="to" :size="size" :css="rightCss" ref="right"></flux-image>
+	<flux-wrapper ref="wrapper" :css="wrapperCss">
+		<flux-image
+			ref="left"
+			:image="from"
+			:size="size"
+			:css="leftCss"
+		/>
+		<flux-image
+			ref="right"
+			:image="to"
+			:size="size"
+			:css="rightCss"
+		/>
 	</flux-wrapper>
 </template>
 

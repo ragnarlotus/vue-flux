@@ -12,8 +12,6 @@ export default {
 				return this.$parent;
 
 			throw new ReferenceError('slider not referenced, check https://deulos.github.com/vue-flux-docs/ for help');
-
-			return undefined;
 		},
 
 		captions() {

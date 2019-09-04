@@ -1,12 +1,12 @@
 <template>
 	<flux-grid
+		ref="grid"
 		:rows="rows"
 		:cols="cols"
 		:size="size"
 		:image="from"
 		:css="gridCss"
-		ref="grid">
-	</flux-grid>
+	/>
 </template>
 
 <script>

@@ -1,22 +1,26 @@
 <template>
-	<div ref="container"
+	<div
+		ref="container"
 		class="vue-flux"
 		:style="style"
 		@mousemove="toggleMouseOver(true)"
 		@mouseleave="toggleMouseOver(false)"
 		@dblclick="toggleFullScreen()"
 		@touchstart="Touches.start($event)"
-		@touchend="Touches.end($event)">
-
-		<img alt=""
-			v-for="(url, index) in Images.loading" :key="index"
+		@touchend="Touches.end($event)"
+	>
+		<img
+			v-for="(url, index) in Images.loading"
+			:key="index"
 			v-if="Images.loading[index]"
 			:src="config.path + url"
 			:time="Images.time"
 			@load="Images.addProperties(index, $event)"
-			@error="Images.addProperties(index, $event)" />
+			@error="Images.addProperties(index, $event)"
+		/>
 
 		<flux-transition
+			ref="transition"
 			v-if="Transitions.current"
 			:transition="Transitions.current"
 			:size="size"
@@ -24,12 +28,13 @@
 			:to="Transitions.to"
 			@start="Transitions.start()"
 			@end="Transitions.end()"
-			ref="transition" />
+		/>
 
 		<flux-image
+			ref="image"
 			:size="size"
 			:image="Images.current"
-			ref="image" />
+		/>
 
 		<slot v-if="size.height" name="preloader" />
 
@@ -167,9 +172,9 @@
 		created() {
 			this.Display = new DisplayController(this);
 			this.Timers = new TimersController(this);
-			this.Transitions = new TransitionsController(this);
 			this.Images = new ImagesController(this);
 			this.Touches = new TouchesController(this);
+			this.Transitions = new TransitionsController(this);
 
 			this.updateOptions();
 			this.Transitions.update();
@@ -306,8 +311,8 @@
 
 				index = this.Images.getIndex(index);
 
-				let from = this.Images.current;
-				let to = this.Images.props[index];
+				let from = { ...this.Images.current };
+				let to = { ...this.Images.props[index] };
 
 				this.Transitions.run(transition, from, to);
 

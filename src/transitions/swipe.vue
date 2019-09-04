@@ -1,10 +1,10 @@
 <template>
 	<flux-wrapper ref="wrapper">
 		<flux-image
+			ref="image"
 			:image="from"
 			:size="size"
-			ref="image">
-		</flux-image>
+		/>
 	</flux-wrapper>
 </template>
 

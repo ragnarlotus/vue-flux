@@ -35,7 +35,7 @@ export default class ImagesController {
 		this.previousIndex = undefined;
 	}
 
-	load(images) {
+	load() {
 		this.reset();
 
 		this.vf.$nextTick(() => {
@@ -102,7 +102,7 @@ export default class ImagesController {
 
 		if (img.naturalWidth || img.width) {
 			this.props[index] = {
-				index: index,
+				index,
 				src: img.src,
 				size: {
 					width: img.naturalWidth || img.width,
@@ -132,7 +132,7 @@ export default class ImagesController {
 		if (typeof index === 'number')
 			return index;
 
-		let currentIndex = this.currentIndex;
+		let { currentIndex } = this;
 
 		if (index === 'previous')
 			return currentIndex > 0? currentIndex - 1 : this.srcs.length - 1;
@@ -141,10 +141,8 @@ export default class ImagesController {
 	}
 
 	setCurrentIndex(index) {
-		setTimeout(() => {
-			this.previousIndex = this.currentIndex;
-			this.currentIndex = index;
-		});
+		this.previousIndex = this.currentIndex;
+		this.currentIndex = index;
 	}
 
 	updateLastShown(image) {

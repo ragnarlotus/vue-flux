@@ -16,8 +16,8 @@ export default class DomHelper {
 	}
 
 	hasWidth() {
-		return this.node.clientWidth? true : false;
-	};
+		return !!this.node.clientWidth;
+	}
 
 	getWidth() {
 		let width;
@@ -32,7 +32,7 @@ export default class DomHelper {
 	}
 
 	hasHeight() {
-		return this.node.clientHeight? true : false;
+		return !!this.node.clientHeight;
 	}
 
 	getHeight() {
