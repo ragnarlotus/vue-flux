@@ -33,7 +33,7 @@ export default class TouchesController {
 	}
 
 	end(event) {
-		let vf = this.vf;
+		let { vf } = this;
 
 		this.previousTouchTime = this.endTime;
 		this.endTime = Date.now();
@@ -57,15 +57,14 @@ export default class TouchesController {
 		// Prevent web scrolling
 		event.preventDefault();
 
-		if (this.slideRight(offsetX)) {
+		if (this.slideRight(offsetX))
 			vf.show('previous');
 
-		} else if (this.slideLeft(offsetX)) {
+		else if (this.slideLeft(offsetX))
 			vf.show('next');
 
-		} else if (vf.index !== undefined && this.slideUp(offsetY)) {
+		else if (vf.index !== undefined && this.slideUp(offsetY))
 			vf.index.show();
-		}
 	}
 
 	tap(offsetX, offsetY) {

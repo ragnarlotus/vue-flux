@@ -15,3 +15,8 @@ export { default as FluxControls } from './complements/FluxControls.vue';
 export { default as FluxIndex } from './complements/FluxIndex.vue';
 export { default as FluxPagination } from './complements/FluxPagination.vue';
 export { default as FluxPreloader } from './complements/FluxPreloader.vue';
+
+// Mixins
+export { default as BaseComplement } from '../mixins/BaseComplement.vue';
+export { default as BaseComponent } from '../mixins/BaseComponent.vue';
+export { default as BaseTransition } from '../mixins/BaseTransition.vue';

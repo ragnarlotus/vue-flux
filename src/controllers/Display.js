@@ -1,5 +1,3 @@
-import DomHelper from '@/libraries/DomHelper.js';
-
 export default class DisplayController {
 
 	constructor(vm) {

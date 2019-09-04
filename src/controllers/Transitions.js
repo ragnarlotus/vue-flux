@@ -45,10 +45,8 @@ export default class TransitionsController {
 		} else {
 			this.currentIndex = this.transitions.indexOf(transition);
 
-			if (this.currentIndex === -1) {
+			if (this.currentIndex === -1)
 				throw new ReferenceError(`Transition ${transition} not found`);
-				return;
-			}
 		}
 
 		this.from = from;
@@ -69,7 +67,7 @@ export default class TransitionsController {
 	}
 
 	end() {
-		let vf = this.vf;
+		let { vf } = this;
 
 		this.reset();
 

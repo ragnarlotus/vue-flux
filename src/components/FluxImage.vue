@@ -88,15 +88,13 @@
 					image.left = (finalSize.width - image.width) / 2;
 				}
 
-				let cssProps = ['width', 'height', 'top', 'left'];
-
-				cssProps.forEach(prop => {
+				['width', 'height'].forEach(prop => {
 					image[prop] = Math.ceil(image[prop]);
 				});
 
-				let cssSides = ['top', 'left'];
+				['top', 'left'].forEach(side => {
+					image[side] = Math.floor(image[side]);
 
-				cssSides.forEach(side => {
 					let offset = 0;
 
 					if ((this.offset === 'auto' || this.offset[side] === 'auto'))
@@ -162,10 +160,8 @@
 			},
 
 			hide() {
-				setTimeout(() => {
-					this.setCss({
-						visibility: 'hidden'
-					});
+				this.setCss({
+					visibility: 'hidden'
 				});
 			},
 		},

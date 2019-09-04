@@ -16,64 +16,31 @@
   ],
   "license": "MIT",
   "bugs": "https://github.com/deulos/vue-flux/issues",
-  "homepage": "https://github.com/deulos/vue-flux",
+  "homepage": "https://deulos.github.com/vue-flux-docs",
   "main": "dist/vue-flux.umd.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "bundle": "vue-cli-service build --target lib --name vue-flux \"src/components/index.js\"",
+    "lint": "vue-cli-service lint --no-fix",
     "test:unit": "vue-cli-service test:unit"
   },
   "files": [
     "dist"
   ],
+  "dependencies": {
+    "core-js": "^2.6.5",
+    "vue": "^2.6.10"
+  },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.9.2",
-    "@vue/cli-service": "^3.9.3",
+    "@vue/cli-plugin-babel": "^3.11.0",
+    "@vue/cli-plugin-unit-jest": "^3.11.0",
+    "@vue/cli-service": "^3.11.0",
+    "@vue/test-utils": "1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",
-    "node-sass": "^4.12.0",
+    "babel-jest": "^23.6.0",
+    "node-sass": "^4.9.0",
     "sass-loader": "^7.1.0",
-    "tailwindcss": "^1.0.6",
-    "vue": "^2.6.10",
+    "tailwindcss": "^1.1.2",
     "vue-template-compiler": "^2.6.10"
-  },
-  "babel": {
-    "presets": [
-      "@vue/app"
-    ]
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json",
-      "vue"
-    ],
-    "transform": {
-      "^.+\\.vue$": "vue-jest",
-      ".+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
-      "^.+\\.jsx?$": "babel-jest"
-    },
-    "transformIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1"
-    },
-    "snapshotSerializers": [
-      "jest-serializer-vue"
-    ],
-    "testMatch": [
-      "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
-    ],
-    "testURL": "http://localhost/",
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
-    ]
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  }
 }

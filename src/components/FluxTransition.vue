@@ -1,7 +1,5 @@
 <template>
 	<div class="mask" :style="maskStyle" ref="mask">
-		<flux-image v-if="!mounted" :size="size" :image="from" />
-
 		<component
 			v-if="componentName"
 			:is="componentName"
@@ -14,19 +12,16 @@
 </template>
 
 <script>
-	import FluxImage from '@/components/FluxImage';
 	import * as transitions from '@/transitions';
 
 	export default {
 		name: 'FluxTransition',
 
 		components: {
-			FluxImage,
 			...transitions,
 		},
 
 		data: () => ({
-			mounted: false,
 			baseStyle: {
 				position: 'relative',
 				overflow: 'hidden',
@@ -97,12 +92,11 @@
 		},
 
 		created() {
-			Object.assign(this.$options.components, this.transition.component);
+			if (this.transition.component)
+				this.$options.components[this.componentName] = this.transition.component;
 		},
 
 		mounted() {
-			this.mounted = true;
-
 			this.$emit('start');
 
 			setTimeout(() => {

@@ -1,5 +1,9 @@
 <template>
-	<flux-image :image="from" :size="size" ref="image"></flux-image>
+	<flux-image
+		ref="image"
+		:image="from"
+		:size="size"
+	/>
 </template>
 
 <script>

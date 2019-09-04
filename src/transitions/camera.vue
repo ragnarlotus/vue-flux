@@ -1,10 +1,10 @@
 <template>
 	<flux-vortex
+		ref="vortex"
 		:size="size"
 		:circles="circles"
 		:image="from"
-		ref="vortex">
-	</flux-vortex>
+	/>
 </template>
 
 <script>
