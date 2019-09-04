@@ -18,7 +18,7 @@
 				<li
 					v-for="(image, index) in images"
 					:key="index" :class="current(index)"
-					@click="showImage(index)">
+					@click="show(index)">
 
 					<flux-thumb :image="images[index]" :description="getCaptionText(index)" />
 				</li>
@@ -127,13 +127,13 @@
 				});
 			},
 
-			showImage(index) {
+			show(index) {
 				if (this.visible) {
 					this.hide(index);
 					return;
 				}
 
-				this.vf.showImage(index);
+				this.vf.show(index);
 			},
 
 			hide(index) {
@@ -144,7 +144,7 @@
 					this.visible = false;
 
 					if (index !== undefined)
-						this.showImage(index);
+						this.show(index);
 				}, this.delay);
 			},
 
