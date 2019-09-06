@@ -1,13 +1,14 @@
 <template>
 	<div class="mask" :style="maskStyle" ref="mask">
 		<component
+			ref="transition"
 			v-if="componentName"
 			:is="componentName"
 			:size="size"
 			:from="from"
 			:to="to"
 			:options="transition.options"
-			ref="transition" />
+		/>
 	</div>
 </template>
 
@@ -84,7 +85,6 @@
 				if (name in transitions === false) {
 					name = this.transition.name || this.transition;
 					throw new ReferenceError (`Transition ${name} does not exist`);
-					return undefined;
 				}
 
 				return name;
@@ -97,8 +97,10 @@
 		},
 
 		mounted() {
-			requestAnimationFrame(() => {
-				requestAnimationFrame(this.play);
+			this.$nextTick(() => {
+				setTimeout(() => {
+					this.play();
+				}, 1);
 			});
 		},
 
