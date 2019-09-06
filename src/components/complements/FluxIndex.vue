@@ -1,10 +1,10 @@
 <template>
 	<div v-if="display" class="flux-index">
 		<transition name="fade">
-			<flux-button v-if="displayButton" @click="show()" class="toggle bottom left">
+			<flux-button v-if="displayButton" @click="showIndex($event)" class="toggle">
 				<rect
-					v-for="(coord, index) in coords"
-					:key="index"
+					v-for="(coord, i) in coords"
+					:key="i"
 					:x="coord.x"
 					:y="coord.y"
 					:width="buttonRectSize +'px'"
@@ -13,14 +13,14 @@
 			</flux-button>
 		</transition>
 
-		<nav :class="listClass" @click="hide()">
+		<nav :class="listClass" @click="hideIndex()">
 			<ul ref="thumbs">
 				<li
-					v-for="(image, index) in images"
-					:key="index" :class="current(index)"
-					@click="show(index)">
+					v-for="(image, i) in images"
+					:key="i" :class="thumbClass(i)"
+					@click="showImage(i)">
 
-					<flux-thumb :image="images[index]" :description="getCaptionText(index)" />
+					<flux-thumb :image="images[i]" :description="getCaptionText(i)" />
 				</li>
 			</ul>
 		</nav>
@@ -117,7 +117,7 @@
 		},
 
 		methods: {
-			show() {
+			showIndex() {
 				this.vf.stop();
 				this.visible = true;
 
@@ -127,29 +127,29 @@
 				});
 			},
 
-			show(index) {
-				if (this.visible) {
-					this.hide(index);
-					return;
-				}
-
-				this.vf.show(index);
-			},
-
-			hide(index) {
+			hideIndex(imageIndex) {
 				this.$refs.thumbs.clientHeight;
 				this.$refs.thumbs.style.marginTop = '100%';
 
 				setTimeout(() => {
 					this.visible = false;
 
-					if (index !== undefined)
-						this.show(index);
+					if (imageIndex !== undefined)
+						this.showImage(imageIndex);
 				}, this.delay);
 			},
 
-			current(index) {
-				return this.currentImageIndex === index? 'current' : '';
+			thumbClass(imageIndex) {
+				return this.currentImageIndex === imageIndex? 'current' : '';
+			},
+
+			showImage(imageIndex) {
+				if (this.visible) {
+					this.hideIndex(imageIndex);
+					return;
+				}
+
+				this.vf.show(imageIndex);
 			},
 		},
 	};
