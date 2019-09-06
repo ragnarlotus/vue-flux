@@ -39,7 +39,7 @@
 			this.totalDuration = this.tileDelay * (this.rows + this.cols) + this.tileDuration;
 		},
 
-		mounted() {
+		played() {
 			this.$refs.grid.transform((tile, i) => {
 				tile.transform({
 					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,

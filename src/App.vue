@@ -8,25 +8,6 @@
 			<div class="block sm:block md:block lg:flex">
 				<div class="lg:w-4/6 px-2 mb-4">
 					<vue-flux :options="vfOptions" :images="vfImages" :transitions="vfTransitions" :captions="vfCaptions" ref="slider">
-						<template v-slot:preloader>
-							<flux-preloader />
-						</template>
-
-						<template v-slot:caption>
-							<flux-caption v-slot="captionProps" />
-						</template>
-
-						<template v-slot:controls>
-							<flux-controls />
-						</template>
-
-						<template v-slot:pagination>
-							<flux-pagination />
-						</template>
-
-						<template v-slot:index>
-							<flux-index />
-						</template>
 					</vue-flux>
 				</div>
 
@@ -273,12 +254,14 @@
 				this.vfCaptions = [];
 
 				let index, src;
-				for (let i = 1; i <= 6; i++) {
-					index = Math.floor(Math.random() * srcs.length);
-					src = srcs.splice(index, 1)[0];
+				for (let i = 0; i <= 6; i++) {
+					//index = Math.floor(Math.random() * srcs.length);
+					//src = srcs.splice(index, 1)[0];
 
-					this.vfCaptions.push(src);
+					src = srcs[i];
+
 					this.vfImages.push(src);
+					this.vfCaptions.push(src);
 				}
 			},
 

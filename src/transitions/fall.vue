@@ -34,7 +34,9 @@
 				perspective: '1600px',
 				overflow: 'visible',
 			});
+		},
 
+		played() {
 			this.$refs.image.transform({
 				transition: `transform ${this.totalDuration}ms ${this.easing}`,
 				transform: 'rotateX(-90deg)',

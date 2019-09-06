@@ -49,8 +49,8 @@ export default class TransitionsController {
 				throw new ReferenceError(`Transition ${transition} not found`);
 		}
 
-		this.from = from;
-		this.to = to;
+		this.from = { ...from };
+		this.to = { ...to };
 		this.current = this.transitions[this.currentIndex];
 	}
 
