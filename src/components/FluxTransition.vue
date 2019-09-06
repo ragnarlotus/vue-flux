@@ -97,19 +97,27 @@
 		},
 
 		mounted() {
-			this.$emit('start');
-
-			setTimeout(() => {
-				this.$emit('end');
-			}, this.getDuration());
+			requestAnimationFrame(() => {
+				requestAnimationFrame(this.play);
+			});
 		},
 
 		methods: {
+			play() {
+				this.$refs.transition.$options.played.call(this.$refs.transition);
+
+				this.$emit('start');
+
+				setTimeout(() => {
+					this.$emit('end');
+				}, this.getDuration());
+			},
+
 			getDuration() {
-				if (!this.$refs['transition'])
+				if (!this.$refs.transition)
 					return 1;
 
-				return this.$refs['transition'].totalDuration;
+				return this.$refs.transition.totalDuration;
 			},
 		}
 	}

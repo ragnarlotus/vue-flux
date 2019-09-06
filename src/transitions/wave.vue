@@ -57,6 +57,11 @@
 
 		mounted() {
 			this.mask.overflow = 'visible';
+		},
+
+		played() {
+			if (this.current)
+				this.current.hide();
 
 			this.$refs.grid.transform((tile, i) => {
 				tile.setCss({
@@ -65,13 +70,11 @@
 
 				tile.turnBottom();
 			});
-
-			if (this.current)
-				this.current.hide();
 		},
 
 		beforeDestroy() {
-			this.current.show();
+			if (this.current)
+				this.current.show();
 		},
 
 		methods: {

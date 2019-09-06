@@ -34,7 +34,7 @@
 			this.totalDuration = this.tileDelay * this.circles + this.tileDuration;
 		},
 
-		mounted() {
+		played() {
 			this.$refs.vortex.transform((circle, i) => {
 				circle.transform({
 					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,

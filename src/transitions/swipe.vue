@@ -30,7 +30,7 @@
 			easing: 'ease-in-out',
 		}),
 
-		mounted() {
+		played() {
 			this.$refs.wrapper.transform({
 				transition: `width ${this.totalDuration}ms ${this.easing}`,
 				width: 0,

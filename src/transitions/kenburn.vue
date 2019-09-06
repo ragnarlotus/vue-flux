@@ -33,7 +33,9 @@
 			this.$refs.image.setCss({
 				transformOrigin: transform.originX +' '+ transform.originY,
 			});
+		},
 
+		played() {
 			this.$refs.image.transform({
 				transition: `all ${this.totalDuration}ms ${this.easing}`,
 				transform: `scale(${transform.scale}) translate(${transform.translateX}, ${transform.translateY})`,

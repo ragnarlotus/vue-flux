@@ -64,7 +64,7 @@
 			};
 		},
 
-		mounted() {
+		played() {
 			Object.assign(this.mask, {
 				perspective: '1600px',
 				overflow: 'visible',

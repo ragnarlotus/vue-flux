@@ -40,14 +40,16 @@
 				overflow: 'visible',
 			});
 
-			this.$refs.cube.transform({
+			this.$refs.cube.setCss({
 				transition: `all ${this.totalDuration}ms ${this.easing}`,
 			});
+		},
 
-			this.$refs.cube.turnLeft();
-
+		played() {
 			if (this.current)
 				this.current.hide();
+
+			this.$refs.cube.turnLeft();
 		},
 
 		beforeDestroy() {

@@ -46,7 +46,9 @@
 
 		mounted() {
 			this.mask.overflow = 'visible';
+		},
 
+		played() {
 			this.$refs.grid.transform((tile, i) => {
 				tile.transform({
 					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,

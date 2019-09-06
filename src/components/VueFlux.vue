@@ -311,8 +311,8 @@
 
 				index = this.Images.getIndex(index);
 
-				let from = { ...this.Images.current };
-				let to = { ...this.Images.props[index] };
+				let from = this.Images.current;
+				let to = this.Images.props[index];
 
 				this.Transitions.run(transition, from, to);
 
