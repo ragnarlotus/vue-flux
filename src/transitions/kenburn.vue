@@ -25,20 +25,21 @@
 			totalDuration: 1500,
 			easing: 'linear',
 			image: undefined,
+			transform: undefined,
 		}),
 
 		mounted() {
-			let transform = this.getTransform();
+			this.transform = this.getTransform();
 
 			this.$refs.image.setCss({
-				transformOrigin: transform.originX +' '+ transform.originY,
+				transformOrigin: this.transform.originX +' '+ this.transform.originY,
 			});
 		},
 
 		played() {
 			this.$refs.image.transform({
 				transition: `all ${this.totalDuration}ms ${this.easing}`,
-				transform: `scale(${transform.scale}) translate(${transform.translateX}, ${transform.translateY})`,
+				transform: `scale(${this.transform.scale}) translate(${this.transform.translateX}, ${this.transform.translateY})`,
 				opacity: 0,
 			});
 		},
