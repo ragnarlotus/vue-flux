@@ -1,7 +1,7 @@
 <template>
 	<div v-if="display" class="flux-index">
 		<transition name="fade">
-			<flux-button v-if="displayButton" @click="showIndex($event)" class="toggle">
+			<flux-button v-if="displayButton" @click="showIndex($event)" class="toggle bottom left">
 				<rect
 					v-for="(coord, i) in coords"
 					:key="i"
