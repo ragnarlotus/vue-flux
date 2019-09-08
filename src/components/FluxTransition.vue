@@ -1,13 +1,15 @@
 <template>
-	<div class="mask" :style="maskStyle" ref="mask">
+	<div class="mask" ref="mask">
 		<component
 			ref="transition"
-			v-if="componentName"
+			v-if="componentName && fullInit"
 			:is="componentName"
 			:size="size"
 			:from="from"
 			:to="to"
 			:options="transition.options"
+			@ready="transitionReady"
+
 		/>
 	</div>
 </template>
@@ -28,6 +30,9 @@
 				overflow: 'hidden',
 				perspective: 'none',
 				zIndex: 1,
+				ready: false,
+				mounted: false,
+				playing: false
 			},
 		}),
 
@@ -56,6 +61,21 @@
 				type: Object,
 				required: false,
 			},
+			
+			bgReady: {
+				type: Boolean,
+				required: true,
+			},
+		},
+		
+		watch: {
+			bgReady: {
+				immediate: true, 
+				handler (val, oldVal) {
+					if (this.fullInit())
+						this.play()
+				}
+			}
 		},
 
 		computed: {
@@ -97,22 +117,38 @@
 		},
 
 		mounted() {
-			this.$nextTick(() => {
-				setTimeout(() => {
-					this.play();
-				}, 1);
-			});
+			this.mounted = true
+			
+			if (this.fullInit())
+				this.play()
 		},
 
 		methods: {
-			play() {
-				this.$refs.transition.$options.played.call(this.$refs.transition);
-
+			
+			transitionReady(){
+				this.ready = true
 				this.$emit('start');
+				
+				if (this.fullInit())
+					this.play()
+			}, 
+			
+			fullInit(){
+				return this.ready && this.bgReady && this.mounted 
+			},
+			
+			play() {
 
-				setTimeout(() => {
-					this.$emit('end');
-				}, this.getDuration());
+				if (!this.playing){
+					this.playing = true
+					this.$emit('startAlt');
+					this.$refs.transition.play()
+					
+					setTimeout(() => {
+						this.$emit('endAlt');
+					}, this.getDuration());
+					
+				}
 			},
 
 			getDuration() {
@@ -124,3 +160,19 @@
 		}
 	}
 </script>
+
+	<style scoped>
+	.mask {
+		transform: translate3d(0, 0, 0);
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		left: 0;
+		overflow: hidden;
+		perspective: none;
+		z-index: 1;
+		width: 100%;
+		height: 100%;
+	}
+</style>

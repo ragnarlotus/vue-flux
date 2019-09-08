@@ -53,11 +53,14 @@ export default class TransitionsController {
 		this.to = { ...to };
 		this.current = this.transitions[this.currentIndex];
 	}
+	
+	end2(){
+		this.vf.Images.setCurrentIndex(this.to.index);
+	}
 
 	start() {
-		this.vf.Images.setCurrentIndex(this.to.index);
-
-		this.vf.$emit('transition-start', this.current);
+		// this.vf.Images.setCurrentIndex(this.to.index);
+		// this.vf.$emit('transition-start', this.current);
 	}
 
 	cancel() {

@@ -1,5 +1,5 @@
 <template>
-	<div :style="style" ref="wrapper">
+	<div :style="css" class="wrapper" ref="wrapper">
 		<slot />
 	</div>
 </template>
@@ -11,13 +11,33 @@
 		name: 'FluxWrapper',
 
 		mixins: [
-			BaseComponent,
+		BaseComponent,
 		],
+		
+		props: {
+			
+			css : {
+				type: Object,
+				default: {}
+			}
+			
+		},
 
 		data: () => ({
 			baseStyle: {
-				overflow: 'hidden',
 			},
 		}),
 	};
 </script>
+
+<style scoped>
+.wrapper {
+	overflow: 'hidden';
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+
+}
+</style>

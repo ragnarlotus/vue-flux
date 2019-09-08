@@ -101,10 +101,7 @@ export default {
 		},
 
 		transform(css) {
-			this.$nextTick(() => {
-				this.$el.clientHeight;
-				this.setCss(css);
-			});
+			this.setCss(css);
 		},
 	},
 };

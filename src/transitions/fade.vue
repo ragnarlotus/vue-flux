@@ -1,9 +1,10 @@
 <template>
 	<flux-image
 		ref="from"
-		:image="from"
+		:image="to"
 		:size="size"
 		:css="imageCss"
+		@ready="ready"
 	/>
 </template>
 
@@ -27,14 +28,30 @@
 			easing: 'ease-in',
 			imageCss: {
 				zIndex: 1,
+				opacity: 0
 			},
 		}),
 
+		methods: {
+			
+			ready(){
+				this.$emit('ready')
+			},
+			
+			play(){
+				// this.$nextTick( () => {
+					const css = {
+						transition: `opacity ${this.totalDuration}ms ${this.easing}`,
+						opacity: 1,
+					}
+					this.imageCss = css 
+				// })
+			}, 
+			
+		},
+
 		played() {
-			this.$refs.from.transform({
-				transition: `opacity ${this.totalDuration}ms ${this.easing}`,
-				opacity: 0,
-			});
+
 		},
 	};
 </script>

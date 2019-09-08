@@ -1,51 +1,54 @@
 <template>
 	<div
-		ref="container"
-		class="vue-flux"
-		:style="style"
-		@mousemove="toggleMouseOver(true)"
-		@mouseleave="toggleMouseOver(false)"
-		@dblclick="toggleFullScreen()"
-		@touchstart="Touches.start($event)"
-		@touchend="Touches.end($event)"
+	ref="container"
+	class="vue-flux"
+	:style="style"
+	@mousemove="toggleMouseOver(true)"
+	@mouseleave="toggleMouseOver(false)"
+	@dblclick="toggleFullScreen()"
+	@touchstart="Touches.start($event)"
+	@touchend="Touches.end($event)"
 	>
-		<img
-			v-for="(url, index) in Images.loading"
-			:key="index"
-			v-if="Images.loading[index]"
-			:src="config.path + url"
-			:time="Images.time"
-			@load="Images.addProperties(index, $event)"
-			@error="Images.addProperties(index, $event)"
-		/>
+	<img
+	v-for="(url, index) in Images.loading"
+	:key="index"
+	v-if="Images.loading[index]"
+	:src="config.path + url"
+	:time="Images.time"
+	@load="Images.addProperties(index, $event)"
+	@error="Images.addProperties(index, $event)"
+	/>
 
-		<flux-transition
-			ref="transition"
-			v-if="Transitions.current"
-			:transition="Transitions.current"
-			:size="size"
-			:from="Transitions.from"
-			:to="Transitions.to"
-			@start="Transitions.start()"
-			@end="Transitions.end()"
-		/>
+	<flux-transition
+	ref="transition"
+	v-if="Transitions.current"
+	:transition="Transitions.current"
+	:size="size"
+	:from="Transitions.from"
+	:to="Transitions.to"
+	@start="Transitions.start()"
+	@end="Transitions.end()"
+	@startAlt="startAlt"
+	@endAlt="endAlt"
+	:bgReady="bgReady"
+	/>
 
-		<flux-image
-			ref="image"
-			:size="size"
-			:image="Images.current"
-		/>
+	<flux-image
+	ref="image"
+	:image="Images.current"
+	@ready="launch"
+	/>
 
-		<slot v-if="size.height" name="preloader" />
+	<slot v-if="size.height" name="preloader" />
 
-		<slot v-if="size.height" name="caption" />
+	<slot v-if="size.height" name="caption" />
 
-		<slot v-if="size.height" name="controls" />
+	<slot v-if="size.height" name="controls" />
 
-		<slot v-if="size.height" name="index" />
+	<slot v-if="size.height" name="index" />
 
-		<slot v-if="loaded && size.height" name="pagination" />
-	</div>
+	<slot v-if="loaded && size.height" name="pagination" />
+</div>
 </template>
 
 <script type="module">
@@ -96,6 +99,8 @@
 			Transitions: undefined,
 			Touches: undefined,
 			Images: undefined,
+			bgReady: false,
+			transitioning: false
 		}),
 
 		props: {
@@ -200,139 +205,165 @@
 		},
 
 		methods: {
-			updateOptions() {
-				Object.assign(this.config, this.options);
+			
+			launch(){
+				// this.$nextTick(() => {
+					this.bgReady = true
+					// })
+				},
+				
+				startAlt(){
+					this.transitioning = true
+				}, 		
+				
+				endAlt(){
+					this.bgReady = false
+					this.Transitions.end2()
+					this.$nextTick(() => {
 
-				if (this.config.autohideTime === 0)
-					this.mouseOver = true;
+						this.transitioning = false
+					})
+				}, 
+				
+				updateOptions() {
+					Object.assign(this.config, this.options);
 
-				window.addEventListener('resize', this.resize, {
-					passive: true,
-				});
+					if (this.config.autohideTime === 0)
+						this.mouseOver = true;
 
-				if (this.config.bindKeys) {
-					window.addEventListener('keydown', this.keydown, {
+					window.addEventListener('resize', this.resize, {
 						passive: true,
 					});
-				}
 
-				this.$emit('options-updated');
-			},
-
-			resize() {
-				this.size = {};
-
-				this.$nextTick(() => {
-					let size = DomHelper.sizeFrom(this.$refs.container);
-
-					if (!size.height)
-						size.height = size.width / 16 * 9;
-
-					this.size = size;
-				});
-			},
-
-			init() {
-				this.loaded = true;
-
-				this.$nextTick(() => {
-					if (this.config.autoplay === true)
-						this.play();
-
-					this.$emit('ready');
-				});
-			},
-
-			toggleMouseOver(over) {
-				if (this.config.autohideTime === 0)
-					return;
-
-				this.Timers.clear('mouseOver');
-
-				this.mouseOver = over;
-
-				if (this.mouseOver) {
-					this.Timers.set('mouseOver', this.config.autohideTime, () => {
-						this.mouseOver = false;
-					});
-
-				} else {
-					this.mouseOver = false;
-					this.Timers.clear('mouseOver');
-				}
-			},
-
-			enterFullScreen() {
-				if (this.config.allowFullscreen === false)
-					return;
-
-				this.Display.requestFullScreen(this.$refs.container);
-			},
-
-			exitFullScreen() {
-				this.Display.exitFullScreen();
-			},
-
-			toggleFullScreen() {
-				this.Display.inFullScreen()? this.exitFullScreen() : this.enterFullScreen();
-			},
-
-			play(index = 'next', delay) {
-				this.config.autoplay = true;
-
-				this.Timers.set('image', delay || this.config.delay, () => {
-					this.show(index);
-				});
-
-				this.$emit('play');
-			},
-
-			stop() {
-				this.config.autoplay = false;
-
-				this.Timers.clear('image');
-
-				this.$emit('stop');
-			},
-
-			show(index, transition) {
-				if (this.loaded === false || this.$refs.image === undefined)
-					return;
-
-				if (this.Transitions.current !== undefined) {
-					if (this.config.allowToSkipTransition) {
-						this.Transitions.cancel();
-
-						this.$nextTick(() => this.show(index, transition));
+					if (this.config.bindKeys) {
+						window.addEventListener('keydown', this.keydown, {
+							passive: true,
+						});
 					}
 
-					return;
-				}
+					this.$emit('options-updated');
+				},
 
-				index = this.Images.getIndex(index);
+				resize() {
+					this.size = {};
 
-				let from = this.Images.current;
-				let to = this.Images.props[index];
+					this.$nextTick(() => {
+						let size = DomHelper.sizeFrom(this.$refs.container);
 
-				this.Transitions.run(transition, from, to);
+						if (!size.height)
+							size.height = size.width / 16 * 9;
 
-				this.$emit('show');
+						this.size = size;
+					});
+				},
+
+				init() {
+					this.loaded = true;
+
+					this.$nextTick(() => {
+						if (this.config.autoplay === true)
+							this.play();
+
+						this.$emit('ready');
+					});
+				},
+
+				toggleMouseOver(over) {
+					if (this.config.autohideTime === 0)
+						return;
+
+					this.Timers.clear('mouseOver');
+
+					this.mouseOver = over;
+
+					if (this.mouseOver) {
+						this.Timers.set('mouseOver', this.config.autohideTime, () => {
+							this.mouseOver = false;
+						});
+
+					} else {
+						this.mouseOver = false;
+						this.Timers.clear('mouseOver');
+					}
+				},
+
+				enterFullScreen() {
+					if (this.config.allowFullscreen === false)
+						return;
+
+					this.Display.requestFullScreen(this.$refs.container);
+				},
+
+				exitFullScreen() {
+					this.Display.exitFullScreen();
+				},
+
+				toggleFullScreen() {
+					this.Display.inFullScreen()? this.exitFullScreen() : this.enterFullScreen();
+				},
+
+				play(index = 'next', delay) {
+					this.config.autoplay = true;
+
+					this.Timers.set('image', delay || this.config.delay, () => {
+						this.show(index);
+					});
+
+					this.$emit('play');
+				},
+
+				stop() {
+					this.config.autoplay = false;
+
+					this.Timers.clear('image');
+
+					this.$emit('stop');
+				},
+
+				show(index, transition) {
+					
+					if (this.transitioning || !this.bgReady)
+						return
+					
+					if (this.loaded === false || this.$refs.image === undefined)
+						return;
+
+					if (this.Transitions.current !== undefined) {
+						if (this.config.allowToSkipTransition) {
+							this.Transitions.cancel();
+
+							this.$nextTick(() => this.show(index, transition));
+						}
+
+						return;
+					}
+
+					index = this.Images.getIndex(index);
+
+					let from = this.Images.current;
+					let to = this.Images.props[index];
+
+					this.Transitions.run(transition, from, to);
+
+					this.$emit('show');
+				},
+
+				keydown(event) {
+					if (/ArrowLeft|Left/.test(event.key))
+						this.show('previous');
+
+					else if (/ArrowRight|Right/.test(event.key))
+						this.show('next');
+				},
 			},
+		};
+	</script>
 
-			keydown(event) {
-				if (/ArrowLeft|Left/.test(event.key))
-					this.show('previous');
-
-				else if (/ArrowRight|Right/.test(event.key))
-					this.show('next');
-			},
-		},
-	};
-</script>
-
-<style lang="scss">
+	<style lang="scss">
 	.vue-flux {
 		position: relative;
+transform: translate3d(0, 0, 0);
+
 
 		& > img {
 			position: absolute;
