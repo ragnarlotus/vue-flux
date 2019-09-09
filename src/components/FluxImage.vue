@@ -93,7 +93,7 @@
 				});
 
 				['top', 'left'].forEach(side => {
-					image[side] = Math.floor(image[side]);
+					image[side] = Math.round(image[side]);
 
 					let offset = 0;
 

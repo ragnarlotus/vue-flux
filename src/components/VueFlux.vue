@@ -26,6 +26,7 @@
 			:size="size"
 			:from="Transitions.from"
 			:to="Transitions.to"
+			:images="Images.props"
 			@start="Transitions.start()"
 			@end="Transitions.end()"
 		/>

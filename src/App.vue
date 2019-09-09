@@ -250,6 +250,7 @@
 					srcs.push(`slides/${i.toString().padStart(2, '0')}.jpg`);
 				}
 
+
 				this.vfImages = [];
 				this.vfCaptions = [];
 

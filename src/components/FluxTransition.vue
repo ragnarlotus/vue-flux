@@ -8,6 +8,7 @@
 			:from="from"
 			:to="to"
 			:options="transition.options"
+			:images="images"
 		/>
 	</div>
 </template>
@@ -32,10 +33,7 @@
 		}),
 
 		props: {
-			size: {
-				type: Object,
-				required: false,
-			},
+			size: Object,
 
 			transition: {
 				type: [ String, Object ],
@@ -52,10 +50,9 @@
 				required: true,
 			},
 
-			options: {
-				type: Object,
-				required: false,
-			},
+			options: Object,
+
+			images: Array,
 		},
 
 		computed: {
@@ -97,11 +94,14 @@
 		},
 
 		mounted() {
-			this.$nextTick(() => {
-				setTimeout(() => {
+			let ivl = setInterval(() => {
+				let rendered = this.$refs.transition.$refs.right.$el.clientHeight;
+
+				if (rendered) {
 					this.play();
-				}, 1);
-			});
+					clearInterval(ivl);
+				}
+			}, 100)
 		},
 
 		methods: {
