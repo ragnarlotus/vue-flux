@@ -52,9 +52,13 @@
 			},
 
 			colorStyle() {
-				return {
-					backgroundColor: this.color,
+				if (this.rendered) {
+					return {
+						backgroundColor: this.color,
+					};
 				};
+
+				return {};
 			},
 
 			imageStyle() {

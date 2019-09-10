@@ -3,6 +3,7 @@ import DomHelper from '@/libraries/DomHelper.js';
 export default {
 	data: () => ({
 		mounted: false,
+		rendered: false,
 		baseStyle: {
 			position: 'absolute',
 			top: 0,
@@ -90,6 +91,12 @@ export default {
 
 	mounted() {
 		this.mounted = true;
+
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				this.rendered = true;
+			});
+		});
 	},
 
 	methods: {
