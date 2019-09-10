@@ -94,14 +94,11 @@
 		},
 
 		mounted() {
-			let ivl = setInterval(() => {
-				let rendered = this.$refs.transition.$refs.right.$el.clientHeight;
-
-				if (rendered) {
+			requestAnimationFrame(() => {
+				requestAnimationFrame(() => {
 					this.play();
-					clearInterval(ivl);
-				}
-			}, 100)
+				});
+			});
 		},
 
 		methods: {

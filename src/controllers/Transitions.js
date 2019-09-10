@@ -55,7 +55,9 @@ export default class TransitionsController {
 	}
 
 	start() {
-		this.vf.Images.setCurrentIndex(this.to.index);
+		requestAnimationFrame(() => {
+			this.vf.Images.setCurrentIndex(this.to.index);
+		});
 
 		this.vf.$emit('transition-start', this.current);
 	}
