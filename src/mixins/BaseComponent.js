@@ -95,6 +95,10 @@ export default {
 		requestAnimationFrame(() => {
 			requestAnimationFrame(() => {
 				this.rendered = true;
+
+				if (this.$options.rendered) {
+					this.$options.rendered.call(this);
+				}
 			});
 		});
 	},

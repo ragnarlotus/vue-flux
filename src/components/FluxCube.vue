@@ -1,8 +1,7 @@
 <template>
 	<div :style="style" ref="cube">
 		<flux-image
-			v-for="side in sides"
-			v-if="sideDefined(side)"
+			v-for="side in definedSides"
 			:key="side"
 			:size="getSideSize(side)"
 			:image="getSideImage(side)"
@@ -56,7 +55,7 @@
 		data: () => ({
 			sides: [ 'front', 'back', 'top', 'bottom', 'left', 'right' ],
 			baseStyle: {
-				transformStyle: 'preserve-3d',
+				transformStyle: 'flat',
 			},
 		}),
 
@@ -78,6 +77,10 @@
 		},
 
 		computed: {
+			definedSides() {
+				return this.sides.filter(side => this.sideDefined(side))
+			},
+
 			style() {
 				return {
 					...this.baseStyle,
@@ -96,6 +99,10 @@
 					right: -(this.depth || size.width) / 2 + this.viewSize.width,
 				};
 			}
+		},
+
+		rendered() {
+			this.baseStyle.transformStyle = 'preserve-3d';
 		},
 
 		methods: {
