@@ -227,7 +227,7 @@
 				autoplay: false,
 				bindKeys: true,
 				allowFullscreen: true,
-				lazyLoadAfter: 5,
+				lazyLoadAfter: 30,
 			},
 			vfImages: [],
 			vfTransitions: [
@@ -274,7 +274,7 @@
 				this.vfCaptions = [];
 
 				let index, src;
-				for (let i = 0; i <= 6; i++) {
+				for (let i = 0; i <= 8; i++) {
 					//index = Math.floor(Math.random() * srcs.length);
 					//src = srcs.splice(index, 1)[0];
 
