@@ -1,7 +1,7 @@
 <template>
 	<div v-if="display" class="flux-index">
 		<transition name="fade">
-			<flux-button v-if="displayButton" @click="showIndex($event)" class="toggle bottom left">
+			<flux-button v-if="displayButton" class="toggle bottom left" @click="showIndex($event)">
 				<rect
 					v-for="(coord, i) in coords"
 					:key="i"
@@ -17,9 +17,10 @@
 			<ul ref="thumbs">
 				<li
 					v-for="(image, i) in images"
-					:key="i" :class="thumbClass(i)"
-					@click="showImage(i)">
-
+					:key="i"
+					:class="thumbClass(i)"
+					@click="showImage(i)"
+				>
 					<flux-thumb :image="images[i]" :description="getCaptionText(i)" />
 				</li>
 			</ul>
@@ -44,13 +45,6 @@
 			BaseComplement,
 		],
 
-		data: () => ({
-			visible: false,
-			rectSize: 14,
-			delay: 500,
-			coords: [],
-		}),
-
 		props: {
 			buttonRows: {
 				type: Number,
@@ -73,19 +67,12 @@
 			},
 		},
 
-		created() {
-			let rowsGap = (100 - this.buttonPadding * 2 - this.rectSize * this.buttonRows) / (this.buttonRows + 1);
-			let colsGap = (100 - this.buttonPadding * 2 - this.rectSize * this.buttonCols) / (this.buttonCols + 1);
-
-			for (let r = 0; r < this.buttonRows; r++) {
-				for (let c = 0; c < this.buttonCols; c++) {
-					this.coords.push({
-						x: this.buttonPadding + rowsGap + rowsGap * r + this.rectSize * r,
-						y: this.buttonPadding + colsGap + colsGap * c + this.rectSize * c,
-					});
-				}
-			}
-		},
+		data: () => ({
+			visible: false,
+			rectSize: 14,
+			delay: 500,
+			coords: [],
+		}),
 
 		computed: {
 			images() {
@@ -114,6 +101,20 @@
 
 				return listClass;
 			},
+		},
+
+		created() {
+			let rowsGap = (100 - this.buttonPadding * 2 - this.rectSize * this.buttonRows) / (this.buttonRows + 1);
+			let colsGap = (100 - this.buttonPadding * 2 - this.rectSize * this.buttonCols) / (this.buttonCols + 1);
+
+			for (let r = 0; r < this.buttonRows; r++) {
+				for (let c = 0; c < this.buttonCols; c++) {
+					this.coords.push({
+						x: this.buttonPadding + rowsGap + rowsGap * r + this.rectSize * r,
+						y: this.buttonPadding + colsGap + colsGap * c + this.rectSize * c,
+					});
+				}
+			}
 		},
 
 		methods: {

@@ -4,7 +4,8 @@
 			v-if="imageSrc && !srcSize"
 			:src="imageSrc"
 			@load="setSrcSize()"
-			@error="setSrcSize()" />
+			@error="setSrcSize()"
+		>
 	</div>
 </template>
 
@@ -18,15 +19,6 @@
 			BaseComponent,
 		],
 
-		data: () => ({
-			srcSize: undefined,
-			baseStyle: {
-				overflow: 'hidden',
-				backfaceVisibility: 'hidden',
-				zIndex: 'auto',
-			},
-		}),
-
 		props: {
 			image: [ String, Object ],
 
@@ -35,6 +27,15 @@
 				default: 'auto',
 			},
 		},
+
+		data: () => ({
+			srcSize: undefined,
+			baseStyle: {
+				overflow: 'hidden',
+				backfaceVisibility: 'hidden',
+				zIndex: 'auto',
+			},
+		}),
 
 		computed: {
 			imageSrc() {
@@ -56,7 +57,7 @@
 					return {
 						backgroundColor: this.color,
 					};
-				};
+				}
 
 				return {};
 			},

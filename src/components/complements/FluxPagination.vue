@@ -5,10 +5,11 @@
 				<slot item="getItem(i - 1)">
 					<span
 						:title="getCaptionText(i - 1)"
+						class="pagination-item"
+						:class="getClass(i - 1)"
 						@click="show(i - 1)"
 						@touchend="show(i - 1, $event)"
-						:class="getClass(i - 1)"
-						class="pagination-item" />
+					/>
 				</slot>
 			</li>
 		</ul>

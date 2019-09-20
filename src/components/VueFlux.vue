@@ -16,11 +16,11 @@
 			:time="Images.time"
 			@load="Images.addProperties(index, $event)"
 			@error="Images.addProperties(index, $event)"
-		/>
+		>
 
 		<flux-transition
-			ref="transition"
 			v-if="Transitions.current"
+			ref="transition"
 			:transition="Transitions.current"
 			:size="size"
 			:from="Transitions.from"
@@ -71,6 +71,28 @@
 			FluxTransition,
 		},
 
+		props: {
+			options: {
+				type: Object,
+				default: () => ({}),
+			},
+
+			transitions: {
+				type: Array,
+				required: true,
+			},
+
+			images: {
+				type: Array,
+				default: () => ([]),
+			},
+
+			captions: {
+				type: Array,
+				default: () => ([]),
+			},
+		},
+
 		data: () => ({
 			config: {
 				allowFullscreen: false,
@@ -97,28 +119,6 @@
 			Touches: undefined,
 			Images: undefined,
 		}),
-
-		props: {
-			options: {
-				type: Object,
-				default: () => ({}),
-			},
-
-			transitions: {
-				type: Array,
-				required: true,
-			},
-
-			images: {
-				type: Array,
-				default: () => ([]),
-			},
-
-			captions: {
-				type: Array,
-				default: () => ([]),
-			},
-		},
 
 		computed: {
 			style() {
@@ -238,12 +238,10 @@
 			init() {
 				this.loaded = true;
 
-//				this.$nextTick(() => {
-					if (this.config.autoplay === true)
-						this.play();
+				if (this.config.autoplay === true)
+					this.play();
 
-					this.$emit('ready');
-//				});
+				this.$emit('ready');
 			},
 
 			toggleMouseOver(over) {

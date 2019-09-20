@@ -1,5 +1,5 @@
 <template>
-	<div :style="style" ref="wrapper">
+	<div ref="wrapper" :style="style">
 		<slot />
 	</div>
 </template>

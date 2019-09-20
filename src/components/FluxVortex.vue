@@ -1,13 +1,14 @@
 <template>
-	<div :style="style" ref="vortex">
+	<div ref="vortex" :style="style">
 		<flux-image
 			v-for="i in numCircles"
+			ref="tiles"
 			:key="i"
 			:size="size"
 			:image="image"
 			:color="color"
 			:css="getTileCss(i)"
-			ref="tiles" />
+		/>
 	</div>
 </template>
 

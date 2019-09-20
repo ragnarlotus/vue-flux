@@ -51,14 +51,14 @@ export default class TransitionsController {
 
 	run(transition, from, to) {
 		if (transition) {
-			transition = transition.name || transition;
+			let name = transition.name || transition;
 
-			transition = this.transitions.find(each => {
-				return each.name === transition;
-			});
+			let found = this.transitions.find(each => each.name === name);
 
-			if (!transition)
-				throw new ReferenceError(`Transition ${transitionName} not found`);
+			if (!found)
+				throw new ReferenceError(`Transition ${transition} not found`);
+
+			transition = found;
 
 		} else {
 			transition = this.next;

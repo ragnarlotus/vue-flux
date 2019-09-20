@@ -2,7 +2,9 @@
 	<div class="preloader">
 		<slot name="spinner">
 			<div v-if="displaySpinner" class="spinner">
-				<div class="pct">{{ Images.progress }}%</div>
+				<div class="pct">
+					{{ vf.Images.progress }}%
+				</div>
 				<div class="border" />
 			</div>
 		</slot>
@@ -10,17 +12,19 @@
 		<flux-image
 			v-if="displayLast"
 			:size="vf.size"
-			:image="Images.lastShown"
-			:css="lastShownCss" />
+			:image="vf.Images.lastShown"
+			:css="lastShownCss"
+		/>
 
 		<flux-transition
-			v-if="runTransition"
+			v-if="displayTransition"
+			ref="transition"
 			:size="vf.size"
-			:transition="runTransition"
-			:from="Images.lastShown"
-			:to="Images.current"
+			:transition="transitionName"
+			:from="vf.Images.lastShown"
+			:to="vf.Images.current"
 			@end="transitionEnd()"
-			ref="transition" />
+		/>
 	</div>
 </template>
 
@@ -41,13 +45,6 @@
 			BaseComplement,
 		],
 
-		data: () => ({
-			runTransition: undefined,
-			lastShownCss: {
-				zIndex: 13,
-			},
-		}),
-
 		props: {
 			spinner: {
 				type: Boolean,
@@ -57,13 +54,21 @@
 			transition: String,
 		},
 
+		data: () => ({
+			displayTransition: false,
+			transitionName: undefined,
+			lastShownCss: {
+				zIndex: 13,
+			},
+		}),
+
 		computed: {
 			displaySpinner() {
-				return this.spinner && this.Images.preloading;
+				return this.spinner && this.vf.Images.preloading;
 			},
 
 			displayLast() {
-				let { Images } = this;
+				let Images = this.vf.Images;
 
 				if (Images.preloading && Images.lastShown && Images.lastShown.src !== Images.props[0].src)
 					return true;
@@ -73,28 +78,30 @@
 		},
 
 		watch: {
-			'Images.preloading': function(preloading) {
-				let { Images } = this;
+			'vf.Images.preloading': function(preloading) {
+				let Images = this.vf.Images;
 
-				if (!preloading && Images.props[0] && Images.lastShown && Images.props[0].src !== Images.lastShown.src)
+				if (!preloading && Images.props[0] && Images.lastShown && Images.lastShown.src !== Images.props[0].src)
 					this.transitionStart();
 			},
 		},
 
 		methods: {
 			transitionStart() {
-				if (!this.Images.current)
+				if (!this.vf.Images.current)
 					return;
 
-				this.runTransition = this.transition || this.Transitions.next.name;
+				this.transitionName = this.transition || this.vf.Transitions.transitions[this.vf.Transitions.nextIndex];
+				this.displayTransition = true;
 			},
 
 			transitionEnd() {
 				if (!this.transition)
-					this.Transitions.last = this.Transitions.next;
+					this.vf.Transitions.lastIndex = this.vf.Transitions.nextIndex;
 
-				this.runTransition = undefined;
-				this.Images.last = this.Images.current;
+				this.transitionName = undefined;
+				this.displayTransition = false;
+				this.vf.Images.updateLastShown(this.vf.Images.current);
 			}
 		}
 	};

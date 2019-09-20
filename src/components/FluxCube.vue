@@ -1,14 +1,15 @@
 <template>
-	<div :style="style" ref="cube">
+	<div ref="cube" :style="style">
 		<flux-image
 			v-for="side in definedSides"
+			:ref="side"
 			:key="side"
-			:size="getSideSize(side)"
+			:size="getSize()"
 			:image="getSideImage(side)"
 			:color="getSideColor(side)"
 			:css="getSideCss(side)"
-			:offset="offset || getSideOffset(side)"
-			:ref="side" />
+			:offset="offset || getOffset()"
+		/>
 	</div>
 </template>
 
@@ -52,13 +53,6 @@
 			BaseComponent,
 		],
 
-		data: () => ({
-			sides: [ 'front', 'back', 'top', 'bottom', 'left', 'right' ],
-			baseStyle: {
-				transformStyle: 'preserve-3d',
-			},
-		}),
-
 		props: {
 			images: {
 				type: Object,
@@ -75,6 +69,13 @@
 				type: [ Number, String, Object ],
 			},
 		},
+
+		data: () => ({
+			sides: [ 'front', 'back', 'top', 'bottom', 'left', 'right' ],
+			baseStyle: {
+				transformStyle: 'preserve-3d',
+			},
+		}),
 
 		computed: {
 			definedSides() {
@@ -117,7 +118,7 @@
 				return this.images[side];
 			},
 
-			getSideSize(side) {
+			getSize() {
 				return this.finalSize;
 			},
 
@@ -150,7 +151,7 @@
 				return css;
 			},
 
-			getSideOffset(side) {
+			getOffset() {
 				let offset = {};
 
 				if (this.css.top)

@@ -1,8 +1,9 @@
 <template>
-	<div :style="style" ref="grid">
+	<div ref="grid" :style="style">
 		<component
 			:is="component"
 			v-for="i in numTiles"
+			ref="tiles"
 			:key="i"
 			:size="size"
 			:image="image"
@@ -10,7 +11,7 @@
 			:color="color"
 			:depth="depth"
 			:css="getTileCss(i)"
-			ref="tiles" />
+		/>
 	</div>
 </template>
 

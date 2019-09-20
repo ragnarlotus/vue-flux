@@ -1,9 +1,9 @@
 <template>
-	<div class="mask" :style="maskStyle" ref="mask">
+	<div ref="mask" class="mask" :style="maskStyle">
 		<component
-			ref="transition"
-			v-if="componentName"
 			:is="componentName"
+			v-if="componentName"
+			ref="transition"
 			:size="size"
 			:from="from"
 			:to="to"
@@ -22,15 +22,6 @@
 		components: {
 			...transitions,
 		},
-
-		data: () => ({
-			baseStyle: {
-				position: 'relative',
-				overflow: 'hidden',
-				perspective: 'none',
-				zIndex: 1,
-			},
-		}),
 
 		props: {
 			size: Object,
@@ -54,6 +45,15 @@
 
 			images: Array,
 		},
+
+		data: () => ({
+			baseStyle: {
+				position: 'relative',
+				overflow: 'hidden',
+				perspective: 'none',
+				zIndex: 1,
+			},
+		}),
 
 		computed: {
 			maskStyle() {

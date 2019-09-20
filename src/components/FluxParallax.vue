@@ -1,14 +1,16 @@
 <template>
-	<div :style="style" ref="parallax">
+	<div ref="parallax" :style="style">
 		<div v-if="type === 'fixed'" :style="fixedParentStyle">
 			<div :style="fixedChildStyle" />
 		</div>
+
 		<img
 			v-if="type !== 'fixed' && !loaded"
+			ref="image"
 			:src="src"
 			@load="setProperties"
 			@error="setProperties"
-			ref="image" />
+		>
 		<slot />
 	</div>
 </template>
@@ -16,6 +18,28 @@
 <script>
 	export default {
 		name: 'FluxParallax',
+
+		props: {
+			src: {
+				type: String,
+				required: true,
+			},
+
+			holder: {
+				type: Object,
+				default: () => window,
+			},
+
+			type: {
+				type: String,
+				default: 'relative',
+			},
+
+			offset: {
+				type: [Number, String],
+				default: '100%',
+			},
+		},
 
 		data: () => ({
 			loaded: false,
@@ -56,27 +80,6 @@
 				clip: 'rect(auto auto auto auto)',
 			},
 		}),
-
-		props: {
-			src: {
-				type: String,
-				required: true,
-			},
-
-			holder: {
-				default: () => window,
-			},
-
-			type: {
-				type: String,
-				default: 'relative',
-			},
-
-			offset: {
-				type: [Number, String],
-				default: '100%',
-			},
-		},
 
 		computed: {
 			parallaxSize() {

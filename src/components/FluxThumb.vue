@@ -1,9 +1,10 @@
 <template>
 	<flux-image
+		ref="thumb"
 		:title="description"
 		:image="image"
 		:size="size"
-		ref="thumb" />
+	/>
 </template>
 
 <script>
