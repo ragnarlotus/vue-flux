@@ -1,7 +1,7 @@
 <template>
 	<nav v-if="display" class="flux-pagination">
 		<ul>
-			<li v-for="i in vf.Images.srcs.length" :key="i">
+			<li v-for="i in Images.srcs.length" :key="i">
 				<slot item="getItem(i - 1)">
 					<span
 						:title="getCaptionText(i - 1)"
@@ -45,10 +45,10 @@
 			},
 
 			getClass(i) {
-				if (this.currentTransition !== undefined && this.previousImageIndex === i)
+				if (this.Transitions.current !== undefined && this.Images.last.index === i)
 					return 'active';
 
-				if (this.currentTransition === undefined && this.currentImageIndex === i)
+				if (this.Transitions.current === undefined && this.Images.current.index === i)
 					return 'active';
 
 				return '';

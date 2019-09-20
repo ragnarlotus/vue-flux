@@ -2,93 +2,110 @@ export default class TransitionsController {
 
 	constructor(vf) {
 		this.vf = vf;
+		this.reset(true);
+	}
 
-		this.transitions = [];
+	get current() {
+		return this.$current;
+	}
+
+	set current(transition) {
+		if (this.current)
+			this.last = this.current;
+
+		this.$current = transition;
+	}
+
+	get next() {
+		let index = this.last.index + 1;
+
+		if (index >= this.transitions.length)
+			index = 0;
+
+		return this.transitions[index];
+	}
+
+	reset(hard = false) {
+		if (hard) {
+			this.last = undefined;
+			this.transitions = [];
+		}
+
 		this.current = undefined;
-		this.currentIndex = undefined;
 		this.from = undefined;
 		this.to = undefined;
-		this.lastIndex = undefined;
 	}
 
-	get nextIndex() {
-		let nextIndex = this.lastIndex + 1;
+	update(transitions) {
+		this.reset(true);
 
-		if (nextIndex >= this.transitions.length)
-			nextIndex = 0;
+		this.transitions = transitions.map((transition, i) => ({
+			index: i,
+			name: transition.name || transition
+		}));
 
-		return nextIndex;
-	}
-
-	update() {
-		this.transitions = this.vf.transitions;
-		this.lastIndex = this.transitions.length - 1;
+		this.last = this.transitions[this.transitions.length - 1];
 
 		this.vf.$emit('transitions-updated');
 	}
 
-	reset() {
-		this.vf.Images.updateLastShown(this.to);
-
-		this.lastIndex = this.currentIndex;
-		this.current = undefined;
-		this.currentIndex = undefined;
-		this.from = undefined;
-		this.to = undefined;
-	}
-
 	run(transition, from, to) {
-		if (transition === undefined) {
-			this.currentIndex = this.nextIndex;
-			transition = this.transitions[this.currentIndex];
+		if (transition) {
+			transition = transition.name || transition;
+
+			transition = this.transitions.find(each => {
+				return each.name === transition;
+			});
+
+			if (!transition)
+				throw new ReferenceError(`Transition ${transitionName} not found`);
 
 		} else {
-			this.currentIndex = this.transitions.indexOf(transition);
-
-			if (this.currentIndex === -1)
-				throw new ReferenceError(`Transition ${transition} not found`);
+			transition = this.next;
 		}
 
 		this.from = { ...from };
 		this.to = { ...to };
-		this.current = this.transitions[this.currentIndex];
+		this.current = transition;
 	}
 
 	start() {
-		requestAnimationFrame(() => {
-			this.vf.Images.setCurrentIndex(this.to.index);
-		});
+		this.vf.Images.current = this.to;
 
 		this.vf.$emit('transition-start', this.current);
 	}
 
 	cancel() {
 		this.vf.$emit('transition-cancel', this.current);
-		this.vf.Timers.clear('transition');
+
+		this.last = this.current;
 		this.reset();
 	}
 
 	end() {
 		let { vf } = this;
 
+		this.last = this.current;
 		this.reset();
 
 		vf.$nextTick(() => {
-			let currentImage = vf.Images.current;
-			let lastImageIndex = vf.Images.props.length - 1;
+			let {
+				current: currentImage,
+				previous: previousImage,
+			} = vf.Images;
 
-			if (vf.config.infinite === false && currentImage.index >= lastImageIndex) {
+			if (!vf.config.infinite && currentImage.index >= previousImage.index) {
 				vf.stop();
 				return;
 			}
 
-			if (vf.config.autoplay === true) {
+			if (vf.config.autoplay) {
 				vf.Timers.set('image', vf.config.delay, () => {
-					vf.show('next');
+					vf.show();
 				});
 			}
 
-			vf.$emit('transition-end', this.transitions[this.lastIndex]);
+			vf.$emit('transition-end', this.current);
 		});
 	}
 

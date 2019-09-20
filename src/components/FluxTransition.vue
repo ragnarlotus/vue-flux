@@ -57,12 +57,12 @@
 
 		computed: {
 			maskStyle() {
-				let size = this.size;
+				let { width, height } = this.size;
 
 				return {
 					...this.baseStyle,
-					width: size.width? size.width +'px' : '100%',
-					height: size.height? size.height +'px' : '100%',
+					width: width? width +'px' : '100%',
+					height: height? height +'px' : '100%',
 				};
 			},
 
@@ -94,11 +94,7 @@
 		},
 
 		mounted() {
-			requestAnimationFrame(() => {
-				requestAnimationFrame(() => {
-					this.play();
-				});
-			});
+			this.play();
 		},
 
 		methods: {

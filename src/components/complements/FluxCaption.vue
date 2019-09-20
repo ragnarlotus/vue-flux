@@ -24,7 +24,7 @@
 				if (!this.vf.loaded)
 					return '';
 
-				if (this.vf.Transitions.current)
+				if (this.Transitions.current)
 					return '';
 
 				return this.getCaption();

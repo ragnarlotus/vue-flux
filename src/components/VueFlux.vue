@@ -12,7 +12,6 @@
 		<img
 			v-for="(url, index) in Images.loading"
 			:key="index"
-			v-if="Images.loading[index]"
 			:src="config.path + url"
 			:time="Images.time"
 			@load="Images.addProperties(index, $event)"
@@ -132,11 +131,13 @@
 					};
 				}
 
-				if (this.size.width)
-					style.width = this.size.width +'px';
+				let { width, height } = this.size;
 
-				if (this.size.height)
-					style.height = this.size.height +'px';
+				if (width)
+					style.width = width +'px';
+
+				if (height)
+					style.height = height +'px';
 
 				return style;
 			},
@@ -152,20 +153,21 @@
 
 				this.stop();
 
-				this.Transitions.update();
-
-				wasPlaying && this.start();
+				this.$nextTick(() => {
+					this.Transitions.update(this.transitions);
+					wasPlaying && this.play();
+				});
 			},
 
 			images() {
 				let wasPlaying = this.config.autoplay;
 
 				this.stop();
+				this.loaded = false;
 
 				this.$nextTick(() => {
-					this.Images.load(this.images);
-
-					this.config.autoplay = wasPlaying;
+					this.Images.update(this.images);
+					wasPlaying && this.play();
 				});
 			},
 		},
@@ -178,7 +180,6 @@
 			this.Transitions = new TransitionsController(this);
 
 			this.updateOptions();
-			this.Transitions.update();
 
 			this.$emit('created');
 		},
@@ -186,7 +187,8 @@
 		mounted() {
 			this.resize();
 
-			this.Images.load(this.images);
+			this.Images.update(this.images);
+			this.Transitions.update(this.transitions);
 
 			this.$emit('mounted');
 		},
@@ -236,12 +238,12 @@
 			init() {
 				this.loaded = true;
 
-				this.$nextTick(() => {
+//				this.$nextTick(() => {
 					if (this.config.autoplay === true)
 						this.play();
 
 					this.$emit('ready');
-				});
+//				});
 			},
 
 			toggleMouseOver(over) {
@@ -296,24 +298,24 @@
 				this.$emit('stop');
 			},
 
-			show(index, transition) {
-				if (this.loaded === false || this.$refs.image === undefined)
+			show(index = 'next', transition) {
+				if (!this.loaded || !this.$refs.image)
 					return;
 
-				if (this.Transitions.current !== undefined) {
+				if (this.Transitions.current) {
 					if (this.config.allowToSkipTransition) {
 						this.Transitions.cancel();
 
-						this.$nextTick(() => this.show(index, transition));
+						this.$nextTick(() => {
+							this.show(index, transition);
+						});
 					}
 
 					return;
 				}
 
-				index = this.Images.getIndex(index);
-
 				let from = this.Images.current;
-				let to = this.Images.props[index];
+				let to = this.Images.getByIndex(index);
 
 				this.Transitions.run(transition, from, to);
 

@@ -55,7 +55,7 @@
 		data: () => ({
 			sides: [ 'front', 'back', 'top', 'bottom', 'left', 'right' ],
 			baseStyle: {
-				transformStyle: 'flat',
+				transformStyle: 'preserve-3d',
 			},
 		}),
 
@@ -99,10 +99,6 @@
 					right: -(this.depth || size.width) / 2 + this.viewSize.width,
 				};
 			}
-		},
-
-		rendered() {
-			this.baseStyle.transformStyle = 'preserve-3d';
 		},
 
 		methods: {

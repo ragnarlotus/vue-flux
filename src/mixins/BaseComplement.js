@@ -18,27 +18,19 @@ export default {
 			return this.vf && this.vf.captions? this.vf.captions : {};
 		},
 
-		currentTransition() {
-			return this.vf.Transitions.current;
+		Transitions() {
+			return this.vf.Transitions;
 		},
 
-		previousImageIndex() {
-			return this.vf.Images.previousIndex;
-		},
-
-		currentImageIndex() {
-			return this.vf.Images.currentIndex;
-		},
-
-		nextImageIndex() {
-			return this.vf.Images.next.index;
+		Images() {
+			return this.vf.Images;
 		},
 	},
 
 	methods: {
 		getCaption(index) {
 			if (index === undefined)
-				index = this.currentImageIndex;
+				index = this.Images.current.index;
 
 			return this.captions[index] || '';
 		},
@@ -46,13 +38,7 @@ export default {
 		getCaptionText(index) {
 			let caption = this.getCaption(index);
 
-			if (typeof caption === 'string')
-				return caption;
-
-			if (caption.text)
-				return caption.text;
-
-			return '';
+			return caption.text || caption || '';
 		},
 	},
 };

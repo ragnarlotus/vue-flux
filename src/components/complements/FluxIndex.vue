@@ -92,7 +92,7 @@
 				if (!this.vf)
 					return [];
 
-				return this.vf.Images.props;
+				return this.Images.props;
 			},
 
 			display() {
@@ -140,7 +140,7 @@
 			},
 
 			thumbClass(imageIndex) {
-				return this.currentImageIndex === imageIndex? 'current' : '';
+				return this.Images.current.index === imageIndex? 'current' : '';
 			},
 
 			showImage(imageIndex) {
@@ -149,7 +149,8 @@
 					return;
 				}
 
-				this.vf.show(imageIndex);
+				if (this.Images.current.index !== imageIndex)
+					this.vf.show(imageIndex);
 			},
 		},
 	};

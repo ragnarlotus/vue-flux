@@ -91,8 +91,7 @@
 				let row = this.getRowNumber(i);
 				let col = this.getColNumber(i);
 
-				let width = this.tileSize.width;
-				let height = this.tileSize.height;
+				let { width, height } = this.tileSize;
 
 				let top = row * height;
 				let left = col * width;
