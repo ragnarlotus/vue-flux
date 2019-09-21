@@ -25,9 +25,9 @@
 				required: true,
 			},
 
+			/* eslint-disable vue/require-prop-types */
 			holder: {
-				type: Object,
-				default: () => window,
+				default: () => window
 			},
 
 			type: {

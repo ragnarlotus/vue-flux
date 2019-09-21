@@ -671,9 +671,9 @@
     to-fast-properties "^2.0.0"
 
 "@hapi/address@2.x.x":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.1.tgz#61395b5ed94c4cb19c2dc4c85969cff3d40d583f"
-  integrity sha512-DYuHzu978pP1XW1GD3HGvLnAFjbQTIgc2+V153FGkbS2pgo9haigCdwBnUDrbhaOkgiJlbZvoEqDrcxSLHpiWA==
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.2.tgz#1c794cd6dbf2354d1eb1ef10e0303f573e1c7222"
+  integrity sha512-O4QDrx+JoGKZc6aN64L04vqa7e41tIiLU+OvKdcYaEMP97UttL0f9GIi9/0A4WAMx0uBd6SidDIhktZhgOcN8Q==
 
 "@hapi/bourne@1.x.x":
   version "1.3.2"
@@ -3365,9 +3365,9 @@ ejs@^2.6.1:
   integrity sha512-kS/gEPzZs3Y1rRsbGX4UOSjtP/CeJP0CxSNZHYxGfVM/VgLcv0ZqM7C45YyTj2DI2g7+P9Dd24C+IMIg6D0nYQ==
 
 electron-to-chromium@^1.3.247:
-  version "1.3.263"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.263.tgz#089957556c0a3e2a3726217449796914e5fe9609"
-  integrity sha512-VfPi+sE/1nEKOV7DWDqWSUGP7ztJG5FeqHbMEj6dBb/arKnxpOCnRXOSC6HBV6qTfK5v8CX7xWCqzN36UqG1oA==
+  version "1.3.264"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.264.tgz#ed837f44524d0601a7b2b7b6efd86e35753d0e27"
+  integrity sha512-z8E7WkrrquCuGYv+kKyybuZIbdms+4PeHp7Zm2uIgEhAigP0bOwqXILItwj0YO73o+QyHY/7XtEfP5DsHOWQgQ==
 
 elliptic@^6.0.0:
   version "6.5.1"
