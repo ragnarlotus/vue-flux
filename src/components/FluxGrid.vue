@@ -19,7 +19,6 @@
 <script>
 	import Dom from '@/libraries/Dom';
 	import Img from '@/libraries/Img';
-	import BaseComponent from '@/mixins/BaseComponent.js';
 	import FluxCube from '@/components/FluxCube.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
@@ -30,10 +29,6 @@
 			FluxCube,
 			FluxImage,
 		},
-
-		mixins: [
-			BaseComponent,
-		],
 
 		props: {
 			rows: {
@@ -67,7 +62,6 @@
 				display: 'inline-block',
 				overflow: 'hidden',
 				position: 'relative',
-				fontSize: 0,
 			},
 			img: null,
 		}),
