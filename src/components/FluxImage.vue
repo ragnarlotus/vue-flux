@@ -16,11 +16,14 @@
 
 		props: {
 			color: String,
+
 			image: [ String, Object ],
+
 			size: {
 				type: Object,
 				required: true,
 			},
+
 			offset: Object,
 		},
 
@@ -29,6 +32,7 @@
 				display: 'inline-block',
 				overflow: 'hidden',
 			},
+
 			img: null,
 		}),
 

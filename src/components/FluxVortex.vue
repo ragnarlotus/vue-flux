@@ -1,13 +1,13 @@
 <template>
 	<div ref="vortex" :style="style">
 		<flux-image
-			v-for="i in numCircles"
+			v-for="(tile, index) in tiles"
 			ref="tiles"
-			:key="i"
-			:size="tiles[i - 1].size"
+			:key="index"
+			:size="tile.size"
 			:image="img"
-			:offset="tiles[i - 1].offset"
-			:style="tiles[i - 1].style"
+			:offset="tile.offset"
+			:style="tile.style"
 		/>
 	</div>
 </template>

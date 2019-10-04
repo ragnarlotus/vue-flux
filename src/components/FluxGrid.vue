@@ -2,16 +2,16 @@
 	<div ref="grid" :style="style">
 		<component
 			:is="component"
-			v-for="i in numTiles"
+			v-for="(tile, index) in tiles"
 			ref="tiles"
-			:key="i"
-			:size="tiles[i - 1].size"
+			:key="index"
+			:size="tile.size"
 			:image="img"
 			:images="images"
 			:color="color"
-			:offset="tiles[i - 1].offset"
+			:offset="tile.offset"
 			:depth="depth"
-			:style="tiles[i - 1].style"
+			:style="tile.style"
 		/>
 	</div>
 </template>
@@ -59,10 +59,10 @@
 
 		data: () => ({
 			baseStyle: {
-				display: 'inline-block',
 				overflow: 'hidden',
 				position: 'relative',
 			},
+
 			img: null,
 		}),
 
