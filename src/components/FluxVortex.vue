@@ -4,17 +4,18 @@
 			v-for="i in numCircles"
 			ref="tiles"
 			:key="i"
-			:size="size"
-			:image="image"
-			:color="color"
-			:css="getTileCss(i)"
+			:size="tiles[i - 1].size"
+			:image="img"
+			:offset="tiles[i - 1].offset"
+			:style="tiles[i - 1].style"
 		/>
 	</div>
 </template>
 
 <script>
-	import BaseComponent from '@/mixins/BaseComponent.js';
-	import FluxImage from '@/components/FluxImage.vue';
+	import Dom from '@/libraries/Dom';
+	import Img from '@/libraries/Img';
+	import FluxImage from '@/components/FluxImage';
 
 	export default {
 		name: 'FluxVortex',
@@ -22,10 +23,6 @@
 		components: {
 			FluxImage,
 		},
-
-		mixins: [
-			BaseComponent,
-		],
 
 		props: {
 			circles: {
@@ -35,8 +32,22 @@
 
 			image: [ String, Object ],
 
+			size: {
+				type: Object,
+				required: true,
+			},
+
 			tileCss: Object,
 		},
+
+		data: () => ({
+			baseStyle: {
+				display: 'inline-block',
+				overflow: 'hidden',
+				position: 'relative',
+			},
+			img: null,
+		}),
 
 		computed: {
 			numCircles() {
@@ -44,9 +55,9 @@
 			},
 
 			diag() {
-				let size = this.viewSize;
+				let { width, height } = this.size;
 
-				return Math.ceil(Math.sqrt(size.width * size.width + size.height * size.height));
+				return Math.ceil(Math.sqrt(width * width + height * height));
 			},
 
 			radius() {
@@ -54,30 +65,91 @@
 			},
 
 			topGap() {
-				return Math.ceil(this.viewSize.height / 2 - this.radius * this.numCircles);
+				return Math.ceil(this.size.height / 2 - this.radius * this.numCircles);
 			},
 
 			leftGap() {
-				return Math.ceil(this.viewSize.width / 2 - this.radius * this.numCircles);
+				return Math.ceil(this.size.width / 2 - this.radius * this.numCircles);
+			},
+
+			tiles() {
+				let tile;
+				let tiles = [];
+
+				for (let i = 0; i < this.numCircles; i++) {
+					let size = (this.numCircles - i) * this.radius * 2;
+					let gap = this.radius * i;
+
+					tile = {
+						size: {
+							width: size,
+							height: size,
+						},
+						offset: {
+							top: this.topGap + gap,
+							left: this.leftGap + gap,
+						},
+					};
+
+					tile.style = {
+						...this.tileCss,
+						position: 'absolute',
+						transform: `translate(${tile.offset.left}px, ${tile.offset.top}px)`,
+						zIndex: i,
+					};
+
+					tiles.push(tile);
+				}
+
+				return tiles;
+			},
+
+			sizeStyle() {
+				let { width, height } = this.size;
+
+				return {
+					width: Dom.px(width),
+					height: Dom.px(height),
+				};
+			},
+
+			style() {
+				return {
+					...this.baseStyle,
+					...this.sizeStyle,
+				};
 			},
 		},
 
+		watch: {
+			image() {
+				this.init();
+			},
+
+			size() {
+				this.img.resizeToCover(this.size);
+			},
+		},
+
+		created() {
+			this.init();
+		},
+
 		methods: {
-			getTileCss(i) {
-				i--;
+			async init() {
+				if (!this.image)
+					return;
 
-				let width = (this.numCircles - i) * this.radius * 2;
+				if (this.image instanceof Img) {
+					this.img = this.image;
+					return;
+				}
 
-				return {
-					...this.tileCss,
-					top: (this.topGap + this.radius * i) +'px',
-					left: (this.leftGap + this.radius * i) +'px',
-					width: width +'px',
-					height: width +'px',
-					backgroundRepeat: 'repeat',
-					borderRadius: '50%',
-					zIndex: i,
-				};
+				this.img = new Img(this.image);
+
+				await this.img.load();
+
+				this.img.resizeToCover(this.size);
 			},
 
 			transform(func) {
