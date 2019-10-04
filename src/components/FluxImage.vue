@@ -90,6 +90,10 @@
 			image() {
 				this.init();
 			},
+
+			size() {
+				this.img.resizeToCover(this.size);
+			},
 		},
 
 		created() {
@@ -107,7 +111,9 @@
 				}
 
 				this.img = new Img(this.image);
+
 				await this.img.load();
+
 				this.img.resizeToCover(this.size);
 			},
 
