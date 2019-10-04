@@ -9,15 +9,6 @@
 		@touchstart="Touches.start($event)"
 		@touchend="Touches.end($event)"
 	>
-		<img
-			v-for="(url, index) in Images.loading"
-			:key="index"
-			:src="config.path + url"
-			:time="Images.time"
-			@load="Images.addProperties(index, $event)"
-			@error="Images.addProperties(index, $event)"
-		>
-
 		<flux-transition
 			v-if="Transitions.current"
 			ref="transition"
@@ -50,7 +41,7 @@
 
 <script type="module">
 	// Libraries
-	import DomHelper from '@/libraries/DomHelper.js';
+	import Dom from '@/libraries/Dom.js';
 
 	// Controllers
 	import DisplayController from '@/controllers/Display.js';
@@ -226,7 +217,7 @@
 				this.size = {};
 
 				this.$nextTick(() => {
-					let size = DomHelper.sizeFrom(this.$refs.container);
+					let size = Dom.sizeFrom(this.$refs.container);
 
 					if (!size.height)
 						size.height = size.width / 16 * 9;
@@ -334,10 +325,5 @@
 <style lang="scss">
 	.vue-flux {
 		position: relative;
-
-		& > img {
-			position: absolute;
-			visibility: hidden;
-		}
 	}
 </style>
