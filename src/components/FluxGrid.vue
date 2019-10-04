@@ -11,7 +11,7 @@
 			:color="color"
 			:offset="tiles[i - 1].offset"
 			:depth="depth"
-			:style="getTileStyle(i)"
+			:style="tiles[i - 1].style"
 		/>
 	</div>
 </template>
@@ -66,10 +66,10 @@
 			baseStyle: {
 				display: 'inline-block',
 				overflow: 'hidden',
+				position: 'relative',
 				fontSize: 0,
 			},
 			img: null,
-			tiles: [],
 		}),
 
 		computed: {
@@ -96,6 +96,43 @@
 				};
 			},
 
+			tiles() {
+				let tile;
+				let tiles = [];
+
+				for (let i = 0; i < this.numTiles; i++) {
+					tile = {
+						row: this.getRowNumber(i),
+						col: this.getColNumber(i),
+						size: {
+							...this.tileSize
+						},
+					};
+
+					if (tile.row + 1 === this.numRows)
+						tile.size.height = this.size.height - tile.row * tile.size.height;
+
+					if (tile.col + 1 === this.numCols)
+						tile.size.width = this.size.width - tile.col * tile.size.width;
+
+					tile.offset = {
+						top: tile.row * tile.size.height,
+						left: tile.col * tile.size.width,
+					};
+
+					tile.style = {
+						...this.tileCss,
+						position: 'absolute',
+						transform: `translate(${tile.offset.left}px, ${tile.offset.top}px)`,
+						zIndex: i + 1 < this.numCols / 2? i + 1 : this.numCols - i,
+					};
+
+					tiles.push(tile);
+				}
+
+				return tiles;
+			},
+
 			sizeStyle() {
 				let { width, height } = this.size;
 
@@ -117,35 +154,14 @@
 			image() {
 				this.init();
 			},
+
+			size() {
+				this.img.resizeToCover(this.size);
+			},
 		},
 
 		created() {
 			this.init();
-
-			for (let i = 0; i < this.numTiles; i++) {
-				let tile = {
-					row: this.getRowNumber(i),
-					col: this.getColNumber(i),
-					size: {
-						...this.tileSize
-					},
-				};
-
-				tile.offset = {
-					top: tile.row * tile.size.height,
-					left: tile.col * tile.size.width,
-				};
-
-				if (tile.row + 1 === this.numRows)
-					tile.size.height = this.size.height - tile.row * tile.size.height;
-
-				if (tile.col + 1 === this.numCols)
-					tile.size.width = this.size.width - tile.col * tile.size.width;
-
-				tile.zIndex = i + 1 < this.numCols / 2? i + 1 : this.numCols - i;
-
-				this.tiles.push(tile);
-			}
 		},
 
 		methods: {
@@ -159,7 +175,9 @@
 				}
 
 				this.img = new Img(this.image);
+
 				await this.img.load();
+
 				this.img.resizeToCover(this.size);
 			},
 
@@ -169,18 +187,6 @@
 
 			getColNumber(i) {
 				return i % this.numCols;
-			},
-
-			getTileStyle(i) {
-				i--;
-
-				let { top, left } = this.tiles[i].offset;
-
-				return {
-					...this.tileCss,
-					transform: `translate3d(${left}px, ${top}px)`,
-					zIndex: this.tiles[i].zIndex,
-				};
 			},
 
 			transform(func) {
