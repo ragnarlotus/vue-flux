@@ -1,7 +1,7 @@
 export default class Img {
 
-	constructor(img) {
-		this.src = img;
+	constructor(src) {
+		this.src = src;
 		this.index = null;
 
 		// null, loaded, error

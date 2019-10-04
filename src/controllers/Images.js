@@ -1,3 +1,5 @@
+import Img from '../libraries/Img'
+
 export default class ImagesController {
 
 	constructor(vf) {
@@ -9,9 +11,9 @@ export default class ImagesController {
 		let index = this.$current.index - 1;
 
 		if (index < 0)
-			index = this.props.length - 1;
+			index = this.imgs.length - 1;
 
-		return this.props[index];
+		return this.imgs[index];
 	}
 
 	get last() {
@@ -36,10 +38,10 @@ export default class ImagesController {
 	get next() {
 		let index = this.$current.index + 1;
 
-		if (index >= this.props.length)
+		if (index >= this.imgs.length)
 			index = 0;
 
-		return this.props[index];
+		return this.imgs[index];
 	}
 
 	reset(hard = false) {
@@ -47,8 +49,7 @@ export default class ImagesController {
 			this.$last = undefined;
 
 		this.srcs = [];
-		this.loading = [];
-		this.props = [];
+		this.imgs = [];
 
 		this.loaded = 0;
 		this.progress = 0;
@@ -69,13 +70,15 @@ export default class ImagesController {
 	}
 
 	preloadStart() {
+		this.preloading = true;
+
 		let preload = this.srcs.length;
 
 		if (this.vf.config.lazyLoad)
 			preload = this.vf.config.lazyLoadAfter;
 
-		this.loading = this.srcs.slice(0, preload);
-		this.preloading = true;
+		let srcs = this.srcs.slice(0, preload);
+		srcs.forEach(src => this.addImg(src));
 
 		this.vf.$emit('images-preload-start');
 	}
@@ -85,66 +88,81 @@ export default class ImagesController {
 
 		this.vf.$emit('images-preload-end');
 
-		if (this.loaded < this.srcs.length)
+		if (this.imgs.length < this.srcs.length)
 			this.lazyLoadStart();
 
 		else
-			this.loading = [];
+			this.removeErrorImgs();
 
 		this.vf.init();
 	}
 
 	lazyLoadStart() {
-		let remaining = this.srcs.slice(this.loaded);
-
-		this.loading = this.loading.concat(remaining);
-
 		this.lazyloading = true;
+
+		let srcs = this.srcs.slice(this.imgs.length);
+		srcs.forEach(src => this.addImg(src));
 
 		this.vf.$emit('images-lazy-load-start');
 	}
 
 	lazyLoadEnd() {
-		this.loading = [];
 		this.lazyloading = false;
+
+		this.removeErrorImgs();
 
 		this.vf.$emit('images-lazy-load-end');
 	}
 
-	addProperties(index, event) {
-		let img = event.target || event.path[0];
+	addImg(src) {
+		let img = new Img(src);
+		this.imgs.push(img);
 
-		if (this.time !== img.attributes.time.nodeValue)
-			return;
+		img.load().then(() => {
+			this.imgLoadSuccess();
+		}).catch(error => {
+			this.imgLoadError(error);
+		});
+	}
 
+	imgLoadSuccess() {
 		this.loaded++;
 
-		if (img.naturalWidth || img.width) {
-			this.props[index] = {
-				index,
-				src: img.src,
-				size: {
-					width: img.naturalWidth || img.width,
-					height: img.naturalHeight || img.height,
-				},
-			};
+		if (!this.current) {
+			for (let i = 0; i < this.imgs.length; i++) {
+				let status = this.imgs[i].status;
 
-		} else {
-			console.warn(`Image ${this.srcs[index]} could not be loaded`);
+				if (status === 'error')
+					continue;
+
+				if (status === 'loaded')
+					this.last = this.current = this.imgs[i];
+
+				break;
+			}
 		}
-
-		if (index === 0)
-			this.last = this.current = this.props[0];
 
 		if (this.preloading)
 			this.updateProgress();
 
-		if (this.loaded === this.loading.length)
+		if (this.loaded === this.imgs.length)
 			this.preloading? this.preloadEnd() : this.lazyLoadEnd();
 	}
 
+	imgLoadError(error) {
+		console.warn(error);
+	}
+
 	updateProgress() {
-		this.progress = Math.ceil(this.loaded * 100 / this.loading.length) || 0;
+		this.progress = Math.ceil(this.loaded * 100 / this.imgs.length) || 0;
+	}
+
+	removeErrorImgs() {
+		this.imgs = this.imgs.filter(img => img.status === 'loaded');
+
+		this.imgs.forEach((img, index) => {
+			img.index = index;
+		});
 	}
 
 	getByIndex(index) {
@@ -154,10 +172,10 @@ export default class ImagesController {
 		if (index === 'previous')
 			return this.previous;
 
-		if (!this.props[index])
+		if (!this.imgs[index])
 			throw new ReferenceError(`Image ${index} not found`);
 
-		return this.props[index];
+		return this.imgs[index];
 	}
 
 }
