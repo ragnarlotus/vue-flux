@@ -1,13 +1,14 @@
 export default class Img {
 
-	construnctor(img) {
-		this.src = img.src || img;
+	constructor(img) {
+		this.src = img;
+		this.index = null;
 
 		// null, loaded, error
 		this.status = null;
 
 		this.real = {
-			size: img.size || null,
+			size: null,
 			ar: null,
 		};
 
@@ -23,7 +24,7 @@ export default class Img {
 		};
 	}
 
-	getSize() {
+	load() {
 		return new Promise((resolve, reject) => {
 			if (this.real.size)
 				resolve(this.real.size);
@@ -40,7 +41,7 @@ export default class Img {
 
 				this.real.ar = this.real.size.width / this.real.size.height;
 
-				resolve(this.size);
+				resolve();
 			}
 
 			img.onerror = () => {
@@ -54,21 +55,21 @@ export default class Img {
 	}
 
 	resizeToCover(finalSize) {
-		if (finalSize.width == this.final.size.width && finalSize.height == this.final.size.height)
+		if (this.final.size && finalSize.width == this.final.size.width && finalSize.height == this.final.size.height)
 			return;
 
 		this.final.size = finalSize;
 		this.final.ar = finalSize.width / finalSize.height;
 
-		this.coverSize = this.getCoverSize();
-		this.coverPosition = this.getCoverPosition();
+		this.cover.size = this.getCoverSize();
+		this.cover.position = this.getCoverPosition();
 	}
 
-	async getCoverSize() {
+	getCoverSize() {
 		if (this.cover.size)
 			return this.cover.size;
 
-		if (this.real.ar >= this.final.ar) {
+		if (this.real.ar <= this.final.ar) {
 			return {
 				width: this.final.size.width,
 				height: this.final.size.width / this.real.ar,
@@ -81,22 +82,20 @@ export default class Img {
 		};
 	}
 
-	async getCoverPosition() {
+	getCoverPosition() {
 		if (this.cover.position)
 			return this.cover.position;
 
-		let realSize = await this.getSize();
-
-		if (this.real.ar >= this.final.ar) {
+		if (this.real.ar <= this.final.ar) {
 			return {
-				top: (this.final.size.height - realSize.height) / 2,
+				top: (this.final.size.height - this.cover.size.height) / 2,
 				left: 0,
 			};
 		}
 
 		return {
 			top: 0,
-			left: (this.final.size.width - realSize.width) / 2,
+			left: (this.final.size.width - this.cover.size.width) / 2,
 		};
 	}
 
