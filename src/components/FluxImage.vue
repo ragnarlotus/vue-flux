@@ -37,6 +37,15 @@
 		}),
 
 		computed: {
+			colorStyle() {
+				if (!this.color)
+					return {};
+
+				return {
+					backgroundColor: this.color,
+				};
+			},
+
 			imageStyle() {
 				if (!this.img)
 					return {};
@@ -62,12 +71,6 @@
 					backgroundSize: `${coverSize.width}px ${coverSize.height}px`,
 					backgroundPosition: `${position.left}px ${position.top}px`,
 					backgroundRepeat: 'no-repeat',
-				};
-			},
-
-			colorStyle() {
-				return {
-					backgroundColor: this.color,
 				};
 			},
 
