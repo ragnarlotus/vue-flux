@@ -5,9 +5,14 @@
 <script>
 	import Dom from '@/libraries/Dom';
 	import Img from '@/libraries/Img';
+	import BaseComponent from '@/mixins/BaseComponent';
 
 	export default {
 		name: 'FluxImage',
+
+		mixins: [
+			BaseComponent,
+		],
 
 		props: {
 			color: String,
@@ -20,12 +25,11 @@
 		},
 
 		data: () => ({
-			img: null,
-			parentSize: null,
 			baseStyle: {
 				display: 'inline-block',
 				overflow: 'hidden',
 			},
+			img: null,
 		}),
 
 		computed: {
@@ -39,11 +43,13 @@
 				if (!realSize || !coverSize)
 					return {};
 
-				let position = this.img.cover.position;
+				let position = {
+					...this.img.cover.position,
+				};
 
 				if (this.offset) {
 					['top', 'left'].forEach(side => {
-						position[side] += this.offset[side] || 0;
+						position[side] -= this.offset[side] || 0;
 					});
 				}
 
@@ -95,8 +101,12 @@
 				if (!this.image)
 					return;
 
-				this.img = typeof this.image === 'string'? new Img(this.image) : this.image;
+				if (this.image instanceof Img) {
+					this.img = this.image;
+					return;
+				}
 
+				this.img = new Img(this.image);
 				await this.img.load();
 				this.img.resizeToCover(this.size);
 			},
