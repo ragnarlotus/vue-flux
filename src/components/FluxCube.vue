@@ -1,20 +1,21 @@
 <template>
 	<div ref="cube" :style="style">
 		<flux-image
-			v-for="side in definedSides"
-			:ref="side"
-			:key="side"
-			:size="getSize()"
-			:image="getSideImage(side)"
-			:color="getSideColor(side)"
-			:css="getSideCss(side)"
-			:offset="offset || getOffset()"
+			v-for="side in sides"
+			:ref="side.name"
+			:key="side.name"
+			:size="side.size"
+			:image="side.img"
+			:color="side.color"
+			:offset="offset"
+			:style="side.style"
 		/>
 	</div>
 </template>
 
 <script>
-	import BaseComponent from '@/mixins/BaseComponent.js';
+	import Dom from '@/libraries/Dom';
+	import Img from '@/libraries/Img';
 	import FluxImage from '@/components/FluxImage.vue';
 
 	const rotate = {
@@ -49,37 +50,98 @@
 			FluxImage,
 		},
 
-		mixins: [
-			BaseComponent,
-		],
-
 		props: {
+			color: String,
+
 			images: {
 				type: Object,
 				default: () => ({}),
 			},
 
+			size: {
+				type: Object,
+				required: true,
+			},
+
 			depth: Number,
+
+			offset: Object,
 
 			sidesCss: {
 				type: Object,
-			},
-
-			offset: {
-				type: [ Number, String, Object ],
+				default: () => ({}),
 			},
 		},
 
 		data: () => ({
-			sides: [ 'front', 'back', 'top', 'bottom', 'left', 'right' ],
+			sideNames: [ 'front', 'back', 'top', 'bottom', 'left', 'right' ],
+
 			baseStyle: {
 				transformStyle: 'preserve-3d',
+				transition: `all 2000ms linear`,
 			},
+
+			imgs: {},
 		}),
 
 		computed: {
+			sides() {
+				let side;
+				let sides = {};
+
+				this.definedSides.forEach(sideName => {
+					side = {
+						name: sideName,
+						img: this.imgs[sideName],
+						color: this.getSideColor(sideName),
+						offset: this.offset,
+					};
+
+					side.size = {
+						...this.size,
+					};
+
+					if (this.depth && ['left', 'right'].includes(sideName))
+						side.size.width = this.depth;
+
+					side.style = {
+						...this.sidesCss[side],
+						display: 'block',
+						position: 'absolute',
+						transform: this.getTransform(sideName),
+						backfaceVisibility: 'hidden',
+					};
+
+					sides[sideName] = side;
+				});
+
+				return sides;
+			},
+
 			definedSides() {
-				return this.sides.filter(side => this.sideDefined(side))
+				return this.sideNames.filter(side => this.sideDefined(side))
+			},
+
+			translateZ() {
+				let { width, height } = this.size;
+				let depthX = (this.depth || width) / 2;
+				let depthY = height / 2
+
+				return {
+					top: depthY,
+					bottom: depthY,
+					left: depthX,
+					right: width - depthX,
+				};
+			},
+
+			sizeStyle() {
+				let { width, height } = this.size;
+
+				return {
+					width: Dom.px(width),
+					height: Dom.px(height),
+				};
 			},
 
 			style() {
@@ -89,22 +151,46 @@
 					...this.css,
 				};
 			},
+		},
 
-			translateZ() {
-				let size = this.viewSize;
+		watch: {
+			image() {
+				this.init();
+			},
 
-				return {
-					top: size.height / 2,
-					bottom: size.height / 2,
-					left: (this.depth || size.width) / 2,
-					right: -(this.depth || size.width) / 2 + this.viewSize.width,
-				};
-			}
+			size() {
+				this.img.resizeToCover(this.size);
+			},
+		},
+
+		created() {
+			this.init();
 		},
 
 		methods: {
+			init() {
+				this.definedSides.forEach(side => {
+					this.initSide(side);
+				});
+			},
+
+			async initSide(side) {
+				let image = this.images[side];
+
+				if (image instanceof Img) {
+					this.imgs[side] = image;
+					return;
+				}
+
+				this.imgs[side] = new Img(this.images[side]);
+
+				await this.imgs[side].load();
+
+				this.imgs[side].resizeToCover(this.size);
+			},
+
 			sideDefined(side) {
-				if (this.images[side] || this.color[side])
+				if (this.images[side] || this.color)
 					return true;
 
 				return false;
@@ -112,14 +198,6 @@
 
 			getSide(side) {
 				return this.sideDefined(side)? this.$refs[side] : undefined;
-			},
-
-			getSideImage(side) {
-				return this.images[side];
-			},
-
-			getSize() {
-				return this.finalSize;
 			},
 
 			getSideColor(side) {
@@ -130,37 +208,6 @@
 					return this.color[side];
 
 				return undefined;
-			},
-
-			getSideCss(side) {
-				let css = {
-					...this.viewSize,
-				};
-
-				if (this.depth && ['left', 'right'].includes(side))
-					css.width = this.depth;
-
-				css.width += 'px';
-				css.height += 'px';
-
-				css.transform = this.getTransform(side);
-
-				if (this.sidesCss && this.sideDefined(side))
-					Object.assign(css, this.sidesCss[side]);
-
-				return css;
-			},
-
-			getOffset() {
-				let offset = {};
-
-				if (this.css.top)
-					offset.top = -parseFloat(this.css.top);
-
-				if (this.css.left)
-					offset.left = -parseFloat(this.css.left);
-
-				return offset;
 			},
 
 			getTransform(side) {
@@ -197,6 +244,20 @@
 
 			turnRight() {
 				this.turn('right');
+			},
+
+			setCss(css) {
+				this.baseStyle = {
+					...this.baseStyle,
+					...css,
+				};
+			},
+
+			transform(css) {
+				this.$nextTick(() => {
+					this.$el.clientHeight;
+					this.setCss(css);
+				});
 			},
 		},
 	};
