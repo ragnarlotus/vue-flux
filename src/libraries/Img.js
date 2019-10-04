@@ -14,7 +14,6 @@ export default class Img {
 
 		this.final = {
 			size: null,
-			position: null,
 			ar: null,
 		};
 
