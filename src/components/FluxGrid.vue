@@ -5,17 +5,20 @@
 			v-for="i in numTiles"
 			ref="tiles"
 			:key="i"
-			:size="size"
-			:image="image"
+			:size="tileSize"
+			:image="img"
 			:images="images"
 			:color="color"
+			:offset="tiles[i - 1].offset"
 			:depth="depth"
-			:css="getTileCss(i)"
+			:style="getTileStyle(i)"
 		/>
 	</div>
 </template>
 
 <script>
+	import Dom from '@/libraries/Dom';
+	import Img from '@/libraries/Img';
 	import BaseComponent from '@/mixins/BaseComponent.js';
 	import FluxCube from '@/components/FluxCube.vue';
 	import FluxImage from '@/components/FluxImage.vue';
@@ -43,14 +46,30 @@
 				default: 1,
 			},
 
+			color: [ String, Object ],
+
 			image: [ String, Object ],
 
 			images: Object,
+
+			size: {
+				type: Object,
+				required: true,
+			},
 
 			depth: Number,
 
 			tileCss: Object,
 		},
+
+		data: () => ({
+			baseStyle: {
+				display: 'inline-block',
+				overflow: 'hidden',
+			},
+			img: null,
+			tiles: [],
+		}),
 
 		computed: {
 			component() {
@@ -71,13 +90,77 @@
 
 			tileSize() {
 				return {
-					width: Math.ceil(this.viewSize.width / this.numCols),
-					height: Math.ceil(this.viewSize.height / this.numRows),
+					width: Math.ceil(this.size.width / this.numCols),
+					height: Math.ceil(this.size.height / this.numRows),
+				};
+			},
+
+			sizeStyle() {
+				let { width, height } = this.size;
+
+				return {
+					width: Dom.px(width),
+					height: Dom.px(height),
+				};
+			},
+
+			style() {
+				return {
+					fontSize: 0,
+					...this.baseStyle,
+					...this.sizeStyle,
 				};
 			},
 		},
 
+		watch: {
+			image() {
+				this.init();
+			},
+		},
+
+		created() {
+			this.init();
+
+			for (let i = 0; i < this.numTiles; i++) {
+				let tile = {
+					row: this.getRowNumber(i),
+					col: this.getColNumber(i),
+					...this.tileSize,
+				};
+
+				tile.offset = {
+					top: tile.row * tile.height,
+					left: tile.col * tile.width,
+				};
+
+				if (tile.row + 1 === this.numRows)
+					tile.height = this.size.height - tile.row * tile.height;
+
+				if (tile.col + 1 === this.numCols)
+					tile.width = this.size.width - tile.col * tile.width;
+
+				tile.zIndex = i + 1 < this.numCols / 2? i + 1 : this.numCols - i;
+
+				this.tiles.push(tile);
+			}
+		},
+
 		methods: {
+			async init() {
+				if (!this.image)
+					return;
+
+				if (this.image instanceof Img) {
+					this.img = this.image;
+					return;
+				}
+
+				this.img = new Img(this.image);
+				await this.img.load();
+				this.img.resizeToCover(this.size);
+			},
+
 			getRowNumber(i) {
 				return Math.floor(i / this.numCols);
 			},
@@ -86,32 +169,15 @@
 				return i % this.numCols;
 			},
 
-			getTileCss(i) {
+			getTileStyle(i) {
 				i--;
 
-				let row = this.getRowNumber(i);
-				let col = this.getColNumber(i);
-
-				let { width, height } = this.tileSize;
-
-				let top = row * height;
-				let left = col * width;
-
-				if (row + 1 === this.numRows)
-					height = this.viewSize.height - row * height;
-
-				if (col + 1 === this.numCols)
-					width = this.viewSize.width - col * width;
-
-				let zIndex = i + 1 < this.numCols / 2? i + 1 : this.numCols - i;
+				let { top, left } = this.tiles[i].offset;
 
 				return {
 					...this.tileCss,
-					top: top +'px',
-					left: left +'px',
-					width: width +'px',
-					height: height +'px',
-					zIndex: zIndex,
+					transform: `translate3d(${left}px, ${top}px)`,
+					zIndex: this.tiles[i].zIndex,
 				};
 			},
 
