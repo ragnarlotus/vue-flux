@@ -5,7 +5,7 @@
 			v-for="i in numTiles"
 			ref="tiles"
 			:key="i"
-			:size="tileSize"
+			:size="tiles[i - 1].size"
 			:image="img"
 			:images="images"
 			:color="color"
@@ -66,6 +66,7 @@
 			baseStyle: {
 				display: 'inline-block',
 				overflow: 'hidden',
+				fontSize: 0,
 			},
 			img: null,
 			tiles: [],
@@ -106,7 +107,6 @@
 
 			style() {
 				return {
-					fontSize: 0,
 					...this.baseStyle,
 					...this.sizeStyle,
 				};
@@ -126,19 +126,21 @@
 				let tile = {
 					row: this.getRowNumber(i),
 					col: this.getColNumber(i),
-					...this.tileSize,
+					size: {
+						...this.tileSize
+					},
 				};
 
 				tile.offset = {
-					top: tile.row * tile.height,
-					left: tile.col * tile.width,
+					top: tile.row * tile.size.height,
+					left: tile.col * tile.size.width,
 				};
 
 				if (tile.row + 1 === this.numRows)
-					tile.height = this.size.height - tile.row * tile.height;
+					tile.size.height = this.size.height - tile.row * tile.size.height;
 
 				if (tile.col + 1 === this.numCols)
-					tile.width = this.size.width - tile.col * tile.width;
+					tile.size.width = this.size.width - tile.col * tile.size.width;
 
 				tile.zIndex = i + 1 < this.numCols / 2? i + 1 : this.numCols - i;
 
