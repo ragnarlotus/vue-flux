@@ -116,6 +116,7 @@
 
 					tile.style = {
 						...this.tileCss,
+						display: 'block',
 						position: 'absolute',
 						transform: `translate(${tile.offset.left}px, ${tile.offset.top}px)`,
 						zIndex: i + 1 < this.numCols / 2? i + 1 : this.numCols - i,

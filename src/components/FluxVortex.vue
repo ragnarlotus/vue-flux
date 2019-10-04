@@ -43,8 +43,8 @@
 		data: () => ({
 			baseStyle: {
 				display: 'inline-block',
-				overflow: 'hidden',
 				position: 'relative',
+				overflow: 'hidden',
 			},
 			img: null,
 		}),
@@ -93,6 +93,7 @@
 
 					tile.style = {
 						...this.tileCss,
+						display: 'block',
 						position: 'absolute',
 						transform: `translate(${tile.offset.left}px, ${tile.offset.top}px)`,
 						zIndex: i,
