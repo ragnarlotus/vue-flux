@@ -115,8 +115,8 @@
 						tile.size.width = this.size.width - tile.col * tile.size.width;
 
 					tile.offset = {
-						top: tile.row * tile.size.height,
-						left: tile.col * tile.size.width,
+						top: tile.row * this.tileSize.height,
+						left: tile.col * this.tileSize.width,
 					};
 
 					tile.style = {
