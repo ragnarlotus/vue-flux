@@ -5,7 +5,7 @@
 		:cols="cols"
 		:size="size"
 		:images="images"
-		:css="gridCss"
+		:style="style"
 	/>
 </template>
 
@@ -29,31 +29,24 @@
 			cols: 6,
 			tileDuration: 800,
 			totalDuration: 0,
-			perspective: '800px',
 			easing: 'ease-out',
 			tileDelay: 150,
-			images: {},
+			style: {
+				overflow: 'visible',
+				perspective: '800px',
+			},
+			images: undefined,
 		}),
 
-		computed: {
-			gridCss() {
-				return {
-					perspective: this.perspective,
-				};
-			}
-		},
-
 		created() {
+			this.mask.overflow = 'visible';
+
 			this.totalDuration = this.tileDelay * this.cols + this.tileDuration;
 
 			this.images = {
 				front: this.from,
 				back: this.to,
 			};
-		},
-
-		mounted() {
-			this.mask.overflow = 'visible';
 		},
 
 		played() {
@@ -70,7 +63,8 @@
 		},
 
 		beforeDestroy() {
-			this.current.show();
+			if (this.current)
+				this.current.show();
 		},
 
 		methods: {

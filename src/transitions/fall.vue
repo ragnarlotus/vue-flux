@@ -2,7 +2,8 @@
 	<flux-image
 		ref="image"
 		:image="from"
-		:css="imageCss"
+		:size="size"
+		:style="style"
 	/>
 </template>
 
@@ -24,12 +25,12 @@
 		data: () => ({
 			totalDuration: 1600,
 			easing: 'ease-in',
-			imageCss: {
+			style: {
 				transformOrigin: 'center bottom',
-			}
+			},
 		}),
 
-		mounted() {
+		created() {
 			Object.assign(this.mask, {
 				perspective: '1600px',
 				overflow: 'visible',
@@ -39,7 +40,7 @@
 		played() {
 			this.$refs.image.transform({
 				transition: `transform ${this.totalDuration}ms ${this.easing}`,
-				transform: 'rotateX(-90deg)',
+				transform: 'rotateX(-84deg)',
 			});
 		},
 	};

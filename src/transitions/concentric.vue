@@ -35,8 +35,8 @@
 		},
 
 		played() {
-			this.$refs.vortex.transform((circle, i) => {
-				circle.transform({
+			this.$refs.vortex.transform((tile, i) => {
+				tile.transform({
 					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
 					opacity: '0',
 					transform: 'rotateZ(90deg)',

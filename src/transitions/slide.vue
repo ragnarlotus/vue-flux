@@ -33,7 +33,7 @@
 		data: () => ({
 			totalDuration: 1400,
 			easing: 'ease-in-out',
-			wrapperSize: null,
+			wrapperSize: undefined,
 		}),
 
 		created() {

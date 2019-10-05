@@ -24,10 +24,15 @@
 		data: () => ({
 			totalDuration: 1400,
 			easing: 'ease-out',
-			images: {},
+			images: undefined,
 		}),
 
 		created() {
+			Object.assign(this.mask, {
+				perspective: '1600px',
+				overflow: 'visible',
+			});
+
 			this.images = {
 				front: this.from,
 				right: this.to,
@@ -35,11 +40,6 @@
 		},
 
 		mounted() {
-			Object.assign(this.mask, {
-				perspective: '1600px',
-				overflow: 'visible',
-			});
-
 			this.$refs.cube.setCss({
 				transition: `all ${this.totalDuration}ms ${this.easing}`,
 			});

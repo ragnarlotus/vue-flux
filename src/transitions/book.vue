@@ -2,16 +2,17 @@
 	<div>
 		<flux-image
 			ref="image"
-			:image="images.front"
+			:image="from"
 			:size="size"
-			:css="imageCss"
+			:style="image.style"
 		/>
 		<flux-cube
 			ref="cube"
-			:images="images"
+			:images="cube.images"
 			:size="size"
-			:css="cubeCss"
-			:sides-css="cubeSidesCss"
+			:offset="cube.offset"
+			:sides-css="cube.sidesCss"
+			:style="cube.style"
 		/>
 	</div>
 </template>
@@ -36,45 +37,65 @@
 		data: () => ({
 			totalDuration: 1200,
 			easing: 'ease-out',
-			images: {},
-			imageCss: {},
-			cubeCss: {
-				transformOrigin: 'left center',
+			image: {
+				style: undefined,
 			},
-			cubeSidesCss: {
-				back: {
-					backgroundPositionX: 0,
+			cube: {
+				images: undefined,
+				offset: undefined,
+				sidesCss: {
+					front: undefined,
+					back: undefined,
 				},
+				style: undefined,
 			},
 		}),
 
 		created() {
-			let widthPx = (this.size.width / 2) +'px';
-
-			this.imageCss.width = widthPx;
-
-			Object.assign(this.cubeCss, {
-				left: widthPx,
-				width: widthPx,
-			});
-
-			this.images = {
-				front: this.from,
-				back: this.to,
-			};
-		},
-
-		played() {
 			Object.assign(this.mask, {
 				perspective: '1600px',
 				overflow: 'visible',
 			});
 
-			this.$nextTick(() => {
-				this.$refs.cube.transform({
-					transition: `transform ${this.totalDuration}ms ${this.easing}`,
-					transform: 'rotateY(-180deg)',
-				});
+			let width = this.size.width / 2;
+			let widthPx = width +'px';
+
+			this.image.style = {
+				width: widthPx,
+			};
+
+			this.cube.images = {
+				front: this.from,
+				back: this.to,
+			};
+
+			this.cube.offset = {
+				left: width,
+				top: 0,
+			};
+
+			this.cube.sidesCss.front = {
+				width: widthPx,
+			};
+
+			this.cube.sidesCss.back = {
+				width: widthPx,
+			};
+
+			this.cube.style = {
+				position: 'absolute',
+				top: 0,
+				left: widthPx,
+				width: widthPx,
+				height: this.size.height +'px',
+				transformOrigin: 'left center',
+			};
+		},
+
+		played() {
+			this.$refs.cube.transform({
+				transition: `transform ${this.totalDuration}ms ${this.easing}`,
+				transform: 'rotateY(-180deg)',
 			});
 		},
 	};
