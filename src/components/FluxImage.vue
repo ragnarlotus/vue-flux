@@ -29,13 +29,12 @@
 
 		data: () => ({
 			baseStyle: {
-				display: 'inline-block',
 				overflow: 'hidden',
 			},
 
-			css: null,
+			css: undefined,
 
-			img: null,
+			img: undefined,
 		}),
 
 		computed: {
