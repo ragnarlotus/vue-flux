@@ -33,11 +33,14 @@
 			tileDelay: 150,
 			images: undefined,
 			style: {
+				overflow: 'visible',
 				perspective: '800px',
 			},
 		}),
 
 		created() {
+			this.mask.overflow = 'visible';
+
 			let divider = this.size.width / this.cols;
 			this.rows = Math.floor(this.size.height / divider);
 
@@ -48,10 +51,6 @@
 				front: this.from,
 				back: this.to,
 			};
-		},
-
-		mounted() {
-			this.mask.overflow = 'visible';
 		},
 
 		played() {
@@ -74,12 +73,13 @@
 
 		methods: {
 			getDelay(i) {
-				let grid = this.$refs.grid;
+				let { grid } = this.$refs;
 
 				let row = grid.getRowNumber(i);
 				let col = grid.getColNumber(i);
 
 				let delay = col + row;
+
 				return delay * this.tileDelay;
 			},
 		},
