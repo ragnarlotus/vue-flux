@@ -2,24 +2,24 @@ export default class Img {
 
 	constructor(src) {
 		this.src = src;
-		this.index = null;
+		this.index = undefined;
 
 		// null, loaded, error
-		this.status = null;
+		this.status = undefined;
 
 		this.real = {
-			size: null,
-			ar: null,
+			size: undefined,
+			ar: undefined,
 		};
 
 		this.final = {
-			size: null,
-			ar: null,
+			size: undefined,
+			ar: undefined,
 		};
 
 		this.cover = {
-			size: null,
-			position: null,
+			size: undefined,
+			position: undefined,
 		};
 	}
 

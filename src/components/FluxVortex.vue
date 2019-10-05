@@ -46,7 +46,8 @@
 				position: 'relative',
 				overflow: 'hidden',
 			},
-			img: null,
+
+			img: undefined,
 		}),
 
 		computed: {
@@ -93,7 +94,6 @@
 
 					tile.style = {
 						...this.tileCss,
-						display: 'block',
 						position: 'absolute',
 						left: tile.offset.left +'px',
 						top: tile.offset.top + 'px',
@@ -157,9 +157,7 @@
 			},
 
 			transform(func) {
-				this.$nextTick(() => {
-					this.$refs.tiles.forEach((tile, i) => func(tile, i));
-				});
+				this.$refs.tiles.forEach((tile, i) => func(tile, i));
 			},
 		},
 	};

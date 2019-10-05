@@ -22,7 +22,7 @@
 				overflow: 'hidden',
 			},
 
-			css: null,
+			css: undefined,
 		}),
 
 		computed: {
