@@ -6,9 +6,10 @@
 			ref="tiles"
 			:key="index"
 			:size="tile.size"
-			:image="img"
-			:images="images"
 			:color="color"
+			:colors="colors"
+			:image="img"
+			:images="imgs"
 			:offset="tile.offset"
 			:depth="depth"
 			:style="tile.style"
@@ -41,7 +42,9 @@
 				default: 1,
 			},
 
-			color: [ String, Object ],
+			color: String,
+
+			colors: Object,
 
 			image: [ String, Object ],
 
@@ -63,7 +66,9 @@
 				position: 'relative',
 			},
 
-			img: null,
+			img: undefined,
+
+			imgs: {},
 		}),
 
 		computed: {
@@ -116,7 +121,6 @@
 
 					tile.style = {
 						...this.tileCss,
-						display: 'block',
 						position: 'absolute',
 						left: tile.offset.left +'px',
 						top: tile.offset.top + 'px',
@@ -148,20 +152,34 @@
 
 		watch: {
 			image() {
-				this.init();
+				this.initOne();
+			},
+
+			images() {
+				this.initMultiple();
 			},
 
 			size() {
-				this.img.resizeToCover(this.size);
+				if (this.image)
+					this.img.resizeToCover(this.size);
+
+				if (this.images) {
+					for (let side in this.images)
+						this.imgs[side].resizeToCover(this.size);
+				}
 			},
 		},
 
 		created() {
-			this.init();
+			if (this.image)
+				this.initOne();
+
+			if (this.images)
+				this.initMultiple();
 		},
 
 		methods: {
-			async init() {
+			async initOne() {
 				if (!this.image)
 					return;
 
@@ -177,6 +195,26 @@
 				this.img.resizeToCover(this.size);
 			},
 
+			initMultiple() {
+				for (let side in this.images)
+					this.initSide(side);
+			},
+
+			async initSide(side) {
+				let image = this.images[side];
+
+				if (image instanceof Img) {
+					this.imgs[side] = image;
+					return;
+				}
+
+				this.imgs[side] = new Img(this.images[side]);
+
+				await this.imgs[side].load();
+
+				this.imgs[side].resizeToCover(this.size);
+			},
+
 			getRowNumber(i) {
 				return Math.floor(i / this.numCols);
 			},
@@ -186,9 +224,7 @@
 			},
 
 			transform(func) {
-				this.$nextTick(() => {
-					this.$refs.tiles.forEach((tile, i) => func(tile, i));
-				});
+				this.$refs.tiles.forEach((tile, i) => func(tile, i));
 			},
 		},
 	};
