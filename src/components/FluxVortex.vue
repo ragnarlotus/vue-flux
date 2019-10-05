@@ -95,7 +95,10 @@
 						...this.tileCss,
 						display: 'block',
 						position: 'absolute',
-						transform: `translate(${tile.offset.left}px, ${tile.offset.top}px)`,
+						left: tile.offset.left +'px',
+						top: tile.offset.top + 'px',
+						backgroundRepeat: 'repeat',
+						borderRadius: '50%',
 						zIndex: i,
 					};
 
