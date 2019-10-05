@@ -94,7 +94,7 @@
 		},
 
 		mounted() {
-			this.play();
+			this.$emit('ready');
 		},
 
 		methods: {
