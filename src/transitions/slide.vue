@@ -1,16 +1,14 @@
 <template>
-	<flux-wrapper ref="wrapper" :css="wrapperCss">
+	<flux-wrapper ref="wrapper" :size="wrapperSize">
 		<flux-image
 			ref="left"
 			:image="from"
 			:size="size"
-			:css="leftCss"
 		/>
 		<flux-image
 			ref="right"
 			:image="to"
 			:size="size"
-			:css="rightCss"
 		/>
 	</flux-wrapper>
 </template>
@@ -35,18 +33,15 @@
 		data: () => ({
 			totalDuration: 1400,
 			easing: 'ease-in-out',
-			wrapperCss: {
-				width: '200%',
-			},
-			leftCss: {
-				width: '50%',
-			},
-			rightCss: {
-				left: 'auto',
-				right: 0,
-				width: '50%',
-			},
+			wrapperSize: null,
 		}),
+
+		created() {
+			this.wrapperSize = {
+				width: this.size.width * 2,
+				height: this.size.height,
+			};
+		},
 
 		played() {
 			this.$refs.wrapper.transform({

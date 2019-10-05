@@ -1,5 +1,5 @@
 <template>
-	<flux-wrapper ref="wrapper">
+	<flux-wrapper ref="wrapper" :size="size">
 		<flux-image
 			ref="image"
 			:image="from"
