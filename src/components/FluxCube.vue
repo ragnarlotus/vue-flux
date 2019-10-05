@@ -51,7 +51,10 @@
 		},
 
 		props: {
-			color: String,
+			colors: {
+				type: Object,
+				default: () => ({}),
+			},
 
 			images: {
 				type: Object,
@@ -77,8 +80,8 @@
 			sideNames: [ 'front', 'back', 'top', 'bottom', 'left', 'right' ],
 
 			baseStyle: {
+				//overflow: 'hidden',
 				transformStyle: 'preserve-3d',
-				transition: `all 2000ms linear`,
 			},
 
 			imgs: {},
@@ -93,7 +96,7 @@
 					side = {
 						name: sideName,
 						img: this.imgs[sideName],
-						color: this.getSideColor(sideName),
+						color: this.colors[sideName],
 						offset: this.offset,
 					};
 
@@ -105,8 +108,7 @@
 						side.size.width = this.depth;
 
 					side.style = {
-						...this.sidesCss[side],
-						display: 'block',
+						...this.sidesCss[sideName],
 						position: 'absolute',
 						transform: this.getTransform(sideName),
 						backfaceVisibility: 'hidden',
@@ -154,12 +156,13 @@
 		},
 
 		watch: {
-			image() {
+			images() {
 				this.init();
 			},
 
 			size() {
-				this.img.resizeToCover(this.size);
+				for (let side in this.images)
+					this.images[side].resizeToCover(this.size);
 			},
 		},
 
@@ -169,9 +172,9 @@
 
 		methods: {
 			init() {
-				this.definedSides.forEach(side => {
+				for (let side in this.images) {
 					this.initSide(side);
-				});
+				}
 			},
 
 			async initSide(side) {
@@ -190,7 +193,7 @@
 			},
 
 			sideDefined(side) {
-				if (this.images[side] || this.color)
+				if (this.images[side] || this.colors[side])
 					return true;
 
 				return false;
@@ -198,16 +201,6 @@
 
 			getSide(side) {
 				return this.sideDefined(side)? this.$refs[side] : undefined;
-			},
-
-			getSideColor(side) {
-				if (this.color && typeof this.color === 'string')
-					return this.color;
-
-				if (this.color && this.color[side])
-					return this.color[side];
-
-				return undefined;
 			},
 
 			getTransform(side) {
@@ -254,10 +247,8 @@
 			},
 
 			transform(css) {
-				this.$nextTick(() => {
-					this.$el.clientHeight;
-					this.setCss(css);
-				});
+				this.$el.clientHeight;
+				this.setCss(css);
 			},
 		},
 	};
