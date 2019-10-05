@@ -21,6 +21,8 @@
 			baseStyle: {
 				overflow: 'hidden',
 			},
+
+			css: null,
 		}),
 
 		computed: {
@@ -37,8 +39,23 @@
 				return {
 					...this.baseStyle,
 					...this.sizeStyle,
+					...this.css,
 				};
 			},
-		}
+		},
+
+		methods: {
+			setCss(css) {
+				this.css = {
+					...this.css,
+					...css,
+				};
+			},
+
+			transform(css) {
+				this.$el.clientHeight;
+				this.setCss(css);
+			},
+		},
 	};
 </script>
