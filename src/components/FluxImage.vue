@@ -33,6 +33,8 @@
 				overflow: 'hidden',
 			},
 
+			css: null,
+
 			img: null,
 		}),
 
@@ -89,6 +91,7 @@
 					...this.sizeStyle,
 					...this.colorStyle,
 					...this.imageStyle,
+					...this.css,
 				};
 			},
 		},
@@ -122,6 +125,18 @@
 				await this.img.load();
 
 				this.img.resizeToCover(this.size);
+			},
+
+			setCss(css) {
+				this.css = {
+					...this.css,
+					...css,
+				};
+			},
+
+			transform(css) {
+				this.$el.clientHeight;
+				this.setCss(css);
 			},
 
 			show() {
