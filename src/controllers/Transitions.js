@@ -64,13 +64,21 @@ export default class TransitionsController {
 			transition = this.next;
 		}
 
-		this.from = { ...from };
-		this.to = { ...to };
+		this.from = from;
+		this.to = to;
 		this.current = transition;
 	}
 
+	ready() {
+		this.vf.$refs.transition.play();
+	}
+
 	start() {
-		this.vf.Images.current = this.to;
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				this.vf.Images.current = this.to;
+			});
+		});
 
 		this.vf.$emit('transition-start', this.current);
 	}

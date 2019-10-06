@@ -54,7 +54,10 @@ export default class Img {
 	}
 
 	resizeToCover(finalSize) {
-		if (this.final.size && finalSize.width == this.final.size.width && finalSize.height == this.final.size.height)
+		if (!this.real.ar)
+			return;
+
+		if (this.sizesEqual(this.final.size, finalSize))
 			return;
 
 		this.final.size = finalSize;
@@ -65,26 +68,20 @@ export default class Img {
 	}
 
 	getCoverSize() {
-		if (this.cover.size)
-			return this.cover.size;
-
 		if (this.real.ar <= this.final.ar) {
 			return {
-				width: this.final.size.width,
-				height: this.final.size.width / this.real.ar,
+				width: Math.ceil(this.final.size.width),
+				height: Math.ceil(this.final.size.width / this.real.ar),
 			};
 		}
 
 		return {
-			width: this.real.ar * this.final.size.height,
-			height: this.final.size.height,
+			width: Math.ceil(this.real.ar * this.final.size.height),
+			height: Math.ceil(this.final.size.height),
 		};
 	}
 
 	getCoverPosition() {
-		if (this.cover.position)
-			return this.cover.position;
-
 		if (this.real.ar <= this.final.ar) {
 			return {
 				top: (this.final.size.height - this.cover.size.height) / 2,
@@ -96,6 +93,19 @@ export default class Img {
 			top: 0,
 			left: (this.final.size.width - this.cover.size.width) / 2,
 		};
+	}
+
+	sizesEqual(size1, size2) {
+		if (!size1 || !size2)
+			return false;
+
+		if (size1.width == size2.width)
+			return false;
+
+		if (size1.height == size2.height)
+			return false;
+
+		return true;
 	}
 
 }

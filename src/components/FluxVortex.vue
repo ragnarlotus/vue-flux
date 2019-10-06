@@ -144,7 +144,7 @@
 				if (!this.image)
 					return;
 
-				if (this.image instanceof Img) {
+				if (this.image.src) {
 					this.img = this.image;
 					return;
 				}

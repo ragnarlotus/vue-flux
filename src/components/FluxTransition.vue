@@ -1,5 +1,5 @@
 <template>
-	<div ref="mask" class="mask" :style="maskStyle">
+	<div ref="mask" class="flux-transition" :style="style">
 		<component
 			:is="componentName"
 			v-if="componentName"
@@ -24,7 +24,10 @@
 		},
 
 		props: {
-			size: Object,
+			size: {
+				type: Object,
+				required: true,
+			},
 
 			transition: {
 				type: [ String, Object ],
@@ -48,21 +51,20 @@
 
 		data: () => ({
 			baseStyle: {
-				position: 'relative',
 				overflow: 'hidden',
 				perspective: 'none',
-				zIndex: 1,
+				zIndex: 3,
 			},
 		}),
 
 		computed: {
-			maskStyle() {
+			style() {
 				let { width, height } = this.size;
 
 				return {
 					...this.baseStyle,
-					width: width? width +'px' : '100%',
-					height: height? height +'px' : '100%',
+					width: width +'px',
+					height: height +'px',
 				};
 			},
 
@@ -94,7 +96,11 @@
 		},
 
 		mounted() {
-			this.$emit('ready');
+			requestAnimationFrame(() => {
+				requestAnimationFrame(() => {
+					this.$emit('ready');
+				});
+			});
 		},
 
 		methods: {
@@ -117,3 +123,9 @@
 		}
 	}
 </script>
+
+<style lang="scss">
+	.flux-transition {
+		position: relative;
+	}
+</style>

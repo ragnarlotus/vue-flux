@@ -16,12 +16,14 @@
 			:size="size"
 			:from="Transitions.from"
 			:to="Transitions.to"
-			:images="Images.props"
+			:images="Images.imgs"
+			@ready="Transitions.ready()"
 			@start="Transitions.start()"
 			@end="Transitions.end()"
 		/>
 
 		<flux-image
+			v-if="Images.current"
 			ref="image"
 			:size="size"
 			:image="Images.current"
@@ -223,6 +225,8 @@
 						size.height = size.width / 16 * 9;
 
 					this.size = size;
+
+					this.Images.updateCoverSize();
 				});
 			},
 
@@ -325,5 +329,9 @@
 <style lang="scss">
 	.vue-flux {
 		position: relative;
+
+		.flux-transition {
+			position: absolute;
+		}
 	}
 </style>

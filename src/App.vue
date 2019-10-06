@@ -15,27 +15,7 @@
 						:images="vfImages"
 						:transitions="vfTransitions"
 						:captions="vfCaptions"
-					>
-						<template v-slot:preloader>
-							<flux-preloader />
-						</template>
-
-						<template v-slot:caption>
-							<flux-caption v-slot="captionProps" />
-						</template>
-
-						<template v-slot:controls>
-							<flux-controls />
-						</template>
-
-						<template v-slot:pagination>
-							<flux-pagination />
-						</template>
-
-						<template v-slot:index>
-							<flux-index />
-						</template>
-					</vue-flux>
+					/>
 				</div>
 
 				<div class="lg:w-2/6 px-2 mb-4 transitions">
@@ -169,7 +149,7 @@
 
 			<h2>Relative</h2>
 
-			<flux-parallax src="slides/01.jpg" style="height: 200px;">
+			<flux-parallax src="slides/01.jpg" class="flux-parallax" style="height: 200px;">
 				<div>CONTENT</div>
 			</flux-parallax>
 
@@ -177,7 +157,7 @@
 				Visible
 			</h2>
 
-			<flux-parallax src="slides/01.jpg" type="visible" style="height: 200px;">
+			<flux-parallax src="slides/01.jpg" class="flux-parallax" type="visible" style="height: 200px;">
 				<div>CONTENT</div>
 			</flux-parallax>
 
@@ -185,7 +165,7 @@
 				Fixed
 			</h2>
 
-			<flux-parallax src="slides/01.jpg" type="fixed" style="height: 200px;">
+			<flux-parallax src="slides/01.jpg" class="flux-parallax" type="fixed" style="height: 200px;">
 				<div>CONTENT</div>
 			</flux-parallax>
 
@@ -211,26 +191,14 @@
 </template>
 
 <script>
-	import VueFlux from './components/VueFlux.vue';
-	import FluxParallax from './components/FluxParallax.vue';
-
-	import FluxPreloader from './components/complements/FluxPreloader.vue';
-	import FluxCaption from './components/complements/FluxCaption.vue';
-	import FluxControls from './components/complements/FluxControls.vue';
-	import FluxIndex from './components/complements/FluxIndex.vue';
-	import FluxPagination from './components/complements/FluxPagination.vue';
+	/* eslint-disable */
+	import * as components from '@/components';
 
 	export default {
 		name: 'App',
 
 		components: {
-			VueFlux,
-			FluxPreloader,
-			FluxCaption,
-			FluxControls,
-			FluxIndex,
-			FluxPagination,
-			FluxParallax,
+			...components,
 		},
 
 		data: () => ({
@@ -256,7 +224,7 @@
 				'wave', 'blinds3d',
 				'round1', 'round2', 'explode',
 			],
-			vfCaptions: []
+			vfCaptions: [],
 		}),
 
 		computed: {
@@ -285,14 +253,13 @@
 					srcs.push(`slides/${i.toString().padStart(2, '0')}.jpg`);
 				}
 
-
 				this.vfImages = [];
 				this.vfCaptions = [];
 
 				// eslint-disable-next-line no-unused-vars
 				let index, src;
 
-				for (let i = 0; i <= 8; i++) {
+				for (let i = 0; i <= 6; i++) {
 					//index = Math.floor(Math.random() * srcs.length);
 					//src = srcs.splice(index, 1)[0];
 

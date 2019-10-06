@@ -183,7 +183,7 @@
 				if (!this.image)
 					return;
 
-				if (this.image instanceof Img) {
+				if (this.image.src) {
 					this.img = this.image;
 					return;
 				}
@@ -203,7 +203,7 @@
 			async initSide(side) {
 				let image = this.images[side];
 
-				if (image instanceof Img) {
+				if (image.src) {
 					this.imgs[side] = image;
 					return;
 				}

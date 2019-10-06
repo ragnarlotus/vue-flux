@@ -63,7 +63,6 @@ export default class ImagesController {
 	update(images) {
 		this.reset();
 
-		this.time = Date.now().toString();
 		this.srcs = images.slice(0);
 
 		this.preloadStart();
@@ -119,14 +118,16 @@ export default class ImagesController {
 		this.imgs.push(img);
 
 		img.load().then(() => {
-			this.imgLoadSuccess();
+			this.imgLoadSuccess(img);
 		}).catch(error => {
 			this.imgLoadError(error);
 		});
 	}
 
-	imgLoadSuccess() {
+	imgLoadSuccess(img) {
 		this.loaded++;
+
+		img.resizeToCover(this.vf.size);
 
 		if (!this.current) {
 			for (let i = 0; i < this.imgs.length; i++) {
@@ -162,6 +163,12 @@ export default class ImagesController {
 
 		this.imgs.forEach((img, index) => {
 			img.index = index;
+		});
+	}
+
+	updateCoverSize() {
+		this.imgs.forEach(img => {
+			img.resizeToCover(this.vf.size);
 		});
 	}
 
