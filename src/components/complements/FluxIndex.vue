@@ -14,14 +14,14 @@
 		</transition>
 
 		<nav :class="listClass" @click="hideIndex()">
-			<ul ref="thumbs">
+			<ul ref="index">
 				<li
 					v-for="(image, i) in images"
 					:key="i"
 					:class="thumbClass(i)"
 					@click="showImage(i)"
 				>
-					<flux-thumb :image="images[i]" :description="getCaptionText(i)" />
+					<flux-image ref="thumbs" :image="images[i]" :size="size" :title="getCaptionText(i)" />
 				</li>
 			</ul>
 		</nav>
@@ -31,14 +31,12 @@
 <script>
 	import BaseComplement from '@/mixins/BaseComplement.js';
 	import FluxButton from '@/components/FluxButton.vue';
-	import FluxThumb from '@/components/FluxThumb.vue';
 
 	export default {
 		name: 'FluxIndex',
 
 		components: {
 			FluxButton,
-			FluxThumb,
 		},
 
 		mixins: [
@@ -79,7 +77,7 @@
 				if (!this.vf)
 					return [];
 
-				return this.Images.props;
+				return this.Images.imgs;
 			},
 
 			display() {
@@ -123,14 +121,14 @@
 				this.visible = true;
 
 				this.$nextTick(() => {
-					this.$refs.thumbs.clientHeight;
-					this.$refs.thumbs.style.marginTop = 0;
+					this.$refs.index.clientHeight;
+					this.$refs.index.style.marginTop = 0;
 				});
 			},
 
 			hideIndex(imageIndex) {
-				this.$refs.thumbs.clientHeight;
-				this.$refs.thumbs.style.marginTop = '100%';
+				this.$refs.index.clientHeight;
+				this.$refs.index.style.marginTop = '100%';
 
 				setTimeout(() => {
 					this.visible = false;

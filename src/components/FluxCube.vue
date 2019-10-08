@@ -14,9 +14,8 @@
 </template>
 
 <script>
-	import Dom from '@/libraries/Dom';
-	import Img from '@/libraries/Img';
 	import FluxImage from '@/components/FluxImage.vue';
+	import BaseComponent from '@/mixins/BaseComponent';
 
 	const rotate = {
 		x: {
@@ -50,25 +49,12 @@
 			FluxImage,
 		},
 
+		mixins: [
+			BaseComponent,
+		],
+
 		props: {
-			colors: {
-				type: Object,
-				default: () => ({}),
-			},
-
-			images: {
-				type: Object,
-				default: () => ({}),
-			},
-
-			size: {
-				type: Object,
-				required: true,
-			},
-
 			depth: Number,
-
-			offset: Object,
 
 			sidesCss: {
 				type: Object,
@@ -80,11 +66,8 @@
 			sideNames: [ 'front', 'back', 'top', 'bottom', 'left', 'right' ],
 
 			baseStyle: {
-				//overflow: 'hidden',
 				transformStyle: 'preserve-3d',
 			},
-
-			imgs: {},
 		}),
 
 		computed: {
@@ -92,7 +75,7 @@
 				let side;
 				let sides = {};
 
-				this.definedSides.forEach(sideName => {
+				for (let sideName of this.definedSides) {
 					side = {
 						name: sideName,
 						img: this.imgs[sideName],
@@ -115,7 +98,7 @@
 					};
 
 					sides[sideName] = side;
-				});
+				}
 
 				return sides;
 			},
@@ -127,7 +110,7 @@
 			translateZ() {
 				let { width, height } = this.size;
 				let depthX = (this.depth || width) / 2;
-				let depthY = height / 2
+				let depthY = height / 2;
 
 				return {
 					top: depthY,
@@ -141,8 +124,8 @@
 				let { width, height } = this.size;
 
 				return {
-					width: Dom.px(width),
-					height: Dom.px(height),
+					width: width +'px',
+					height: height +'px',
 				};
 			},
 
@@ -155,43 +138,7 @@
 			},
 		},
 
-		watch: {
-			images() {
-				this.init();
-			},
-
-			size() {
-				for (let side in this.images)
-					this.images[side].resizeToCover(this.size);
-			},
-		},
-
-		created() {
-			this.init();
-		},
-
 		methods: {
-			init() {
-				for (let side in this.images) {
-					this.initSide(side);
-				}
-			},
-
-			async initSide(side) {
-				let image = this.images[side];
-
-				if (image.src) {
-					this.imgs[side] = image;
-					return;
-				}
-
-				this.imgs[side] = new Img(this.images[side]);
-
-				await this.imgs[side].load();
-
-				this.imgs[side].resizeToCover(this.size);
-			},
-
 			sideDefined(side) {
 				if (this.images[side] || this.colors[side])
 					return true;
@@ -200,7 +147,7 @@
 			},
 
 			getSide(side) {
-				return this.sideDefined(side)? this.$refs[side] : undefined;
+				return this.$refs[side];
 			},
 
 			getTransform(side) {
@@ -237,18 +184,6 @@
 
 			turnRight() {
 				this.turn('right');
-			},
-
-			setCss(css) {
-				this.baseStyle = {
-					...this.baseStyle,
-					...css,
-				};
-			},
-
-			transform(css) {
-				this.$el.clientHeight;
-				this.setCss(css);
 			},
 		},
 	};

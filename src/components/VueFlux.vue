@@ -225,8 +225,6 @@
 						size.height = size.width / 16 * 9;
 
 					this.size = size;
-
-					this.Images.updateCoverSize();
 				});
 			},
 

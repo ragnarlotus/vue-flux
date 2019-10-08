@@ -70,7 +70,7 @@
 			displayLast() {
 				let Images = this.vf.Images;
 
-				if (Images.preloading && Images.lastShown && Images.lastShown.src !== Images.props[0].src)
+				if (Images.preloading && Images.lastShown && Images.lastShown.src !== Images.imgs[0].src)
 					return true;
 
 				return false;
@@ -81,7 +81,7 @@
 			'vf.Images.preloading': function(preloading) {
 				let Images = this.vf.Images;
 
-				if (!preloading && Images.props[0] && Images.lastShown && Images.lastShown.src !== Images.props[0].src)
+				if (!preloading && Images.imgs[0] && Images.lastShown && Images.lastShown.src !== Images.imgs[0].src)
 					this.transitionStart();
 			},
 		},

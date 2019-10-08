@@ -5,57 +5,19 @@
 </template>
 
 <script>
-	import Dom from '@/libraries/Dom';
+	import BaseComponent from '@/mixins/BaseComponent';
 
 	export default {
 		name: 'FluxWrapper',
 
-		props: {
-			size: {
-				type: Object,
-				required: true,
-			},
-		},
+		mixins: [
+			BaseComponent,
+		],
 
 		data: () => ({
 			baseStyle: {
 				overflow: 'hidden',
 			},
-
-			css: undefined,
 		}),
-
-		computed: {
-			sizeStyle() {
-				let { width, height } = this.size;
-
-				return {
-					width: Dom.px(width),
-					height: Dom.px(height),
-				};
-			},
-
-			style() {
-				return {
-					...this.baseStyle,
-					...this.sizeStyle,
-					...this.css,
-				};
-			},
-		},
-
-		methods: {
-			setCss(css) {
-				this.css = {
-					...this.css,
-					...css,
-				};
-			},
-
-			transform(css) {
-				this.$el.clientHeight;
-				this.setCss(css);
-			},
-		},
 	};
 </script>

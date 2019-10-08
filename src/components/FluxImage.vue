@@ -3,8 +3,6 @@
 </template>
 
 <script>
-	import Dom from '@/libraries/Dom';
-	import Img from '@/libraries/Img';
 	import BaseComponent from '@/mixins/BaseComponent';
 
 	export default {
@@ -14,27 +12,10 @@
 			BaseComponent,
 		],
 
-		props: {
-			color: String,
-
-			image: [ String, Object ],
-
-			size: {
-				type: Object,
-				required: true,
-			},
-
-			offset: Object,
-		},
-
 		data: () => ({
 			baseStyle: {
 				overflow: 'hidden',
 			},
-
-			css: undefined,
-
-			img: undefined,
 		}),
 
 		computed: {
@@ -48,106 +29,23 @@
 			},
 
 			imageStyle() {
-				if (!this.img)
+				if (!this.img || this.img.status !== 'loaded')
 					return {};
 
-				let realSize = this.img.real.size;
-				let coverSize = this.img.cover.size;
-
-				if (!realSize || !coverSize)
-					return {};
-
-				let position = {
-					...this.img.cover.position,
-				};
+				let { size, position } = this.img.getCoverProps(this.size);
 
 				if (this.offset) {
-					['top', 'left'].forEach(side => {
+					for (let side of ['top', 'left']) {
 						position[side] -= this.offset[side] || 0;
-					});
+					}
 				}
 
 				return {
 					backgroundImage: `url(${this.img.src})`,
-					backgroundSize: `${coverSize.width}px ${coverSize.height}px`,
+					backgroundSize: `${size.width}px ${size.height}px`,
 					backgroundPosition: `${position.left}px ${position.top}px`,
 					backgroundRepeat: 'no-repeat',
 				};
-			},
-
-			sizeStyle() {
-				let { width, height } = this.size;
-
-				return {
-					width: Dom.px(width),
-					height: Dom.px(height),
-				};
-			},
-
-			style() {
-				return {
-					...this.baseStyle,
-					...this.sizeStyle,
-					...this.colorStyle,
-					...this.imageStyle,
-					...this.css,
-				};
-			},
-		},
-
-		watch: {
-			image() {
-				this.init();
-			},
-
-			size() {
-				this.img.resizeToCover(this.size);
-			},
-		},
-
-		created() {
-			this.init();
-		},
-
-		methods: {
-			async init() {
-				if (!this.image)
-					return;
-
-				if (this.image.src) {
-					this.img = this.image;
-					return;
-				}
-
-				this.img = new Img(this.image);
-
-				await this.img.load();
-
-				this.img.resizeToCover(this.size);
-			},
-
-			setCss(css) {
-				this.css = {
-					...this.css,
-					...css,
-				};
-			},
-
-			transform(css) {
-				this.$el.clientHeight;
-				this.setCss(css);
-			},
-
-			show() {
-				this.setCss({
-					visibility: 'visible'
-				});
-			},
-
-			hide() {
-				this.setCss({
-					visibility: 'hidden'
-				});
 			},
 		},
 	};

@@ -18,8 +18,7 @@
 </template>
 
 <script>
-	import Dom from '@/libraries/Dom';
-	import Img from '@/libraries/Img';
+	import BaseComponent from '@/mixins/BaseComponent';
 	import FluxCube from '@/components/FluxCube.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
@@ -30,6 +29,10 @@
 			FluxCube,
 			FluxImage,
 		},
+
+		mixins: [
+			BaseComponent,
+		],
 
 		props: {
 			rows: {
@@ -42,19 +45,6 @@
 				default: 1,
 			},
 
-			color: String,
-
-			colors: Object,
-
-			image: [ String, Object ],
-
-			images: Object,
-
-			size: {
-				type: Object,
-				required: true,
-			},
-
 			depth: Number,
 
 			tileCss: Object,
@@ -65,10 +55,6 @@
 				overflow: 'hidden',
 				position: 'relative',
 			},
-
-			img: undefined,
-
-			imgs: {},
 		}),
 
 		computed: {
@@ -132,89 +118,9 @@
 
 				return tiles;
 			},
-
-			sizeStyle() {
-				let { width, height } = this.size;
-
-				return {
-					width: Dom.px(width),
-					height: Dom.px(height),
-				};
-			},
-
-			style() {
-				return {
-					...this.baseStyle,
-					...this.sizeStyle,
-				};
-			},
-		},
-
-		watch: {
-			image() {
-				this.initOne();
-			},
-
-			images() {
-				this.initMultiple();
-			},
-
-			size() {
-				if (this.image)
-					this.img.resizeToCover(this.size);
-
-				if (this.images) {
-					for (let side in this.images)
-						this.imgs[side].resizeToCover(this.size);
-				}
-			},
-		},
-
-		created() {
-			if (this.image)
-				this.initOne();
-
-			if (this.images)
-				this.initMultiple();
 		},
 
 		methods: {
-			async initOne() {
-				if (!this.image)
-					return;
-
-				if (this.image.src) {
-					this.img = this.image;
-					return;
-				}
-
-				this.img = new Img(this.image);
-
-				await this.img.load();
-
-				this.img.resizeToCover(this.size);
-			},
-
-			initMultiple() {
-				for (let side in this.images)
-					this.initSide(side);
-			},
-
-			async initSide(side) {
-				let image = this.images[side];
-
-				if (image.src) {
-					this.imgs[side] = image;
-					return;
-				}
-
-				this.imgs[side] = new Img(this.images[side]);
-
-				await this.imgs[side].load();
-
-				this.imgs[side].resizeToCover(this.size);
-			},
-
 			getRowNumber(i) {
 				return Math.floor(i / this.numCols);
 			},

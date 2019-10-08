@@ -40,7 +40,7 @@
 		played() {
 			this.$refs.image.transform({
 				transition: `transform ${this.totalDuration}ms ${this.easing}`,
-				transform: 'rotateX(-84deg)',
+				transform: 'rotateX(-83deg)',
 			});
 		},
 	};

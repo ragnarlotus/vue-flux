@@ -3,42 +3,27 @@ export default class Img {
 	constructor(src) {
 		this.src = src;
 		this.index = undefined;
-
-		// null, loaded, error
 		this.status = undefined;
-
-		this.real = {
-			size: undefined,
-			ar: undefined,
-		};
-
-		this.final = {
-			size: undefined,
-			ar: undefined,
-		};
-
-		this.cover = {
-			size: undefined,
-			position: undefined,
-		};
+		this.aspectRatio = undefined;
+		this.size = undefined;
 	}
 
 	load() {
 		return new Promise((resolve, reject) => {
-			if (this.real.size)
-				resolve(this.real.size);
+			if (this.status)
+				resolve();
 
 			let img = new Image();
 
 			img.onload = () => {
-				this.status = 'loaded';
-
-				this.real.size = {
+				this.size = {
 					width: img.naturalWidth || img.width,
 					height: img.naturalHeight || img.height,
 				};
 
-				this.real.ar = this.real.size.width / this.real.size.height;
+				this.aspectRatio = this.size.width / this.size.height;
+
+				this.status = 'loaded';
 
 				resolve();
 			}
@@ -53,59 +38,50 @@ export default class Img {
 		});
 	}
 
-	resizeToCover(finalSize) {
-		if (!this.real.ar)
-			return;
+	getCoverProps(viewSize) {
+		if (this.status !== 'loaded')
+			return undefined;
 
-		if (this.sizesEqual(this.final.size, finalSize))
-			return;
+		let view = {
+			size: viewSize,
+			aspectRatio: viewSize.width / viewSize.height,
+		};
 
-		this.final.size = finalSize;
-		this.final.ar = finalSize.width / finalSize.height;
+		let cover = {
+			size: this.getCoverSize(view),
+		}
 
-		this.cover.size = this.getCoverSize();
-		this.cover.position = this.getCoverPosition();
+		cover.position = this.getCoverPosition(view, cover.size);
+
+		return cover;
 	}
 
-	getCoverSize() {
-		if (this.real.ar <= this.final.ar) {
+	getCoverSize(view) {
+		if (this.aspectRatio <= view.aspectRatio) {
 			return {
-				width: Math.ceil(this.final.size.width),
-				height: Math.ceil(this.final.size.width / this.real.ar),
+				width: view.size.width,
+				height: view.size.width / this.aspectRatio,
 			};
 		}
 
 		return {
-			width: Math.ceil(this.real.ar * this.final.size.height),
-			height: Math.ceil(this.final.size.height),
+			width: this.aspectRatio * view.size.height,
+			height: view.size.height,
 		};
 	}
 
-	getCoverPosition() {
-		if (this.real.ar <= this.final.ar) {
+	getCoverPosition(view, coverSize) {
+		if (this.aspectRatio <= view.aspectRatio) {
 			return {
-				top: (this.final.size.height - this.cover.size.height) / 2,
+				top: (view.size.height - coverSize.height) / 2,
 				left: 0,
 			};
 		}
 
 		return {
 			top: 0,
-			left: (this.final.size.width - this.cover.size.width) / 2,
+			left: (view.size.width - coverSize.width) / 2,
 		};
-	}
-
-	sizesEqual(size1, size2) {
-		if (!size1 || !size2)
-			return false;
-
-		if (size1.width == size2.width)
-			return false;
-
-		if (size1.height == size2.height)
-			return false;
-
-		return true;
 	}
 
 }

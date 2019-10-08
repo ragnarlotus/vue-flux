@@ -13,8 +13,7 @@
 </template>
 
 <script>
-	import Dom from '@/libraries/Dom';
-	import Img from '@/libraries/Img';
+	import BaseComponent from '@/mixins/BaseComponent';
 	import FluxImage from '@/components/FluxImage';
 
 	export default {
@@ -24,17 +23,14 @@
 			FluxImage,
 		},
 
+		mixins: [
+			BaseComponent,
+		],
+
 		props: {
 			circles: {
 				type: Number,
 				default: 1,
-			},
-
-			image: [ String, Object ],
-
-			size: {
-				type: Object,
-				required: true,
 			},
 
 			tileCss: Object,
@@ -42,7 +38,6 @@
 
 		data: () => ({
 			baseStyle: {
-				display: 'inline-block',
 				position: 'relative',
 				overflow: 'hidden',
 			},
@@ -107,55 +102,9 @@
 
 				return tiles;
 			},
-
-			sizeStyle() {
-				let { width, height } = this.size;
-
-				return {
-					width: Dom.px(width),
-					height: Dom.px(height),
-				};
-			},
-
-			style() {
-				return {
-					...this.baseStyle,
-					...this.sizeStyle,
-				};
-			},
-		},
-
-		watch: {
-			image() {
-				this.init();
-			},
-
-			size() {
-				this.img.resizeToCover(this.size);
-			},
-		},
-
-		created() {
-			this.init();
 		},
 
 		methods: {
-			async init() {
-				if (!this.image)
-					return;
-
-				if (this.image.src) {
-					this.img = this.image;
-					return;
-				}
-
-				this.img = new Img(this.image);
-
-				await this.img.load();
-
-				this.img.resizeToCover(this.size);
-			},
-
 			transform(func) {
 				this.$refs.tiles.forEach((tile, i) => func(tile, i));
 			},

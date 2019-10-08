@@ -118,16 +118,15 @@ export default class ImagesController {
 		this.imgs.push(img);
 
 		img.load().then(() => {
-			this.imgLoadSuccess(img);
+			this.loadSuccess(img);
+
 		}).catch(error => {
-			this.imgLoadError(error);
+			this.loadError(error);
 		});
 	}
 
-	imgLoadSuccess(img) {
+	loadSuccess() {
 		this.loaded++;
-
-		img.resizeToCover(this.vf.size);
 
 		if (!this.current) {
 			for (let i = 0; i < this.imgs.length; i++) {
@@ -150,7 +149,7 @@ export default class ImagesController {
 			this.preloading? this.preloadEnd() : this.lazyLoadEnd();
 	}
 
-	imgLoadError(error) {
+	loadError(error) {
 		console.warn(error);
 	}
 
@@ -163,12 +162,6 @@ export default class ImagesController {
 
 		this.imgs.forEach((img, index) => {
 			img.index = index;
-		});
-	}
-
-	updateCoverSize() {
-		this.imgs.forEach(img => {
-			img.resizeToCover(this.vf.size);
 		});
 	}
 
