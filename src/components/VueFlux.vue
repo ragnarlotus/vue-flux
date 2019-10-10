@@ -5,7 +5,7 @@
 		:style="style"
 		@mousemove="toggleMouseOver(true)"
 		@mouseleave="toggleMouseOver(false)"
-		@dblclick="toggleFullScreen()"
+		@dblclick="Display.toggleFullScreen()"
 		@touchstart="Touches.start($event)"
 		@touchend="Touches.end($event)"
 	>
@@ -16,6 +16,7 @@
 			:size="size"
 			:from="Transitions.from"
 			:to="Transitions.to"
+			:options="Transitions.current.options"
 			:images="Images.imgs"
 			@ready="Transitions.ready()"
 			@start="Transitions.start()"
@@ -29,15 +30,15 @@
 			:image="Images.current"
 		/>
 
-		<slot v-if="size.height" name="preloader" />
+		<slot v-if="size" name="preloader" />
 
-		<slot v-if="size.height" name="caption" />
+		<slot v-if="size" name="caption" />
 
-		<slot v-if="size.height" name="controls" />
+		<slot v-if="size" name="controls" />
 
-		<slot v-if="size.height" name="index" />
+		<slot v-if="size" name="index" />
 
-		<slot v-if="loaded && size.height" name="pagination" />
+		<slot v-if="loaded && size" name="pagination" />
 	</div>
 </template>
 
@@ -100,10 +101,7 @@
 				lazyLoadAfter: 3,
 				path: '',
 			},
-			size: {
-				width: undefined,
-				height: undefined,
-			},
+			size: undefined,
 			loaded: false,
 			mouseOver: false,
 			Display: undefined,
@@ -115,8 +113,6 @@
 
 		computed: {
 			style() {
-				let style = {};
-
 				if (this.Display.inFullScreen()) {
 					return {
 						width: '100% !important',
@@ -124,15 +120,15 @@
 					};
 				}
 
+				if (!this.size)
+					return {};
+
 				let { width, height } = this.size;
 
-				if (width)
-					style.width = width +'px';
-
-				if (height)
-					style.height = height +'px';
-
-				return style;
+				return {
+					width: width? width +'px' : 'auto',
+					height: height? height +'px' : 'auto',
+				};
 			},
 		},
 
@@ -187,8 +183,7 @@
 		},
 
 		beforeDestroy() {
-			window.removeEventListener('resize', this.resize);
-			window.removeEventListener('keydown', this.keydown);
+			this.removeListeners();
 
 			this.Timers.clear();
 
@@ -201,6 +196,8 @@
 
 				if (this.config.autohideTime === 0)
 					this.mouseOver = true;
+
+				this.removeListeners();
 
 				window.addEventListener('resize', this.resize, {
 					passive: true,
@@ -216,7 +213,10 @@
 			},
 
 			resize() {
-				this.size = {};
+				if (!this.$refs.container)
+					return;
+
+				this.size = undefined;
 
 				this.$nextTick(() => {
 					let size = Dom.sizeFrom(this.$refs.container);
@@ -256,21 +256,6 @@
 				}
 			},
 
-			enterFullScreen() {
-				if (this.config.allowFullscreen === false)
-					return;
-
-				this.Display.requestFullScreen(this.$refs.container);
-			},
-
-			exitFullScreen() {
-				this.Display.exitFullScreen();
-			},
-
-			toggleFullScreen() {
-				this.Display.inFullScreen()? this.exitFullScreen() : this.enterFullScreen();
-			},
-
 			play(index = 'next', delay) {
 				this.config.autoplay = true;
 
@@ -307,18 +292,24 @@
 
 				let from = this.Images.current;
 				let to = this.Images.getByIndex(index);
+				let direction = ['prev', 'next'].includes(index)? index : undefined;
 
-				this.Transitions.run(transition, from, to);
+				this.Transitions.run(transition, from, to, direction);
 
 				this.$emit('show');
 			},
 
 			keydown(event) {
 				if (/ArrowLeft|Left/.test(event.key))
-					this.show('previous');
+					this.show('prev');
 
 				else if (/ArrowRight|Right/.test(event.key))
 					this.show('next');
+			},
+
+			removeListeners() {
+				window.removeEventListener('resize', this.resize);
+				window.removeEventListener('keydown', this.keydown);
 			},
 		},
 	};

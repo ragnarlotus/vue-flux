@@ -29,15 +29,14 @@
 			},
 
 			imageStyle() {
-				if (!this.img || this.img.status !== 'loaded')
+				if (!this.img || this.img.status !== 'loaded' || !this.size)
 					return {};
 
 				let { size, position } = this.img.getCoverProps(this.size);
 
 				if (this.offset) {
-					for (let side of ['top', 'left']) {
+					for (let side of ['top', 'left'])
 						position[side] -= this.offset[side] || 0;
-					}
 				}
 
 				return {

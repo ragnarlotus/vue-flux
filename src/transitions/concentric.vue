@@ -35,11 +35,13 @@
 		},
 
 		played() {
+			let deg = this.getDirection() === 'next'? '90' : '-90';
+
 			this.$refs.vortex.transform((tile, i) => {
 				tile.transform({
 					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
 					opacity: '0',
-					transform: 'rotateZ(90deg)',
+					transform: `rotateZ(${deg}deg)`,
 				});
 			});
 		},

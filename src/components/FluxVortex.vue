@@ -4,7 +4,7 @@
 			v-for="(tile, index) in tiles"
 			ref="tiles"
 			:key="index"
-			:size="tile.size"
+			:size="size"
 			:image="img"
 			:offset="tile.offset"
 			:style="tile.style"
@@ -41,8 +41,6 @@
 				position: 'relative',
 				overflow: 'hidden',
 			},
-
-			img: undefined,
 		}),
 
 		computed: {
@@ -77,10 +75,6 @@
 					let gap = this.radius * i;
 
 					tile = {
-						size: {
-							width: size,
-							height: size,
-						},
 						offset: {
 							top: this.topGap + gap,
 							left: this.leftGap + gap,
@@ -92,6 +86,8 @@
 						position: 'absolute',
 						left: tile.offset.left +'px',
 						top: tile.offset.top + 'px',
+						width: size +'px',
+						height: size +'px',
 						backgroundRepeat: 'repeat',
 						borderRadius: '50%',
 						zIndex: i,

@@ -37,9 +37,11 @@
 		},
 
 		played() {
+			let direction = this.getDirection();
+
 			this.$refs.grid.transform((tile, i) => {
 				tile.transform({
-					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
+					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i, direction)}ms`,
 					opacity: '0.1',
 					transform: 'scaleX(0)',
 				});
@@ -47,7 +49,11 @@
 		},
 
 		methods: {
-			getDelay(i) {
+			getDelayPrev(i) {
+				return (this.cols - i - 1) * this.tileDelay;
+			},
+
+			getDelayNext(i) {
 				return i * this.tileDelay;
 			},
 		},

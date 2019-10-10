@@ -119,23 +119,6 @@
 					right: width - depthX,
 				};
 			},
-
-			sizeStyle() {
-				let { width, height } = this.size;
-
-				return {
-					width: width +'px',
-					height: height +'px',
-				};
-			},
-
-			style() {
-				return {
-					...this.baseStyle,
-					...this.sizeStyle,
-					...this.css,
-				};
-			},
 		},
 
 		methods: {

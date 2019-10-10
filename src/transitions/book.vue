@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<flux-image
-			ref="image"
+			ref="from"
 			:image="from"
 			:size="size"
 			:style="image.style"
@@ -35,7 +35,7 @@
 		],
 
 		data: () => ({
-			totalDuration: 1200,
+			totalDuration: 1200000,
 			easing: 'ease-out',
 			image: {
 				style: undefined,
@@ -70,7 +70,7 @@
 			};
 
 			this.cube.offset = {
-				left: width,
+				left: 0,
 				top: 0,
 			};
 

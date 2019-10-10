@@ -39,7 +39,7 @@ export default class Img {
 	}
 
 	getCoverProps(viewSize) {
-		if (this.status !== 'loaded')
+		if (!viewSize || this.status !== 'loaded')
 			return undefined;
 
 		let view = {

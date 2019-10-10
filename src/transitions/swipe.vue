@@ -1,9 +1,10 @@
 <template>
-	<flux-wrapper ref="wrapper" :size="size">
+	<flux-wrapper ref="wrapper" :size="size" :style="wrapperStyle">
 		<flux-image
 			ref="image"
 			:image="from"
 			:size="size"
+			:style="imageStyle"
 		/>
 	</flux-wrapper>
 </template>
@@ -28,6 +29,15 @@
 		data: () => ({
 			totalDuration: 1400,
 			easing: 'ease-in-out',
+			wrapperStyle: {
+				position: 'absolute',
+				top: 0,
+				display: 'flex',
+				flexWrap: 'nowrap',
+			},
+			imageStyle: {
+				flex: '0 0 auto',
+			},
 		}),
 
 		played() {
@@ -35,6 +45,22 @@
 				transition: `width ${this.totalDuration}ms ${this.easing}`,
 				width: 0,
 			});
-		}
+		},
+
+		methods: {
+			setupPrev() {
+				this.$refs.wrapper.setCss({
+					right: 0,
+					justifyContent: 'flex-end',
+				});
+			},
+
+			setupNext() {
+				this.$refs.wrapper.setCss({
+					left: 0,
+					justifyContent: 'flex-start',
+				});
+			},
+		},
 	};
 </script>

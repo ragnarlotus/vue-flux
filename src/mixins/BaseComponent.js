@@ -15,10 +15,7 @@ export default {
 
 		offset: Object,
 
-		size: {
-			type: Object,
-			required: true,
-		},
+		size: Object,
 	},
 
 	data: () => ({
@@ -61,6 +58,9 @@ export default {
 		},
 
 		sizeStyle() {
+			if (!this.size)
+				return {};
+
 			let { width, height } = this.size;
 
 			return {

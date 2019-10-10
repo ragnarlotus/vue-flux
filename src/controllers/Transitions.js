@@ -41,7 +41,8 @@ export default class TransitionsController {
 
 		this.transitions = transitions.map((transition, i) => ({
 			index: i,
-			name: transition.name || transition
+			name: transition.name || transition,
+			options: transition.options,
 		}));
 
 		this.last = this.transitions[this.transitions.length - 1];
@@ -49,7 +50,7 @@ export default class TransitionsController {
 		this.vf.$emit('transitions-updated');
 	}
 
-	run(transition, from, to) {
+	run(transition, from, to, direction) {
 		if (transition) {
 			let name = transition.name || transition;
 
@@ -58,10 +59,20 @@ export default class TransitionsController {
 			if (!found)
 				throw new ReferenceError(`Transition ${transition} not found`);
 
-			transition = found;
+			transition = { ...found };
 
 		} else {
-			transition = this.next;
+			transition = { ...this.next };
+		}
+
+		if (!transition.options)
+			transition.options = {};
+
+		if (!transition.options.direction) {
+			if (!direction)
+				direction = from.index < to.index? 'next' : 'prev';
+
+			transition.options.direction = direction;
 		}
 
 		this.from = from;
@@ -74,11 +85,7 @@ export default class TransitionsController {
 	}
 
 	start() {
-		requestAnimationFrame(() => {
-			requestAnimationFrame(() => {
-				this.vf.Images.current = this.to;
-			});
-		});
+		this.vf.Images.current = this.to;
 
 		this.vf.$emit('transition-start', this.current);
 	}

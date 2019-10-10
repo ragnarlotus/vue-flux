@@ -7,7 +7,7 @@ export default class TouchesController {
 		this.startY = 0;
 		this.startTime = 0;
 		this.endTime = 0;
-		this.previousTouchTime = 0;
+		this.prevTouchTime = 0;
 
 		// Max distance in pixels from start until end
 		this.tapThreshold = 5;
@@ -35,7 +35,7 @@ export default class TouchesController {
 	end(event) {
 		let { vf } = this;
 
-		this.previousTouchTime = this.endTime;
+		this.prevTouchTime = this.endTime;
 		this.endTime = Date.now();
 
 		if (this.doubleTap()) {
@@ -58,7 +58,7 @@ export default class TouchesController {
 		event.preventDefault();
 
 		if (this.slideRight(offsetX))
-			vf.show('previous');
+			vf.show('prev');
 
 		else if (this.slideLeft(offsetX))
 			vf.show('next');
@@ -72,7 +72,7 @@ export default class TouchesController {
 	}
 
 	doubleTap() {
-		return this.endTime - this.previousTouchTime < this.doubleTapThreshold;
+		return this.endTime - this.prevTouchTime < this.doubleTapThreshold;
 	}
 
 	slideLeft(offsetX) {

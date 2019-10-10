@@ -5,7 +5,7 @@
 			v-for="(tile, index) in tiles"
 			ref="tiles"
 			:key="index"
-			:size="tile.size"
+			:size="size"
 			:color="color"
 			:colors="colors"
 			:image="img"
@@ -82,23 +82,24 @@
 			},
 
 			tiles() {
-				let tile;
+				let tile, size;
 				let tiles = [];
 
 				for (let i = 0; i < this.numTiles; i++) {
 					tile = {
 						row: this.getRowNumber(i),
 						col: this.getColNumber(i),
-						size: {
-							...this.tileSize
-						},
+					};
+
+					size = {
+						...this.tileSize,
 					};
 
 					if (tile.row + 1 === this.numRows)
-						tile.size.height = this.size.height - tile.row * tile.size.height;
+						size.height = this.size.height - tile.row * size.height;
 
 					if (tile.col + 1 === this.numCols)
-						tile.size.width = this.size.width - tile.col * tile.size.width;
+						size.width = this.size.width - tile.col * size.width;
 
 					tile.offset = {
 						top: tile.row * this.tileSize.height,
@@ -109,7 +110,9 @@
 						...this.tileCss,
 						position: 'absolute',
 						left: tile.offset.left +'px',
-						top: tile.offset.top + 'px',
+						top: tile.offset.top +'px',
+						width: size.width +'px',
+						height: size.height +'px',
 						zIndex: i + 1 < this.numCols / 2? i + 1 : this.numCols - i,
 					};
 

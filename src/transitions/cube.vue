@@ -14,7 +14,7 @@
 		name: 'TransitionCube',
 
 		components: {
-			FluxCube
+			FluxCube,
 		},
 
 		mixins: [
@@ -35,6 +35,7 @@
 
 			this.images = {
 				front: this.from,
+				left: this.to,
 				right: this.to,
 			};
 		},
@@ -49,7 +50,14 @@
 			if (this.current)
 				this.current.hide();
 
-			this.$refs.cube.turnLeft();
+			let direction = this.getDirection();
+
+			let sides = {
+				next: 'left',
+				prev: 'right',
+			};
+
+			this.$refs.cube.turn(sides[direction]);
 		},
 
 		beforeDestroy() {

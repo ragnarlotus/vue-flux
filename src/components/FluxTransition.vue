@@ -7,7 +7,7 @@
 			:size="size"
 			:from="from"
 			:to="to"
-			:options="transition.options"
+			:options="options"
 			:images="images"
 		/>
 	</div>
@@ -96,11 +96,9 @@
 		},
 
 		mounted() {
-			requestAnimationFrame(() => {
-				requestAnimationFrame(() => {
-					this.$emit('ready');
-				});
-			});
+			setTimeout(() => {
+				this.$emit('ready');
+			}, 100);
 		},
 
 		methods: {
@@ -126,6 +124,6 @@
 
 <style lang="scss">
 	.flux-transition {
-		position: relative;
+		position: 'relative';
 	}
 </style>

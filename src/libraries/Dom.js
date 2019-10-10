@@ -15,35 +15,14 @@ export default class Dom {
 		return (new Dom(node)).size;
 	}
 
-	static px(size) {
-		if (!size)
-			return undefined;
-
-		return parseFloat(size) +'px';
-	}
-
-	hasWidth() {
-		return !!this.node.clientWidth;
-	}
-
 	getWidth() {
-		let width = this.node.style.width;
-
-		if (!width || width === 'auto')
-			width = getComputedStyle(this.node).width;
+		let width = getComputedStyle(this.node).width;
 
 		return parseFloat(width);
 	}
 
-	hasHeight() {
-		return !!this.node.clientHeight;
-	}
-
 	getHeight() {
-		let height = this.node.style.height;
-
-		if (!height || height === 'auto')
-			height = getComputedStyle(this.node).height;
+		let height = getComputedStyle(this.node).height;
 
 		return parseFloat(height);
 	}

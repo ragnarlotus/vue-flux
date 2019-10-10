@@ -1,7 +1,7 @@
 export default class DisplayController {
 
-	constructor(vm) {
-		this.vm = vm;
+	constructor(vf) {
+		this.vf = vf;
 	}
 
 	inFullScreen() {
@@ -15,7 +15,14 @@ export default class DisplayController {
 		return document[props.find(prop => prop in document)];
 	}
 
-	requestFullScreen(element) {
+	toggleFullScreen() {
+		this.inFullScreen()? this.exitFullScreen() : this.enterFullScreen();
+	}
+
+	enterFullScreen() {
+		if (!this.vf.config.allowFullscreen)
+			return;
+
 		let methods = [
 			'requestFullscreen',
 			'mozRequestFullScreen',
@@ -23,13 +30,15 @@ export default class DisplayController {
 			'msRequestFullscreen',
 		];
 
+		let element = this.vf.$refs.container;
+
 		methods.find((method) => {
 			return method in element? element[method]() || true : false;
 		});
 
-		this.vm.resize();
+		this.vf.resize();
 
-		this.vm.$emit('fullscreen-enter');
+		this.vf.$emit('fullscreen-enter');
 	}
 
 	exitFullScreen() {
@@ -44,9 +53,9 @@ export default class DisplayController {
 			return method in document? document[method]() || true : false;
 		});
 
-		this.vm.resize();
+		this.vf.resize();
 
-		this.vm.$emit('fullscreen-exit');
+		this.vf.$emit('fullscreen-exit');
 	}
 
 }

@@ -35,9 +35,11 @@
 		},
 
 		played() {
+			let direction = this.getDirection();
+
 			this.$refs.vortex.transform((tile, i) => {
 				tile.transform({
-					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
+					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i, direction)}ms`,
 					opacity: '0',
 					transform: `rotateZ(${this.getDeg(i)}deg)`,
 				});
@@ -45,7 +47,11 @@
 		},
 
 		methods: {
-			getDelay(i) {
+			getDelayPrev(i) {
+				return (this.circles - i - 1) * this.tileDelay;
+			},
+
+			getDelayNext(i) {
 				return i * this.tileDelay;
 			},
 

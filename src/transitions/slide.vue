@@ -1,13 +1,13 @@
 <template>
-	<flux-wrapper ref="wrapper" :size="wrapperSize">
+	<flux-wrapper ref="wrapper" :size="wrapperSize" :style="wrapperStyle">
 		<flux-image
 			ref="left"
-			:image="from"
+			:image="left"
 			:size="size"
 		/>
 		<flux-image
 			ref="right"
-			:image="to"
+			:image="right"
 			:size="size"
 		/>
 	</flux-wrapper>
@@ -33,8 +33,20 @@
 		data: () => ({
 			totalDuration: 1400,
 			easing: 'ease-in-out',
+			left: undefined,
+			right: undefined,
 			wrapperSize: undefined,
+			wrapperStyle: {
+				display: 'flex',
+				flexWrap: 'nowrap',
+			},
 		}),
+
+		computed: {
+			transition() {
+				return `transform ${this.totalDuration}ms ${this.easing}`;
+			},
+		},
 
 		created() {
 			this.wrapperSize = {
@@ -43,11 +55,34 @@
 			};
 		},
 
-		played() {
-			this.$refs.wrapper.transform({
-				transition: `transform ${this.totalDuration}ms ${this.easing}`,
-				transform: `translateX(${-this.size.width}px)`,
-			});
-		},
+		methods: {
+			setupPrev() {
+				this.left = this.to;
+				this.right = this.from;
+
+				this.$refs.wrapper.setCss({
+					transform: `translateX(-50%)`,
+				});
+			},
+
+			setupNext() {
+				this.left = this.from;
+				this.right = this.to;
+			},
+
+			playPrev() {
+				this.$refs.wrapper.transform({
+					transition: this.transition,
+					transform: `translateX(0)`,
+				});
+			},
+
+			playNext() {
+				this.$refs.wrapper.transform({
+					transition: this.transition,
+					transform: `translateX(-50%)`,
+				});
+			},
+		}
 	};
 </script>

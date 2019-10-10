@@ -7,7 +7,7 @@ export default class ImagesController {
 		this.reset(true);
 	}
 
-	get previous() {
+	get prev() {
 		let index = this.$current.index - 1;
 
 		if (index < 0)
@@ -169,8 +169,8 @@ export default class ImagesController {
 		if (index === 'next')
 			return this.next;
 
-		if (index === 'previous')
-			return this.previous;
+		if (index === 'prev')
+			return this.prev;
 
 		if (!this.imgs[index])
 			throw new ReferenceError(`Image ${index} not found`);

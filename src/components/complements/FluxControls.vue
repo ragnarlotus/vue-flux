@@ -1,7 +1,7 @@
 <template>
 	<transition name="fade">
 		<div v-if="display" class="flux-controls">
-			<flux-button class="previous top left" @click="vf.show('previous')">
+			<flux-button class="prev top left" @click="vf.show('prev')">
 				<polyline points="64,18 22,50 64,82" />
 			</flux-button>
 
@@ -74,7 +74,7 @@
 			transition: opacity 0.3s ease-in;
 		}
 
-		.previous {
+		.prev {
 			left: 6%;
 		}
 
