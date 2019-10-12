@@ -4,6 +4,7 @@
 			ref="from"
 			:image="from"
 			:size="size"
+			:view-size="viewSize"
 			:offset="image.offset"
 			:css="image.css"
 		/>
@@ -11,6 +12,7 @@
 			ref="cube"
 			:images="cube.images"
 			:size="size"
+			:view-size="viewSize"
 			:offsets="cube.offsets"
 			:sides-css="cube.sidesCss"
 			:css="cube.css"
@@ -38,6 +40,7 @@
 		data: () => ({
 			totalDuration: 1200,
 			easing: 'ease-out',
+			viewSize: {},
 			image: {
 				offset: {},
 				css: {
@@ -53,10 +56,6 @@
 					position: 'absolute',
 					top: 0,
 					left: 0,
-				},
-				sidesCss: {
-					front: {},
-					back: {},
 				},
 			},
 		}),
@@ -77,23 +76,15 @@
 				overflow: 'visible',
 			});
 
-			let { halfWidthPx: widthPx } = this;
-
-			this.image.css.width = widthPx;
+			this.viewSize = {
+				width: Math.ceil(this.size.width / 2),
+				height: this.size.height,
+			};
 
 			this.cube.images = {
 				front: this.from,
 				back: this.to,
 			};
-
-			this.cube.css = {
-				...this.cube.css,
-				width: widthPx,
-				height: this.size.height +'px',
-			};
-
-			this.cube.sidesCss.front.width = widthPx;
-			this.cube.sidesCss.back.width = widthPx;
 		},
 
 		played() {

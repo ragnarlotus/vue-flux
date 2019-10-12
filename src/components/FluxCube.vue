@@ -5,6 +5,7 @@
 			:ref="side.name"
 			:key="side.name"
 			:size="side.size"
+			:view-size="side.viewSize"
 			:image="side.img"
 			:color="side.color"
 			:offset="side.offset"
@@ -87,8 +88,15 @@
 						...this.size,
 					};
 
+					side.viewSize = {
+						...this.viewSize,
+					};
+
 					if (this.depth && ['left', 'right'].includes(sideName))
-						side.size.width = this.depth;
+						side.viewSize.width = this.depth;
+
+					if (this.depth && ['top', 'bottom'].includes(sideName))
+						side.viewSize.height = this.depth;
 
 					side.style = {
 						...this.sidesCss[sideName],
@@ -108,19 +116,21 @@
 			},
 
 			translateZ() {
-				let { width, height } = this.size;
+				let {
+					width,
+					height
+				} = this.size;
 
-				if (this.depth)
-					width = this.depth;
+				let { width: viewWidth } = this.viewSize;
 
-				let depthX = width / 2;
+				let depthX = (this.depth || width) / 2;
 				let depthY = height / 2;
 
 				return {
 					top: depthY,
 					bottom: depthY,
 					left: depthX,
-					right: this.size.width - depthX,
+					right: viewWidth? viewWidth - depthX : depthX,
 				};
 			},
 		},

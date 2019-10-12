@@ -20,7 +20,15 @@ export default {
 			default: () => ({}),
 		},
 
-		size: Object,
+		size: {
+			type: Object,
+			required: true,
+		},
+
+		viewSize: {
+			type: Object,
+			default: () => ({}),
+		},
 
 		css: Object,
 	},
@@ -68,7 +76,10 @@ export default {
 			if (!this.size)
 				return {};
 
-			let { width, height } = this.size;
+			let {
+				width = this.size.width,
+				height = this.size.height
+			} = this.viewSize;
 
 			return {
 				width: width +'px',

@@ -29,10 +29,10 @@
 		data: () => ({
 			rows: 1,
 			cols: 8,
-			tileDuration: 900000,
+			tileDuration: 900,
 			totalDuration: 0,
 			easing: 'cubic-bezier(0.3, -0.3, 0.735, 0.285)',
-			tileDelay: 110000,
+			tileDelay: 110,
 			sideColor: '#333',
 			gridCss: {
 				overflow: 'visible',
