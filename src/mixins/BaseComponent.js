@@ -15,11 +15,18 @@ export default {
 
 		offset: Object,
 
+		offsets: {
+			type: Object,
+			default: () => ({}),
+		},
+
 		size: Object,
+
+		css: Object,
 	},
 
 	data: () => ({
-		css: {},
+		baseStyle: {},
 	}),
 
 	computed: {
@@ -71,19 +78,19 @@ export default {
 
 		style() {
 			return {
-				...this.baseStyle,
 				...this.sizeStyle,
 				...this.colorStyle,
 				...this.imageStyle,
 				...this.css,
+				...this.baseStyle,
 			};
 		},
 	},
 
 	methods: {
 		setCss(css) {
-			this.css = {
-				...this.css,
+			this.baseStyle = {
+				...this.baseStyle,
 				...css,
 			};
 		},

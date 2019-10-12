@@ -5,7 +5,7 @@
 		:cols="cols"
 		:size="size"
 		:images="images"
-		:style="style"
+		:css="gridCss"
 	/>
 </template>
 
@@ -31,7 +31,7 @@
 			totalDuration: 0,
 			easing: 'ease-out',
 			tileDelay: 150,
-			style: {
+			gridCss: {
 				overflow: 'visible',
 				perspective: '800px',
 			},

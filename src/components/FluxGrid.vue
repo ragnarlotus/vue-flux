@@ -12,7 +12,8 @@
 			:images="imgs"
 			:offset="tile.offset"
 			:depth="depth"
-			:style="tile.style"
+			:css="tile.css"
+			:sides-css="tile.sidesCss"
 		/>
 	</div>
 </template>
@@ -52,7 +53,6 @@
 
 		data: () => ({
 			baseStyle: {
-				overflow: 'hidden',
 				position: 'relative',
 			},
 		}),
@@ -82,7 +82,7 @@
 			},
 
 			tiles() {
-				let tile, size;
+				let tile;
 				let tiles = [];
 
 				for (let i = 0; i < this.numTiles; i++) {
@@ -91,29 +91,41 @@
 						col: this.getColNumber(i),
 					};
 
-					size = {
-						...this.tileSize,
-					};
+					let { width, height } = this.tileSize;
 
 					if (tile.row + 1 === this.numRows)
-						size.height = this.size.height - tile.row * size.height;
+						height = this.size.height - tile.row * height;
 
 					if (tile.col + 1 === this.numCols)
-						size.width = this.size.width - tile.col * size.width;
+						width = this.size.width - tile.col * width;
 
 					tile.offset = {
 						top: tile.row * this.tileSize.height,
 						left: tile.col * this.tileSize.width,
 					};
 
-					tile.style = {
+					tile.css = {
 						...this.tileCss,
 						position: 'absolute',
 						left: tile.offset.left +'px',
 						top: tile.offset.top +'px',
-						width: size.width +'px',
-						height: size.height +'px',
+						width: width +'px',
+						height: height +'px',
 						zIndex: i + 1 < this.numCols / 2? i + 1 : this.numCols - i,
+					};
+
+					let sideSize = {
+						width: width +'px',
+						height: height +'px',
+					};
+
+					tile.sidesCss = {
+						front: sideSize,
+						back: sideSize,
+						top: sideSize,
+						bottom: sideSize,
+						left: sideSize,
+						right: sideSize,
 					};
 
 					tiles.push(tile);

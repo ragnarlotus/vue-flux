@@ -31,9 +31,7 @@ export default {
 
 	created() {
 		Object.assign(this, this.options);
-	},
 
-	mounted() {
 		let direction = this.getDirection();
 
 		let setup = {

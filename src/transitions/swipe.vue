@@ -1,10 +1,10 @@
 <template>
-	<flux-wrapper ref="wrapper" :size="size" :style="wrapperStyle">
+	<flux-wrapper ref="wrapper" :size="size" :css="wrapperCss">
 		<flux-image
 			ref="image"
 			:image="from"
 			:size="size"
-			:style="imageStyle"
+			:css="imageCss"
 		/>
 	</flux-wrapper>
 </template>
@@ -29,13 +29,13 @@
 		data: () => ({
 			totalDuration: 1400,
 			easing: 'ease-in-out',
-			wrapperStyle: {
+			wrapperCss: {
 				position: 'absolute',
 				top: 0,
 				display: 'flex',
 				flexWrap: 'nowrap',
 			},
-			imageStyle: {
+			imageCss: {
 				flex: '0 0 auto',
 			},
 		}),
@@ -49,17 +49,19 @@
 
 		methods: {
 			setupPrev() {
-				this.$refs.wrapper.setCss({
+				this.wrapperCss = {
+					...this.wrapperCss,
 					right: 0,
 					justifyContent: 'flex-end',
-				});
+				};
 			},
 
 			setupNext() {
-				this.$refs.wrapper.setCss({
+				this.wrapperCss = {
+					...this.wrapperCss,
 					left: 0,
 					justifyContent: 'flex-start',
-				});
+				};
 			},
 		},
 	};

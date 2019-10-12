@@ -7,7 +7,7 @@
 		:images="images"
 		:colors="colors"
 		:depth="size.height"
-		:style="style"
+		:css="gridCss"
 	/>
 </template>
 
@@ -29,17 +29,17 @@
 		data: () => ({
 			rows: 1,
 			cols: 8,
-			tileDuration: 900,
+			tileDuration: 900000,
 			totalDuration: 0,
 			easing: 'cubic-bezier(0.3, -0.3, 0.735, 0.285)',
-			tileDelay: 110,
+			tileDelay: 110000,
 			sideColor: '#333',
-			style: {
+			gridCss: {
 				overflow: 'visible',
 				perspective: '1200px',
 			},
-			images: undefined,
-			colors: undefined,
+			images: {},
+			colors: {},
 		}),
 
 		created() {

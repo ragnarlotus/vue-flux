@@ -3,6 +3,7 @@
 		ref="cube"
 		:images="images"
 		:size="size"
+		:css="cubeCss"
 	/>
 </template>
 
@@ -25,6 +26,7 @@
 			totalDuration: 1400,
 			easing: 'ease-out',
 			images: undefined,
+			cubeCss: {},
 		}),
 
 		created() {
@@ -33,17 +35,13 @@
 				overflow: 'visible',
 			});
 
+			this.cubeCss.transition = `all ${this.totalDuration}ms ${this.easing}`;
+
 			this.images = {
 				front: this.from,
 				left: this.to,
 				right: this.to,
 			};
-		},
-
-		mounted() {
-			this.$refs.cube.setCss({
-				transition: `all ${this.totalDuration}ms ${this.easing}`,
-			});
 		},
 
 		played() {

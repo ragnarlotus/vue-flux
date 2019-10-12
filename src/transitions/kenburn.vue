@@ -3,6 +3,7 @@
 		ref="image"
 		:image="from"
 		:size="size"
+		:css="css"
 	/>
 </template>
 
@@ -24,16 +25,13 @@
 		data: () => ({
 			totalDuration: 1500,
 			easing: 'linear',
-			image: undefined,
-			transform: undefined,
+			transform: {},
+			css: {},
 		}),
 
-		mounted() {
+		created() {
 			this.transform = this.getTransform();
-
-			this.$refs.image.setCss({
-				transformOrigin: this.transform.originX +' '+ this.transform.originY,
-			});
+			this.css.transformOrigin = this.transform.originX +' '+ this.transform.originY;
 		},
 
 		played() {

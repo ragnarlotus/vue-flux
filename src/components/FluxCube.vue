@@ -7,7 +7,7 @@
 			:size="side.size"
 			:image="side.img"
 			:color="side.color"
-			:offset="offset"
+			:offset="side.offset"
 			:style="side.style"
 		/>
 	</div>
@@ -79,8 +79,8 @@
 					side = {
 						name: sideName,
 						img: this.imgs[sideName],
-						color: this.colors[sideName],
-						offset: this.offset,
+						color: this.colors[sideName] || this.color,
+						offset: this.offsets[sideName] || this.offset,
 					};
 
 					side.size = {
@@ -109,14 +109,18 @@
 
 			translateZ() {
 				let { width, height } = this.size;
-				let depthX = (this.depth || width) / 2;
+
+				if (this.depth)
+					width = this.depth;
+
+				let depthX = width / 2;
 				let depthY = height / 2;
 
 				return {
 					top: depthY,
 					bottom: depthY,
 					left: depthX,
-					right: width - depthX,
+					right: this.size.width - depthX,
 				};
 			},
 		},

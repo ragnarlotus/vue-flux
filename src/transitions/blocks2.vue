@@ -7,7 +7,7 @@
 			:size="size"
 			:image="gridImage"
 			:tile-css="tileCss"
-			:style="gridStyle"
+			:css="gridCss"
 		/>
 
 		<flux-image
@@ -15,7 +15,7 @@
 			ref="background"
 			:size="size"
 			:image="backgroundImage"
-			:style="backgroundStyle"
+			:css="backgroundCss"
 		/>
 	</div>
 </template>
@@ -45,15 +45,15 @@
 			easing: 'ease',
 			tileDelay: 80,
 			gridImage: undefined,
-			tileCss: undefined,
-			gridStyle: {
+			tileCss: {},
+			gridCss: {
 				position: 'absolute',
 				top: 0,
 				left: 0,
 				zIndex: 2,
 			},
 			backgroundImage: undefined,
-			backgroundStyle: {
+			backgroundCss: {
 				position: 'absolute',
 				top: 0,
 				left: 0,
@@ -87,26 +87,20 @@
 				this.$refs.grid.transform((tile, i) => {
 					tile.transform({
 						transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i, 'prev')}ms`,
+						opacity: 1,
+						transform: 'scale(1)',
 					});
 				});
-
-				this.tileCss = {
-					opacity: 1,
-					transform: 'scale(1)',
-				};
 			},
 
 			playNext() {
 				this.$refs.grid.transform((tile, i) => {
 					tile.transform({
 						transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i, 'next')}ms`,
+						opacity: 0,
+						transform: 'scale(0.4)',
 					});
 				});
-
-				this.tileCss = {
-					opacity: 0,
-					transform: 'scale(0.4)',
-				};
 			},
 
 			getDelay(i, direction) {

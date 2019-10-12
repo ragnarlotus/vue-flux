@@ -1,5 +1,5 @@
 <template>
-	<flux-wrapper ref="wrapper" :size="wrapperSize" :style="wrapperStyle">
+	<flux-wrapper ref="wrapper" :size="wrapperSize" :css="wrapperCss">
 		<flux-image
 			ref="left"
 			:image="left"
@@ -35,8 +35,8 @@
 			easing: 'ease-in-out',
 			left: undefined,
 			right: undefined,
-			wrapperSize: undefined,
-			wrapperStyle: {
+			wrapperSize: {},
+			wrapperCss: {
 				display: 'flex',
 				flexWrap: 'nowrap',
 			},
@@ -59,10 +59,7 @@
 			setupPrev() {
 				this.left = this.to;
 				this.right = this.from;
-
-				this.$refs.wrapper.setCss({
-					transform: `translateX(-50%)`,
-				});
+				this.wrapperCss.transform = 'translateX(-50%)';
 			},
 
 			setupNext() {
@@ -73,14 +70,14 @@
 			playPrev() {
 				this.$refs.wrapper.transform({
 					transition: this.transition,
-					transform: `translateX(0)`,
+					transform: 'translateX(0)',
 				});
 			},
 
 			playNext() {
 				this.$refs.wrapper.transform({
 					transition: this.transition,
-					transform: `translateX(-50%)`,
+					transform: 'translateX(-50%)'
 				});
 			},
 		}
