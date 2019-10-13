@@ -5,7 +5,7 @@
 		:cols="cols"
 		:size="size"
 		:image="from"
-		:style="style"
+		:css="cssGrid"
 	/>
 </template>
 
@@ -31,7 +31,7 @@
 			totalDuration: 0,
 			easing: 'linear',
 			tileDelay: 100,
-			style: {
+			cssGrid: {
 				overflow: 'visible',
 			},
 		}),

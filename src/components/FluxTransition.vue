@@ -97,8 +97,10 @@
 
 		mounted() {
 			setTimeout(() => {
+				//console.log(this.$refs.transition.$refs.grid.$children[0].$refs.front);
+
 				this.$emit('ready');
-			}, 100);
+			}, 150);
 		},
 
 		methods: {

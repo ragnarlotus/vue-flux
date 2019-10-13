@@ -32,7 +32,6 @@
 			easing: 'ease-out',
 			tileDelay: 150,
 			gridCss: {
-				overflow: 'visible',
 				perspective: '800px',
 			},
 			images: undefined,
@@ -53,12 +52,19 @@
 			if (this.current)
 				this.current.hide();
 
+			let direction = this.getDirection();
+
+			let sides = {
+				prev: 'backl',
+				next: 'backr',
+			};
+
 			this.$refs.grid.transform((tile, i) => {
 				tile.setCss({
-					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
+					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i, direction)}ms`,
 				});
 
-				tile.turnBack();
+				tile.turn(sides[direction]);
 			});
 		},
 
@@ -68,7 +74,11 @@
 		},
 
 		methods: {
-			getDelay(i) {
+			getDelayPrev(i) {
+				return (this.cols - i - 1) * this.tileDelay;
+			},
+
+			getDelayNext(i) {
 				return i * this.tileDelay;
 			},
 		},

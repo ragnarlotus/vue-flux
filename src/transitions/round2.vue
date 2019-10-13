@@ -5,7 +5,8 @@
 		:cols="cols"
 		:size="size"
 		:image="from"
-		:style="style"
+		:css="gridCss"
+		:tile-css="tileCss"
 	/>
 </template>
 
@@ -32,9 +33,11 @@
 			rotateX: '-540',
 			easing: 'linear',
 			tileDelay: 100,
-			style: {
-				overflow: 'visible',
+			gridCss: {
 				perspective: '1200px',
+			},
+			tileCss: {
+				backfaceVisibility: 'hidden',
 			},
 		}),
 
@@ -48,24 +51,35 @@
 		},
 
 		played() {
+			let direction = this.getDirection();
+
 			this.$refs.grid.transform((tile, i) => {
 				tile.transform({
-					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
+					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i, direction)}ms`,
 					opacity: '0',
-					transform: `rotateX(${this.rotateX}deg)`,
+					transform: `rotateY(${this.rotateX}deg)`,
 				});
 			});
 		},
 
 		methods: {
-			getDelay(i) {
+			getDelay(i, direction) {
 				let { grid } = this.$refs;
 
 				let row = grid.getRowNumber(i);
 				let col = grid.getColNumber(i);
 
-				let rowDelay = Math.abs(this.rows - row);
-				let colDelay = Math.abs(this.cols / 2 - 0.5 - col);
+				let rowDelay, colDelay;
+
+				if (direction === 'prev') {
+					rowDelay = Math.abs(this.rows / 2 - 0.5 - row);
+					colDelay = Math.abs(this.cols - col);
+
+				} else {
+					rowDelay = Math.abs(this.rows / 2 - 0.5 - row);
+					colDelay = Math.abs(col);
+				}
+
 				let delay = rowDelay + colDelay - 1;
 
 				return delay * this.tileDelay;

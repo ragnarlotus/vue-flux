@@ -5,7 +5,7 @@
 		:cols="cols"
 		:size="size"
 		:images="images"
-		:style="style"
+		:css="gridCss"
 	/>
 </template>
 
@@ -32,8 +32,7 @@
 			easing: 'ease-out',
 			tileDelay: 150,
 			images: undefined,
-			style: {
-				overflow: 'visible',
+			gridCss: {
 				perspective: '800px',
 			},
 		}),
@@ -57,12 +56,19 @@
 			if (this.current)
 				this.current.hide();
 
+			let direction = this.getDirection();
+
+			let sides = {
+				prev: 'backl',
+				next: 'backr',
+			};
+
 			this.$refs.grid.transform((tile, i) => {
 				tile.setCss({
-					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
+					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i, direction)}ms`,
 				});
 
-				tile.turnBack();
+				tile.turn(sides[direction]);
 			});
 		},
 
@@ -72,13 +78,15 @@
 		},
 
 		methods: {
-			getDelay(i) {
+			getDelay(i, direction) {
 				let { grid } = this.$refs;
 
 				let row = grid.getRowNumber(i);
 				let col = grid.getColNumber(i);
-
 				let delay = col + row;
+
+				if (direction === 'prev')
+					delay = this.rows + this.cols - delay - 1;
 
 				return delay * this.tileDelay;
 			},
