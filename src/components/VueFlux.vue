@@ -9,36 +9,38 @@
 		@touchstart="Touches.start($event)"
 		@touchend="Touches.end($event)"
 	>
-		<flux-transition
-			v-if="Transitions.current"
-			ref="transition"
-			:transition="Transitions.current"
-			:size="size"
-			:from="Transitions.from"
-			:to="Transitions.to"
-			:options="Transitions.current.options"
-			:images="Images.imgs"
-			@ready="Transitions.ready()"
-			@start="Transitions.start()"
-			@end="Transitions.end()"
-		/>
+		<div v-if="size">
+			<flux-transition
+				v-if="Transitions.current"
+				ref="transition"
+				:transition="Transitions.current"
+				:size="size"
+				:from="Transitions.from"
+				:to="Transitions.to"
+				:options="Transitions.current.options"
+				:images="Images.imgs"
+				@ready="Transitions.ready()"
+				@start="Transitions.start()"
+				@end="Transitions.end()"
+			/>
 
-		<flux-image
-			v-if="Images.current"
-			ref="image"
-			:size="size"
-			:image="Images.current"
-		/>
+			<flux-image
+				v-if="Images.current"
+				ref="image"
+				:size="size"
+				:image="Images.current"
+			/>
 
-		<slot v-if="size" name="preloader" />
+			<slot name="preloader" />
 
-		<slot v-if="size" name="caption" />
+			<slot name="caption" />
 
-		<slot v-if="size" name="controls" />
+			<slot name="controls" />
 
-		<slot v-if="size" name="index" />
+			<slot name="index" />
 
-		<slot v-if="loaded && size" name="pagination" />
+			<slot v-if="loaded" name="pagination" />
+		</div>
 	</div>
 </template>
 

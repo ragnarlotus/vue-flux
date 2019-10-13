@@ -78,7 +78,7 @@
 			});
 
 			setTimeout(() => {
-				this.image = this.to;
+				this.$refs.image.hide();
 
 				this.$refs.wrapper.transform({
 					transition: `all ${this.totalDuration / 2 - 50}ms ${this.easing} 0ms`,
