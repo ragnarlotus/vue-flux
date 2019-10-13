@@ -33,8 +33,8 @@
 		data: () => ({
 			circles: 2,
 			totalDuration: 900,
-			easing: 'cubic-bezier(0.385, 0.000, 0.795, 0.560)',
-			backgroundColor: '#000',
+			easing: 'cubic-bezier(0.385, 0, 0.795, 0.560)',
+			backgroundColor: '#111',
 			image: undefined,
 			diag: undefined,
 			wrapperSize: {},
@@ -73,7 +73,7 @@
 
 		played() {
 			this.$refs.wrapper.transform({
-				transition: `all ${this.totalDuration / 2}ms ${this.easing} 0ms`,
+				transition: `all ${this.totalDuration / 2 - 50}ms ${this.easing} 0ms`,
 				borderWidth: (this.diag / 2) +'px',
 			});
 
@@ -81,10 +81,10 @@
 				this.image = this.to;
 
 				this.$refs.wrapper.transform({
-					transition: `all ${this.totalDuration / 2}ms ${this.easing} 0ms`,
+					transition: `all ${this.totalDuration / 2 - 50}ms ${this.easing} 0ms`,
 					borderWidth: 0,
 				});
-			}, this.totalDuration / 2);
+			}, this.totalDuration / 2 + 50);
 		},
 	};
 </script>

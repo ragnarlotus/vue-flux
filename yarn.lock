@@ -9888,6 +9888,14 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.0.tgz#bd76d6a23323e2ca8ffa12028dc04559c75f9019"
   integrity sha512-iq+S7vZJE60yejDYM0ek6zg308+UZsdtPExWP9VZoCFCz1zkJoXFnAX7aZfd/ZwrkidzdUZL0C/ryW+JwAiIGw==
 
+vue-cosk@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/vue-cosk/-/vue-cosk-0.1.1.tgz#424a20771970cee8fa3198ec7c09c719704ad2d5"
+  integrity sha512-cBosfcRp+OPyLdOqqaZ3zvrEsGXYNeZeAc88nKeL3Xc4830Lh1XTiAe1mzkBVQq65cZK/R+DD3ykfpJze6RLnQ==
+  dependencies:
+    core-js "^2.6.5"
+    vue "^2.6.10"
+
 vue-eslint-parser@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-2.0.3.tgz#c268c96c6d94cfe3d938a5f7593959b0ca3360d1"
