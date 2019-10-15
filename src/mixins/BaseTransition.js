@@ -76,16 +76,23 @@ export default {
 			for (let child of this.$children) {
 				let tag = child.$options._componentTag;
 
-				if (tag === 'flux-grid') {
+				if (tag === 'flux-grid')
 					time += child._props.cols * child._props.rows;
-				} else if (tag === 'flux-cube') {
-					time += 2;
-				} else {
+
+				else if (tag === 'flux-vortex')
+					time += child._props.circles * 2;
+
+				else if (tag === 'flux-wrapper')
+					time += 8;
+
+				else if (tag === 'flux-cube')
+					time += 4;
+
+				else
 					time++;
-				}
 			}
 
-			return time * 10;
+			return (time < 16? 16 : time) * 10;
 		},
 	},
 
