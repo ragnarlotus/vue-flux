@@ -48,14 +48,12 @@
 			if (this.current)
 				this.current.hide();
 
-			let direction = this.getDirection();
-
 			let sides = {
 				next: 'left',
 				prev: 'right',
 			};
 
-			this.$refs.cube.turn(sides[direction]);
+			this.$refs.cube.turn(sides[this.direction]);
 		},
 
 		beforeDestroy() {

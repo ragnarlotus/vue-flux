@@ -62,11 +62,9 @@
 				right: this.sideColor,
 			};
 
-			let direction = this.getDirection();
-
 			this.$refs.grid.transform((tile, i) => {
 				tile.setCss({
-					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i, direction)}ms`,
+					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
 				});
 
 				tile.turnBottom();

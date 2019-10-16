@@ -122,14 +122,12 @@
 			},
 
 			getDeg() {
-				let direction = this.getDirection();
-
 				let sides = {
 					next: '-180',
 					prev: '180',
 				};
 
-				return sides[direction];
+				return sides[this.direction];
 			}
 		}
 	};

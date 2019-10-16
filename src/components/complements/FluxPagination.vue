@@ -46,7 +46,7 @@
 			},
 
 			getClass(i) {
-				if (this.Transitions.current !== undefined && this.Images.last.index === i)
+				if (this.Transitions.current !== undefined && this.Transitions.from.index === i)
 					return 'active';
 
 				if (this.Transitions.current === undefined && this.Images.current.index === i)
@@ -107,6 +107,7 @@
 			}
 
 			&.active {
+				border-color: white;
 				background-color: white;
 			}
 

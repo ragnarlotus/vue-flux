@@ -52,8 +52,6 @@
 			if (this.current)
 				this.current.hide();
 
-			let direction = this.getDirection();
-
 			let sides = {
 				prev: 'backl',
 				next: 'backr',
@@ -61,10 +59,10 @@
 
 			this.$refs.grid.transform((tile, i) => {
 				tile.setCss({
-					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i, direction)}ms`,
+					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
 				});
 
-				tile.turn(sides[direction]);
+				tile.turn(sides[this.direction]);
 			});
 		},
 

@@ -30,9 +30,9 @@ export default {
 	},
 
 	created() {
-		Object.assign(this, this.options);
+		Object.assign(this, {direction: 'next'}, this.options);
 
-		let direction = this.getDirection();
+		let { direction } = this;
 
 		let setup = {
 			prev: this.setupPrev,
@@ -43,7 +43,7 @@ export default {
 	},
 
 	played() {
-		let direction = this.getDirection();
+		let { direction } = this;
 
 		let play = {
 			prev: this.playPrev,
@@ -54,13 +54,8 @@ export default {
 	},
 
 	methods: {
-		getDirection() {
-			return this.direction || 'next';
-		},
-
-		getDelay(i, direction) {
-			if (!direction)
-				direction = this.getDirection();
+		getDelay(i) {
+			let { direction } = this;
 
 			let getDelay = {
 				prev: this.getDelayPrev,
@@ -71,28 +66,20 @@ export default {
 		},
 
 		getReadyness() {
-			let time = 0;
+			const min = 80;
 
-			for (let child of this.$children) {
-				let tag = child.$options._componentTag;
+			const getNumChilds = el => {
+				let numChilds = el.$children.length;
 
-				if (tag === 'flux-grid')
-					time += child._props.cols * child._props.rows;
+				for (let child of el.$children)
+					numChilds += getNumChilds(child);
 
-				else if (tag === 'flux-vortex')
-					time += child._props.circles * 2;
-
-				else if (tag === 'flux-wrapper')
-					time += 8;
-
-				else if (tag === 'flux-cube')
-					time += 4;
-
-				else
-					time++;
+				return numChilds
 			}
 
-			return (time < 16? 16 : time) * 10;
+			let time = getNumChilds(this) * 3;
+
+			return time < min? min : time;
 		},
 	},
 

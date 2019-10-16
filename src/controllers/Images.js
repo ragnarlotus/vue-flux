@@ -150,6 +150,7 @@ export default class ImagesController {
 	}
 
 	loadError(error) {
+		// eslint-disable-next-line
 		console.warn(error);
 	}
 

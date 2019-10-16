@@ -21,7 +21,7 @@
 					:class="thumbClass(i)"
 					@click="showImage(i)"
 				>
-					<flux-image ref="thumbs" :image="images[i]" :size="size" :title="getCaptionText(i)" />
+					<flux-image ref="thumbs" :image="images[i]" :size="thumbSize" :title="getCaptionText(i)" />
 				</li>
 			</ul>
 		</nav>
@@ -29,14 +29,16 @@
 </template>
 
 <script>
-	import BaseComplement from '@/mixins/BaseComplement.js';
-	import FluxButton from '@/components/FluxButton.vue';
+	import BaseComplement from '@/mixins/BaseComplement';
+	import FluxButton from '@/components/FluxButton';
+	import FluxImage from '@/components/FluxImage';
 
 	export default {
 		name: 'FluxIndex',
 
 		components: {
 			FluxButton,
+			FluxImage,
 		},
 
 		mixins: [
@@ -99,6 +101,18 @@
 
 				return listClass;
 			},
+
+			thumbSize() {
+				let { width, height } = this.vf.size;
+
+				width = width * 0.22;
+				height = width * 90 / 1.7;
+
+				return {
+					width,
+					height,
+				};
+			}
 		},
 
 		created() {
@@ -202,28 +216,13 @@
 			transition: all 0.5s linear;
 		}
 
-		$width: 160px;
-		$height: 90px;
-
 		li {
 			position: relative;
 			display: inline-block;
 			box-sizing: content-box;
 			margin: 8px 8px;
-			width: $width;
-			height: $height;
 			cursor: pointer;
 			transition: all 0.3s ease;
-
-			@media (max-width: 386px) {
-				width: $width * 0.5;
-				height: $height * 0.5;
-			}
-
-			@media (min-width: 387px) and (max-width: 576px) {
-				width: $width * 0.7;
-				height: $height * 0.7;
-			}
 
 			&:hover {
 				box-shadow: 0px 0px 3px 2px rgba(255,255,255,0.6);
