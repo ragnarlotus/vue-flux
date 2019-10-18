@@ -105,8 +105,13 @@
 			thumbSize() {
 				let { width, height } = this.vf.size;
 
-				width = width * 0.22;
-				height = width * 90 / 1.7;
+				width = width / 4.2;
+				height = width * 90 / 160;
+
+				if (width > 160) {
+					width = 160;
+					height = 90;
+				}
 
 				return {
 					width,
@@ -181,7 +186,7 @@
 
 		.toggle {
 			left: 50%;
-			top: 70%;
+			top: 74%;
 			cursor: pointer;
 			z-index: 100;
 		}
@@ -208,19 +213,20 @@
 			height: 100%;
 			margin: 0;
 			margin-top: 100%;
-			padding: 18px 10px;
+			padding: 24px 0 0 24px;
 			list-style-type: none;
 			text-align: center;
 			overflow-y: auto;
-			background-color: rgba(0, 0, 0, 0.8);
+			background-color: black;
 			transition: all 0.5s linear;
+			font-size: 0;
 		}
 
 		li {
 			position: relative;
 			display: inline-block;
 			box-sizing: content-box;
-			margin: 8px 8px;
+			margin: 0 24px 24px 0;
 			cursor: pointer;
 			transition: all 0.3s ease;
 

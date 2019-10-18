@@ -1,11 +1,12 @@
 export default class Img {
+	status;
+	index;
+	aspectRatio;
+	size;
 
-	constructor(src) {
+	constructor(src, vm) {
 		this.src = src;
-		this.index = undefined;
-		this.status = undefined;
-		this.aspectRatio = undefined;
-		this.size = undefined;
+		this.vm = vm;
 	}
 
 	load() {
@@ -25,11 +26,17 @@ export default class Img {
 
 				this.status = 'loaded';
 
+				if (this.vm)
+					this.vm.status = this.status;
+
 				resolve();
 			}
 
 			img.onerror = () => {
 				this.status = 'error';
+
+				if (this.vm)
+					this.vm.status = this.status;
 
 				reject(`Image ${this.src} could not be loaded`);
 			}

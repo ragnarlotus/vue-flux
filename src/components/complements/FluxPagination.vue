@@ -68,13 +68,15 @@
 <style lang="scss">
 	.vue-flux .flux-pagination {
 		position: absolute;
-		left: 50px;
-		right: 50px;
-		bottom: 2%;
+		left: 2%;
+		right: 2%;
+		bottom: 3%;
 		z-index: 100;
 
 		ul {
-			display: block;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
 			margin: 0;
 			padding: 0;
 			list-style-type: none;
@@ -82,14 +84,15 @@
 		}
 
 		li {
-			display: inline-block;
-			margin: 0 8px;
+			margin: 1% 2%;
 			cursor: pointer;
+			font-size: 0;
+			flex: none;
 		}
 
 		$size: 16px;
-		$smSize: $size * 0.70;
-		$mdSize: $size * 0.80;
+		$smSize: $size * 0.60;
+		$mdSize: $size * 0.75;
 		$lgSize: $size * 0.90;
 
 		.pagination-item {

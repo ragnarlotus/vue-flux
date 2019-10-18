@@ -9,28 +9,28 @@
 		@touchstart="Touches.start($event)"
 		@touchend="Touches.end($event)"
 	>
+		<flux-transition
+			v-if="Transitions.current"
+			ref="transition"
+			:transition="Transitions.current"
+			:size="size"
+			:from="Transitions.from"
+			:to="Transitions.to"
+			:options="Transitions.current.options"
+			:images="Images.imgs"
+			@ready="Transitions.ready()"
+			@start="Transitions.start()"
+			@end="Transitions.end()"
+		/>
+
+		<flux-image
+			v-if="Images.current"
+			ref="image"
+			:size="size"
+			:image="Images.current"
+		/>
+
 		<div v-if="size">
-			<flux-transition
-				v-if="Transitions.current"
-				ref="transition"
-				:transition="Transitions.current"
-				:size="size"
-				:from="Transitions.from"
-				:to="Transitions.to"
-				:options="Transitions.current.options"
-				:images="Images.imgs"
-				@ready="Transitions.ready()"
-				@start="Transitions.start()"
-				@end="Transitions.end()"
-			/>
-
-			<flux-image
-				v-if="Images.current"
-				ref="image"
-				:size="size"
-				:image="Images.current"
-			/>
-
 			<slot name="preloader" />
 
 			<slot name="caption" />
@@ -93,7 +93,7 @@
 			config: {
 				allowFullscreen: false,
 				allowToSkipTransition: true,
-				autohideTime: 1500,
+				autohideTime: 2500,
 				autoplay: false,
 				bindKeys: false,
 				delay: 5000,
@@ -214,20 +214,20 @@
 				this.$emit('options-updated');
 			},
 
-			resize() {
+			async resize() {
 				if (!this.$refs.container)
 					return;
 
 				this.size = undefined;
 
-				this.$nextTick(() => {
-					let size = Dom.sizeFrom(this.$refs.container);
+				await this.$nextTick();
 
-					if (!size.height)
-						size.height = size.width / 16 * 9;
+				let size = Dom.sizeFrom(this.$refs.container);
 
-					this.size = size;
-				});
+				if (!size.height)
+					size.height = size.width / 16 * 9;
+
+				this.size = size;
 			},
 
 			init() {

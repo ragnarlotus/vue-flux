@@ -16,7 +16,7 @@
 </script>
 
 <style lang="scss">
-	$size: 50px;
+	$size: 40px;
 	$smSize: $size * 0.55;
 	$mdSize: $size * 0.70;
 	$lgSize: $size * 0.85;

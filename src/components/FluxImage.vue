@@ -28,11 +28,17 @@
 				};
 			},
 
+			loaded() {
+				let { status = this.img.status } = this;
+
+				return this.img && status === 'loaded';
+			},
+
 			imageStyle() {
-				if (!this.img || this.img.status !== 'loaded' || !this.size)
+				if (!this.loaded)
 					return {};
 
-				let { size, position } = this.img.getCoverProps(this.size);
+				let { size, position } = this.img.getCoverProps(this.size || this.domSize);
 
 				if (this.offset) {
 					for (let side of ['top', 'left'])

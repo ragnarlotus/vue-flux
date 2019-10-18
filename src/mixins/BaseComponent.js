@@ -1,3 +1,4 @@
+import Dom from '@/libraries/Dom';
 import Img from '@/libraries/Img';
 
 export default {
@@ -22,7 +23,6 @@ export default {
 
 		size: {
 			type: Object,
-			required: true,
 		},
 
 		viewSize: {
@@ -34,6 +34,7 @@ export default {
 	},
 
 	data: () => ({
+		status: undefined,
 		baseStyle: {},
 	}),
 
@@ -45,7 +46,7 @@ export default {
 			if (this.image.src)
 				return this.image;
 
-			let img = new Img(this.image);
+			let img = new Img(this.image, this);
 			img.load();
 
 			return img;
@@ -72,13 +73,19 @@ export default {
 			return imgs;
 		},
 
+		domSize() {
+			return Dom.sizeFrom(this.$el);
+		},
+
 		sizeStyle() {
 			if (!this.size)
 				return {};
 
+			let size = this.size;
+
 			let {
-				width = this.size.width,
-				height = this.size.height
+				width = size.width,
+				height = size.height,
 			} = this.viewSize;
 
 			return {
