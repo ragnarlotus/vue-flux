@@ -30,15 +30,12 @@
 			:image="Images.current"
 		/>
 
-		<div v-if="size">
+		<div v-if="size" class="complements">
 			<slot name="preloader" />
-
 			<slot name="caption" />
-
+			<div style="height: 48%;" />
 			<slot name="controls" />
-
 			<slot name="index" />
-
 			<slot v-if="loaded" name="pagination" />
 		</div>
 	</div>
@@ -115,15 +112,15 @@
 
 		computed: {
 			style() {
-				if (this.Display.inFullScreen()) {
+				if (!this.size)
+					return {};
+
+				if (this.Display.inFullScreen) {
 					return {
 						width: '100% !important',
 						height: '100% !important',
 					};
 				}
-
-				if (!this.size)
-					return {};
 
 				let { width, height } = this.size;
 
@@ -323,6 +320,24 @@
 
 		.flux-transition {
 			position: absolute;
+		}
+
+		& > .flux-image {
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+		.complements {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			z-index: 45;
 		}
 	}
 </style>

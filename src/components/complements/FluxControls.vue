@@ -59,12 +59,9 @@
 
 <style lang="scss">
 	.vue-flux .flux-controls {
-		position: absolute;
-		top: 50%;
-		left: 0;
-		right: 0;
-		text-align: center;
-		z-index: 100;
+		flex: 1 1 0%;
+		display: flex;
+		justify-content: space-between;
 
 		&.fade-enter, &.fade-leave-to {
 			opacity: 0;
@@ -75,16 +72,11 @@
 		}
 
 		.prev {
-			left: 6%;
-		}
-
-		.play, .pause {
-			position: relative;
-			display: inline-block;
+			margin-left: 4%;
 		}
 
 		.next {
-			right: 6%;
+			margin-right: 4%;
 		}
 	}
 </style>

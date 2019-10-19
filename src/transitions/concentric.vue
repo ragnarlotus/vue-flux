@@ -35,7 +35,7 @@
 		},
 
 		played() {
-			let deg = this.getDirection() === 'next'? '90' : '-90';
+			let deg = this.direction === 'next'? '90' : '-90';
 
 			this.$refs.vortex.transform((tile, i) => {
 				tile.transform({

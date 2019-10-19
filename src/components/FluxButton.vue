@@ -22,9 +22,6 @@
 	$lgSize: $size * 0.85;
 
 	.vue-flux .flux-button {
-		position: absolute;
-		margin: 0;
-		padding: 0;
 		width: $size;
 		height: $size;
 		border: 0;
@@ -45,70 +42,6 @@
 		@media (min-width: 769px) and (max-width: 992px) {
 			width: $lgSize;
 			height: $lgSize;
-		}
-
-		&.top {
-			margin-top: -($size / 2);
-
-			@media (max-width: 576px) {
-				margin-top: -($smSize / 2);
-			}
-
-			@media (min-width: 577px) and (max-width: 768px) {
-				margin-top: -($mdSize / 2);
-			}
-
-			@media (min-width: 769px) and (max-width: 992px) {
-				margin-top: -($lgSize / 2);
-			}
-		}
-
-		&.right {
-			margin-right: -($size / 2);
-
-			@media (max-width: 576px) {
-				margin-right: -($smSize / 2);
-			}
-
-			@media (min-width: 577px) and (max-width: 768px) {
-				margin-right: -($mdSize / 2);
-			}
-
-			@media (min-width: 769px) and (max-width: 992px) {
-				margin-right: -($lgSize / 2);
-			}
-		}
-
-		&.bottom {
-			margin-bottom: -($size / 2);
-
-			@media (max-width: 576px) {
-				margin-bottom: -($smSize / 2);
-			}
-
-			@media (min-width: 577px) and (max-width: 768px) {
-				margin-bottom: -($mdSize / 2);
-			}
-
-			@media (min-width: 769px) and (max-width: 992px) {
-				margin-bottom: -($lgSize / 2);
-			}
-		}
-
-		&.left {
-			margin-left: -($size / 2);
-
-			@media (max-width: 576px) {
-				margin-left: -($smSize / 2);
-			}
-
-			@media (min-width: 577px) and (max-width: 768px) {
-				margin-left: -($mdSize / 2);
-			}
-
-			@media (min-width: 769px) and (max-width: 992px) {
-				margin-left: -($lgSize / 2);
-			}
 		}
 
 		> svg {

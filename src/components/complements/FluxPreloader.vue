@@ -3,7 +3,7 @@
 		<slot name="spinner">
 			<div v-if="displaySpinner" class="spinner">
 				<div class="pct">
-					{{ vf.Images.progress }}%
+					{{ Images.progress }}%
 				</div>
 				<div class="border" />
 			</div>
@@ -12,17 +12,18 @@
 		<flux-image
 			v-if="displayLast"
 			:size="vf.size"
-			:image="vf.Images.lastShown"
-			:css="lastShownCss"
+			:image="Images.last"
+			:css="imageCss"
 		/>
 
 		<flux-transition
-			v-if="displayTransition"
+			v-if="transitionName"
 			ref="transition"
 			:size="vf.size"
 			:transition="transitionName"
-			:from="vf.Images.lastShown"
-			:to="vf.Images.current"
+			:from="Images.last"
+			:to="Images.current"
+			@ready="$refs.transition.start()"
 			@end="transitionEnd()"
 		/>
 	</div>
@@ -57,7 +58,7 @@
 		data: () => ({
 			displayTransition: false,
 			transitionName: undefined,
-			lastShownCss: {
+			imageCss: {
 				zIndex: 13,
 			},
 		}),
@@ -68,7 +69,7 @@
 			},
 
 			displayLast() {
-				let Images = this.vf.Images;
+				let { Images } = this;
 
 				if (Images.preloading && Images.lastShown && Images.lastShown.src !== Images.imgs[0].src)
 					return true;
@@ -79,7 +80,7 @@
 
 		watch: {
 			'vf.Images.preloading': function(preloading) {
-				let Images = this.vf.Images;
+				let { Images } = this;
 
 				if (!preloading && Images.imgs[0] && Images.lastShown && Images.lastShown.src !== Images.imgs[0].src)
 					this.transitionStart();
@@ -88,20 +89,22 @@
 
 		methods: {
 			transitionStart() {
-				if (!this.vf.Images.current)
+				let { Images, Transitions } = this;
+
+				if (!Images.current)
 					return;
 
-				this.transitionName = this.transition || this.vf.Transitions.transitions[this.vf.Transitions.nextIndex];
-				this.displayTransition = true;
+				this.transitionName = this.transition || Transitions.next.name;
 			},
 
 			transitionEnd() {
+				let { Images, Transitions } = this;
+
 				if (!this.transition)
-					this.vf.Transitions.lastIndex = this.vf.Transitions.nextIndex;
+					Transitions.last = Transitions.next;
 
 				this.transitionName = undefined;
-				this.displayTransition = false;
-				this.vf.Images.updateLastShown(this.vf.Images.current);
+				Images.last = Images.current;
 			}
 		}
 	};
@@ -114,7 +117,7 @@
 		right: 0;
 		bottom: 0;
 		left: 0;
-		z-index: 12;
+		z-index: -1;
 
 		$spinner-size: 80px;
 

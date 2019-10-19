@@ -1,5 +1,5 @@
 <template>
-	<div :style="style" />
+	<div class="flux-image" :style="style" />
 </template>
 
 <script>
@@ -29,9 +29,12 @@
 			},
 
 			loaded() {
-				let { status = this.img.status } = this;
+				let { status } = this;
 
-				return this.img && status === 'loaded';
+				if (!status && this.img)
+					status = this.img.status;
+
+				return status === 'loaded';
 			},
 
 			imageStyle() {

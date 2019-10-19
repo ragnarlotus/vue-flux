@@ -124,6 +124,6 @@
 
 <style lang="scss">
 	.flux-transition {
-		position: 'relative';
+		position: relative;
 	}
 </style>

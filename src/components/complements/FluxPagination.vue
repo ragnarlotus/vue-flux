@@ -67,11 +67,7 @@
 
 <style lang="scss">
 	.vue-flux .flux-pagination {
-		position: absolute;
-		left: 2%;
-		right: 2%;
-		bottom: 3%;
-		z-index: 100;
+		margin-bottom: 1%;
 
 		ul {
 			display: flex;

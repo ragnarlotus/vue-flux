@@ -4,7 +4,7 @@ export default class DisplayController {
 		this.vf = vf;
 	}
 
-	inFullScreen() {
+	get inFullScreen() {
 		let props = [
 			'fullscreenElement',
 			'webkitFullscreenElement',
@@ -12,14 +12,16 @@ export default class DisplayController {
 			'msFullscreenElement',
 		];
 
-		return document[props.find(prop => prop in document)];
+		return !!document[props.find(prop => prop in document)];
 	}
 
 	toggleFullScreen() {
-		this.inFullScreen()? this.exitFullScreen() : this.enterFullScreen();
+		this.inFullScreen? this.exitFullScreen() : this.enterFullScreen();
 	}
 
-	enterFullScreen() {
+	async enterFullScreen() {
+		let { vf } = this;
+
 		if (!this.vf.config.allowFullscreen)
 			return;
 
@@ -30,18 +32,18 @@ export default class DisplayController {
 			'msRequestFullscreen',
 		];
 
-		let element = this.vf.$refs.container;
+		let element = vf.$refs.container;
 
 		methods.find((method) => {
 			return method in element? element[method]() || true : false;
 		});
 
-		this.vf.resize();
-
-		this.vf.$emit('fullscreen-enter');
+		vf.$emit('fullscreen-enter');
 	}
 
-	exitFullScreen() {
+	async exitFullScreen() {
+		let { vf } = this;
+
 		let methods = [
 			'exitFullscreen',
 			'mozCancelFullScreen',
@@ -53,9 +55,7 @@ export default class DisplayController {
 			return method in document? document[method]() || true : false;
 		});
 
-		this.vf.resize();
-
-		this.vf.$emit('fullscreen-exit');
+		vf.$emit('fullscreen-exit');
 	}
 
 }

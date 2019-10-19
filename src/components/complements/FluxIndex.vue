@@ -139,15 +139,19 @@
 				this.vf.stop();
 				this.visible = true;
 
+				let { index } = this.$refs;
+
 				this.$nextTick(() => {
-					this.$refs.index.clientHeight;
-					this.$refs.index.style.marginTop = 0;
+					index.clientHeight;
+					index.style.marginTop = 0;
 				});
 			},
 
 			hideIndex(imageIndex) {
-				this.$refs.index.clientHeight;
-				this.$refs.index.style.marginTop = '100%';
+				let { index } = this.$refs;
+
+				index.clientHeight;
+				index.style.marginTop = '100%';
 
 				setTimeout(() => {
 					this.visible = false;
@@ -176,19 +180,16 @@
 
 <style lang="scss">
 	.vue-flux .flux-index {
+		margin-bottom: 1%;
+		font-size: 0;
+		text-align: center;
+
 		.fade-enter, .fade-leave-to {
 			opacity: 0;
 		}
 
 		.fade-enter-active, .fade-leave-active {
 			transition: opacity 0.3s ease-in;
-		}
-
-		.toggle {
-			left: 50%;
-			top: 74%;
-			cursor: pointer;
-			z-index: 100;
 		}
 
 		nav {

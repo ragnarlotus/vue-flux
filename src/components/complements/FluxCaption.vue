@@ -41,11 +41,11 @@
 		top: 0;
 		left: 0;
 		right: 0;
-		padding: 8px;
+		font-size: 0.8rem;
+		line-height: 1.8rem;
 		color: white;
 		text-align: center;
 		background-color: rgba(0, 0, 0, 0.65);
-		z-index: 100;
 
 		&.fade-enter, &.fade-leave-to {
 			opacity: 0;
