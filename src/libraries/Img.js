@@ -1,4 +1,5 @@
 export default class Img {
+	status;
 	index;
 	aspectRatio;
 	size;
