@@ -1,4 +1,5 @@
 // Components
+export { default as FluxButton } from './FluxButton.vue';
 export { default as FluxCube } from './FluxCube.vue';
 export { default as FluxGrid } from './FluxGrid.vue';
 export { default as FluxImage } from './FluxImage.vue';

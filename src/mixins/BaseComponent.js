@@ -34,7 +34,6 @@ export default {
 	},
 
 	data: () => ({
-		status: undefined,
 		baseStyle: {},
 	}),
 
@@ -46,7 +45,7 @@ export default {
 			if (this.image.src)
 				return this.image;
 
-			let img = new Img(this.image, this);
+			let img = new Img(this.image);
 			img.load();
 
 			return img;

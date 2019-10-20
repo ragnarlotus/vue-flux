@@ -28,20 +28,13 @@
 				};
 			},
 
-			loaded() {
-				let { status } = this;
-
-				if (!status && this.img)
-					status = this.img.status;
-
-				return status === 'loaded';
-			},
-
 			imageStyle() {
-				if (!this.loaded)
+				let { img } = this;
+
+				if (img.status !== 'loaded')
 					return {};
 
-				let { size, position } = this.img.getCoverProps(this.size || this.domSize);
+				let { size, position } = img.getCoverProps(this.size || this.domSize);
 
 				if (this.offset) {
 					for (let side of ['top', 'left'])
