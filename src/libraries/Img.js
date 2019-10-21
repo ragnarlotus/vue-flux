@@ -22,7 +22,6 @@ export default class Img {
 				};
 
 				this.aspectRatio = this.size.width / this.size.height;
-
 				this.status = 'loaded';
 
 				resolve();

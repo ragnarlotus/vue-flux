@@ -31,7 +31,7 @@
 			imageStyle() {
 				let { img } = this;
 
-				if (img.status !== 'loaded')
+				if (!img || img.status !== 'loaded')
 					return {};
 
 				let { size, position } = img.getCoverProps(this.size || this.domSize);

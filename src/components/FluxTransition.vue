@@ -102,7 +102,7 @@
 		},
 
 		methods: {
-			play() {
+			start() {
 				this.$refs.transition.$options.played.call(this.$refs.transition);
 
 				this.$emit('start');

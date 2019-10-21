@@ -30,9 +30,9 @@
 </template>
 
 <script>
-	import BaseComplement from '@/mixins/BaseComplement.js';
-	import FluxImage from '@/components/FluxImage.vue';
-	import FluxTransition from '@/components/FluxTransition.vue';
+	import BaseComplement from '@/mixins/BaseComplement';
+	import FluxImage from '@/components/FluxImage';
+	import FluxTransition from '@/components/FluxTransition';
 
 	export default {
 		name: 'FluxPreloader',
@@ -56,7 +56,6 @@
 		},
 
 		data: () => ({
-			displayTransition: false,
 			transitionName: undefined,
 			imageCss: {
 				zIndex: 13,
@@ -71,7 +70,7 @@
 			displayLast() {
 				let { Images } = this;
 
-				if (Images.preloading && Images.lastShown && Images.lastShown.src !== Images.imgs[0].src)
+				if (Images.preloading && Images.last && Images.last.src !== Images.imgs[0].src)
 					return true;
 
 				return false;
@@ -82,7 +81,7 @@
 			'vf.Images.preloading': function(preloading) {
 				let { Images } = this;
 
-				if (!preloading && Images.imgs[0] && Images.lastShown && Images.lastShown.src !== Images.imgs[0].src)
+				if (!preloading && Images.imgs[0] && Images.last && Images.last.src !== Images.imgs[0].src)
 					this.transitionStart();
 			},
 		},

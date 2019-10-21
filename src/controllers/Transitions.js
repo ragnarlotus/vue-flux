@@ -81,7 +81,7 @@ export default class TransitionsController {
 	}
 
 	ready() {
-		this.vf.$refs.transition.play();
+		this.vf.$refs.transition.start();
 	}
 
 	start() {

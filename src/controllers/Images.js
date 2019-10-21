@@ -21,7 +21,7 @@ export default class ImagesController {
 	}
 
 	set last(image) {
-		this.$last = { ...image };
+		this.$last = image;
 	}
 
 	get current() {
@@ -69,17 +69,19 @@ export default class ImagesController {
 	}
 
 	preloadStart() {
+		let { vf } = this;
+
 		this.preloading = true;
 
 		let preload = this.srcs.length;
 
-		if (this.vf.config.lazyLoad)
-			preload = this.vf.config.lazyLoadAfter;
+		if (vf.config.lazyLoad)
+			preload = vf.config.lazyLoadAfter;
 
 		let srcs = this.srcs.slice(0, preload);
 		srcs.forEach(src => this.addImg(src));
 
-		this.vf.$emit('images-preload-start');
+		vf.$emit('images-preload-start');
 	}
 
 	preloadEnd() {
@@ -135,8 +137,12 @@ export default class ImagesController {
 				if (status === 'error')
 					continue;
 
-				if (status === 'loaded')
-					this.last = this.current = this.imgs[i];
+				if (status === 'loaded') {
+					this.current = this.imgs[i];
+
+					if (!this.last)
+						this.last = this.current;
+				}
 
 				break;
 			}

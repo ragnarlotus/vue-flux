@@ -34,44 +34,12 @@ export default {
 	},
 
 	data: () => ({
+		img: undefined,
+		imgs: undefined,
 		baseStyle: {},
 	}),
 
 	computed: {
-		img() {
-			if (!this.image)
-				return undefined;
-
-			if (this.image.src)
-				return this.image;
-
-			let img = new Img(this.image);
-			img.load();
-
-			return img;
-		},
-
-		imgs() {
-			if (!this.images)
-				return undefined;
-
-			let img;
-			let imgs = {};
-
-			for (let side in this.images) {
-				img = this.images[side];
-
-				if (!img.src) {
-					img = new Img(img);
-					img.load();
-				}
-
-				imgs[side] = img;
-			}
-
-			return imgs;
-		},
-
 		domSize() {
 			return Dom.sizeFrom(this.$el);
 		},
@@ -104,7 +72,54 @@ export default {
 		},
 	},
 
+	watch: {
+		image: function() {
+			this.initImg();
+		},
+
+		images: function() {
+			this.initImgs();
+		},
+	},
+
+	created() {
+		this.initImg();
+		this.initImgs();
+	},
+
 	methods: {
+		initImg() {
+			if (!this.image)
+				return this.img = undefined;
+
+			if (this.image.src)
+				return this.img = this.image;
+
+			this.img = new Img(this.image);
+			this.img.load();
+		},
+
+		initImgs() {
+			if (!this.images)
+				return this.imgs = undefined;
+
+			let img;
+			let imgs = {};
+
+			for (let side in this.images) {
+				img = this.images[side];
+
+				if (!img.src) {
+					img = new Img(img);
+					img.load();
+				}
+
+				imgs[side] = img;
+			}
+
+			this.imgs = imgs;
+		},
+
 		setCss(css) {
 			this.baseStyle = {
 				...this.baseStyle,
