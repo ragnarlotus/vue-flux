@@ -116,7 +116,7 @@ export default class ImagesController {
 	}
 
 	addImg(src) {
-		let img = new Img(src);
+		let img = new Img(this.vf.config.path + src);
 		this.imgs.push(img);
 
 		img.load().then(() => {

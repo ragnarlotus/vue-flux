@@ -23,10 +23,6 @@ export default class TouchesController {
 		if (!this.vf.config.enableGestures)
 			return;
 
-		// Prevent web scrolling
-		if (event.path[1].matches('.mask') || event.path[1].matches('.vue-flux'))
-			event.preventDefault();
-
 		this.startTime = Date.now();
 		this.startX = event.touches[0].clientX;
 		this.startY = event.touches[0].clientY;
@@ -37,11 +33,6 @@ export default class TouchesController {
 
 		this.prevTouchTime = this.endTime;
 		this.endTime = Date.now();
-
-		if (this.doubleTap()) {
-			vf.toggleFullscreen();
-			return;
-		}
 
 		let offsetX = event.changedTouches[0].clientX - this.startX;
 		let offsetY = event.changedTouches[0].clientY - this.startY;
@@ -54,17 +45,11 @@ export default class TouchesController {
 		if (!vf.config.enableGestures)
 			return;
 
-		// Prevent web scrolling
-		event.preventDefault();
-
 		if (this.slideRight(offsetX))
 			vf.show('prev');
 
 		else if (this.slideLeft(offsetX))
 			vf.show('next');
-
-		else if (vf.index !== undefined && this.slideUp(offsetY))
-			vf.index.show();
 	}
 
 	tap(offsetX, offsetY) {

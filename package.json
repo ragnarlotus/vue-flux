@@ -1,6 +1,6 @@
 {
   "name": "vue-flux",
-  "version": "6.0.0-beta.21",
+  "version": "6.0.0-beta.22",
   "description": "Vue image slider",
   "author": "ragnar lotus",
   "repository": {
@@ -43,7 +43,7 @@
     "sass-loader": "^7.1.0",
     "tailwindcss": "^1.1.2",
     "vue": "^2.6.10",
-    "vue-cosk": "0.1.1",
+    "vue-cosk": "0.2.1",
     "vue-template-compiler": "^2.6.10"
   }
 }

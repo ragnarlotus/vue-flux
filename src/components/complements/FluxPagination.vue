@@ -8,7 +8,6 @@
 						class="pagination-item"
 						:class="getClass(i - 1)"
 						@click="show(i - 1)"
-						@touchend="show(i - 1, $event)"
 					/>
 				</slot>
 			</li>
