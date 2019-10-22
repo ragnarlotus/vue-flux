@@ -66,7 +66,8 @@
 
 <style lang="scss">
 	.vue-flux .flux-pagination {
-		margin-bottom: 1%;
+		margin-bottom: 2.5%;
+		height: 5%;
 
 		ul {
 			display: flex;
@@ -76,24 +77,26 @@
 			padding: 0;
 			list-style-type: none;
 			text-align: center;
+			height: 100%;
 		}
 
 		li {
-			margin: 1% 2%;
+			margin: 1% 1.5%;
 			cursor: pointer;
+			width: 2.5%;
+			height: 90%;
+			min-width: 5px;
+			min-height: 5px;
+			max-width: 14px;
+			max-height: 14px;
 			font-size: 0;
 			flex: none;
 		}
 
-		$size: 16px;
-		$smSize: $size * 0.60;
-		$mdSize: $size * 0.75;
-		$lgSize: $size * 0.90;
-
 		.pagination-item {
-			display: inline-block;
-			width: $size;
-			height: $size;
+			display: block;
+			width: 100%;
+			height: 100%;
 			border: 2px solid #fff;
 			border-radius: 50%;
 			background-color: rgba(0, 0, 0, 0.7);
@@ -107,21 +110,6 @@
 			&.active {
 				border-color: white;
 				background-color: white;
-			}
-
-			@media (max-width: 576px) {
-				width: $smSize;
-				height: $smSize;
-			}
-
-			@media (min-width: 577px) and (max-width: 768px) {
-				width: $mdSize;
-				height: $mdSize;
-			}
-
-			@media (min-width: 769px) and (max-width: 992px) {
-				width: $lgSize;
-				height: $lgSize;
 			}
 		}
 	}
