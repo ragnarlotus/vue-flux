@@ -89,6 +89,7 @@
 			min-height: 10px;
 			padding-bottom: 2%;
 			position: relative;
+			box-sizing: border-box;
 		}
 
 		.pagination-item {
