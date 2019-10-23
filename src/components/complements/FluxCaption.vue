@@ -42,7 +42,8 @@
 		left: 0;
 		right: 0;
 		font-size: 0.8rem;
-		line-height: 1.8rem;
+		line-height: 1.1rem;
+		padding: 6px;
 		color: white;
 		text-align: center;
 		background-color: rgba(0, 0, 0, 0.65);

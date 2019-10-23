@@ -153,7 +153,7 @@
 
 				let index, src;
 
-				for (let i = 0; i <= 12; i++) {
+				for (let i = 0; i < 12; i++) {
 					index = Math.floor(Math.random() * srcs.length);
 
 					src = srcs.splice(index, 1)[0];

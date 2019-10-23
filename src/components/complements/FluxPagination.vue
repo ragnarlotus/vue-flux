@@ -66,8 +66,7 @@
 
 <style lang="scss">
 	.vue-flux .flux-pagination {
-		margin-bottom: 2.5%;
-		height: 5%;
+		margin-bottom: 0.5%;
 
 		ul {
 			display: flex;
@@ -77,26 +76,28 @@
 			padding: 0;
 			list-style-type: none;
 			text-align: center;
-			height: 100%;
+			position: relative;
 		}
 
 		li {
-			margin: 1% 1.5%;
+			display: block;
+			margin: 0 1% 1.5% 1%;
 			cursor: pointer;
-			width: 2.5%;
-			height: 90%;
-			min-width: 5px;
-			min-height: 5px;
-			max-width: 14px;
-			max-height: 14px;
-			font-size: 0;
-			flex: none;
+			width: 2%;
+			height: 0;
+			min-width: 10px;
+			min-height: 10px;
+			padding-bottom: 2%;
+			position: relative;
 		}
 
 		.pagination-item {
-			display: block;
-			width: 100%;
-			height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			box-sizing: border-box;
 			border: 2px solid #fff;
 			border-radius: 50%;
 			background-color: rgba(0, 0, 0, 0.7);
