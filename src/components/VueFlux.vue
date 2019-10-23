@@ -289,6 +289,8 @@
 					return;
 				}
 
+				this.Timers.clear('image');
+
 				let from = this.Images.current;
 				let to = this.Images.getByIndex(index);
 				let direction = ['prev', 'next'].includes(index)? index : undefined;
