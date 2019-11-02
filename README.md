@@ -6,6 +6,10 @@
 
 **Version 6 is still in beta stage**
 
+**[Version 6 documentation](https://deulos.github.io/vue-flux-docs/v6/)**
+
+**[Version 6 demos](https://deulos.github.io/vue-flux-docs/demos/)**
+
 ## Overview
 
 This is an image slider developed with [Vuejs](https://vuejs.org/) 2 which comes with 20 cool transitions out of the box.
@@ -22,6 +26,7 @@ This is an image slider developed with [Vuejs](https://vuejs.org/) 2 which comes
 You can view a [demo here](https://deulos.github.io/vue-flux-docs/).
 
 ## Features
+
 | Feature | Description |
 |---------|-------------|
 | Responsive | The slider and the images are adapted to container to fill it always |
@@ -113,11 +118,12 @@ export default {
 
 ## Performance
 
-Weight is just 102KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
+Weight is about 130KB so is pretty light having only the essential CSS. It also does not require a high end computer as animations are performed with CSS3 hardware acceleration.
 
 ## Included transitions
 
 #### 2D transitions
+
 * Fade: fades from one image to next.
 * Kenburn: fades, zoom and moves current image to next.
 * Swipe: swipes the image to display next like uncovered with a curtain.
@@ -129,9 +135,10 @@ Weight is just 102KB so is pretty light having only the essential CSS. It also d
 * Blocks 2: the image is splited in blocks that shrink and fade out in wave from a corner to the opposite.
 * Concentric: a concentric effect is performed by rotating the image converted into circles.
 * Warp: a concentric effect is performed by rotating the image converted into circles in alternate direction.
-* Camera: from outside to inside the image is being cropped like in a camera lens.
+* Camera: from outside to inside the image is being circled in black like a camera.
 
 #### 3D transitions
+
 * Cube: turns the image to a side like if place in a cube.
 * Book: makes the effect of turning a page to display next image.
 * Fall: the image falls in front displaying next image.
@@ -161,7 +168,7 @@ You can view the full documentation at the project's [documentation](https://deu
 
 ## Changelog
 
-Check the version 6 [changelog](https://deulos.github.io/vue-flux-docs/v6/changelog) for update info.
+Check the [changelog](https://deulos.github.io/vue-flux-docs/v6/changelog) for update info.
 
 ## Inspiration
 

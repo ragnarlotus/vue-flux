@@ -14,18 +14,18 @@ export default {
 
 		images: Object,
 
-		offset: Object,
-
-		offsets: {
-			type: Object,
-			default: () => ({}),
-		},
-
 		size: {
 			type: Object,
 		},
 
 		viewSize: {
+			type: Object,
+			default: () => ({}),
+		},
+
+		offset: Object,
+
+		offsets: {
 			type: Object,
 			default: () => ({}),
 		},

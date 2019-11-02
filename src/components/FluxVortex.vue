@@ -7,7 +7,7 @@
 			:size="size"
 			:image="img"
 			:offset="tile.offset"
-			:style="tile.style"
+			:css="tile.css"
 		/>
 	</div>
 </template>
@@ -81,7 +81,7 @@
 						},
 					};
 
-					tile.style = {
+					tile.css = {
 						...this.tileCss,
 						position: 'absolute',
 						left: tile.offset.left +'px',
