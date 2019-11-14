@@ -132,8 +132,11 @@
 		},
 
 		watch: {
-			options() {
-				this.updateOptions();
+			options: {
+				handler() {
+					this.updateOptions();
+				},
+				deep: true,
 			},
 
 			transitions() {
@@ -262,7 +265,9 @@
 					this.show(index);
 				});
 
-				this.$emit('play');
+				this.$emit('play', {
+					index,
+				});
 			},
 
 			stop() {
@@ -297,7 +302,12 @@
 
 				this.Transitions.run(transition, from, to, direction);
 
-				this.$emit('show');
+				this.$emit('show', {
+					transition,
+					from,
+					to,
+					direction,
+				});
 			},
 
 			keydown(event) {

@@ -105,11 +105,25 @@
 			start() {
 				this.$refs.transition.$options.played.call(this.$refs.transition);
 
-				this.$emit('start');
+				this.$emit('start', {
+					transition: this.transition,
+					from: this.from,
+					to: this.to,
+					options: this.options,
+				});
 
 				setTimeout(() => {
-					this.$emit('end');
+					this.end();
 				}, this.getDuration());
+			},
+
+			end() {
+				this.$emit('end', {
+					transition: this.transition,
+					from: this.from,
+					to: this.to,
+					options: this.options,
+				});
 			},
 
 			getDuration() {

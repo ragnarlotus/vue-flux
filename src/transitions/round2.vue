@@ -44,8 +44,10 @@
 		created() {
 			this.mask.overflow = 'visible';
 
-			let divider = this.size.width / this.cols;
-			this.rows = Math.floor(this.size.height / divider);
+			if (!this.options.rows) {
+				let divider = this.size.width / this.cols;
+				this.rows = Math.floor(this.size.height / divider);
+			}
 
 			this.totalDuration = (this.cols / 2 + this.rows) * (this.tileDelay * 2);
 		},

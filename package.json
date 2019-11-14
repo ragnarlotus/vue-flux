@@ -1,6 +1,6 @@
 {
   "name": "vue-flux",
-  "version": "6.0.0-beta.26",
+  "version": "6.0.0-beta.28",
   "description": "Vue image slider",
   "author": "ragnar lotus",
   "repository": {
@@ -20,12 +20,16 @@
   "main": "dist/vue-flux.umd.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
+    "build": "npm run bundle:nossr && npm run bundle:ssr",
     "bundle": "vue-cli-service build --target lib --name vue-flux \"src/components/index.js\"",
+    "bundle:nossr": "set EXTRACT_CSS=false&& npm run bundle -- --dest dist",
+    "bundle:ssr": "set EXTRACT_CSS=true&& npm run bundle -- --dest dist-ssr",
     "lint": "vue-cli-service lint --no-fix",
     "test:unit": "vue-cli-service test:unit"
   },
   "files": [
-    "dist"
+    "dist",
+    "dist-ssr"
   ],
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",

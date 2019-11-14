@@ -2,7 +2,7 @@
 	<nav v-if="display" class="flux-pagination">
 		<ul>
 			<li v-for="i in Images.srcs.length" :key="i">
-				<slot item="getItem(i - 1)">
+				<slot :item="getItem(i - 1)">
 					<span
 						:title="getCaptionText(i - 1)"
 						class="pagination-item"

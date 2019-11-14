@@ -62,8 +62,10 @@
 		}),
 
 		created() {
-			let divider = this.size.width / this.cols;
-			this.rows = Math.floor(this.size.height / divider);
+			if (!this.options.rows) {
+				let divider = this.size.width / this.cols;
+				this.rows = Math.floor(this.size.height / divider);
+			}
 
 			this.totalDuration = this.tileDelay * (this.rows + this.cols) + this.tileDuration;
 		},
@@ -75,7 +77,7 @@
 
 				this.tileCss = {
 					opacity: 0,
-					transform: 'scale(0.4)',
+					transform: 'scale(0.3)',
 				};
 			},
 
@@ -98,7 +100,7 @@
 					tile.transform({
 						transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i, 'next')}ms`,
 						opacity: 0,
-						transform: 'scale(0.4)',
+						transform: 'scale(0.3)',
 					});
 				});
 			},

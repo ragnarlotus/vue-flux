@@ -59,10 +59,10 @@ export default class TransitionsController {
 			if (!found)
 				throw new ReferenceError(`Transition ${transition} not found`);
 
-			transition = { ...found };
+			transition = JSON.parse(JSON.stringify(found));
 
 		} else {
-			transition = { ...this.next };
+			transition = JSON.parse(JSON.stringify(this.next));
 		}
 
 		if (!transition.options)
@@ -87,11 +87,19 @@ export default class TransitionsController {
 	start() {
 		this.vf.Images.current = this.to;
 
-		this.vf.$emit('transition-start', this.current);
+		this.vf.$emit('transition-start', {
+			transition: this.current,
+			from: this.from,
+			to: this.to,
+		});
 	}
 
 	cancel() {
-		this.vf.$emit('transition-cancel', this.current);
+		this.vf.$emit('transition-cancel', {
+			transition: this.current,
+			from: this.from,
+			to: this.to,
+		});
 
 		this.last = this.current;
 		this.reset();
@@ -120,7 +128,11 @@ export default class TransitionsController {
 				});
 			}
 
-			vf.$emit('transition-end', this.current);
+			vf.$emit('transition-end', {
+				transition: this.current,
+				from: this.from,
+				to: this.to,
+			});
 		});
 	}
 
