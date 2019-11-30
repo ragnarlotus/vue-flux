@@ -16,6 +16,7 @@
 			:size="size"
 			:from="Transitions.from"
 			:to="Transitions.to"
+			:current="$refs.image"
 			:options="Transitions.current.options"
 			:images="Images.imgs"
 			@ready="Transitions.ready()"
@@ -156,10 +157,10 @@
 				this.stop();
 				this.loaded = false;
 
-				this.$nextTick(() => {
+				// this.$nextTick(() => {
 					this.Images.update(this.images);
 					wasPlaying && this.play();
-				});
+				// });
 			},
 		},
 

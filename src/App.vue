@@ -51,8 +51,8 @@
 					<div>
 						Transition: <select v-model="selectedTransition">
 							<option
-								v-for="transition in transitions"
-								:key="transition"
+								v-for="(transition, index) in transitions"
+								:key="'transition'+ index"
 							>{{ transition }}</option>
 						</select>
 					</div>
@@ -115,7 +115,8 @@
 				'wave', 'blinds3d',
 				'round1', 'round2', 'explode',
 			],
-			selectedTransition: 'fade',
+			// transitions: ['cube'],
+			selectedTransition: 'cube',
 			vfOptions: {
 				autohideTime: 0,
 				autoplay: false,

@@ -112,6 +112,8 @@ export default class TransitionsController {
 		this.reset();
 
 		vf.$nextTick(() => {
+			vf.Images.last = vf.Images.current;
+
 			let {
 				current: currentImage,
 				previous: previousImage,

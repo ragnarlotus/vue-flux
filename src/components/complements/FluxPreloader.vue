@@ -8,39 +8,14 @@
 				<div class="border" />
 			</div>
 		</slot>
-
-		<flux-image
-			v-if="displayLast"
-			:size="vf.size"
-			:image="Images.last"
-			:css="imageCss"
-		/>
-
-		<flux-transition
-			v-if="transitionName"
-			ref="transition"
-			:size="vf.size"
-			:transition="transitionName"
-			:from="Images.last"
-			:to="Images.current"
-			@ready="$refs.transition.start()"
-			@end="transitionEnd()"
-		/>
 	</div>
 </template>
 
 <script>
 	import BaseComplement from '@/mixins/BaseComplement';
-	import FluxImage from '@/components/FluxImage';
-	import FluxTransition from '@/components/FluxTransition';
 
 	export default {
 		name: 'FluxPreloader',
-
-		components: {
-			FluxTransition,
-			FluxImage,
-		},
 
 		mixins: [
 			BaseComplement,
@@ -51,8 +26,6 @@
 				type: Boolean,
 				default: true,
 			},
-
-			transition: String,
 		},
 
 		data: () => ({
@@ -66,45 +39,33 @@
 			displaySpinner() {
 				return this.spinner && this.vf.Images.preloading;
 			},
-
-			displayLast() {
-				let { Images } = this;
-
-				if (Images.preloading && Images.last && Images.last.src !== Images.imgs[0].src)
-					return true;
-
-				return false;
-			},
 		},
 
 		watch: {
+			'vf.images': function() {
+				let { Images, Transitions } = this;
+
+				if (Images.last && !Transitions.current)
+					Images.current = Images.last;
+			},
+
 			'vf.Images.preloading': function(preloading) {
 				let { Images } = this;
 
-				if (!preloading && Images.imgs[0] && Images.last && Images.last.src !== Images.imgs[0].src)
-					this.transitionStart();
-			},
+				if (!Images.last || preloading)
+					return;
+
+				if (Images.current === Images.last)
+					this.transitionStart()
+			}
 		},
 
 		methods: {
 			transitionStart() {
 				let { Images, Transitions } = this;
 
-				if (!Images.current)
-					return;
-
-				this.transitionName = this.transition || Transitions.next.name;
+				Transitions.run(undefined, Images.current, Images.imgs[0], 'next');
 			},
-
-			transitionEnd() {
-				let { Images, Transitions } = this;
-
-				if (!this.transition)
-					Transitions.last = Transitions.next;
-
-				this.transitionName = undefined;
-				Images.last = Images.current;
-			}
 		}
 	};
 </script>

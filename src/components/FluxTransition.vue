@@ -7,6 +7,7 @@
 			:size="size"
 			:from="from"
 			:to="to"
+			:current="current"
 			:options="options"
 			:images="images"
 		/>
@@ -43,6 +44,8 @@
 				type: [ String, Object ],
 				required: true,
 			},
+
+			current: Object,
 
 			options: Object,
 

@@ -13,19 +13,14 @@ export default {
 
 		to: [ String, Object ],
 
+		current: Object,
+
 		options: Object,
 	},
 
 	computed: {
 		mask() {
 			return this.$parent.baseStyle;
-		},
-
-		current() {
-			if (this.$parent.$parent)
-				return this.$parent.$parent.$refs.image;
-
-			return undefined;
 		},
 	},
 

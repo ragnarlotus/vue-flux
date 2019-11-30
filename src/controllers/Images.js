@@ -1,6 +1,8 @@
 import Img from '../libraries/Img'
 
 export default class ImagesController {
+	$current;
+	$last;
 
 	constructor(vf) {
 		this.vf = vf;
@@ -57,7 +59,7 @@ export default class ImagesController {
 		this.preloading = false;
 		this.lazyloading = false;
 
-		this.current = undefined;
+		this.$current = undefined;
 	}
 
 	update(images) {
@@ -137,12 +139,8 @@ export default class ImagesController {
 				if (status === 'error')
 					continue;
 
-				if (status === 'loaded') {
+				if (status === 'loaded')
 					this.current = this.imgs[i];
-
-					if (!this.last)
-						this.last = this.current;
-				}
 
 				break;
 			}
