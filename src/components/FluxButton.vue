@@ -29,7 +29,6 @@
 		border: 0;
 		cursor: pointer;
 		background-color: transparent;
-		outline: 0;
 
 		&:hover {
 			> svg {
@@ -44,6 +43,8 @@
 		}
 
 		> svg {
+			width: 100%;
+
 			& * {
 				cursor: pointer;
 			}
