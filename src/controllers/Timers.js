@@ -4,6 +4,7 @@ export default class TimersController {
 	}
 
 	set(timer, time, cb) {
+		this.clear(timer);
 		this.timers[timer] = setTimeout(cb, time);
 	}
 
