@@ -64,6 +64,9 @@
 			transitionStart() {
 				let { Images, Transitions } = this;
 
+				if (Transitions.current)
+					Transitions.end(true);
+
 				Transitions.run(undefined, Images.current, Images.imgs[0], 'next');
 			},
 		}

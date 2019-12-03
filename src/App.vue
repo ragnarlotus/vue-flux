@@ -121,7 +121,7 @@
 				autohideTime: 0,
 				autoplay: false,
 				enableGestures: true,
-				delay: 1500,
+				delay: 4000,
 				bindKeys: true,
 				allowFullscreen: true,
 				lazyLoadAfter: 30,

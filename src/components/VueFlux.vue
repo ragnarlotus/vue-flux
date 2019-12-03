@@ -143,24 +143,20 @@
 			transitions() {
 				let wasPlaying = this.config.autoplay;
 
-				this.stop();
+				this.stop(true);
 
-				this.$nextTick(() => {
-					this.Transitions.update(this.transitions);
-					wasPlaying && this.play();
-				});
+				this.Transitions.update(this.transitions);
+				wasPlaying && this.play();
 			},
 
 			images() {
 				let wasPlaying = this.config.autoplay;
 
-				this.stop();
+				this.stop(true);
 				this.loaded = false;
 
-				// this.$nextTick(() => {
-					this.Images.update(this.images);
-					wasPlaying && this.play();
-				// });
+				this.Images.update(this.images);
+				wasPlaying && this.play();
 			},
 		},
 
@@ -219,6 +215,9 @@
 				if (!this.$refs.container)
 					return;
 
+				if (this.Transitions.current)
+					this.Transitions.end(true);
+
 				this.size = undefined;
 
 				await this.$nextTick();
@@ -262,19 +261,24 @@
 			play(index = 'next', delay) {
 				this.config.autoplay = true;
 
-				this.Timers.set('image', delay || this.config.delay, () => {
-					this.show(index);
-				});
+				if (!this.Transitions.current) {
+					this.Timers.set('transition', delay || this.config.delay, () => {
+						this.show(index);
+					});
+				}
 
 				this.$emit('play', {
 					index,
 				});
 			},
 
-			stop() {
+			stop(cancelTransition) {
 				this.config.autoplay = false;
 
-				this.Timers.clear('image');
+				this.Timers.clear('transition');
+
+				if (this.Transitions.current && cancelTransition)
+					this.Transitions.end(true);
 
 				this.$emit('stop');
 			},
@@ -285,7 +289,7 @@
 
 				if (this.Transitions.current) {
 					if (this.config.allowToSkipTransition) {
-						this.Transitions.cancel();
+						this.Transitions.end(true);
 
 						this.$nextTick(() => {
 							this.show(index, transition);
@@ -294,8 +298,6 @@
 
 					return;
 				}
-
-				this.Timers.clear('image');
 
 				let from = this.Images.current;
 				let to = this.Images.getByIndex(index);

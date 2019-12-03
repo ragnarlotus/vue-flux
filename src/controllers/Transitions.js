@@ -51,6 +51,8 @@ export default class TransitionsController {
 	}
 
 	run(transition, from, to, direction) {
+		this.vf.Timers.clear('transition');
+
 		if (transition) {
 			let name = transition.name || transition;
 
@@ -94,18 +96,7 @@ export default class TransitionsController {
 		});
 	}
 
-	cancel() {
-		this.vf.$emit('transition-cancel', {
-			transition: this.current,
-			from: this.from,
-			to: this.to,
-		});
-
-		this.last = this.current;
-		this.reset();
-	}
-
-	end() {
+	end(cancel = false) {
 		let { vf } = this;
 
 		this.last = this.current;
@@ -125,12 +116,12 @@ export default class TransitionsController {
 			}
 
 			if (vf.config.autoplay) {
-				vf.Timers.set('image', vf.config.delay, () => {
+				vf.Timers.set('transition', vf.config.delay, () => {
 					vf.show();
 				});
 			}
 
-			vf.$emit('transition-end', {
+			vf.$emit(cancel? 'transition-cancel' : 'transition-end', {
 				transition: this.current,
 				from: this.from,
 				to: this.to,
