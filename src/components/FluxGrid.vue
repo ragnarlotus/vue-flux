@@ -67,11 +67,11 @@
 			},
 
 			numRows() {
-				return Math.round(parseFloat(this.rows));
+				return Math.ceil(parseFloat(this.rows));
 			},
 
 			numCols() {
-				return Math.round(parseFloat(this.cols));
+				return Math.ceil(parseFloat(this.cols));
 			},
 
 			numTiles() {
@@ -80,8 +80,8 @@
 
 			tileSize() {
 				return {
-					width: Math.ceil(this.size.width / this.numCols),
-					height: Math.ceil(this.size.height / this.numRows),
+					width: Math.floor(this.size.width / this.numCols),
+					height: Math.floor(this.size.height / this.numRows),
 				};
 			},
 
@@ -113,20 +113,12 @@
 						left: tile.col * this.tileSize.width,
 					};
 
-					let zIndex;
-
-					if (this.numCols >= this.numRows) {
-						zIndex = i + 1 < this.numCols / 2? i + 1 : this.numCols - i;
-					} else {
-						zIndex = i + 1 < this.numRows / 2? i + 1 : this.numRows - i;
-					}
-
 					tile.css = {
 						...this.tileCss,
 						position: 'absolute',
 						left: tile.offset.left +'px',
 						top: tile.offset.top +'px',
-						zIndex,
+						zIndex: i + 1 < this.numTiles / 2? i + 1 : this.numTiles - i,
 					};
 
 					tiles.push(tile);
