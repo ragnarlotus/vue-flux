@@ -47,7 +47,10 @@
 				default: 1,
 			},
 
-			depth: Number,
+			depth: {
+				type: Number,
+				default: 0,
+			},
 
 			tileCss: Object,
 		},
@@ -110,12 +113,20 @@
 						left: tile.col * this.tileSize.width,
 					};
 
+					let zIndex;
+
+					if (this.numCols >= this.numRows) {
+						zIndex = i + 1 < this.numCols / 2? i + 1 : this.numCols - i;
+					} else {
+						zIndex = i + 1 < this.numRows / 2? i + 1 : this.numRows - i;
+					}
+
 					tile.css = {
 						...this.tileCss,
 						position: 'absolute',
 						left: tile.offset.left +'px',
 						top: tile.offset.top +'px',
-						zIndex: i + 1 < this.numCols / 2? i + 1 : this.numCols - i,
+						zIndex,
 					};
 
 					tiles.push(tile);

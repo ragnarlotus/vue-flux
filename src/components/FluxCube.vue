@@ -57,7 +57,10 @@
 		],
 
 		props: {
-			depth: Number,
+			depth: {
+				type: Number,
+				default: 0,
+			},
 
 			sidesCss: {
 				type: Object,
@@ -94,11 +97,15 @@
 						...this.viewSize,
 					};
 
-					if (this.depth && ['left', 'right'].includes(sideName))
+					if (['left', 'right'].includes(sideName)) {
 						side.viewSize.width = this.depth;
+						side.size.width = this.depth;
+					}
 
-					if (this.depth && ['top', 'bottom'].includes(sideName))
+					if (['top', 'bottom'].includes(sideName)) {
 						side.viewSize.height = this.depth;
+						side.size.height = this.depth;
+					}
 
 					side.style = {
 						...this.sidesCss[sideName],
@@ -119,20 +126,22 @@
 
 			translateZ() {
 				let {
-					width,
-					height
-				} = this.size;
+					size: { width, height },
+					viewSize: {
+						width: viewWidth,
+						height: viewHeight,
+					},
+					depth,
+				} = this;
 
-				let { width: viewWidth } = this.viewSize;
-
-				let depthX = (this.depth || width) / 2;
-				let depthY = height / 2;
+				let halfDepth = depth / 2;
 
 				return {
-					top: depthY,
-					bottom: depthY,
-					left: depthX,
-					right: viewWidth? viewWidth - depthX : depthX,
+					top: halfDepth,
+					bottom: viewHeight? viewHeight - halfDepth : height - halfDepth,
+					left: halfDepth,
+					right: viewWidth? viewWidth - halfDepth : width - halfDepth,
+					back: depth,
 				};
 			},
 		},

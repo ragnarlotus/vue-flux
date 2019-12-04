@@ -3,6 +3,7 @@
 		ref="cube"
 		:images="images"
 		:size="size"
+		:depth="size.width"
 		:css="cubeCss"
 	/>
 </template>

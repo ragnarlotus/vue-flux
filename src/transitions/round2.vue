@@ -4,6 +4,7 @@
 		:rows="rows"
 		:cols="cols"
 		:size="size"
+		:depth="0"
 		:image="from"
 		:css="gridCss"
 		:tile-css="tileCss"

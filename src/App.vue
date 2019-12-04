@@ -2,13 +2,23 @@
 	<!-- eslint-disable -->
 	<div id="app">
 		<div class="container mx-auto">
-			<!--<flux-image :image="vfImages[0]" :size="{width:300, height: 150}" />
-			<flux-cube :images="{ front: vfImages[0], right: vfImages[1], left: vfImages[2]}" :size="{width:300, height: 150}" />
-			<flux-grid :image="vfImages[0]" :size="{width:300, height: 150}" />-->
-
 			<h1 class="my-4">
 				Vue flux
 			</h1>
+
+			<!--<flux-image :image="vfImages[0]" :size="{width:300, height: 150}" />-->
+			<!--<div style="perspective: 1600px;">
+				<flux-cube
+					:images="{ front: vfImages[0], right: vfImages[1], left: vfImages[2], back: vfImages[3], top: vfImages[4], bottom: vfImages[5] }"
+					:size="{width:640, height: 480}"
+					:depth="320"
+					:css="{
+						transform: 'rotateX(0deg) rotateY(0deg)',
+						transformOrigin: `50% 50% -150px`,
+					}"
+				/>
+			</div>-->
+			<!--<flux-grid :image="vfImages[0]" :size="{width:300, height: 150}" />-->
 
 			<p>You can use arrow keys to show next image (when no transition running). Double click to switch full screen mode.</p>
 
@@ -116,7 +126,7 @@
 				'round1', 'round2', 'explode',
 			],
 			// transitions: ['cube'],
-			selectedTransition: 'cube',
+			selectedTransition: 'fall',
 			vfOptions: {
 				autohideTime: 0,
 				autoplay: false,
