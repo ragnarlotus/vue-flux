@@ -15,7 +15,10 @@ export default {
 
 		current: Object,
 
-		options: Object,
+		options: {
+			type: Object,
+			default: () => ({}),
+		},
 	},
 
 	computed: {
@@ -25,7 +28,7 @@ export default {
 	},
 
 	created() {
-		Object.assign(this, {direction: 'next'}, this.options);
+		Object.assign(this, { direction: 'next' }, this.options);
 
 		let { direction } = this;
 
