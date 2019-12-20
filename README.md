@@ -1,10 +1,6 @@
+## Documentation and demos
+
 **[Version 5 documentation](https://deulos.github.io/vue-flux-docs/v5/)**
-
-**[Version 5 demo](https://deulos.github.io/vue-flux/)**
-
-# This is the version 6 README
-
-**Version 6 is still in beta stage**
 
 **[Version 6 documentation](https://deulos.github.io/vue-flux-docs/v6/)**
 
@@ -20,10 +16,6 @@ This is an image slider developed with [Vuejs](https://vuejs.org/) 2 which comes
 ![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/vue-flux/beta.svg?style=flat-square)
 ![GitHub issues](https://img.shields.io/github/issues-raw/deulos/vue-flux.svg?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)
-
-## Demo
-
-You can view a [demo here](https://deulos.github.io/vue-flux-docs/).
 
 ## Features
 
