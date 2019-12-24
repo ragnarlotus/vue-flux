@@ -10,10 +10,10 @@
 
 This is an image slider developed with [Vuejs](https://vuejs.org/) 2 which comes with 20 cool transitions out of the box.
 
-![npm](https://img.shields.io/npm/v/vue-flux/beta.svg?style=flat-square)
+![npm](https://img.shields.io/npm/v/vue-flux/latest.svg?style=flat-square)
 ![npm](https://img.shields.io/npm/dt/vue-flux.svg?style=flat-square)
-![npm bundle size (minified)](https://img.shields.io/bundlephobia/min/vue-flux/beta.svg?style=flat-square)
-![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/vue-flux/beta.svg?style=flat-square)
+![npm bundle size (minified)](https://img.shields.io/bundlephobia/min/vue-flux/latest.svg?style=flat-square)
+![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/vue-flux/latest.svg?style=flat-square)
 ![GitHub issues](https://img.shields.io/github/issues-raw/deulos/vue-flux.svg?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)
 
@@ -34,7 +34,7 @@ This is an image slider developed with [Vuejs](https://vuejs.org/) 2 which comes
 Install and save the package.
 
 ``` bash
-npm install --save vue-flux@beta
+npm install --save vue-flux
 ```
 
 Add the component to the template. This one has all the complements, so you can remove the ones you don't want.
