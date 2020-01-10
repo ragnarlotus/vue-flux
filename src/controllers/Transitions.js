@@ -105,12 +105,7 @@ export default class TransitionsController {
 		vf.$nextTick(() => {
 			vf.Images.last = vf.Images.current;
 
-			let {
-				current: currentImage,
-				previous: previousImage,
-			} = vf.Images;
-
-			if (!vf.config.infinite && currentImage.index >= previousImage.index) {
+			if (!vf.config.infinite && vf.Images.next.index === 0) {
 				vf.stop();
 				return;
 			}
