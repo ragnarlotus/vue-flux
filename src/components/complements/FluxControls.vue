@@ -5,11 +5,11 @@
 				<polyline points="64,18 22,50 64,82" />
 			</flux-button>
 
-			<flux-button v-if="!vf.config.autoplay" class="play top" @click="vf.play('next', 1)">
+			<flux-button v-if="!vf.config.autoplay" class="play" @click="vf.play('next', 1)">
 				<polygon points="32,12 82,50 32,88" />
 			</flux-button>
 
-			<flux-button v-if="vf.config.autoplay" class="pause top" @click="vf.stop()">
+			<flux-button v-if="vf.config.autoplay" class="pause" @click="vf.stop()">
 				<line x1="32" y1="22" x2="32" y2="78" />
 				<line x1="68" y1="22" x2="68" y2="78" />
 			</flux-button>
@@ -48,10 +48,6 @@
 					return false;
 
 				return true;
-			},
-
-			autoplayClass() {
-				return this.vf && this.vf.config.autoplay? 'pause' : 'play';
 			},
 		},
 	};

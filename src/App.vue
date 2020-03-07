@@ -10,7 +10,7 @@
 			<!--<div style="perspective: 1600px;">
 				<flux-cube
 					:images="{ front: vfImages[0], right: vfImages[1], left: vfImages[2], back: vfImages[3], top: vfImages[4], bottom: vfImages[5] }"
-					:size="{width:640, height: 480}"
+					:size="{width:640, height: 360}"
 					:depth="320"
 					:css="{
 						transform: 'rotateX(0deg) rotateY(0deg)',
@@ -18,13 +18,17 @@
 					}"
 				/>
 			</div>-->
-			<!--<flux-grid :image="vfImages[0]" :size="{width:300, height: 150}" />-->
+
+			<!-- <flux-grid :rows="10" :cols="10" :image="vfImages[0]" :size="{width:640, height: 362}" class="test" /> -->
+
+			<input type="checkbox" v-model="rendered" :value="true" />
 
 			<p>You can use arrow keys to show next image (when no transition running). Double click to switch full screen mode.</p>
 
 			<div class="block sm:block md:block lg:flex">
 				<div class="lg:w-3/4 px-2 mb-4">
 					<vue-flux
+						v-if="rendered"
 						ref="slider"
 						:options="vfOptions"
 						:images="vfImages"
@@ -114,7 +118,7 @@
 		},
 
 		data: () => ({
-			rendered: false,
+			rendered: true,
 			transitions: [
 				'fade', 'kenburn',
 				'swipe', 'slide',
@@ -126,8 +130,9 @@
 				'round1', 'round2', 'explode',
 			],
 			// transitions: ['cube'],
-			selectedTransition: 'fall',
+			selectedTransition: 'wave',
 			vfOptions: {
+				infinite: false,
 				autohideTime: 0,
 				autoplay: false,
 				enableGestures: true,
@@ -187,7 +192,14 @@
 	};
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+	.test {
+		.flux-image {
+			border: 1px solid white;
+			border-collapse: collapse;
+		}
+	}
+
 	.vue-flux {
 		box-shadow: 0 0 12px 2px rgba(34,36,38,.85);
 	}
