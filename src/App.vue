@@ -21,8 +21,6 @@
 
 			<!-- <flux-grid :rows="10" :cols="10" :image="vfImages[0]" :size="{width:640, height: 362}" class="test" /> -->
 
-			<input type="checkbox" v-model="rendered" :value="true" />
-
 			<p>You can use arrow keys to show next image (when no transition running). Double click to switch full screen mode.</p>
 
 			<div class="block sm:block md:block lg:flex">
@@ -74,6 +72,8 @@
 					<button @click="loadImages()">Update images</button>
 				</div>
 			</div>
+
+			<button type="button" @click="$refs.slider.toggleFullScreen();">toggle fscren</button>
 
 			<vc-paragraph v-for="i of 12" :key="'a'+ i" mode="fill" style="margin-top: 24px;" />
 
@@ -161,7 +161,10 @@
 
 				let srcs = [];
 				for (let i = 1; i <= 32; i++) {
-					srcs.push(`slides/${i.toString().padStart(2, '0')}.jpg`);
+					if (i % 3 === 0)
+						srcs.push(`${i.toString()}`);
+					else
+						srcs.push(`slides/${i.toString().padStart(2, '0')}.jpg`);
 				}
 
 				this.vfImages = [];
@@ -169,7 +172,7 @@
 
 				let index, src;
 
-				for (let i = 0; i < 12; i++) {
+				for (let i = 0; i < 6; i++) {
 					index = Math.floor(Math.random() * srcs.length);
 
 					src = srcs.splice(index, 1)[0];

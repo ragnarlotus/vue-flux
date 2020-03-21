@@ -258,6 +258,10 @@
 				}
 			},
 
+			toggleFullScreen() {
+				this.Display.toggleFullScreen();
+			},
+
 			play(index = 'next', delay) {
 				this.config.autoplay = true;
 

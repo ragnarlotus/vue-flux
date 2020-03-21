@@ -126,12 +126,19 @@ export default class ImagesController {
 
 		}).catch(error => {
 			this.loadError(error);
+
+		}).finally(() => {
+			this.loaded++;
+
+			if (this.preloading)
+				this.updateProgress();
+
+			if (this.loaded === this.imgs.length)
+				this.preloading? this.preloadEnd() : this.lazyLoadEnd();
 		});
 	}
 
 	loadSuccess() {
-		this.loaded++;
-
 		if (!this.current) {
 			for (let i = 0; i < this.imgs.length; i++) {
 				let status = this.imgs[i].status;
@@ -145,12 +152,6 @@ export default class ImagesController {
 				break;
 			}
 		}
-
-		if (this.preloading)
-			this.updateProgress();
-
-		if (this.loaded === this.imgs.length)
-			this.preloading? this.preloadEnd() : this.lazyLoadEnd();
 	}
 
 	loadError(error) {
