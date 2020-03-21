@@ -21,7 +21,7 @@
 					:class="thumbClass(i)"
 					@click="showImage(i)"
 				>
-					<flux-image ref="thumbs" :image="images[i]" :size="thumbSize" :title="getCaptionText(i)" />
+					<flux-image ref="thumbs" :image="images[i]" :size="thumbSize" :title="getCaptionText(image.initIndex)" />
 				</li>
 			</ul>
 		</nav>

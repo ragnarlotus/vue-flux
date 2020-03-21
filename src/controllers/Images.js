@@ -71,7 +71,7 @@ export default class ImagesController {
 	}
 
 	preloadStart() {
-		let { vf } = this;
+		const { vf } = this;
 
 		this.preloading = true;
 
@@ -80,8 +80,8 @@ export default class ImagesController {
 		if (vf.config.lazyLoad)
 			preload = vf.config.lazyLoadAfter;
 
-		let srcs = this.srcs.slice(0, preload);
-		srcs.forEach(src => this.addImg(src));
+		const srcs = this.srcs.slice(0, preload);
+		srcs.forEach((src, i) => this.addImg(src, i));
 
 		vf.$emit('images-preload-start');
 	}
@@ -103,8 +103,10 @@ export default class ImagesController {
 	lazyLoadStart() {
 		this.lazyloading = true;
 
-		let srcs = this.srcs.slice(this.imgs.length);
-		srcs.forEach(src => this.addImg(src));
+		const preloaded = this.imgs.length;
+
+		const srcs = this.srcs.slice(preloaded);
+		srcs.forEach((src, i) => this.addImg(src, preloaded + i));
 
 		this.vf.$emit('images-lazy-load-start');
 	}
@@ -117,8 +119,8 @@ export default class ImagesController {
 		this.vf.$emit('images-lazy-load-end');
 	}
 
-	addImg(src) {
-		let img = new Img(this.vf.config.path + src);
+	addImg(src, i) {
+		const img = new Img(this.vf.config.path + src, i);
 		this.imgs.push(img);
 
 		img.load().then(() => {
@@ -141,7 +143,7 @@ export default class ImagesController {
 	loadSuccess() {
 		if (!this.current) {
 			for (let i = 0; i < this.imgs.length; i++) {
-				let status = this.imgs[i].status;
+				const status = this.imgs[i].status;
 
 				if (status === 'error')
 					continue;

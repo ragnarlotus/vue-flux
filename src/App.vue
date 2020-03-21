@@ -132,7 +132,7 @@
 			// transitions: ['cube'],
 			selectedTransition: 'wave',
 			vfOptions: {
-				infinite: false,
+				infinite: true,
 				autohideTime: 0,
 				autoplay: false,
 				enableGestures: true,

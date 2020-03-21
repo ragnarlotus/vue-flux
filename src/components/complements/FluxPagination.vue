@@ -1,13 +1,13 @@
 <template>
 	<nav v-if="display" class="flux-pagination">
 		<ul>
-			<li v-for="i in Images.imgs.length" :key="i">
-				<slot :item="getItem(i - 1)">
+			<li v-for="(img, index) in Images.imgs" :key="index">
+				<slot :item="getItem(img, index)">
 					<span
-						:title="getCaptionText(i - 1)"
+						:title="getCaptionText(img.initIndex)"
 						class="pagination-item"
-						:class="getClass(i - 1)"
-						@click="show(i - 1)"
+						:class="getClass(index)"
+						@click="show(index)"
 					/>
 				</slot>
 			</li>
@@ -35,12 +35,12 @@
 		},
 
 		methods: {
-			getItem(i) {
+			getItem(img, index) {
 				return {
-					index: i,
-					title: this.getCaptionText(i),
+					index: index,
+					title: this.getCaptionText(img.initIndex),
 					onClick: this.show,
-					active: this.getClass(i) === 'active',
+					active: this.getClass(index) === 'active',
 				};
 			},
 

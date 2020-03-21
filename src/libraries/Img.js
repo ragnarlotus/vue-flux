@@ -1,11 +1,13 @@
 export default class Img {
 	status;
+	initIndex;
 	index;
 	aspectRatio;
 	size;
 
-	constructor(src) {
+	constructor(src, i) {
 		this.src = src;
+		this.initIndex = i;
 	}
 
 	load() {
