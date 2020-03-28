@@ -30,7 +30,7 @@ export default {
 	methods: {
 		getCaption(index) {
 			if (index === undefined)
-				index = this.Images.current.initIndex;
+				index = this.Images.current? this.Images.current.initIndex : '';
 
 			return this.captions[index] || '';
 		},

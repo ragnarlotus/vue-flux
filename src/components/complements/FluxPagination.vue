@@ -48,6 +48,9 @@
 				if (this.Transitions.current !== undefined && this.Transitions.from.index === i)
 					return 'active';
 
+				if (!this.Images.current)
+					return '';
+
 				if (this.Transitions.current === undefined && this.Images.current.index === i)
 					return 'active';
 

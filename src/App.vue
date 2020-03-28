@@ -134,12 +134,12 @@
 			vfOptions: {
 				infinite: true,
 				autohideTime: 0,
-				autoplay: false,
+				autoplay: true,
 				enableGestures: true,
 				delay: 4000,
 				bindKeys: true,
 				allowFullscreen: true,
-				lazyLoadAfter: 30,
+				lazyLoadAfter: 5,
 			},
 			vfImages: [],
 			vfCaptions: [],
@@ -172,7 +172,7 @@
 
 				let index, src;
 
-				for (let i = 0; i < 6; i++) {
+				for (let i = 0; i < 16; i++) {
 					index = Math.floor(Math.random() * srcs.length);
 
 					src = srcs.splice(index, 1)[0];

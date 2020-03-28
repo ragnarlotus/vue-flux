@@ -52,9 +52,18 @@ export default class ImagesController {
 
 		this.srcs = [];
 		this.imgs = [];
+		this.loading = [];
 
-		this.loaded = 0;
+		this.loaded = {
+			current: 0,
+			success: 0,
+			error: 0,
+			total: 0,
+		};
 		this.progress = 0;
+
+		this.toPreload = 0;
+		this.toLazyload = 0;
 
 		this.preloading = false;
 		this.lazyloading = false;
@@ -67,61 +76,79 @@ export default class ImagesController {
 
 		this.srcs = images.slice(0);
 
+		const { config } = this.vf;
+
+		this.toPreload = config.lazyLoad? config.lazyLoadAfter : this.srcs.length;
+
+		if (this.toPreload > this.srcs.length)
+			this.toPreload = this.srcs.length;
+
+		this.toLazyload = this.srcs.length - this.toPreload;
+
 		this.preloadStart();
 	}
 
 	preloadStart() {
-		const { vf } = this;
-
 		this.preloading = true;
 
-		let preload = this.srcs.length;
+		const { vf } = this;
 
-		if (vf.config.lazyLoad)
-			preload = vf.config.lazyLoadAfter;
+		if (!this.loading.length)
+			vf.$emit('images-preload-start');
 
-		const srcs = this.srcs.slice(0, preload);
-		srcs.forEach((src, i) => this.addImg(src, i));
+		const { total: totalLoaded } = this.loaded;
+		const toPreload = this.toPreload - this.imgs.length;
 
-		vf.$emit('images-preload-start');
+		this.loading = this.srcs.slice(totalLoaded, totalLoaded + toPreload);
+
+		this.loaded.current = 0;
+		this.loading.forEach((src, i) => this.addImg(src, i, totalLoaded));
 	}
 
 	preloadEnd() {
+		const { vf } = this;
+
+		this.addLoadedSuccessfully();
+
+		if (this.imgs.length < this.toPreload && this.loaded.total < this.toPreload)
+			return this.preloadStart();
+
+		this.updateIndexes();
+
 		this.preloading = false;
 
-		this.vf.$emit('images-preload-end');
+		vf.$emit('images-preload-end');
 
-		if (this.imgs.length < this.srcs.length)
+		if (this.loaded.total < this.srcs.length)
 			this.lazyLoadStart();
 
-		else
-			this.removeErrorImgs();
-
-		this.vf.init();
+		vf.init();
 	}
 
 	lazyLoadStart() {
+		this.vf.$emit('images-lazy-load-start');
+
 		this.lazyloading = true;
 
-		const preloaded = this.imgs.length;
+		const { total: totalLoaded } = this.loaded;
 
-		const srcs = this.srcs.slice(preloaded);
-		srcs.forEach((src, i) => this.addImg(src, preloaded + i));
-
-		this.vf.$emit('images-lazy-load-start');
+		this.loading = this.srcs.slice(totalLoaded);
+		this.loaded.current = 0;
+		this.loading.forEach((src, i) => this.addImg(src, i, totalLoaded));
 	}
 
 	lazyLoadEnd() {
-		this.lazyloading = false;
+		this.addLoadedSuccessfully();
+		this.updateIndexes();
 
-		this.removeErrorImgs();
+		this.lazyloading = false;
 
 		this.vf.$emit('images-lazy-load-end');
 	}
 
-	addImg(src, i) {
-		const img = new Img(this.vf.config.path + src, i);
-		this.imgs.push(img);
+	addImg(src, i, totalLoaded) {
+		const { config } = this.vf;
+		const img = this.loading[i] = new Img(config.path + src, i + totalLoaded);
 
 		img.load().then(() => {
 			this.loadSuccess(img);
@@ -130,26 +157,27 @@ export default class ImagesController {
 			this.loadError(error);
 
 		}).finally(() => {
-			this.loaded++;
+			this.loaded.current++;
+			this.loaded.total++;
 
 			if (this.preloading)
 				this.updateProgress();
 
-			if (this.loaded === this.imgs.length)
+			if (this.loaded.current === this.loading.length)
 				this.preloading? this.preloadEnd() : this.lazyLoadEnd();
 		});
 	}
 
 	loadSuccess() {
-		if (!this.current) {
-			for (let i = 0; i < this.imgs.length; i++) {
-				const status = this.imgs[i].status;
+		this.loaded.success++;
 
-				if (status === 'error')
+		if (this.preloading && !this.current) {
+			for (const img of this.loading) {
+				if (img.status === 'error')
 					continue;
 
-				if (status === 'loaded')
-					this.current = this.imgs[i];
+				if (img.status === 'loaded')
+					this.current = img;
 
 				break;
 			}
@@ -157,20 +185,27 @@ export default class ImagesController {
 	}
 
 	loadError(error) {
+		this.loaded.error++;
+
 		// eslint-disable-next-line
 		console.warn(error);
 	}
 
 	updateProgress() {
-		this.progress = Math.ceil(this.loaded * 100 / this.imgs.length) || 0;
+		this.progress = Math.ceil(this.loaded.success * 100 / this.toPreload) || 0;
 	}
 
-	removeErrorImgs() {
-		this.imgs = this.imgs.filter(img => img.status === 'loaded');
+	addLoadedSuccessfully() {
+		const loaded = this.loading.filter(img => img.status === 'loaded');
 
-		this.imgs.forEach((img, index) => {
-			img.index = index;
-		});
+		this.imgs.push(...loaded)
+
+		this.loading = [];
+		this.loaded.current = 0;
+	}
+
+	updateIndexes() {
+		this.imgs.forEach((img, i) => img.index = i);
 	}
 
 	getByIndex(index) {

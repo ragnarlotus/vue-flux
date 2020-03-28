@@ -162,7 +162,7 @@
 			},
 
 			thumbClass(imageIndex) {
-				return this.Images.current.index === imageIndex? 'current' : '';
+				return this.Images.current && this.Images.current.index === imageIndex? 'current' : '';
 			},
 
 			showImage(imageIndex) {
