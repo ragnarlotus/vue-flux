@@ -91,6 +91,7 @@
 			config: {
 				allowFullscreen: false,
 				allowToSkipTransition: true,
+				aspectRatio: '16:9',
 				autohideTime: 2500,
 				autoplay: false,
 				bindKeys: false,
@@ -224,8 +225,10 @@
 
 				let size = Dom.sizeFrom(this.$refs.container);
 
-				if (!size.height)
-					size.height = size.width / 16 * 9;
+				if (!size.height) {
+					const [ arWidth, arHeight ] = this.config.aspectRatio.split(':');
+					size.height = size.width / arWidth * arHeight;
+				}
 
 				this.size = size;
 			},
