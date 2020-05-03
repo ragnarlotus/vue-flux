@@ -61,10 +61,10 @@ export default class TransitionsController {
 			if (!found)
 				throw new ReferenceError(`Transition ${transition} not found`);
 
-			transition = JSON.parse(JSON.stringify(found));
+			transition = { ...found };
 
 		} else {
-			transition = JSON.parse(JSON.stringify(this.next));
+			transition = { ...this.next };
 		}
 
 		if (!transition.options)

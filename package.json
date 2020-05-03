@@ -25,7 +25,7 @@
     "bundle:nossr": "EXTRACT_CSS=false npm run bundle -- --dest dist",
     "bundle:ssr": "EXTRACT_CSS=true npm run bundle -- --dest dist-ssr",
     "lint": "vue-cli-service lint --no-fix",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit --coverage --no-cache --watch"
   },
   "files": [
     "dist",
