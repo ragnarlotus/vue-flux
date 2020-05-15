@@ -88,7 +88,7 @@ describe('TouchesController', () => {
 		expect(ctrl.doubleTap()).toBe(false);
 	});
 
-	test('slide left', () => {
+	test('slide left show next image', () => {
 		vf.show = jest.fn();
 		vf.size.width = 200;
 		vf.size.height = 200;
@@ -99,7 +99,7 @@ describe('TouchesController', () => {
 		expect(vf.show).toHaveBeenCalledWith('next');
 	});
 
-	test('slide right', () => {
+	test('slide right show previous image', () => {
 		vf.show = jest.fn();
 		vf.size.width = 200;
 		vf.size.height = 200;
@@ -108,6 +108,20 @@ describe('TouchesController', () => {
 		ctrl.end(touchEnd(200, 100));
 
 		expect(vf.show).toHaveBeenCalledWith('prev');
+	});
+
+	test('slide up', () => {
+		vf.size.width = 200;
+		vf.size.height = 200;
+
+		expect(ctrl.slideUp(-100)).toBe(true);
+	});
+
+	test('slide down', () => {
+		vf.size.width = 200;
+		vf.size.height = 200;
+
+		expect(ctrl.slideDown(100)).toBe(true);
 	});
 
 });
