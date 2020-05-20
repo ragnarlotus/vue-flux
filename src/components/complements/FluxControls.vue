@@ -55,7 +55,7 @@
 
 <style lang="scss">
 	.vue-flux .flux-controls {
-		flex: 1 1 0%;
+		flex: none;
 		display: flex;
 		justify-content: space-between;
 
