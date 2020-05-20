@@ -1,11 +1,9 @@
 <template>
-	<transition name="fade">
-		<slot v-if="caption" :caption="caption" :text="getCaptionText()">
-			<div class="flux-caption">
-				{{ getCaptionText() }}
-			</div>
+	<div v-if="caption" :class="htmlClass">
+		<slot :caption="caption" :text="getCaptionText()">
+			{{ getCaptionText() }}
 		</slot>
-	</transition>
+	</div>
 </template>
 
 <script>
@@ -26,10 +24,16 @@
 				if (!this.vf.loaded)
 					return '';
 
-				if (this.Transitions.current)
-					return '';
-
 				return this.getCaption();
+			},
+
+			htmlClass() {
+				const css = ['flux-caption'];
+
+				if (!this.Transitions.current)
+					css.push('visible');
+
+				return css;
 			},
 		},
 	};
@@ -37,6 +41,7 @@
 
 <style lang="scss">
 	.vue-flux .flux-caption {
+		flex: none;
 		width: 100%;
 		font-size: 0.8rem;
 		line-height: 1.1rem;
@@ -44,12 +49,10 @@
 		color: white;
 		text-align: center;
 		background-color: rgba(0, 0, 0, 0.65);
+		opacity: 0;
 
-		&.fade-enter, &.fade-leave-to {
-			opacity: 0;
-		}
-
-		&.fade-enter-active {
+		&.visible {
+			opacity: 1;
 			transition: opacity 0.3s ease-in;
 		}
 	}
