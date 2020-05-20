@@ -134,7 +134,7 @@
 			vfOptions: {
 				infinite: true,
 				autohideTime: 0,
-				autoplay: true,
+				autoplay: false,
 				enableGestures: true,
 				delay: 4000,
 				aspectRatio: '4:3',
@@ -162,10 +162,12 @@
 
 				let srcs = [];
 				for (let i = 1; i <= 32; i++) {
-					if (i % 3 === 0)
-						srcs.push(`${i.toString()}`);
-					else
-						srcs.push(`slides/${i.toString().padStart(2, '0')}.jpg`);
+					srcs.push(`slides/${i.toString().padStart(2, '0')}.jpg`);
+
+					// if (i % 3 === 0)
+					// 	srcs.push(`${i.toString()}`);
+					// else
+					// 	srcs.push(`slides/${i.toString().padStart(2, '0')}.jpg`);
 				}
 
 				this.vfImages = [];
