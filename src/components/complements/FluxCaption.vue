@@ -37,10 +37,7 @@
 
 <style lang="scss">
 	.vue-flux .flux-caption {
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
+		width: 100%;
 		font-size: 0.8rem;
 		line-height: 1.1rem;
 		padding: 6px;
