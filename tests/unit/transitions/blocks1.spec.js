@@ -1,8 +1,8 @@
 import { shallowMount } from '@vue/test-utils';
-import TransitionBlinds2d from '@/transitions/blinds2d';
+import TransitionBlocks1 from '@/transitions/blocks1';
 import Img from '@/libraries/Img';
 
-describe('TransitionBlinds2d', () => {
+describe('TransitionBlocks1', () => {
 	let wrapper, transition, from, to, current, options, tile;
 
 	beforeEach(() => {
@@ -10,7 +10,7 @@ describe('TransitionBlinds2d', () => {
 		to = new Img('to', 1);
 		options = {};
 
-		wrapper = shallowMount(TransitionBlinds2d, {
+		wrapper = shallowMount(TransitionBlocks1, {
 			propsData: {
 				size: {
 					width: 200,
@@ -37,18 +37,33 @@ describe('TransitionBlinds2d', () => {
 		expect(transition.totalDuration).toBeGreaterThan(1);
 	});
 
+	test('does not calcs rows if defined', () => {
+		options.rows = 10;
+
+		wrapper = shallowMount(TransitionBlocks1, {
+			propsData: {
+				size: {
+					width: 200,
+					height: 200,
+				},
+				from,
+				to,
+				current,
+				options,
+			},
+		});
+
+		expect(wrapper.vm.rows).toBe(10);
+	});
+
 	test('played transforms grid', () => {
 		transition.$options.played.call(transition);
 
 		expect(transition.$refs.grid.transform).toHaveBeenCalled();
 	});
 
-	test('gets previous delay', () => {
-		expect(transition.getDelayPrev(1)).toBe(800);
-	});
-
-	test('gets next delay', () => {
-		expect(transition.getDelayNext(1)).toBe(100);
+	test('gets delay', () => {
+		expect(transition.getDelay()).toEqual(expect.any(Number));
 	});
 
 	test('transform tiles', () => {
