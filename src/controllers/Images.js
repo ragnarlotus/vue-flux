@@ -71,38 +71,35 @@ export default class ImagesController {
 		this.$current = undefined;
 	}
 
-	update(images) {
+	update(srcs) {
 		this.reset();
 
-		this.srcs = images.slice(0);
+		this.srcs = [...srcs];
 
 		const { config } = this.vf;
 
 		this.toPreload = config.lazyLoad? config.lazyLoadAfter : this.srcs.length;
 
-		if (this.toPreload > this.srcs.length)
+		if (this.toPreload >= this.srcs.length) {
 			this.toPreload = this.srcs.length;
-
-		this.toLazyload = this.srcs.length - this.toPreload;
+		} else {
+			this.toLazyload = this.srcs.length - this.toPreload;
+		}
 
 		this.preloadStart();
 	}
 
 	preloadStart() {
+		const { vf, loaded } = this;
+
 		this.preloading = true;
+		vf.$emit('images-preload-start');
 
-		const { vf } = this;
-
-		if (!this.loading.length)
-			vf.$emit('images-preload-start');
-
-		const { total: totalLoaded } = this.loaded;
-		const toPreload = this.toPreload - this.imgs.length;
-
-		this.loading = this.srcs.slice(totalLoaded, totalLoaded + toPreload);
+		const toLoad = this.toPreload - loaded.success;
+		this.loading = this.srcs.slice(loaded.total, loaded.total + toLoad);
 
 		this.loaded.current = 0;
-		this.loading.forEach((src, i) => this.addImg(src, i, totalLoaded));
+		this.loading.forEach((src, i) => this.addImg(src, i, loaded.total));
 	}
 
 	preloadEnd() {
@@ -110,13 +107,12 @@ export default class ImagesController {
 
 		this.addLoadedSuccessfully();
 
-		if (this.imgs.length < this.toPreload && this.loaded.total < this.toPreload)
+		if (this.loaded.success < this.toPreload && this.loaded.total < this.toPreload)
 			return this.preloadStart();
 
 		this.updateIndexes();
 
 		this.preloading = false;
-
 		vf.$emit('images-preload-end');
 
 		if (this.loaded.total < this.srcs.length)
@@ -126,15 +122,14 @@ export default class ImagesController {
 	}
 
 	lazyLoadStart() {
-		this.vf.$emit('images-lazy-load-start');
+		const { vf, loaded } = this;
 
 		this.lazyloading = true;
+		vf.$emit('images-lazy-load-start');
 
-		const { total: totalLoaded } = this.loaded;
-
-		this.loading = this.srcs.slice(totalLoaded);
+		this.loading = this.srcs.slice(loaded.total);
 		this.loaded.current = 0;
-		this.loading.forEach((src, i) => this.addImg(src, i, totalLoaded));
+		this.loading.forEach((src, i) => this.addImg(src, i, loaded.total));
 	}
 
 	lazyLoadEnd() {
@@ -142,7 +137,6 @@ export default class ImagesController {
 		this.updateIndexes();
 
 		this.lazyloading = false;
-
 		this.vf.$emit('images-lazy-load-end');
 	}
 
@@ -150,7 +144,7 @@ export default class ImagesController {
 		const { config } = this.vf;
 		const img = this.loading[i] = new Img(config.path + src, i + totalLoaded);
 
-		img.load().then(() => {
+		return img.load().then(() => {
 			this.loadSuccess(img);
 
 		}).catch(error => {

@@ -11,6 +11,9 @@ export default class TimersController {
 	clear(timer) {
 		let timers = timer? [ timer ] : Object.keys(this.timers);
 
-		timers.forEach(timer => clearTimeout(this.timers[timer]));
+		timers.forEach(timer => {
+			clearTimeout(this.timers[timer]);
+			this.timers[timer] = undefined;
+		});
 	}
 }

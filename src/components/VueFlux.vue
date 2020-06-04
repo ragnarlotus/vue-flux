@@ -34,8 +34,9 @@
 		<div v-if="size" class="complements">
 			<slot name="preloader" />
 			<slot name="caption" />
-			<div style="height: 48%;" />
+			<div class="remainder upper" />
 			<slot name="controls" />
+			<div class="remainder lower" />
 			<slot name="index" />
 			<slot v-if="loaded" name="pagination" />
 		</div>
@@ -360,6 +361,14 @@
 			flex-direction: column;
 			justify-content: space-between;
 			z-index: 45;
+
+			.remainder {
+				flex-basis: 50%;
+
+				&.lower {
+					flex-basis: 50%;
+				}
+			}
 		}
 	}
 </style>

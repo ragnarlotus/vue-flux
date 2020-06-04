@@ -42,7 +42,7 @@ export default class TransitionsController {
 		this.transitions = transitions.map((transition, i) => ({
 			index: i,
 			name: transition.name || transition,
-			options: transition.options,
+			options: transition.options || {},
 		}));
 
 		this.last = this.transitions[this.transitions.length - 1];
@@ -61,14 +61,11 @@ export default class TransitionsController {
 			if (!found)
 				throw new ReferenceError(`Transition ${transition} not found`);
 
-			transition = JSON.parse(JSON.stringify(found));
+			transition = { ...found };
 
 		} else {
-			transition = JSON.parse(JSON.stringify(this.next));
+			transition = { ...this.next };
 		}
-
-		if (!transition.options)
-			transition.options = {};
 
 		if (!transition.options.direction) {
 			if (!direction)

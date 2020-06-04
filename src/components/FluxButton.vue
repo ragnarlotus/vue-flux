@@ -19,8 +19,8 @@
 	.vue-flux .flux-button {
 		padding: 0;
 		width: 6%;
-		min-width: 15px;
-		min-height: 15px;
+		min-width: 26px;
+		min-height: 26px;
 		max-width: 40px;
 		max-height: 40px;
 	}

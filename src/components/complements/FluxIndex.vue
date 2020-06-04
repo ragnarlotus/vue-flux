@@ -180,6 +180,7 @@
 
 <style lang="scss">
 	.vue-flux .flux-index {
+		flex: none;
 		margin-bottom: 2%;
 		font-size: 0;
 		text-align: center;
