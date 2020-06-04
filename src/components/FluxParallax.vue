@@ -1,16 +1,9 @@
 <template>
 	<div ref="parallax" :style="style">
-		<div v-if="type === 'fixed'" :style="fixedParentStyle">
-			<div :style="fixedChildStyle" />
+		<div v-if="type === 'fixed' && !ios" :style="fixedParentStyle">
+			<div class="image" :style="fixedChildStyle" />
 		</div>
 
-		<img
-			v-if="type !== 'fixed' && !loaded"
-			ref="image"
-			:src="src"
-			@load="setProperties"
-			@error="setProperties"
-		>
 		<slot />
 	</div>
 </template>
@@ -31,7 +24,6 @@
 			},
 
 			type: {
-				type: String,
 				default: 'relative',
 			},
 
@@ -42,6 +34,8 @@
 		},
 
 		data: () => ({
+			ios: false,
+
 			loaded: false,
 
 			view: {
@@ -109,6 +103,9 @@
 			},
 
 			backgroundHeight() {
+				if (this.ios)
+					return this.view.height;
+
 				return this.parallaxSize.height + this.offsetHeight.px;
 			},
 
@@ -118,20 +115,30 @@
 
 			fixedChildStyle() {
 				return {
-					position: 'fixed',
+					position: 'absolute',
 					top: 0,
 					bottom: 0,
 					left: 0,
 					right: 0,
 					background: `url("${this.src}") no-repeat center center fixed`,
 				};
-			}
+			},
+
+			handle() {
+				return {
+					visible: this.handleVisible,
+					relative: this.handleRelative,
+					fixed: this.handleFixed,
+				};
+			},
+		},
+
+		created() {
+			this.ios = (/iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
+			this.setProperties();
 		},
 
 		mounted() {
-			if (this.type === 'fixed')
-				return;
-
 			this.setCss({
 				background: `url("${this.src}") no-repeat`,
 			});
@@ -140,35 +147,41 @@
 				passive: true,
 			});
 
-			setTimeout(() => {
-				this.holder.addEventListener('scroll', this.handleScroll, {
-					passive: true,
+			if (this.type !== 'fixed' || this.ios) {
+				setTimeout(() => {
+					this.holder.addEventListener('scroll', this.handleScroll, {
+						passive: true,
+					});
 				});
-			});
+			}
 		},
 
 		beforeDestroy() {
-			if (this.type === 'fixed')
-				return;
-
 			window.removeEventListener('resize', this.resize);
 			this.holder.removeEventListener('scroll', this.handleScroll);
 		},
 
 		methods: {
 			setProperties() {
-				let img = this.$refs.image;
+				let img = new Image();
 
-				if (img.naturalWidth || img.width) {
-					Object.assign(this.image, {
+				img.onload = () => {
+					this.image = {
+						...this.image,
 						src: img.src,
 						width: img.naturalWidth || img.width,
 						height: img.naturalHeight || img.height,
-					});
+					};
+
+					this.loaded = true;
+					this.resize();
 				}
 
-				this.loaded = true;
-				this.resize();
+				img.onerror = () => {
+					console.warn(`Image ${this.src} could not be loaded`);
+				}
+
+				img.src = this.src;
 			},
 
 			resize() {
@@ -183,7 +196,7 @@
 				let imageRatio = this.image.height / this.image.width;
 				let parallaxRatio = this.parallax.height / this.parallax.width;
 
-				if (imageRatio >= parallaxRatio) {
+				if (imageRatio >= parallaxRatio && !this.ios) {
 					this.background.width = this.parallax.width;
 					this.background.height = Math.floor(this.parallax.width * this.image.height / this.image.width);
 
@@ -217,7 +230,7 @@
 			},
 
 			handleScroll() {
-				if (this.loaded === false)
+				if (this.loaded === false || (!this.ios && this.type === 'fixed'))
 					return;
 
 				let scrollTop = this.holder.scrollY || this.holder.scrollTop || this.holder.pageYOffset || 0;
@@ -233,11 +246,7 @@
 
 				let positionY = scrollTop - this.parallax.top + this.view.height;
 
-				if (this.type === 'visible')
-					this.handleVisible(positionY);
-
-				else if (this.type === 'relative')
-					this.handleRelative(positionY);
+				this.handle[this.type](positionY);
 			},
 
 			handleVisible(positionY) {
@@ -266,6 +275,12 @@
 
 				this.moveBackgroundByPct(pct);
 			},
+
+			handleFixed(positionY) {
+				this.setCss({
+					backgroundPositionY: (positionY - this.view.height) +'px',
+				});
+			},
 		},
 	};
 </script>
@@ -274,5 +289,9 @@
 	.flux-parallax img {
 		position: absolute;
 		visibility: hidden;
+	}
+
+	.flux-parallax :not(.image) {
+		z-index: 1;
 	}
 </style>
