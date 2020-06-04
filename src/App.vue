@@ -1,7 +1,7 @@
 <template>
 	<!-- eslint-disable -->
 	<div id="app">
-		<div class="container mx-auto">
+		<div class="container mx-auto mb-4">
 			<h1 class="my-4">
 				Vue flux
 			</h1>
