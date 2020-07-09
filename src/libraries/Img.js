@@ -13,7 +13,7 @@ export default class Img {
 	load() {
 		return new Promise((resolve, reject) => {
 			if (this.status)
-				resolve();
+				return this.status === 'loaded'? resolve() : reject(`Image ${this.src} could not be loaded`);
 
 			let img = new Image();
 
