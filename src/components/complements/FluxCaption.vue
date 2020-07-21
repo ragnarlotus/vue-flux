@@ -46,6 +46,7 @@
 		font-size: 0.8rem;
 		line-height: 1.1rem;
 		padding: 6px;
+		box-sizing: border-box;
 		color: white;
 		text-align: center;
 		background-color: rgba(0, 0, 0, 0.65);
