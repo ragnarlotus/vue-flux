@@ -153,6 +153,10 @@
 		},
 
 		created() {
+			// setTimeout(() => {
+			// 	this.rendered = true;
+			// }, 400);
+
 			this.loadImages();
 		},
 
@@ -175,7 +179,7 @@
 
 				let index, src;
 
-				for (let i = 0; i < 16; i++) {
+				for (let i = 0; i < 32; i++) {
 					index = Math.floor(Math.random() * srcs.length);
 
 					src = srcs.splice(index, 1)[0];

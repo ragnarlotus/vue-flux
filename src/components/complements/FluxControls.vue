@@ -55,8 +55,6 @@
 
 <style lang="scss">
 	.vue-flux .flux-controls {
-		margin-top: -92%;
-		padding-top: 100%;
 		flex: none;
 		display: flex;
 		justify-content: space-between;

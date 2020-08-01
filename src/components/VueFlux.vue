@@ -364,10 +364,6 @@
 
 			.remainder {
 				flex-basis: 50%;
-
-				&.lower {
-					flex-basis: 50%;
-				}
 			}
 		}
 	}
