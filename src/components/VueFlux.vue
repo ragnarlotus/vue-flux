@@ -39,6 +39,7 @@
 			<div class="remainder lower" />
 			<slot name="index" />
 			<slot v-if="loaded" name="pagination" />
+			<slot name="description" />
 		</div>
 	</div>
 </template>
