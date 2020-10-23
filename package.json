@@ -1,6 +1,6 @@
 {
   "name": "vue-flux",
-  "version": "6.3.0",
+  "version": "7.0.0",
   "description": "Vue image slider",
   "author": "ragnar lotus",
   "repository": {
@@ -32,21 +32,21 @@
     "dist-ssr"
   ],
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.4.6",
-    "@vue/cli-plugin-eslint": "~4.4.6",
-    "@vue/cli-plugin-unit-jest": "~4.4.6",
-    "@vue/cli-service": "~4.4.6",
-    "@vue/test-utils": "~1.0.3",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-unit-jest": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/test-utils": "^2.0.0-0",
     "babel-eslint": "^10.1.0",
     "core-js": "^3.6.5",
-    "eslint": "^7.5.0",
-    "eslint-plugin-jest": "^23.18.0",
-    "eslint-plugin-vue": "^6.2.2",
-    "node-sass": "^4.14.1",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^7.0.0-0",
+    "node-sass": "^4.12.0",
     "sass-loader": "^8.0.2",
     "tailwindcss": "^1.5.2",
-    "vue": "^2.6.11",
     "vue-cosk": "^0.2.5",
-    "vue-template-compiler": "^2.6.11"
+    "vue": "^3.0.0",
+    "vue-jest": "^5.0.0-0"
   }
 }

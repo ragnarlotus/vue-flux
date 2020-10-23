@@ -1,4 +1,3 @@
-import Dom from '@/libraries/Dom';
 import Img from '@/libraries/Img';
 
 export default {
@@ -40,10 +39,6 @@ export default {
 	}),
 
 	computed: {
-		domSize() {
-			return Dom.sizeFrom(this.$el);
-		},
-
 		sizeStyle() {
 			if (!this.size)
 				return {};

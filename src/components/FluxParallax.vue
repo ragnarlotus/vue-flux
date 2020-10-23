@@ -39,7 +39,6 @@
 			loaded: false,
 
 			view: {
-				width: undefined,
 				height: undefined,
 			},
 
@@ -122,7 +121,6 @@
 					left: 0,
 					right: 0,
 					background: `url("${this.src}") no-repeat center center fixed`,
-					backgroundSize: `${this.background.width}px ${this.background.height}px`,
 				};
 			},
 
@@ -187,7 +185,6 @@
 			},
 
 			resize() {
-				this.view.width = this.holder.scrollWidth || this.holder.innerWidth;
 				this.view.height = this.holder.scrollHeight || this.holder.innerHeight;
 
 				this.parallax = {
@@ -197,14 +194,14 @@
 				};
 
 				let imageRatio = this.image.height / this.image.width;
-				let viewRatio = this.view.height / this.view.width;
+				let parallaxRatio = this.parallax.height / this.parallax.width;
 
-				if (imageRatio >= viewRatio && !this.ios) {
-					this.background.width = this.view.width;
-					this.background.height = Math.floor(this.view.width * this.image.height / this.image.width);
+				if (imageRatio >= parallaxRatio && !this.ios) {
+					this.background.width = this.parallax.width;
+					this.background.height = Math.floor(this.parallax.width * this.image.height / this.image.width);
 
 				} else {
-					this.background.height = this.view.height;
+					this.background.height = this.backgroundHeight;
 					this.background.width = Math.floor(this.background.height * this.image.width / this.image.height);
 				}
 

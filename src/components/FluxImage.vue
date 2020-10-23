@@ -1,40 +1,49 @@
 <template>
-	<div class="flux-image" :style="style" />
+	<div ref="image" class="flux-image" :style="style" />
 </template>
 
 <script>
-	import BaseComponent from '@/mixins/BaseComponent';
+	import { ref, reactive, computed } from 'vue';
+	import Dom from '@/models/Dom.js';
+	import { baseProps } from '@/mixins/BaseComponent.js';
 
 	export default {
 		name: 'FluxImage',
 
-		mixins: [
-			BaseComponent,
-		],
+		props: baseProps,
 
-		data: () => ({
-			baseStyle: {
+		setup(props) {
+			const image = ref(undefined);
+
+			const baseStyle = reactive({
 				overflow: 'hidden',
-			},
-		}),
+			});
 
-		computed: {
-			colorStyle() {
-				if (!this.color)
+			const colorStyle = computed(() => {
+				if (!props.color.value)
 					return {};
 
 				return {
-					backgroundColor: this.color,
+					backgroundColor: props.color.value,
 				};
-			},
+			}) ;
 
+			return {
+				image,
+				baseStyle,
+				colorStyle,
+			};
+		},
+
+
+		computed: {
 			imageStyle() {
 				let { img } = this;
 
 				if (!img || img.status !== 'loaded')
 					return {};
 
-				let { size, position } = img.getCoverProps(this.size || this.domSize);
+				let { size, position } = img.getCoverProps(this.size || Dom.sizeFrom(this.$el));
 
 				if (this.offset) {
 					for (let side of ['top', 'left'])
