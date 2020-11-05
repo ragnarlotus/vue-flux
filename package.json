@@ -5,7 +5,7 @@
   "author": "ragnar lotus",
   "repository": {
     "type": "git",
-    "url": "https://github.com/deulos/vue-flux"
+    "url": "https://github.com/ragnarlotus/vue-flux"
   },
   "keywords": [
     "vue",
@@ -15,8 +15,8 @@
     "parallax"
   ],
   "license": "MIT",
-  "bugs": "https://github.com/deulos/vue-flux/issues",
-  "homepage": "https://deulos.github.com/vue-flux-docs",
+  "bugs": "https://github.com/ragnarlotus/vue-flux/issues",
+  "homepage": "https://ragnarlotus.github.com/vue-flux-docs",
   "main": "dist/vue-flux.umd.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",

@@ -76,7 +76,7 @@
 					if (this.transition.name)
 						return this.transition.name;
 
-					let vfURL= 'https://deulos.github.com/vue-flux-docs/documentation-6/Components/VueFlux';
+					let vfURL= 'https://ragnarlotus.github.com/vue-flux-docs/documentation-6/Components/VueFlux';
 
 					throw new ReferenceError(`Transition undefined, check ${vfURL}`);
 				}
