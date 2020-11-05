@@ -1,10 +1,11 @@
 <template>
 	<div id="app">
-		<div>hola</div>
-		<flux-button>
-			<line x1="32" y1="22" x2="32" y2="78" />
-			<line x1="68" y1="22" x2="68" y2="78" />
-		</flux-button>
+		<div class="vue-flux">
+			<flux-button>
+				<line x1="32" y1="22" x2="32" y2="78" />
+				<line x1="68" y1="22" x2="68" y2="78" />
+			</flux-button>
+		</div>
 	</div>
 </template>
 
@@ -93,8 +94,4 @@ export default {
 </script>
 
 <style lang="scss">
-	body {
-		color: white;
-		background-color: black;
-	}
 </style>

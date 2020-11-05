@@ -5,7 +5,7 @@
 <script>
 	import { ref, reactive, computed } from 'vue';
 	import Dom from '@/models/Dom.js';
-	import { baseProps } from '@/mixins/BaseComponent.js';
+	import { baseProps } from './FluxComponentBase.js';
 
 	export default {
 		name: 'FluxImage',

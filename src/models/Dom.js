@@ -16,13 +16,13 @@ export default class Dom {
 	}
 
 	getWidth() {
-		let width = getComputedStyle(this.node).width;
+		const width = getComputedStyle(this.node).width;
 
 		return parseFloat(width);
 	}
 
 	getHeight() {
-		let height = getComputedStyle(this.node).height;
+		const height = getComputedStyle(this.node).height;
 
 		return parseFloat(height);
 	}
