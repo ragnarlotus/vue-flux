@@ -5,15 +5,20 @@
 <script>
 	import { ref, reactive, computed } from 'vue';
 	import Dom from '@/models/Dom.js';
-	import { baseProps } from './FluxComponentBase.js';
+	import {
+		useProps,
+		BaseComponent
+	} from './FluxComponentBase.js';
 
 	export default {
 		name: 'FluxImage',
 
-		props: baseProps,
+		props: {
+			...useProps(),
+		},
 
 		setup(props) {
-			const image = ref(undefined);
+			const image = ref();
 
 			const baseStyle = reactive({
 				overflow: 'hidden',
@@ -26,18 +31,9 @@
 				return {
 					backgroundColor: props.color.value,
 				};
-			}) ;
+			});
 
-			return {
-				image,
-				baseStyle,
-				colorStyle,
-			};
-		},
-
-
-		computed: {
-			imageStyle() {
+			const imageStyle = computed(() => {
 				let { img } = this;
 
 				if (!img || img.status !== 'loaded')
@@ -56,7 +52,23 @@
 					backgroundPosition: `${position.left}px ${position.top}px`,
 					backgroundRepeat: 'no-repeat',
 				};
-			},
+			});
+
+			const {
+				style,
+				setCss,
+				transform,
+				show,
+				hide
+			} = BaseComponent(image, props, baseStyle, colorStyle, imageStyle);
+
+			return {
+				style,
+				setCss,
+				transform,
+				show,
+				hide
+			};
 		},
 	};
 </script>

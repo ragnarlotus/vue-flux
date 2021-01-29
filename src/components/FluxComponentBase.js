@@ -1,142 +1,216 @@
+import { ref, reactive, computed, watch } from 'vue';
 import Img from '@/libraries/Img';
 
-export default {
-	props: {
-		color: String,
+export const useProps = () => ({
+	color: String,
 
-		colors: {
-			type: Object,
-			default: () => ({}),
-		},
-
-		image: [ String, Object ],
-
-		images: Object,
-
-		size: {
-			type: Object,
-		},
-
-		viewSize: {
-			type: Object,
-			default: () => ({}),
-		},
-
-		offset: Object,
-
-		offsets: {
-			type: Object,
-			default: () => ({}),
-		},
-
-		css: Object,
+	colors: {
+		type: Object,
+		default: () => ({}),
 	},
 
-	data: () => ({
-		img: undefined,
-		imgs: undefined,
-		baseStyle: {},
-	}),
+	image: [ String, Object ],
 
-	computed: {
-		sizeStyle() {
-			if (!this.size)
-				return {};
+	images: Object,
 
-			let size = this.size;
-
-			let {
-				width = size.width,
-				height = size.height,
-			} = this.viewSize;
-
-			return {
-				width: width +'px',
-				height: height +'px',
-			};
-		},
-
-		style() {
-			return {
-				...this.sizeStyle,
-				...this.colorStyle,
-				...this.imageStyle,
-				...this.css,
-				...this.baseStyle,
-			};
-		},
+	size: {
+		type: Object,
 	},
 
-	watch: {
-		image: function() {
-			this.initImg();
-		},
-
-		images: function() {
-			this.initImgs();
-		},
+	viewSize: {
+		type: Object,
+		default: () => ({}),
 	},
 
-	created() {
-		this.initImg();
-		this.initImgs();
+	offset: Object,
+
+	offsets: {
+		type: Object,
+		default: () => ({}),
 	},
 
-	methods: {
-		initImg() {
-			if (!this.image)
-				return this.img = undefined;
+	css: Object,
+});
 
-			if (this.image.src)
-				return this.img = this.image;
 
-			this.img = new Img(this.image);
-			this.img.load();
-		},
+export function useSizeStyle(props) {
+	return computed(() => {
+		if (!props.size) {
+			return {};
+		}
 
-		initImgs() {
-			if (!this.images)
-				return this.imgs = undefined;
+		const size = props.size;
 
-			let img;
-			let imgs = {};
+		const {
+			width = size.width,
+			height = size.height,
+		} = props.viewSize;
 
-			for (let side in this.images) {
-				img = this.images[side];
+		return {
+			width: width +'px',
+			height: height +'px',
+		};
+	});
+}
 
-				if (!img.src) {
-					img = new Img(img);
-					img.load();
-				}
+export function useStyle(sizeStyle, colorStyle, imageStyle, props, baseStyle) {
+	return computed(() => ({
+		...sizeStyle,
+		...colorStyle,
+		...imageStyle,
+		...props.css,
+		...baseStyle,
+	}));
+}
 
-				imgs[side] = img;
+export const useMethods = ($el, baseStyle) => {
+	const setCss = css => {
+		baseStyle = {
+			...baseStyle,
+			...css,
+		};
+	};
+
+	const transform = css => {
+		$el.clientHeight;
+		setCss(css);
+	};
+
+	const show = () => {
+		setCss({
+			visibility: 'visible'
+		});
+	};
+
+	const hide = () => {
+		setCss({
+			visibility: 'hidden'
+		});
+	};
+
+	return {
+		setCss,
+		transform,
+		show,
+		hide,
+	};
+}
+
+
+
+
+export function BaseComponent($el, props, baseStyle, colorStyle, imageStyle) {
+	if (!baseStyle) {
+		baseStyle = reactive({});
+	}
+
+	const sizeStyle = computed(() => {
+		if (!props.size) {
+			return {};
+		}
+
+		const size = props.size;
+
+		const {
+			width = size.width,
+			height = size.height,
+		} = props.viewSize;
+
+		return {
+			width: width +'px',
+			height: height +'px',
+		};
+	})
+
+	const style = computed(() => ({
+		...sizeStyle,
+		...colorStyle,
+		...imageStyle,
+		...props.css,
+		...baseStyle,
+	}));
+
+	const img = ref();
+
+	const initImg = () => {
+		if (!props.image) {
+			img.value = undefined;
+			return;
+		}
+
+		if (props.image instanceof Img) {
+			img.value = props.image;
+			return;
+		}
+
+		img.value = new Img(props.image);
+		img.value.load();
+	};
+
+	watch(props.image, () => {
+		initImg();
+	});
+
+	let imgs;
+
+	const initImgs = () => {
+		if (!props.images) {
+			imgs = undefined;
+			return;
+		}
+
+		imgs = reactive({});
+
+		for (const side in props.images) {
+			let imgSide = props.images[side];
+
+			if (!imgSide.src) {
+				imgSide = new Img(imgSide);
+				img.load();
 			}
 
-			this.imgs = imgs;
-		},
+			imgs[side] = imgSide;
+		}
+	};
 
-		setCss(css) {
-			this.baseStyle = {
-				...this.baseStyle,
-				...css,
-			};
-		},
+	watch(props.images, () => {
+		initImgs();
+	});
 
-		transform(css) {
-			this.$el.clientHeight;
-			this.setCss(css);
-		},
+	const setCss = css => {
+		baseStyle = {
+			...baseStyle,
+			...css,
+		};
+	};
 
-		show() {
-			this.setCss({
-				visibility: 'visible'
-			});
-		},
+	const transform = css => {
+		$el.clientHeight;
+		setCss(css);
+	};
 
-		hide() {
-			this.setCss({
-				visibility: 'hidden'
-			});
-		},
-	},
-};
+	const show = () => {
+		setCss({
+			visibility: 'visible'
+		});
+	};
+
+	const hide = () => {
+		setCss({
+			visibility: 'hidden'
+		});
+	};
+
+	initImg();
+	initImgs();
+
+	return {
+		img,
+		imgs,
+		style,
+		setCss,
+		transform,
+		show,
+		hide,
+	};
+}
