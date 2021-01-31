@@ -106,11 +106,13 @@
 				let { width, height } = this.vf.size;
 
 				width = width / 4.2;
-				height = width * 90 / 160;
+				height = height / 4.2;
 
 				if (width > 160) {
+					const [ arWidth, arHeight ] = this.vf.config.aspectRatio.split(':');
+
 					width = 160;
-					height = 90;
+					height = width * arHeight / arWidth;
 				}
 
 				return {
