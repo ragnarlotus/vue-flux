@@ -10,9 +10,6 @@ module.exports = {
 		'plugin:jest/recommended',
 		'eslint:recommended',
 	],
-	parserOptions: {
-		parser: 'babel-eslint',
-	},
 	rules: {
 		'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
 		'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
@@ -25,12 +22,17 @@ module.exports = {
 			ignores: [],
 		}],
 		'vue/max-attributes-per-line': [ 'warn', {
-			singleline: 4,
+			singleline: {
+				max: 4,
+			},
 			multiline: {
 				max: 1,
-				allowFirstLine: false,
 			},
 		}],
+	},
+	globals: {
+		defineProps: true,
+		defineExpose: true,
 	},
 	overrides: [
 		{

@@ -1,109 +1,112 @@
+<script setup>
+	import { ref, reactive, computed } from 'vue';
+	import { round, ceil, diag } from '@/models/partials/math.js';
+	import FluxImage from '@/components/FluxImage.vue';
+	import {
+		baseProps,
+		default as usePartials,
+	} from '@/models/partials/component.js';
+
+	const $el = ref(null);
+
+	const props = defineProps({
+		...baseProps,
+
+		circles: {
+			type: Number,
+			default: 1,
+		},
+
+		tileCss: Object,
+	});
+
+	const styles = reactive({
+		base: {
+			position: 'relative',
+			overflow: 'hidden',
+		},
+		color: props.color,
+		props: props.css,
+	});
+
+	const {
+		style,
+		setCss,
+		show,
+		hide,
+	} = usePartials($el, props, styles);
+
+	const numCircles = computed(() => {
+		return round(props.circles);
+	});
+
+	const diagonal = computed(() => {
+		return diag(props.size);
+	});
+
+	const radius = computed(() => {
+		return ceil(diagonal.value / 2 / numCircles.value);
+	});
+
+	const topGap = computed(() => {
+		return ceil(props.size.height / 2 - radius.value * numCircles.value);
+	});
+
+	const leftGap = computed(() => {
+		return ceil(props.size.width / 2 - radius.value * numCircles.value);
+	});
+
+	const tiles = computed(() => {
+		const tiles = [];
+
+		for (let i = 0; i < numCircles.value; i++) {
+			const size = (numCircles.value - i) * radius.value * 2;
+			const gap = radius.value * i;
+
+			const tile = {
+				offset: {
+					top: topGap.value + gap,
+					left: leftGap.value + gap,
+				},
+			};
+
+			tile.css = {
+				...props.tileCss,
+				position: 'absolute',
+				left: tile.offset.left +'px',
+				top: tile.offset.top + 'px',
+				width: size +'px',
+				height: size +'px',
+				backgroundRepeat: 'repeat',
+				borderRadius: '50%',
+				zIndex: i,
+			};
+
+			tiles.push(tile);
+		}
+
+		return tiles;
+	});
+
+	let $tiles = [];
+
+	const transform = func => {
+		$tiles.forEach((tile, i) => func(tile, i));
+	};
+
+	defineExpose(setCss, transform, show, hide);
+</script>
+
 <template>
-	<div ref="vortex" :style="style">
-		<flux-image
+	<div ref="$el" :style="style">
+		<FluxImage
 			v-for="(tile, index) in tiles"
-			ref="tiles"
+			:ref="el => { if (el) $tiles[index] = el }"
 			:key="index"
 			:size="size"
-			:image="img"
+			:rsc="rsc"
 			:offset="tile.offset"
 			:css="tile.css"
 		/>
 	</div>
 </template>
-
-<script>
-	import BaseComponent from '@/mixins/BaseComponent';
-	import FluxImage from '@/components/FluxImage';
-
-	export default {
-		name: 'FluxVortex',
-
-		components: {
-			FluxImage,
-		},
-
-		mixins: [
-			BaseComponent,
-		],
-
-		props: {
-			circles: {
-				type: Number,
-				default: 1,
-			},
-
-			tileCss: Object,
-		},
-
-		data: () => ({
-			baseStyle: {
-				position: 'relative',
-				overflow: 'hidden',
-			},
-		}),
-
-		computed: {
-			numCircles() {
-				return Math.round(parseFloat(this.circles));
-			},
-
-			diag() {
-				let { width, height } = this.size;
-
-				return Math.ceil(Math.sqrt(width * width + height * height));
-			},
-
-			radius() {
-				return Math.ceil(this.diag / 2 / this.numCircles);
-			},
-
-			topGap() {
-				return Math.ceil(this.size.height / 2 - this.radius * this.numCircles);
-			},
-
-			leftGap() {
-				return Math.ceil(this.size.width / 2 - this.radius * this.numCircles);
-			},
-
-			tiles() {
-				let tile;
-				let tiles = [];
-
-				for (let i = 0; i < this.numCircles; i++) {
-					let size = (this.numCircles - i) * this.radius * 2;
-					let gap = this.radius * i;
-
-					tile = {
-						offset: {
-							top: this.topGap + gap,
-							left: this.leftGap + gap,
-						},
-					};
-
-					tile.css = {
-						...this.tileCss,
-						position: 'absolute',
-						left: tile.offset.left +'px',
-						top: tile.offset.top + 'px',
-						width: size +'px',
-						height: size +'px',
-						backgroundRepeat: 'repeat',
-						borderRadius: '50%',
-						zIndex: i,
-					};
-
-					tiles.push(tile);
-				}
-
-				return tiles;
-			},
-		},
-
-		methods: {
-			transform(func) {
-				this.$refs.tiles.forEach((tile, i) => func(tile, i));
-			},
-		},
-	};
-</script>
