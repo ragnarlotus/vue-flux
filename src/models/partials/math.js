@@ -1,6 +1,8 @@
 export const round = number => Math.round(parseFloat(number));
 
-export const ceil = number => Math.ceil(number);
+export const floor = number => Math.floor(parseFloat(number));
+
+export const ceil = number => Math.ceil(parseFloat(number));
 
 export const diag = size => {
 	const { width, height } = size;

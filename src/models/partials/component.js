@@ -45,7 +45,7 @@ export default ($el, props, styles) => {
 	}));
 
 	const setCss = css => ({
-		...toRefs(styles.baseCss),
+		...toRefs(styles.base),
 		...css,
 	});
 
