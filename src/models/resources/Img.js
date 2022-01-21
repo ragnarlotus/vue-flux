@@ -46,49 +46,44 @@ export default class Img {
 		return `Image ${this.src} could not be loaded`;
 	}
 
-	getCoverProps(viewSize) {
-		if (!viewSize || this.status.value !== 'loaded')
+	getCoverProps(view) {
+		if (!view || this.status.value !== 'loaded')
 			return undefined;
 
-		const view = {
-			size: viewSize,
-			aspectRatio: viewSize.width / viewSize.height,
+		const size = this.getCoverSize(view);
+		const position = this.getCoverPosition(view, size);
+
+		return {
+			...size,
+			...position,
 		};
-
-		const cover = {
-			size: this.getCoverSize(view),
-		};
-
-		cover.position = this.getCoverPosition(view, cover.size);
-
-		return cover;
 	}
 
 	getCoverSize(view) {
-		if (this.aspectRatio.value <= view.aspectRatio) {
+		if (this.aspectRatio.value <= view.aspectRatio.value) {
 			return {
-				width: view.size.width,
-				height: view.size.width / this.aspectRatio.value,
+				width: view.width,
+				height: view.width / this.aspectRatio.value,
 			};
 		}
 
 		return {
-			width: this.aspectRatio.value * view.size.height,
-			height: view.size.height,
+			width: this.aspectRatio.value * view.height,
+			height: view.height,
 		};
 	}
 
-	getCoverPosition(view, coverSize) {
-		if (this.aspectRatio.value <= view.aspectRatio) {
+	getCoverPosition(view, size) {
+		if (this.aspectRatio.value <= view.aspectRatio.value) {
 			return {
-				top: (view.size.height - coverSize.height) / 2,
+				top: (view.height - size.height) / 2,
 				left: 0,
 			};
 		}
 
 		return {
 			top: 0,
-			left: (view.size.width - coverSize.width) / 2,
+			left: (view.width - size.width) / 2,
 		};
 	}
 
