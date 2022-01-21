@@ -1,7 +1,6 @@
 <script setup>
 	import { ref, reactive, computed, unref, onMounted, onUnmounted } from 'vue';
-	import { floor, ceil } from '@/models/partials/math.js';
-	import { default as usePartials } from '@/models/partials/component.js';
+	import { ceil } from '@/models/partials/math.js';
 
 	const $el = ref(null);
 
@@ -13,7 +12,7 @@
 
 		/* eslint-disable vue/require-prop-types */
 		holder: {
-			default: () => window
+			default: window,
 		},
 
 		type: {
@@ -26,23 +25,33 @@
 		},
 	});
 
-	const styles = reactive({
+	const { holder, rsc } = props;
+
+	const style = {
 		base: {
 			position: 'relative',
+			background: `url("${rsc.src}") no-repeat`,
 		},
-	});
+		defined: reactive({}),
+		final: computed(() => ({
+			...style.base,
+			...unref(style.defined),
+		}))
+	};
 
 	const isIos = (/iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
 
-	const view = reactive({
+	const display = reactive({
 		width: null,
 		height: null,
+		aspectRatio: computed(() => display.width / display.height),
 	});
 
-	let parallax = reactive({
+	const view = reactive({
 		top: null,
 		width: null,
 		height: null,
+		aspectRatio: computed(() => view.width / view.height),
 	});
 
 	const background = reactive({
@@ -52,23 +61,23 @@
 		height: null,
 	});
 
-	const fixedParentStyle = reactive({
+	const fixedParentStyle = {
 		position: 'absolute',
 		top: 0,
 		left: 0,
 		bottom: 0,
 		right: 0,
 		clip: 'rect(auto auto auto auto)',
-	});
+	};
 
-	const {
-		style,
-		setCss,
-	} = usePartials($el, props, styles);
-
-	const parallaxSize = computed(() => ({
-		width: $el.clientWidth,
-		height: $el.clientHeight,
+	const fixedChildStyle = computed(() => ({
+		position: 'absolute',
+		top: 0,
+		bottom: 0,
+		left: 0,
+		right: 0,
+		background: `url("${rsc.src}") no-repeat center center fixed`,
+		backgroundSize: `${background.width}px ${background.height}px`,
 	}));
 
 	const offsetHeight = computed(() => {
@@ -80,165 +89,129 @@
 				px: offsetValue,
 				pct: offsetValue * 100 / background.height,
 			};
-
 		}
 
 		if (/^[0-9]+%$/.test(offset)) {
 			return {
-				px: ceil(parallaxSize.height * offsetValue / 100),
-				pct: parseFloat(offsetValue),
+				px: ceil(view.height * offsetValue / 100),
+				pct: offsetValue,
 			};
 		}
 
 		return 0;
 	});
 
-	const backgroundHeight = computed(
-		() => isIos? view.height : parallaxSize.height + offsetHeight.px
-	);
+	const remainderHeight = computed(() => {
+		const effectHeight = isIos? display.height : view.height + offsetHeight.value.px;
 
-	const remainderHeight = computed(() => background.height - backgroundHeight.value);
-
-	const fixedChildStyle = computed(() => ({
-		position: 'absolute',
-		top: 0,
-		bottom: 0,
-		left: 0,
-		right: 0,
-		background: `url("${props.rsc.src}") no-repeat center center fixed`,
-		backgroundSize: `${background.width}px ${background.height}px`,
-	}));
-
+		return background.height - effectHeight;
+	});
 
 	onMounted(() => {
-		setCss({
-			background: `url("${props.rsc.src}") no-repeat`,
-		});
-
 		window.addEventListener('resize', resize, {
 			passive: true,
 		});
 
 		if (props.type !== 'fixed' || isIos) {
-			setTimeout(() => {
-				props.holder.addEventListener('scroll', handleScroll, {
-					passive: true,
-				});
+			holder.addEventListener('scroll', onScroll, {
+				passive: true,
 			});
 		}
-	});
 
+		rsc.load().then(() => {
+			resize();
+		});
+	});
 
 	onUnmounted(() => {
 		window.removeEventListener('resize', resize);
-		props.holder.removeEventListener('scroll', handleScroll);
+		holder.removeEventListener('scroll', onScroll);
 	});
 
-
 	const resize = () => {
-		view.width = props.holder.scrollWidth || props.holder.innerWidth;
-		view.height = props.holder.scrollHeight || props.holder.innerHeight;
+		display.width = holder.scrollWidth || holder.innerWidth;
+		display.height = holder.scrollHeight || holder.innerHeight;
 
-		parallax = {
-			...unref(parallax),
-			...unref(parallaxSize),
-			top: $el.offsetTop,
-		};
+		view.width = $el.value.clientWidth;
+		view.height = $el.value.clientHeight;
+		view.top = $el.value.offsetTop;
 
-		let imageRatio = props.rsc.height / props.rsc.width;
-		let viewRatio = view.height / view.width;
+		const coverSize = rsc.getCoverSize(display);
+		background.width = coverSize.width;
+		background.height = coverSize.height;
 
-		if (imageRatio >= viewRatio && !isIos) {
-			background.width = view.width;
-			background.height = floor(view.width * props.rsc.height / props.rsc.width);
+		style.defined.backgroundSize = `${background.width}px ${background.height}px`;
+		style.defined.backgroundPosition = `center 0`;
 
-		} else {
-			background.height = view.height;
-			background.width = floor(background.height * props.rsc.width / props.rsc.height);
-		}
-
-		setCss({
-			backgroundSize: `${background.width}px ${background.height}px`,
-			backgroundPosition: `center 0`,
-		});
-
-		handleScroll();
+		onScroll();
 	};
 
 	const moveBackgroundByPct = pct => {
 		if (remainderHeight.value > 0)
-			pct = pct * offsetHeight.pct / 100 + 50 - offsetHeight.pct / 2;
+			pct = pct * offsetHeight.value.pct / 100 + 50 - offsetHeight.value.pct / 2;
 
-		setCss({
-			backgroundPositionY: pct.toFixed(2) +'%'
-		});
+		style.defined.backgroundPositionY = pct.toFixed(2) +'%';
 	};
 
-	const handleScroll = () => {
-		if (props.rsc.status.value !== 'loaded' || (!isIos && props.type === 'fixed'))
+	const onScroll = () => {
+		if (rsc.status.value !== 'loaded' || (!isIos && props.type === 'fixed'))
 			return;
 
-		let scrollTop = props.holder.scrollY || props.holder.scrollTop || props.holder.pageYOffset || 0;
+		const scrollTop = holder.scrollY || holder.scrollTop || holder.pageYOffset || 0;
 
-		if (props.holder !== window)
-			return handleRelative(scrollTop);
+		if (holder !== window)
+			return handle.relative(scrollTop);
 
-		if (scrollTop + view.height < parallax.top)
+		if (scrollTop + display.height < view.top)
 			return;
 
-		if (scrollTop > parallax.top + parallax.height)
+		if (scrollTop > view.top + view.height)
 			return;
 
-		let positionY = scrollTop - parallax.top + view.height;
+		let positionY = scrollTop - view.top + display.height;
 
 		handle[props.type](positionY);
 	};
 
-	const handleVisible = positionY => {
-		let pct = 0;
-
-		if (positionY < parallax.height)
-			pct = 0;
-
-		else if (positionY > view.height)
-			pct = 100;
-
-		else
-			pct = (positionY - parallax.height) * 100 / (view.height - parallax.height);
-
-		moveBackgroundByPct(pct);
-	};
-
-	const handleRelative = positionY => {
-		let pct;
-
-		if (props.holder === window)
-			pct = positionY * 100 / (view.height + parallax.height);
-
-		else
-			pct = positionY * 100 / (view.height - props.holder.clientHeight);
-
-		moveBackgroundByPct(pct);
-	};
-
-	const handleFixed = positionY => {
-		setCss({
-			backgroundPositionY: (positionY - view.height) +'px',
-		});
-	};
-
 	const handle = {
-		visible: handleVisible,
-		relative: handleRelative,
-		fixed: handleFixed,
+		visible: positionY => {
+			let pct = 0;
+
+			if (positionY < view.height)
+				pct = 0;
+
+			else if (positionY > view.height)
+				pct = 100;
+
+			else
+				pct = (positionY - view.height) * 100 / (view.height - view.height);
+
+			moveBackgroundByPct(pct);
+		},
+
+		relative: positionY => {
+			let pct;
+
+			if (holder === window)
+				pct = positionY * 100 / (display.height + view.height);
+
+			else
+				pct = positionY * 100 / (display.height - holder.clientHeight);
+
+			moveBackgroundByPct(pct);
+		},
+
+		fixed: positionY => {
+			style.defined.backgroundPositionY = (positionY - display.height) +'px';
+		},
 	};
 
-	defineExpose(resize, setCss);
+	defineExpose(resize);
 </script>
 
 <template>
-	<div ref="parallax" :style="style">
-		<div v-if="type === 'fixed' && !isIos" :style="fixedParentStyle">
+	<div ref="$el" :style="style.final.value">
+		<div v-if="props.type === 'fixed' && !isIos" :style="fixedParentStyle">
 			<div class="image" :style="fixedChildStyle" />
 		</div>
 
