@@ -30,17 +30,17 @@
 			if (!rsc || rsc.status.value !== 'loaded' || !$el.value)
 				return {};
 
-			const backgroundStyle = rsc.getCoverProps(props.size || Dom.sizeFrom($el.value));
+			const style = rsc.getCoverProps(props.size || Dom.sizeFrom($el.value));
 
 			if (props.offset) {
 				for (const side of ['top', 'left'])
-					backgroundStyle[side] -= props.offset[side] || 0;
+					style[side] -= props.offset[side] || 0;
 			}
 
 			return {
 				backgroundImage: `url(${rsc.src})`,
-				backgroundSize: `${backgroundStyle.width}px ${backgroundStyle.height}px`,
-				backgroundPosition: `${backgroundStyle.left}px ${backgroundStyle.top}px`,
+				backgroundSize: `${style.width}px ${style.height}px`,
+				backgroundPosition: `${style.left}px ${style.top}px`,
 				backgroundRepeat: 'no-repeat',
 			};
 		}),

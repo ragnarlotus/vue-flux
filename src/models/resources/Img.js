@@ -50,6 +50,10 @@ export default class Img {
 		if (!view || this.status.value !== 'loaded')
 			return undefined;
 
+		if (!view.aspectRatio) {
+			view.aspectRatio = view.width / view.height;
+		}
+
 		const size = this.getCoverSize(view);
 		const position = this.getCoverPosition(view, size);
 
@@ -60,7 +64,7 @@ export default class Img {
 	}
 
 	getCoverSize(view) {
-		if (this.aspectRatio.value <= view.aspectRatio.value) {
+		if (this.aspectRatio.value <= view.aspectRatio) {
 			return {
 				width: view.width,
 				height: view.width / this.aspectRatio.value,
@@ -74,7 +78,7 @@ export default class Img {
 	}
 
 	getCoverPosition(view, size) {
-		if (this.aspectRatio.value <= view.aspectRatio.value) {
+		if (this.aspectRatio.value <= view.aspectRatio) {
 			return {
 				top: (view.height - size.height) / 2,
 				left: 0,
