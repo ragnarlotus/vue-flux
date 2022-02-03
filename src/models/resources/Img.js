@@ -1,93 +1,104 @@
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed } from 'vue';
 
 export default class Img {
 	status = ref(null);
-	aspectRatio = ref(null);
-	size = reactive({});
+	errorMessage;
 
-	constructor(src) {
+	size;
+	aspectRatio;
+
+	constructor(src, resizeType = 'fill') {
 		this.src = src;
+		this.resizeType = resizeType; // fill | fitsize
 		this.loader = this.load();
 	}
 
+	isLoading = () => this.status.value === 'loading';
+
+	isLoaded = () => this.status.value === 'loaded';
+
+	isError = () => this.status.value === 'error';
+
 	load() {
-		if (this.status.value === 'loading')
+		if (this.isLoading())
 			return this.loader;
 
 		return new Promise((resolve, reject) => {
-			if (this.status.value)
-				return this.status.value === 'loaded'? resolve() : reject(this.loadError());
+			if (this.isLoaded())
+				return resolve();
+
+			if (this.isError())
+				return reject(this.errorMessage);
 
 			this.status.value = 'loading';
 
 			const img = new Image();
 
-			img.onload = () => {
-				this.size.width = img.naturalWidth || img.width;
-				this.size.height = img.naturalHeight || img.height;
-
-				this.aspectRatio.value = this.size.width / this.size.height;
-				this.status.value = 'loaded';
-
-				resolve();
-			}
-
-			img.onerror = () => {
-				this.status.value = 'error';
-
-				reject(this.loadError());
-			}
+			img.onload = () => this.onLoad(img, resolve);
+			img.onerror = () => this.onError(img, reject);
 
 			img.src = this.src;
 		});
 	}
 
-	loadError() {
-		return `Image ${this.src} could not be loaded`;
+	onLoad(img, resolve) {
+		this.size = {
+			width: img.naturalWidth || img.width,
+			height: img.naturalHeight || img.height,
+		};
+
+		this.aspectRatio = this.size.width / this.size.height;
+		this.status.value = 'loaded';
+
+		resolve();
 	}
 
-	getCoverProps(view) {
-		if (!view || this.status.value !== 'loaded')
-			return undefined;
+	onError(img, reject) {
+		this.status.value = 'error';
+		this.errorMessage = `Image ${this.src} could not be loaded`;
 
-		if (!view.aspectRatio) {
-			view.aspectRatio = view.width / view.height;
-		}
+		reject(this.errorMessage);
+	}
 
-		const size = this.getCoverSize(view);
-		const position = this.getCoverPosition(view, size);
+	adaptToSize = reactive({});
+
+	adaptedStyle = computed(() => {
+		const adaptedAspectRatio = this.adaptToSize.width / this.adaptToSize.height;
+
+		const adaptedSize = this.getAdaptedSize(adaptedAspectRatio);
+		const adaptedPosition = this.getAdaptedPosition(adaptedAspectRatio, adaptedSize);
 
 		return {
-			...size,
-			...position,
+			...adaptedSize,
+			...adaptedPosition,
 		};
-	}
+	});
 
-	getCoverSize(view) {
-		if (this.aspectRatio.value <= view.aspectRatio) {
+	getAdaptedSize(adaptedAspectRatio) {
+		if (this.aspectRatio <= adaptedAspectRatio) {
 			return {
-				width: view.width,
-				height: view.width / this.aspectRatio.value,
+				width: this.adaptToSize.width,
+				height: this.adaptToSize.width / this.aspectRatio,
 			};
 		}
 
 		return {
-			width: this.aspectRatio.value * view.height,
-			height: view.height,
+			width: this.aspectRatio * this.adaptToSize.height,
+			height: this.adaptToSize.height,
 		};
 	}
 
-	getCoverPosition(view, size) {
-		if (this.aspectRatio.value <= view.aspectRatio) {
+	getAdaptedPosition(adaptedAspectRatio, adaptedSize) {
+		if (this.aspectRatio <= adaptedAspectRatio) {
 			return {
-				top: (view.height - size.height) / 2,
+				top: (this.adaptToSize.height - adaptedSize.height) / 2,
 				left: 0,
 			};
 		}
 
 		return {
 			top: 0,
-			left: (view.width - size.width) / 2,
+			left: (this.adaptToSize.width - adaptedSize.width) / 2,
 		};
 	}
 

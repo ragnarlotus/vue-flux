@@ -1,140 +1,95 @@
 <script setup>
-	import * as transitions from '@/transitions';
+	import { ref, reactive, computed, onMounted } from 'vue';
 
-	export default {
-		name: 'FluxTransition',
+	const $el = ref(null);
+	const $transition = ref(null);
 
-		components: {
-			...transitions,
+	const props = defineProps({
+		size: {
+			type: Object,
+			required: true,
 		},
 
-		props: {
-			size: {
-				type: Object,
-				required: true,
-			},
-
-			transition: {
-				type: [ String, Object ],
-				required: true,
-			},
-
-			from: {
-				type: [ String, Object ],
-				required: true,
-			},
-
-			to: {
-				type: [ String, Object ],
-				required: true,
-			},
-
-			current: Object,
-
-			options: Object,
-
-			images: Array,
+		transition: {
+			type: Object,
+			required: true,
 		},
 
-		data: () => ({
-			baseStyle: {
-				overflow: 'hidden',
-				perspective: 'none',
-				zIndex: 3,
-			},
-		}),
-
-		computed: {
-			style() {
-				let { width, height } = this.size;
-
-				return {
-					...this.baseStyle,
-					width: width +'px',
-					height: height +'px',
-				};
-			},
-
-			componentName() {
-				if (this.transition.component) {
-					if (this.transition.name)
-						return this.transition.name;
-
-					let vfURL= 'https://ragnarlotus.github.com/vue-flux-docs/documentation-6/Components/VueFlux';
-
-					throw new ReferenceError(`Transition undefined, check ${vfURL}`);
-				}
-
-				let name = this.transition.name || this.transition;
-				name = 'Transition'+ name[0].toUpperCase() + name.slice(1);
-
-				if (name in transitions === false) {
-					name = this.transition.name || this.transition;
-					throw new ReferenceError (`Transition ${name} does not exist`);
-				}
-
-				return name;
-			},
+		from: {
+			type: Object,
+			required: true,
 		},
 
-		created() {
-			if (this.transition.component)
-				this.$options.components[this.componentName] = this.transition.component;
+		to: {
+			type: Object,
+			required: true,
 		},
 
-		mounted() {
-			setTimeout(() => {
-				this.$emit('ready');
-			}, this.$refs.transition.getReadyness());
-		},
+		current: Object,
 
-		methods: {
-			start() {
-				this.$refs.transition.$options.played.call(this.$refs.transition);
+		options: Object,
 
-				this.$emit('start', {
-					transition: this.transition,
-					from: this.from,
-					to: this.to,
-					options: this.options,
-				});
+		rscs: Array,
+	});
 
-				setTimeout(() => {
-					this.end();
-				}, this.getDuration());
-			},
+	const emit = defineEmits(['ready', 'start', 'end']);
 
-			end() {
-				this.$emit('end', {
-					transition: this.transition,
-					from: this.from,
-					to: this.to,
-					options: this.options,
-				});
-			},
+	const style = computed(() => {
+		const { width, height } = props.size;
 
-			getDuration() {
-				if (!this.$refs.transition)
-					return 1;
+		return {
+			width: width +'px',
+			height: height +'px',
+			overflow: 'hidden',
+			perspective: 'none',
+			zIndex: 3,
+		};
+	});
 
-				return this.$refs.transition.totalDuration;
-			},
-		}
-	}
+	onMounted(() => {
+		setTimeout(() => {
+			emit('ready');
+		}, $transition.getReadyness());
+	});
+
+	const getDuration = () => !$transition? 1 : $transition.totalDuration;
+
+	const start = () => {
+		$transition.play();
+
+		emit('start', {
+			transition: props.transition,
+			from: props.from,
+			to: props.to,
+			options: props.options,
+		});
+
+		setTimeout(() => {
+			end();
+		}, getDuration());
+	};
+
+	const end = () => {
+		emit('end', {
+			transition: props.transition,
+			from: props.from,
+			to: props.to,
+			options: props.options,
+		});
+	};
 </script>
 
 <template>
 	<div ref="$el" class="flux-transition" :style="style">
 		<component
-			:is="componentName"
-			v-if="componentName"
+			:is="transition"
 			ref="transition"
 			:size="size"
 			:from="from"
 			:to="to"
 			:current="current"
 			:options="options"
-			:images="images"
+			:rscs="rscs"
 		/>
 	</div>
 </template>

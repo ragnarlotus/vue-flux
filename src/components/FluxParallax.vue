@@ -1,4 +1,6 @@
 <script setup>
+	// holder (window), component, background
+
 	import { ref, reactive, computed, unref, onMounted, onUnmounted } from 'vue';
 	import { ceil } from '@/models/partials/math.js';
 
@@ -136,7 +138,9 @@
 		view.height = $el.value.clientHeight;
 		view.top = $el.value.offsetTop;
 
-		const coverSize = rsc.getCoverSize(display);
+		Object.assign(rsc.adaptToSize, display);
+		const coverSize = rsc.adaptedStyle;
+
 		background.width = coverSize.width;
 		background.height = coverSize.height;
 

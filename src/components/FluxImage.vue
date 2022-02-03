@@ -1,6 +1,5 @@
 <script setup>
 	import { ref, reactive, computed } from 'vue';
-	import Dom from '@/models/Dom.js';
 	import {
 		baseProps,
 		default as usePartials
@@ -25,22 +24,24 @@
 		}),
 
 		image: computed(() => {
-			const rsc = props.rsc;
+			const { rsc } = props;
 
-			if (!rsc || rsc.status.value !== 'loaded' || !$el.value)
+			if (!rsc || rsc.isLoading() || !$el.value)
 				return {};
 
-			const style = rsc.getCoverProps(props.size || Dom.sizeFrom($el.value));
+			Object.assign(rsc.adaptToSize, props.size);
+
+			const bgStyle = rsc.adaptedStyle.value;
 
 			if (props.offset) {
 				for (const side of ['top', 'left'])
-					style[side] -= props.offset[side] || 0;
+					bgStyle[side] -= props.offset[side] || 0;
 			}
 
 			return {
 				backgroundImage: `url(${rsc.src})`,
-				backgroundSize: `${style.width}px ${style.height}px`,
-				backgroundPosition: `${style.left}px ${style.top}px`,
+				backgroundSize: `${bgStyle.width}px ${bgStyle.height}px`,
+				backgroundPosition: `${bgStyle.left}px ${bgStyle.top}px`,
 				backgroundRepeat: 'no-repeat',
 			};
 		}),

@@ -3,6 +3,9 @@ module.exports = {
 	env: {
 		node: true,
 	},
+	parserOptions: {
+		ecmaVersion: 'latest',
+	},
 	extends: [
 		'plugin:vue/essential',
 		'plugin:vue/strongly-recommended',
