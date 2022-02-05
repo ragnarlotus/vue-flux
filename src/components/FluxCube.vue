@@ -11,6 +11,21 @@
 	const props = defineProps({
 		...baseProps,
 
+		rscs: {
+			type: Object,
+			required: true,
+		},
+
+		colors: {
+			type: Object,
+			default: () => ({}),
+		},
+
+		offsets: {
+			type: Object,
+			default: () => ({}),
+		},
+
 		depth: {
 			type: Number,
 			default: 0,
@@ -20,6 +35,14 @@
 			type: Object,
 			default: () => ({}),
 		},
+	});
+
+	const styles = reactive({
+		base: {
+			transformStyle: 'preserve-3d',
+		},
+		color: props.color,
+		props: props.css,
 	});
 
 	const {
@@ -57,17 +80,9 @@
 		},
 	};
 
-	const styles = reactive({
-		base: {
-			transformStyle: 'preserve-3d',
-		},
-		color: props.color,
-		props: props.css,
-	});
-
 	const sideNames = [ 'front', 'back', 'top', 'bottom', 'left', 'right' ];
 
-	const isSideDefined = side => props.rscs[side] || props.color[side];
+	const isSideDefined = side => props.rscs[side] || props.colors[side];
 
 	const definedSides = computed(() => sideNames.filter(side => isSideDefined(side)));
 
@@ -97,7 +112,7 @@
 		const ry = rotate.y[side] || 0;
 		const tx = translate.x[side] || 0;
 		const ty = translate.y[side] || 0;
-		const tz = translateZ[side] || 0;
+		const tz = translateZ.value[side] || 0;
 
 		return `rotateX(${rx}deg) rotateY(${ry}deg) translate3d(${tx}%, ${ty}%, ${tz}px)`;
 	}
@@ -107,9 +122,9 @@
 
 		for (let sideName of definedSides.value) {
 			const side = {
-				name: sideName,
+				ref: sideName,
 				rsc: props.rscs[sideName],
-				color: props.colors[sideName] || props.color,
+				color: props.colors[sideName],
 				offset: props.offsets[sideName] || props.offset,
 				size: { ...props.size },
 				viewSize: { ...props.viewSize },
@@ -171,16 +186,6 @@
 
 <template>
 	<div ref="cube" :style="style">
-		<FluxImage
-			v-for="side in sides"
-			:ref="el => { if (el) $sides[side.name] = el }"
-			:key="side.name"
-			:size="side.size"
-			:view-size="side.viewSize"
-			:image="side.img"
-			:color="side.color"
-			:offset="side.offset"
-			:style="side.style"
-		/>
+		<FluxImage v-for="side in sides" :key="side.ref" v-bind="side" />
 	</div>
 </template>

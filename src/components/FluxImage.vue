@@ -31,7 +31,7 @@
 
 			Object.assign(rsc.adaptToSize, props.size);
 
-			const bgStyle = rsc.adaptedStyle.value;
+			const bgStyle = { ...rsc.adaptedStyle.value };
 
 			if (props.offset) {
 				for (const side of ['top', 'left'])

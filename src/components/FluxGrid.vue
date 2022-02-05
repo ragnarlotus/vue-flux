@@ -5,6 +5,8 @@
 		baseProps,
 		default as usePartials
 	} from '@/models/partials/component.js';
+	import FluxImage from './FluxImage.vue';
+	import FluxGrid from './FluxGrid.vue';
 
 	const $el = ref(null);
 
@@ -44,38 +46,44 @@
 		hide,
 	} = usePartials($el, props, styles);
 
-	const component = computed(() => props.rscs? 'FluxCube' : 'FluxImage');
+	const component = computed(() => props.rscs? FluxGrid : FluxImage);
 
 	const numRows = computed(() => ceil(props.rows));
 
 	const numCols = computed(() => ceil(props.cols));
 
-	const numTiles = computed(() => numRows * numCols);
+	const numTiles = computed(() => numRows.value * numCols.value);
 
 	const tileSize = computed(() => ({
-		width: floor(props.size.width / numCols),
-		height: floor(props.size.height / numRows),
+		width: floor(props.size.width / numCols.value),
+		height: floor(props.size.height / numRows.value),
 	}));
 
-	const getRowNumber = i => floor(i / numCols);
+	const getRowNumber = i => floor(i / numCols.value);
 
-	const getColNumber = i => i % numCols;
+	const getColNumber = i => i % numCols.value;
 
 	const tiles = computed(() => {
 		const tiles = [];
 
 		for (let i = 0; i < numTiles.value; i++) {
 			const tile = {
+				ref: `$tiles[${i}]`,
 				row: getRowNumber(i),
 				col: getColNumber(i),
 			};
 
-			let { width, height } = tileSize;
+			let { width, height } = tileSize.value;
 
-			if (tile.row + 1 === numRows)
+			tile.offset = {
+				top: tile.row * height,
+				left: tile.col * width,
+			};
+
+			if (tile.row + 1 === numRows.value)
 				height = props.size.height - tile.row * height;
 
-			if (tile.col + 1 === numCols)
+			if (tile.col + 1 === numCols.value)
 				width = props.size.width - tile.col * width;
 
 			tile.viewSize = {
@@ -83,17 +91,12 @@
 				height,
 			};
 
-			tile.offset = {
-				top: tile.row * tileSize.height,
-				left: tile.col * tileSize.width,
-			};
-
 			tile.css = {
 				...props.tileCss,
 				position: 'absolute',
 				left: tile.offset.left +'px',
 				top: tile.offset.top +'px',
-				zIndex: i + 1 < numTiles / 2? i + 1 : numTiles - i,
+				zIndex: i + 1 < numTiles.value / 2? i + 1 : numTiles.value - i,
 			};
 
 			tiles.push(tile);
@@ -102,29 +105,23 @@
 		return tiles;
 	});
 
-	let $tiles = [];
-
-	const transform = cb => $tiles.forEach((tile, i) => cb(tile, i));
+	const transform = cb => tiles.forEach((tile, i) => cb(tile, i));
 
 	defineExpose(setCss, transform, show, hide);
 </script>
 
 <template>
-	<div ref="grid" :style="style">
+	<div ref="$el" :style="style">
 		<component
 			:is="component"
-			v-for="(tile, index) in tiles"
-			:ref="el => { if (el) $tiles[index] = el }"
-			:key="index"
+			v-for="tile in tiles"
+			:key="tile.ref"
 			:size="size"
-			:view-size="tile.viewSize"
+			v-bind="tile"
 			:color="color"
-			:image="img"
-			:images="imgs"
-			:offset="tile.offset"
+			:rsc="rsc"
+			:rscs="rscs"
 			:depth="depth"
-			:css="tile.css"
-			:sides-css="tile.sidesCss"
 		/>
 	</div>
 </template>
