@@ -1,5 +1,9 @@
 <script setup>
-	import { ref, reactive, computed, onMounted } from 'vue';
+	import {
+		ref,
+		reactive,
+		computed,
+	} from 'vue';
 
 	const $el = ref(null);
 	const $transition = ref(null);
@@ -32,30 +36,30 @@
 		rscs: Array,
 	});
 
-	const emit = defineEmits(['ready', 'start', 'end']);
+	const emit = defineEmits(['start', 'end']);
+
+	const styles = reactive({
+		base: {
+			overflow: 'hidden',
+			perspective: 'none',
+			zIndex: 3,
+		}
+	});
 
 	const style = computed(() => {
 		const { width, height } = props.size;
 
 		return {
+			...styles.base,
 			width: width +'px',
 			height: height +'px',
-			overflow: 'hidden',
-			perspective: 'none',
-			zIndex: 3,
 		};
-	});
-
-	onMounted(() => {
-		setTimeout(() => {
-			emit('ready');
-		}, $transition.getReadyness());
 	});
 
 	const getDuration = () => !$transition? 1 : $transition.totalDuration;
 
 	const start = () => {
-		$transition.play();
+		$transition.played();
 
 		emit('start', {
 			transition: props.transition,
@@ -77,13 +81,16 @@
 			options: props.options,
 		});
 	};
+
+	defineExpose(start, end);
+	defineEmits('start', 'end');
 </script>
 
 <template>
 	<div ref="$el" class="flux-transition" :style="style">
 		<component
 			:is="transition"
-			ref="transition"
+			ref="$transition"
 			:size="size"
 			:from="from"
 			:to="to"

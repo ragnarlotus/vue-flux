@@ -16,17 +16,16 @@
 			:size="size"
 			:from="Transitions.from"
 			:to="Transitions.to"
-			:current="$refs.image"
+			:rendering-component="$refs.renderingComponent"
 			:options="Transitions.current.options"
 			:images="Images.imgs"
-			@ready="Transitions.ready()"
 			@start="Transitions.start()"
 			@end="Transitions.end()"
 		/>
 
 		<flux-image
 			v-if="Images.current"
-			ref="image"
+			ref="renderingComponent"
 			:size="size"
 			:image="Images.current"
 		/>

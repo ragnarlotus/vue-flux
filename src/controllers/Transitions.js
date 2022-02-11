@@ -80,7 +80,7 @@ export default class TransitionsController {
 	}
 
 	ready() {
-		this.vf.$refs.transition.start();
+		this.vf.$transition.start();
 	}
 
 	start() {

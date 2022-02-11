@@ -36,6 +36,7 @@ module.exports = {
 	globals: {
 		defineProps: true,
 		defineExpose: true,
+		defineEmits: true,
 	},
 	overrides: [
 		{

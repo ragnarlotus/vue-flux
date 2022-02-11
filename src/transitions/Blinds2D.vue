@@ -1,0 +1,50 @@
+<script setup>
+	import { ref, reactive } from 'vue';
+	import {
+		baseProps,
+		default as usePartials
+	} from '@/models/partials/component.js';
+	import FluxGrid from '@/components/FluxGrid.vue';
+
+	const $grid = ref(null);
+	const props = defineProps(baseProps);
+
+	const conf = reactive({
+		rows: 1,
+		cols: 10,
+		tileDuration: 800,
+		easing: 'linear',
+		tileDelay: 100,
+	});
+
+	const totalDuration = conf.tileDelay * conf.cols + conf.tileDuration;
+
+	usePartials(props.options, conf);
+
+	const getDelay = {
+		prev: i => (conf.cols - i - 1) * conf.tileDelay,
+		next: i => i * conf.tileDelay,
+	};
+
+	const play = () => {
+		$grid.transform((tile, i) => {
+			tile.transform({
+				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay[conf.direction](i)}ms`,
+				opacity: '0.1',
+				transform: 'scaleX(0)',
+			});
+		});
+	};
+
+	defineExpose(play, totalDuration);
+</script>
+
+<template>
+	<flux-grid
+		ref="$grid"
+		:rows="rows"
+		:cols="cols"
+		:size="size"
+		:rsc="from"
+	/>
+</template>

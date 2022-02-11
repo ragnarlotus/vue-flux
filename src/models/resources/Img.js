@@ -1,5 +1,11 @@
 import { ref, reactive, computed } from 'vue';
 
+const status = {
+	loading: 'loading',
+	loaded: 'loaded',
+	error: 'error',
+};
+
 export default class Img {
 	status = ref(null);
 	errorMessage;
@@ -13,11 +19,11 @@ export default class Img {
 		this.loader = this.load();
 	}
 
-	isLoading = () => this.status.value === 'loading';
+	isLoading = () => this.status.value === status.loading;
 
-	isLoaded = () => this.status.value === 'loaded';
+	isLoaded = () => this.status.value === status.loaded;
 
-	isError = () => this.status.value === 'error';
+	isError = () => this.status.value === status.error;
 
 	load() {
 		if (this.isLoading())
@@ -30,7 +36,7 @@ export default class Img {
 			if (this.isError())
 				return reject(this.errorMessage);
 
-			this.status.value = 'loading';
+			this.status.value = status.loading;
 
 			const img = new Image();
 
@@ -48,13 +54,13 @@ export default class Img {
 		};
 
 		this.aspectRatio = this.size.width / this.size.height;
-		this.status.value = 'loaded';
+		this.status.value = status.loaded;
 
 		resolve();
 	}
 
 	onError(img, reject) {
-		this.status.value = 'error';
+		this.status.value = status.error;
 		this.errorMessage = `Image ${this.src} could not be loaded`;
 
 		reject(this.errorMessage);
