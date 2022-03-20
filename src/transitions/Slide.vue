@@ -1,85 +1,83 @@
-<template>
-	<flux-wrapper ref="wrapper" :size="wrapperSize" :css="wrapperCss">
-		<flux-image
-			ref="left"
-			:image="left"
-			:size="size"
-		/>
-		<flux-image
-			ref="right"
-			:image="right"
-			:size="size"
-		/>
-	</flux-wrapper>
-</template>
-
-<script>
-	import BaseTransition from '@/mixins/BaseTransition.js';
+<script setup>
+	import { ref, reactive } from 'vue';
+	import {
+		baseProps,
+		default as usePartials
+	} from '@/models/partials/transition.js';
 	import FluxWrapper from '@/components/FluxWrapper.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
-	export default {
-		name: 'TransitionSlide',
+	const $wrapper = ref(null);
+	const $left = ref(null);
+	const $right = ref(null);
+	const props = defineProps(baseProps);
 
-		components: {
-			FluxWrapper,
-			FluxImage,
+	const conf = reactive({
+		totalDuration: 1400,
+		easing: 'ease-in-out',
+		left: null,
+		right: null,
+		wrapperSize: {
+			width: props.size.width * 2,
+			height: props.size.height,
+		},
+		wrapperCss: {
+			display: 'flex',
+			flexWrap: 'nowrap',
+		},
+	});
+
+	const transition = `transform ${conf.totalDuration}ms ${conf.easing}`;
+
+	const setup = {
+		prev: () => {
+			conf.left = props.to;
+			conf.right = props.from;
+			conf.wrapperCss.transform = 'translateX(-50%)';
 		},
 
-		mixins: [
-			BaseTransition,
-		],
-
-		data: () => ({
-			totalDuration: 1400,
-			easing: 'ease-in-out',
-			left: undefined,
-			right: undefined,
-			wrapperSize: {},
-			wrapperCss: {
-				display: 'flex',
-				flexWrap: 'nowrap',
-			},
-		}),
-
-		computed: {
-			transition() {
-				return `transform ${this.totalDuration}ms ${this.easing}`;
-			},
+		next: () => {
+			conf.left = props.from;
+			conf.right = props.to;
 		},
-
-		created() {
-			this.wrapperSize = {
-				width: this.size.width * 2,
-				height: this.size.height,
-			};
-		},
-
-		methods: {
-			setupPrev() {
-				this.left = this.to;
-				this.right = this.from;
-				this.wrapperCss.transform = 'translateX(-50%)';
-			},
-
-			setupNext() {
-				this.left = this.from;
-				this.right = this.to;
-			},
-
-			playPrev() {
-				this.$refs.wrapper.transform({
-					transition: this.transition,
-					transform: 'translateX(0)',
-				});
-			},
-
-			playNext() {
-				this.$refs.wrapper.transform({
-					transition: this.transition,
-					transform: 'translateX(-50%)'
-				});
-			},
-		}
 	};
+
+	setup[conf.direction]();
+
+	const play = {
+		prev: () => {
+			$wrapper.transform({
+				transition: transition,
+				transform: 'translateX(0)',
+			});
+		},
+
+		next: () => {
+			$wrapper.transform({
+				transition: transition,
+				transform: 'translateX(-50%)'
+			});
+		},
+	};
+
+	const onPlay = () => {
+		play[conf.direction]();
+	};
+
+	defineExpose(onPlay, conf.totalDuration);
 </script>
+
+<template>
+	<FluxWrapper ref="$wrapper" :size="conf.wrapperSize" :css="conf.wrapperCss">
+		<FluxImage
+			ref="$left"
+			:rsc="left"
+			:size="size"
+		/>
+		<FluxImage
+			ref="$right"
+			:rsc="right"
+			:size="size"
+		/>
+	</FluxWrapper>
+</template>

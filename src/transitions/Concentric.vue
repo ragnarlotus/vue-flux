@@ -1,55 +1,50 @@
-<template>
-	<flux-vortex
-		ref="vortex"
-		:size="size"
-		:circles="circles"
-		:image="from"
-	/>
-</template>
-
-<script>
-	import BaseTransition from '@/mixins/BaseTransition.js';
+<script setup>
+	import { ref, reactive } from 'vue';
+	import {
+		baseProps,
+		default as usePartials
+	} from '@/models/partials/transition.js';
 	import FluxVortex from '@/components/FluxVortex.vue';
 
-	export default {
-		name: 'TransitionConcentric',
+	const $vortex = ref(null);
+	const props = defineProps(baseProps);
 
-		components: {
-			FluxVortex,
-		},
+	const conf = reactive({
+		circles: 7,
+		tileDuration: 800,
+		easing: 'linear',
+		tileDelay: 150,
+	});
 
-		mixins: [
-			BaseTransition,
-		],
+	usePartials(props.options, conf);
 
-		data: () => ({
-			circles: 7,
-			tileDuration: 800,
-			totalDuration: 0,
-			easing: 'linear',
-			tileDelay: 150,
-		}),
+	const totalDuration = conf.tileDelay * conf.circles + conf.tileDuration;
 
-		created() {
-			this.totalDuration = this.tileDelay * this.circles + this.tileDuration;
-		},
+	const getDelay = i => i * conf.tileDelay;
 
-		played() {
-			let deg = this.direction === 'next'? '90' : '-90';
+	const onPlay = () => {
+		const deg = {
+			prev: '-90',
+			next: '90',
+		};
 
-			this.$refs.vortex.transform((tile, i) => {
-				tile.transform({
-					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
-					opacity: '0',
-					transform: `rotateZ(${deg}deg)`,
-				});
+		$vortex.transform((tile, i) => {
+			tile.transform({
+				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(i)}ms`,
+				opacity: '0',
+				transform: `rotateZ(${deg[conf.direction]}deg)`,
 			});
-		},
-
-		methods: {
-			getDelay(i) {
-				return i * this.tileDelay;
-			},
-		},
+		});
 	};
+
+	defineExpose(onPlay, totalDuration);
 </script>
+
+<template>
+	<FluxVortex
+		ref="$vortex"
+		:size="size"
+		:circles="circles"
+		:rsc="from"
+	/>
+</template>

@@ -1,47 +1,44 @@
-<template>
-	<flux-image
-		ref="image"
-		:image="from"
-		:size="size"
-		:style="style"
-	/>
-</template>
-
-<script>
-	import BaseTransition from '@/mixins/BaseTransition.js';
+<script setup>
+	import { ref, reactive } from 'vue';
+	import {
+		baseProps,
+		default as usePartials
+	} from '@/models/partials/transition.js';
 	import FluxImage from '@/components/FluxImage.vue';
 
-	export default {
-		name: 'TransitionFall',
+	const $image = ref(null);
+	const props = defineProps(baseProps);
 
-		components: {
-			FluxImage,
+	const conf = reactive({
+		totalDuration: 1600,
+		easing: 'ease-in',
+		style: {
+			transformOrigin: 'center bottom',
 		},
+	});
 
-		mixins: [
-			BaseTransition,
-		],
+	usePartials(props.options, conf);
 
-		data: () => ({
-			totalDuration: 1600,
-			easing: 'ease-in',
-			style: {
-				transformOrigin: 'center bottom',
-			},
-		}),
+	Object.assign(props.maskStyle, {
+		perspective: '1600px',
+		overflow: 'visible',
+	});
 
-		created() {
-			Object.assign(this.mask, {
-				perspective: '1600px',
-				overflow: 'visible',
-			});
-		},
-
-		played() {
-			this.$refs.image.transform({
-				transition: `transform ${this.totalDuration}ms ${this.easing}`,
-				transform: 'rotateX(-83deg)',
-			});
-		},
+	const onPlay = () => {
+		$image.transform({
+			transition: `transform ${conf.totalDuration}ms ${conf.easing}`,
+			transform: 'rotateX(-83deg)',
+		});
 	};
+
+	defineExpose(onPlay, conf.totalDuration);
 </script>
+
+<template>
+	<FluxImage
+		ref="$image"
+		:rsc="from"
+		:size="size"
+		:style="conf.style"
+	/>
+</template>

@@ -103,7 +103,7 @@
 
 <template>
 	<div>
-		<flux-image
+		<FluxImage
 			ref="$from"
 			:rsc="from"
 			:size="size"
@@ -112,7 +112,7 @@
 			:css="image.css"
 		/>
 
-		<flux-cube
+		<FluxCube
 			ref="$cube"
 			:rscs="cube.rscs"
 			:size="size"

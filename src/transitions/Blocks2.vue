@@ -103,21 +103,21 @@
 
 <template>
 	<div>
-		<flux-grid
+		<FluxGrid
 			ref="$grid"
-			:rows="rows"
-			:cols="cols"
+			:rows="conf.rows"
+			:cols="conf.cols"
 			:size="size"
 			:rsc="gridRsc"
 			:tile-css="tileCss"
 			:css="gridCss"
 		/>
 
-		<flux-image
+		<FluxImage
 			v-if="backgroundRsc"
 			ref="$background"
 			:size="size"
-			:image="backgroundRsc"
+			:rsc="backgroundRsc"
 			:css="backgroundCss"
 		/>
 	</div>

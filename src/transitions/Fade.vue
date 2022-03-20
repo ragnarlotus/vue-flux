@@ -1,40 +1,39 @@
-<template>
-	<flux-image
-		ref="from"
-		:image="from"
-		:size="size"
-		:css="imageCss"
-	/>
-</template>
-
-<script>
-	import BaseTransition from '@/mixins/BaseTransition.js';
+<script setup>
+	import { ref, reactive } from 'vue';
+	import {
+		baseProps,
+		default as usePartials
+	} from '@/models/partials/transition.js';
 	import FluxImage from '@/components/FluxImage.vue';
 
-	export default {
-		name: 'TransitionFade',
+	const $image = ref(null);
+	const props = defineProps(baseProps);
 
-		components: {
-			FluxImage,
+	const conf = reactive({
+		totalDuration: 1200,
+		easing: 'ease-in',
+		imageCss: {
+			zIndex: 1,
 		},
+	});
 
-		mixins: [
-			BaseTransition,
-		],
+	usePartials(props.options, conf);
 
-		data: () => ({
-			totalDuration: 1200,
-			easing: 'ease-in',
-			imageCss: {
-				zIndex: 1,
-			},
-		}),
-
-		played() {
-			this.$refs.from.transform({
-				transition: `opacity ${this.totalDuration}ms ${this.easing}`,
-				opacity: 0,
-			});
-		},
+	const onPlay = () => {
+		$image.transform({
+			transition: `opacity ${props.totalDuration}ms ${props.easing}`,
+			opacity: 0,
+		});
 	};
+
+	defineExpose(onPlay, conf.totalDuration);
 </script>
+
+<template>
+	<FluxImage
+		ref="$image"
+		:rsc="from"
+		:size="size"
+		:css="conf.imageCss"
+	/>
+</template>

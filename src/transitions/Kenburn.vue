@@ -1,89 +1,80 @@
-<template>
-	<flux-image
-		ref="image"
-		:image="from"
-		:size="size"
-		:css="css"
-	/>
-</template>
-
-<script>
-	import BaseTransition from '@/mixins/BaseTransition.js';
+<script setup>
+	import { ref, reactive } from 'vue';
+	import { floor } from '@/models/partials/math.js';
+	import {
+		baseProps,
+		default as usePartials
+	} from '@/models/partials/transition.js';
 	import FluxImage from '@/components/FluxImage.vue';
 
-	export default {
-		name: 'TransitionKenburn',
+	const $image = ref(null);
+	const props = defineProps(baseProps);
 
-		components: {
-			FluxImage,
-		},
-
-		mixins: [
-			BaseTransition,
-		],
-
-		data: () => ({
-			totalDuration: 1500,
-			easing: 'linear',
-			transform: {},
-			css: {},
-		}),
-
-		created() {
-			this.transform = this.getTransform();
-			this.css.transformOrigin = this.transform.originX +' '+ this.transform.originY;
-		},
-
-		played() {
-			this.$refs.image.transform({
-				transition: `all ${this.totalDuration}ms ${this.easing}`,
-				transform: `scale(${this.transform.scale}) translate(${this.transform.translateX}, ${this.transform.translateY})`,
-				opacity: 0,
-			});
-		},
-
-		methods: {
-			getTransform() {
-				let origin = Math.floor((Math.random() * 4) + 1);
-
-				if (origin === 1) {
-					return {
-						scale: '1.7',
-						translateX: '-35%',
-						translateY: '-35%',
-						originX: 'top',
-						originY: 'left',
-					};
-				}
-
-				if (origin === 2) {
-					return {
-						scale: '1.7',
-						translateX: '35%',
-						translateY: '-35%',
-						originX: 'top',
-						originY: 'right',
-					};
-				}
-
-				if (origin === 3) {
-					return {
-						scale: '1.7',
-						translateX: '-35%',
-						translateY: '35%',
-						originX: 'bottom',
-						originY: 'left',
-					};
-				}
-
-				return {
-					scale: '1.7',
-					translateX: '35%',
-					translateY: '35%',
-					originX: 'bottom',
-					originY: 'right',
-				};
+	const getTransform = () => {
+		const transform = {
+			1: {
+				scale: '1.7',
+				translateX: '-35%',
+				translateY: '-35%',
+				originX: 'top',
+				originY: 'left',
 			},
-		},
+
+			2: {
+				scale: '1.7',
+				translateX: '35%',
+				translateY: '-35%',
+				originX: 'top',
+				originY: 'right',
+			},
+
+			3: {
+				scale: '1.7',
+				translateX: '-35%',
+				translateY: '35%',
+				originX: 'bottom',
+				originY: 'left',
+			},
+
+			4: {
+				scale: '1.7',
+				translateX: '35%',
+				translateY: '35%',
+				originX: 'bottom',
+				originY: 'right',
+			},
+		};
+
+		return transform[floor((Math.random() * 4) + 1)]
 	};
+
+	const conf = reactive({
+		totalDuration: 1500,
+		easing: 'linear',
+		transform: getTransform(),
+		css: {},
+	});
+
+	usePartials(props.options, conf);
+
+	conf.css.transformOrigin = conf.transform.originX +' '+ conf.transform.originY;
+
+	const onPlay = () => {
+		$image.transform({
+			transition: `all ${conf.totalDuration}ms ${conf.easing}`,
+			transform: `scale(${conf.transform.scale}) translate(${conf.transform.translateX}, ${conf.transform.translateY})`,
+			opacity: 0,
+		});
+	};
+
+	defineExpose(onPlay, conf.totalDuration);
 </script>
+
+<template>
+	<FluxImage
+		ref="$image"
+		:rsc="from"
+		:size="size"
+		:css="conf.css"
+	/>
+</template>

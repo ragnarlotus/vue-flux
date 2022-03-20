@@ -40,10 +40,10 @@
 </script>
 
 <template>
-	<flux-grid
+	<FluxGrid
 		ref="$grid"
-		:rows="rows"
-		:cols="cols"
+		:rows="conf.rows"
+		:cols="conf.cols"
 		:size="size"
 		:rsc="from"
 	/>
