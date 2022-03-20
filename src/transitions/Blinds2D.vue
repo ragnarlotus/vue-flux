@@ -3,7 +3,7 @@
 	import {
 		baseProps,
 		default as usePartials
-	} from '@/models/partials/component.js';
+	} from '@/models/partials/transition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	const $grid = ref(null);
@@ -17,16 +17,16 @@
 		tileDelay: 100,
 	});
 
-	const totalDuration = conf.tileDelay * conf.cols + conf.tileDuration;
-
 	usePartials(props.options, conf);
+
+	const totalDuration = conf.tileDelay * conf.cols + conf.tileDuration;
 
 	const getDelay = {
 		prev: i => (conf.cols - i - 1) * conf.tileDelay,
 		next: i => i * conf.tileDelay,
 	};
 
-	const play = () => {
+	const onPlay = () => {
 		$grid.transform((tile, i) => {
 			tile.transform({
 				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay[conf.direction](i)}ms`,
@@ -36,7 +36,7 @@
 		});
 	};
 
-	defineExpose(play, totalDuration);
+	defineExpose(onPlay, totalDuration);
 </script>
 
 <template>

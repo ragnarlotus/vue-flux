@@ -1,120 +1,124 @@
+<script setup>
+	import { ref, reactive } from 'vue';
+	import {
+		baseProps,
+		default as usePartials
+	} from '@/models/partials/transition.js';
+	import FluxGrid from '@/components/FluxGrid.vue';
+	import FluxImage from '@/components/FluxImage.vue';
+
+	const $grid = ref(null);
+	const $background = ref(null);
+	const props = defineProps(baseProps);
+
+	const conf = reactive({
+		rows: 8,
+		cols: 8,
+		tileDuration: 800,
+		easing: 'ease',
+		tileDelay: 80,
+		gridRsc: null,
+		tileCss: {},
+		gridCss: {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			zIndex: 2,
+		},
+		backgroundRsc: null,
+		backgroundCss: {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			zIndex: 1,
+		},
+	});
+
+	usePartials(props.options, conf);
+
+	const totalDuration = conf.tileDelay * (conf.rows + conf.cols) + conf.tileDuration;
+
+	if (!props.options.rows) {
+		let divider = props.size.width / conf.cols;
+		conf.rows = Math.floor(props.size.height / divider);
+	}
+
+	const setup = {
+		prev: () => {
+			conf.gridRsc = props.to;
+			conf.backgroundRsc = props.from;
+
+			conf.tileCss = {
+				opacity: 0,
+				transform: 'scale(0.3)',
+			};
+		},
+
+		next: () => {
+			conf.gridRsc = props.from;
+		},
+	};
+
+	setup[conf.direction]();
+
+	const getDelay = i => {
+		const row = $grid.getRowNumber(i);
+		const col = $grid.getColNumber(i);
+		let delay = col + row;
+
+		if (conf.direction === 'prev')
+			delay = conf.rows + conf.cols - delay - 1;
+
+		return delay * conf.tileDelay;
+	};
+
+	const play = {
+		prev: () => {
+			$grid.transform((tile, i) => {
+				tile.transform({
+					transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(i)}ms`,
+					opacity: 1,
+					transform: 'scale(1)',
+				});
+			});
+		},
+
+		next: () => {
+			$grid.transform((tile, i) => {
+				tile.transform({
+					transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(i)}ms`,
+					opacity: 0,
+					transform: 'scale(0.3)',
+				});
+			});
+		},
+	};
+
+	const onPlay = () => {
+		play[conf.direction]();
+	};
+
+	defineExpose(onPlay, totalDuration);
+</script>
+
 <template>
 	<div>
 		<flux-grid
-			ref="grid"
+			ref="$grid"
 			:rows="rows"
 			:cols="cols"
 			:size="size"
-			:image="gridImage"
+			:rsc="gridRsc"
 			:tile-css="tileCss"
 			:css="gridCss"
 		/>
 
 		<flux-image
-			v-if="backgroundImage"
-			ref="background"
+			v-if="backgroundRsc"
+			ref="$background"
 			:size="size"
-			:image="backgroundImage"
+			:image="backgroundRsc"
 			:css="backgroundCss"
 		/>
 	</div>
 </template>
-
-<script>
-	import BaseTransition from '@/mixins/BaseTransition.js';
-	import FluxGrid from '@/components/FluxGrid.vue';
-	import FluxImage from '@/components/FluxImage.vue';
-
-	export default {
-		name: 'TransitionBlocks2',
-
-		components: {
-			FluxGrid,
-			FluxImage,
-		},
-
-		mixins: [
-			BaseTransition,
-		],
-
-		data: () => ({
-			rows: 8,
-			cols: 8,
-			tileDuration: 800,
-			totalDuration: 0,
-			easing: 'ease',
-			tileDelay: 80,
-			gridImage: undefined,
-			tileCss: {},
-			gridCss: {
-				position: 'absolute',
-				top: 0,
-				left: 0,
-				zIndex: 2,
-			},
-			backgroundImage: undefined,
-			backgroundCss: {
-				position: 'absolute',
-				top: 0,
-				left: 0,
-				zIndex: 1,
-			},
-		}),
-
-		created() {
-			if (!this.options.rows) {
-				let divider = this.size.width / this.cols;
-				this.rows = Math.floor(this.size.height / divider);
-			}
-
-			this.totalDuration = this.tileDelay * (this.rows + this.cols) + this.tileDuration;
-		},
-
-		methods: {
-			setupPrev() {
-				this.gridImage = this.to;
-				this.backgroundImage = this.from;
-
-				this.tileCss = {
-					opacity: 0,
-					transform: 'scale(0.3)',
-				};
-			},
-
-			setupNext() {
-				this.gridImage = this.from;
-			},
-
-			playPrev() {
-				this.$refs.grid.transform((tile, i) => {
-					tile.transform({
-						transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i, 'prev')}ms`,
-						opacity: 1,
-						transform: 'scale(1)',
-					});
-				});
-			},
-
-			playNext() {
-				this.$refs.grid.transform((tile, i) => {
-					tile.transform({
-						transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i, 'next')}ms`,
-						opacity: 0,
-						transform: 'scale(0.3)',
-					});
-				});
-			},
-
-			getDelay(i, direction) {
-				let row = this.$refs.grid.getRowNumber(i);
-				let col = this.$refs.grid.getColNumber(i);
-				let delay = col + row;
-
-				if (direction === 'prev')
-					delay = this.rows + this.cols - delay - 1;
-
-				return delay * this.tileDelay;
-			},
-		},
-	};
-</script>

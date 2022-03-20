@@ -1,84 +1,69 @@
+<script setup>
+	import { ref, reactive } from 'vue';
+	import {
+		baseProps,
+		default as usePartials
+	} from '@/models/partials/transition.js';
+	import FluxGrid from '@/components/FluxGrid.vue';
+
+	const $grid = ref(null);
+	const props = defineProps(baseProps);
+
+	const conf = reactive({
+		rows: 1,
+		cols: 6,
+		tileDuration: 800,
+		easing: 'ease-out',
+		tileDelay: 150,
+		gridCss: {
+			perspective: '800px',
+		},
+		rscs: {
+			front: props.from,
+			back: props.to,
+		},
+	});
+
+	usePartials(props.options, conf);
+
+	const totalDuration = conf.tileDelay * conf.cols + conf.tileDuration;
+
+	// eslint-disable-next-line vue/no-mutating-props
+	props.maskStyle.overflow = 'visible';
+
+	const getDelay = {
+		prev: i => (conf.cols - i - 1) * conf.tileDelay,
+		next: i => i * conf.tileDelay,
+	};
+
+	const onPlay = () => {
+		if (props.current)
+			props.current.hide();
+
+		const sides = {
+			prev: 'backl',
+			next: 'backr',
+		};
+
+		$grid.transform((tile, i) => {
+			tile.setCss({
+				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay[conf.direction](i)}ms`,
+			});
+
+			tile.turn(sides[conf.direction]);
+		});
+	};
+
+	defineExpose(onPlay, totalDuration);
+</script>
+
 <template>
-	<flux-grid
-		ref="grid"
-		:rows="rows"
-		:cols="cols"
+	<FluxGrid
+		ref="$grid"
+		:rows="conf.rows"
+		:cols="conf.cols"
 		:size="size"
-		:images="images"
+		:rscs="rscs"
 		:css="gridCss"
 	/>
 </template>
-
-<script>
-	import BaseTransition from '@/mixins/BaseTransition.js';
-	import FluxGrid from '@/components/FluxGrid.vue';
-
-	export default {
-		name: 'TransitionBlinds3d',
-
-		components: {
-			FluxGrid,
-		},
-
-		mixins: [
-			BaseTransition,
-		],
-
-		data: () => ({
-			rows: 1,
-			cols: 6,
-			tileDuration: 800,
-			totalDuration: 0,
-			easing: 'ease-out',
-			tileDelay: 150,
-			gridCss: {
-				perspective: '800px',
-			},
-			images: undefined,
-		}),
-
-		created() {
-			this.mask.overflow = 'visible';
-
-			this.totalDuration = this.tileDelay * this.cols + this.tileDuration;
-
-			this.images = {
-				front: this.from,
-				back: this.to,
-			};
-		},
-
-		played() {
-			if (this.current)
-				this.current.hide();
-
-			let sides = {
-				prev: 'backl',
-				next: 'backr',
-			};
-
-			this.$refs.grid.transform((tile, i) => {
-				tile.setCss({
-					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
-				});
-
-				tile.turn(sides[this.direction]);
-			});
-		},
-
-		beforeDestroy() {
-			if (this.current)
-				this.current.show();
-		},
-
-		methods: {
-			getDelayPrev(i) {
-				return (this.cols - i - 1) * this.tileDelay;
-			},
-
-			getDelayNext(i) {
-				return i * this.tileDelay;
-			},
-		},
-	};
-</script>

@@ -3,6 +3,7 @@
 		ref,
 		reactive,
 		computed,
+		onUnmounted,
 	} from 'vue';
 
 	const $el = ref(null);
@@ -59,7 +60,7 @@
 	const getDuration = () => !$transition? 1 : $transition.totalDuration;
 
 	const start = () => {
-		$transition.played();
+		$transition.onPlay();
 
 		emit('start', {
 			transition: props.transition,
@@ -82,6 +83,11 @@
 		});
 	};
 
+	onUnmounted(() => {
+		if (props.current)
+			props.current.show();
+	});
+
 	defineExpose(start, end);
 	defineEmits('start', 'end');
 </script>
@@ -97,6 +103,7 @@
 			:current="current"
 			:options="options"
 			:rscs="rscs"
+			:mask-style="styles.base"
 		/>
 	</div>
 </template>

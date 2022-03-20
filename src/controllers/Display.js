@@ -1,19 +1,9 @@
-export default class DisplayController {
-
+export default class Display {
 	constructor(vf) {
 		this.vf = vf;
 	}
 
-	get inFullScreen() {
-		let props = [
-			'fullscreenElement',
-			'webkitFullscreenElement',
-			'mozFullScreenElement',
-			'msFullscreenElement',
-		];
-
-		return !!document[props.find(prop => prop in document)];
-	}
+	inFullScreen = () => !!document.fullscreenElement;
 
 	toggleFullScreen() {
 		this.inFullScreen? this.exitFullScreen() : this.enterFullScreen();
@@ -22,7 +12,7 @@ export default class DisplayController {
 	async enterFullScreen() {
 		let { vf } = this;
 
-		if (!this.vf.config.allowFullscreen)
+		if (!vf.config.allowFullscreen)
 			return;
 
 		let methods = [

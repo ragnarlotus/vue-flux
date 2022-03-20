@@ -1,62 +1,52 @@
-<template>
-	<flux-grid
-		ref="grid"
-		:rows="rows"
-		:cols="cols"
-		:size="size"
-		:image="from"
-	/>
-</template>
-
-<script>
-	import BaseTransition from '@/mixins/BaseTransition.js';
+<script setup>
+	import { ref, reactive } from 'vue';
+	import {
+		baseProps,
+		default as usePartials
+	} from '@/models/partials/transition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
 
-	export default {
-		name: 'TransitionBlocks1',
+	const $grid = ref(null);
+	const props = defineProps(baseProps);
 
-		components: {
-			FluxGrid,
-		},
+	const conf = reactive({
+		rows: 8,
+		cols: 8,
+		tileDuration: 300,
+		easing: 'linear',
+		tileDelay: 1000,
+	});
 
-		mixins: [
-			BaseTransition,
-		],
+	usePartials(props.options, conf);
 
-		data: () => ({
-			rows: 8,
-			cols: 8,
-			tileDuration: 300,
-			totalDuration: 0,
-			easing: 'linear',
-			tileDelay: 1000,
-		}),
+	if (!props.options.rows) {
+		const divider = props.size.width / conf.cols;
+		conf.rows = Math.floor(props.size.height / divider);
+	}
 
-		created() {
-			if (!this.options.rows) {
-				let divider = this.size.width / this.cols;
-				this.rows = Math.floor(this.size.height / divider);
-			}
+	const totalDuration = conf.tileDelay + conf.tileDuration;
 
-			this.totalDuration = this.tileDelay + this.tileDuration;
-		},
+	const getDelay = () => Math.floor(Math.random() * conf.tileDelay);
 
-		played() {
-			this.$refs.grid.transform((tile, i) => {
-				tile.transform({
-					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
-					opacity: '0',
-					transform: 'scale(0.3, 0.3)',
-				});
+	const onPlay = () => {
+		$grid.transform((tile, i) => {
+			tile.transform({
+				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(i)}ms`,
+				opacity: '0',
+				transform: 'scale(0.3, 0.3)',
 			});
-		},
-
-		methods: {
-			getDelay() {
-				let delay = Math.random() * this.tileDelay;
-
-				return Math.floor(delay);
-			},
-		},
+		});
 	};
+
+	defineExpose(onPlay, totalDuration);
 </script>
+
+<template>
+	<FluxGrid
+		ref="$grid"
+		:rows="conf.rows"
+		:cols="conf.cols"
+		:size="size"
+		:rscs="from"
+	/>
+</template>
