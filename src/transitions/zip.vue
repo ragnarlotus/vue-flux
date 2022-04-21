@@ -1,59 +1,48 @@
-<template>
-	<flux-grid
-		ref="grid"
-		:rows="rows"
-		:cols="cols"
-		:size="size"
-		:image="from"
-	/>
-</template>
-
-<script>
-	import BaseTransition from '@/mixins/BaseTransition.js';
+<script setup>
+	import { ref, reactive } from 'vue';
+	import usePartials, { baseProps } from '@/models/partials/transition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
 
-	export default {
-		name: 'TransitionZip',
+	const $grid = ref(null);
+	const props = defineProps(baseProps);
 
-		components: {
-			FluxGrid,
-		},
+	const conf = reactive({
+		rows: 1,
+		cols: 10,
+		tileDuration: 600,
+		totalDuration: 0,
+		easing: 'ease-in',
+		tileDelay: 80,
+	});
 
-		mixins: [
-			BaseTransition,
-		],
+	usePartials(props.options, conf);
 
-		data: () => ({
-			rows: 1,
-			cols: 10,
-			tileDuration: 600,
-			totalDuration: 0,
-			easing: 'ease-in',
-			tileDelay: 80,
-		}),
+	const totalDuration = conf.tileDelay * conf.cols + conf.tileDuration;
 
-		created() {
-			this.totalDuration = this.tileDelay * this.cols + this.tileDuration;
-		},
-
-		played() {
-			this.$refs.grid.transform((tile, i) => {
-				tile.transform({
-					transition: `all ${this.tileDuration}ms ${this.easing} ${this.getDelay(i)}ms`,
-					opacity: '0.1',
-					transform: `translateY(${i % 2? '-' : ''}100%)`,
-				});
-			});
-		},
-
-		methods: {
-			getDelayPrev(i) {
-				return (this.cols - i - 1) * this.tileDelay;
-			},
-
-			getDelayNext(i) {
-				return i * this.tileDelay;
-			},
-		},
+	const getDelay = {
+		prev: i => (conf.cols - i - 1) * conf.tileDelay,
+		next: i => i * conf.tileDelay,
 	};
+
+	const onPlay = () => {
+		$grid.transform((tile, i) => {
+			tile.transform({
+				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay[conf.direction](i)}ms`,
+				opacity: '0.1',
+				transform: `translateY(${i % 2? '-' : ''}100%)`,
+			});
+		});
+	};
+
+	defineExpose(onPlay, totalDuration);
 </script>
+
+<template>
+	<FluxGrid
+		ref="$grid"
+		:rows="conf.rows"
+		:cols="conf.cols"
+		:size="size"
+		:rsc="from"
+	/>
+</template>

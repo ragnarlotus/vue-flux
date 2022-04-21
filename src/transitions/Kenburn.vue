@@ -1,10 +1,7 @@
 <script setup>
 	import { ref, reactive } from 'vue';
 	import { floor } from '@/models/partials/math.js';
-	import {
-		baseProps,
-		default as usePartials
-	} from '@/models/partials/transition.js';
+	import usePartials, { baseProps } from '@/models/partials/transition.js';
 	import FluxImage from '@/components/FluxImage.vue';
 
 	const $image = ref(null);

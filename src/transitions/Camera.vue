@@ -1,10 +1,7 @@
 <script setup>
 	import { ref, reactive } from 'vue';
 	import { diag } from '@/models/partials/math.js';
-	import {
-		baseProps,
-		default as usePartials
-	} from '@/models/partials/transition.js';
+	import usePartials, { baseProps } from '@/models/partials/transition.js';
 	import FluxWrapper from '@/components/FluxWrapper.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
@@ -17,34 +14,37 @@
 		totalDuration: 900,
 		easing: 'cubic-bezier(0.385, 0, 0.795, 0.560)',
 		backgroundColor: '#111',
-		image: props.from,
 		diag: diag(props.size),
-		wrapperSize: {
-			width: diag,
-			height: diag,
+		image: {
+			rsc: props.from,
+			css: {
+				alignSelf: 'center',
+				flex: 'none',
+			},
 		},
-		wrapperCss: {
-			boxSizing: 'border-box',
-			position: 'absolute',
-			display: 'flex',
-			justifyContent: 'center',
-			overflow: 'hidden',
-			borderRadius: '50%',
-		},
-		imageCss: {
-			alignSelf: 'center',
-			flex: 'none',
+		wrapper: {
+			size: {
+				width: diag,
+				height: diag,
+			},
+			css: {
+				boxSizing: 'border-box',
+				position: 'absolute',
+				display: 'flex',
+				justifyContent: 'center',
+				overflow: 'hidden',
+				borderRadius: '50%',
+			},
 		},
 	});
 
 	usePartials(props.options, conf);
 
-	conf.wrapperCss = {
-		...conf.wrapperCss,
+	Object.assign(conf.wrapper.css, {
 		border: '0 solid '+ conf.backgroundColor,
 		top: ((props.size.height - conf.diag) / 2) +'px',
 		left: ((props.size.width - conf.diag) / 2) +'px',
-	};
+	});
 
 	const onPlay = () => {
 		$wrapper.transform({
@@ -68,14 +68,14 @@
 <template>
 	<FluxWrapper
 		ref="$wrapper"
-		:size="conf.wrapperSize"
-		:css="conf.wrapperCss"
+		:size="conf.wrapper.size"
+		:css="conf.wrapper.css"
 	>
 		<FluxImage
 			ref="$image"
-			:rsc="rsc"
+			:rsc="conf.image.rsc"
 			:size="size"
-			:css="conf.imageCss"
+			:css="conf.image.css"
 		/>
 	</FluxWrapper>
 </template>

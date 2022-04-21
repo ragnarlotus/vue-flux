@@ -1,22 +1,21 @@
 export default class TouchesController {
+	startX = 0;
+	startY = 0;
+	startTime = 0;
+	endTime = 0;
+	prevTouchTime = 0;
+
+	// Max distance in pixels from start until end
+	tapThreshold = 5;
+
+	// Max time in ms from first to second tap
+	doubleTapThreshold = 200;
+
+	// Distance in percentage to trigger slide
+	slideTrigger = 0.3;
 
 	constructor(vf) {
 		this.vf = vf;
-
-		this.startX = 0;
-		this.startY = 0;
-		this.startTime = 0;
-		this.endTime = 0;
-		this.prevTouchTime = 0;
-
-		// Max distance in pixels from start until end
-		this.tapThreshold = 5;
-
-		// Max time in ms from first to second tap
-		this.doubleTapThreshold = 200;
-
-		// Distance in percentage to trigger slide
-		this.slideTrigger = 0.3;
 	}
 
 	start(event) {
@@ -29,13 +28,13 @@ export default class TouchesController {
 	}
 
 	end(event) {
-		let { vf } = this;
+		const { vf } = this;
 
 		this.prevTouchTime = this.endTime;
 		this.endTime = Date.now();
 
-		let offsetX = event.changedTouches[0].clientX - this.startX;
-		let offsetY = event.changedTouches[0].clientY - this.startY;
+		const offsetX = event.changedTouches[0].clientX - this.startX;
+		const offsetY = event.changedTouches[0].clientY - this.startY;
 
 		if (this.tap(offsetX, offsetY)) {
 			vf.toggleMouseOver(true);
@@ -52,28 +51,16 @@ export default class TouchesController {
 			vf.show('next');
 	}
 
-	tap(offsetX, offsetY) {
-		return Math.abs(offsetX) < this.tapThreshold && Math.abs(offsetY) < this.tapThreshold;
-	}
+	tap = (offsetX, offsetY) => Math.abs(offsetX) < this.tapThreshold && Math.abs(offsetY) < this.tapThreshold;
 
-	doubleTap() {
-		return this.endTime - this.prevTouchTime < this.doubleTapThreshold;
-	}
+	doubleTap = () => this.endTime - this.prevTouchTime < this.doubleTapThreshold;
 
-	slideLeft(offsetX) {
-		return offsetX < 0 && offsetX < -(this.vf.size.width * this.slideTrigger);
-	}
+	slideLeft = offsetX => offsetX < 0 && offsetX < -(this.vf.size.width * this.slideTrigger);
 
-	slideRight(offsetX) {
-		return offsetX > 0 && offsetX > this.vf.size.width * this.slideTrigger;
-	}
+	slideRight = offsetX => offsetX > 0 && offsetX > this.vf.size.width * this.slideTrigger;
 
-	slideUp(offsetY) {
-		return offsetY < 0 && offsetY < -(this.vf.size.height * this.slideTrigger);
-	}
+	slideUp = offsetY => offsetY < 0 && offsetY < -(this.vf.size.height * this.slideTrigger);
 
-	slideDown(offsetY) {
-		return offsetY > 0 && offsetY > this.vf.size.height * this.slideTrigger;
-	}
+	slideDown = offsetY => offsetY > 0 && offsetY > this.vf.size.height * this.slideTrigger;
 
 }

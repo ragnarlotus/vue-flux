@@ -6,7 +6,7 @@ export default class SizeController {
 	width = ref('auto');
 	height = ref('auto');
 
-	constructor(props) {
+	constructor(size) {
 		this.width.value = parseFloat(size.width);
 		this.height.value = parseFloat(size.height);
 	}
@@ -18,12 +18,12 @@ export default class SizeController {
 
 		const { width, height } = getComputedStyle(node);
 
-		return new SizeManager({width, height});
+		return new SizeController({ width, height });
 	}
 
 	aspectRatio = computed(() => {
-		if (!this.width.value || !this.height.value)
-			return undefined;
+		if ([this.width.value, this.height.value].some(size => ['auto', null].includes(size)))
+			return null;
 
 		return this.width.value / this.height.value;
 	});

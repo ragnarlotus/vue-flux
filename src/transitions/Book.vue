@@ -1,10 +1,7 @@
 <script setup>
 	import { ref, reactive } from 'vue';
 	import { ceil } from '@/models/partials/math.js';
-	import {
-		baseProps,
-		default as usePartials
-	} from '@/models/partials/transition.js';
+	import usePartials, { baseProps } from '@/models/partials/transition.js';
 	import FluxCube from '@/components/FluxCube.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
@@ -82,14 +79,10 @@
 
 	setup[conf.direction]();
 
-	const getDeg = () => {
-		const sides = {
-			next: '-180',
-			prev: '180',
-		};
-
-		return sides[conf.direction];
-	}
+	const getDeg = () => ({
+		prev: '180',
+		next: '-180',
+	}[conf.direction]);
 
 	const onPlay = () => {
 		this.$cube.transform({
@@ -107,19 +100,19 @@
 			ref="$from"
 			:rsc="from"
 			:size="size"
-			:view-size="viewSize"
-			:offset="image.offset"
-			:css="image.css"
+			:view-size="conf.viewSize"
+			:offset="conf.image.offset"
+			:css="conf.image.css"
 		/>
 
 		<FluxCube
 			ref="$cube"
-			:rscs="cube.rscs"
+			:rscs="conf.cube.rscs"
 			:size="size"
-			:view-size="viewSize"
-			:offsets="cube.offsets"
-			:sides-css="cube.sidesCss"
-			:css="cube.css"
+			:view-size="conf.viewSize"
+			:offsets="conf.cube.offsets"
+			:sides-css="conf.cube.sidesCss"
+			:css="conf.cube.css"
 		/>
 	</div>
 </template>

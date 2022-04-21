@@ -1,9 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import {
-		baseProps,
-		default as usePartials
-	} from '@/models/partials/transition.js';
+	import usePartials, { baseProps } from '@/models/partials/transition.js';
 	import FluxVortex from '@/components/FluxVortex.vue';
 
 	const $vortex = ref(null);
@@ -44,7 +41,7 @@
 	<FluxVortex
 		ref="$vortex"
 		:size="size"
-		:circles="circles"
+		:circles="conf.circles"
 		:rsc="from"
 	/>
 </template>

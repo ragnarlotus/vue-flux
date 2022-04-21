@@ -1,9 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import {
-		baseProps,
-		default as usePartials
-	} from '@/models/partials/transition.js';
+	import usePartials, { baseProps } from '@/models/partials/transition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
@@ -15,22 +12,26 @@
 		rows: 8,
 		cols: 8,
 		tileDuration: 800,
-		easing: 'ease',
 		tileDelay: 80,
-		gridRsc: null,
 		tileCss: {},
-		gridCss: {
-			position: 'absolute',
-			top: 0,
-			left: 0,
-			zIndex: 2,
+		easing: 'ease',
+		grid: {
+			rsc: null,
+			css: {
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				zIndex: 2,
+			},
 		},
-		backgroundRsc: null,
-		backgroundCss: {
-			position: 'absolute',
-			top: 0,
-			left: 0,
-			zIndex: 1,
+		background: {
+			rsc: null,
+			css: {
+				position: 'absolute',
+				top: 0,
+				left: 0,
+				zIndex: 1,
+			},
 		},
 	});
 
@@ -45,8 +46,8 @@
 
 	const setup = {
 		prev: () => {
-			conf.gridRsc = props.to;
-			conf.backgroundRsc = props.from;
+			conf.grid.rsc = props.to;
+			conf.background.rsc = props.from;
 
 			conf.tileCss = {
 				opacity: 0,
@@ -55,7 +56,7 @@
 		},
 
 		next: () => {
-			conf.gridRsc = props.from;
+			conf.grid.rsc = props.from;
 		},
 	};
 
@@ -108,17 +109,17 @@
 			:rows="conf.rows"
 			:cols="conf.cols"
 			:size="size"
-			:rsc="gridRsc"
+			:rsc="grid.rsc"
 			:tile-css="tileCss"
-			:css="gridCss"
+			:css="grid.css"
 		/>
 
 		<FluxImage
-			v-if="backgroundRsc"
+			v-if="background.rsc"
 			ref="$background"
 			:size="size"
-			:rsc="backgroundRsc"
-			:css="backgroundCss"
+			:rsc="background.rsc"
+			:css="background.css"
 		/>
 	</div>
 </template>

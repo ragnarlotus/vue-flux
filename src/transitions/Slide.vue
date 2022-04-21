@@ -1,9 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import {
-		baseProps,
-		default as usePartials
-	} from '@/models/partials/transition.js';
+	import usePartials, { baseProps } from '@/models/partials/transition.js';
 	import FluxWrapper from '@/components/FluxWrapper.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
@@ -17,15 +14,19 @@
 		easing: 'ease-in-out',
 		left: null,
 		right: null,
-		wrapperSize: {
-			width: props.size.width * 2,
-			height: props.size.height,
-		},
-		wrapperCss: {
-			display: 'flex',
-			flexWrap: 'nowrap',
+		wrapper: {
+			size: {
+				width: props.size.width * 2,
+				height: props.size.height,
+			},
+			css: {
+				display: 'flex',
+				flexWrap: 'nowrap',
+			}
 		},
 	});
+
+	usePartials(props.options, conf);
 
 	const transition = `transform ${conf.totalDuration}ms ${conf.easing}`;
 
@@ -33,7 +34,7 @@
 		prev: () => {
 			conf.left = props.to;
 			conf.right = props.from;
-			conf.wrapperCss.transform = 'translateX(-50%)';
+			conf.wrapper.css.transform = 'translateX(-50%)';
 		},
 
 		next: () => {
@@ -68,15 +69,15 @@
 </script>
 
 <template>
-	<FluxWrapper ref="$wrapper" :size="conf.wrapperSize" :css="conf.wrapperCss">
+	<FluxWrapper ref="$wrapper" :size="conf.wrapper.size" :css="conf.wrapper.css">
 		<FluxImage
 			ref="$left"
-			:rsc="left"
+			:rsc="conf.left"
 			:size="size"
 		/>
 		<FluxImage
 			ref="$right"
-			:rsc="right"
+			:rsc="conf.right"
 			:size="size"
 		/>
 	</FluxWrapper>

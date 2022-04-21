@@ -1,49 +1,4 @@
-<template>
-	<div
-		ref="container"
-		class="vue-flux"
-		:style="style"
-		@mousemove="toggleMouseOver(true)"
-		@mouseleave="toggleMouseOver(false)"
-		@dblclick="Display.toggleFullScreen()"
-		@touchstart="Touches.start($event)"
-		@touchend="Touches.end($event)"
-	>
-		<flux-transition
-			v-if="Transitions.current"
-			ref="transition"
-			:transition="Transitions.current"
-			:size="size"
-			:from="Transitions.from"
-			:to="Transitions.to"
-			:rendering-component="$renderingComponent"
-			:options="Transitions.current.options"
-			:images="Images.imgs"
-			@start="Transitions.start()"
-			@end="Transitions.end()"
-		/>
-
-		<flux-image
-			v-if="Images.current"
-			ref="$renderingComponent"
-			:size="size"
-			:image="Images.current"
-		/>
-
-		<div v-if="size" class="complements">
-			<slot name="preloader" />
-			<slot name="caption" />
-			<div class="remainder upper" />
-			<slot name="controls" />
-			<div class="remainder lower" />
-			<slot name="index" />
-			<slot v-if="loaded" name="pagination" />
-			<slot name="description" />
-		</div>
-	</div>
-</template>
-
-<script type="module">
+<script setup>
 	// Controllers
 	import DisplayController from '@/controllers/Display.js';
 	import TimersController from '@/controllers/Timers.js';
@@ -333,6 +288,51 @@
 		},
 	};
 </script>
+
+<template>
+	<div
+		ref="container"
+		class="vue-flux"
+		:style="style"
+		@mousemove="toggleMouseOver(true)"
+		@mouseleave="toggleMouseOver(false)"
+		@dblclick="Display.toggleFullScreen()"
+		@touchstart="Touches.start($event)"
+		@touchend="Touches.end($event)"
+	>
+		<FluxTransition
+			v-if="Transitions.current"
+			ref="transition"
+			:transition="Transitions.current"
+			:size="size"
+			:from="Transitions.from"
+			:to="Transitions.to"
+			:rendering-component="$renderingComponent"
+			:options="Transitions.current.options"
+			:images="Images.imgs"
+			@start="Transitions.start()"
+			@end="Transitions.end()"
+		/>
+
+		<FluxImage
+			v-if="Images.current"
+			ref="$renderingComponent"
+			:size="size"
+			:rsc="Images.current"
+		/>
+
+		<div v-if="size" class="complements">
+			<slot name="preloader" />
+			<slot name="caption" />
+			<div class="remainder upper" />
+			<slot name="controls" />
+			<div class="remainder lower" />
+			<slot name="index" />
+			<slot v-if="loaded" name="pagination" />
+			<slot name="description" />
+		</div>
+	</div>
+</template>
 
 <style lang="scss">
 	.vue-flux {

@@ -1,9 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import {
-		baseProps,
-		default as usePartials
-	} from '@/models/partials/transition.js';
+	import usePartials, { baseProps } from '@/models/partials/transition.js';
 	import FluxCube from '@/components/FluxCube.vue';
 
 	const $cube = ref(null);
