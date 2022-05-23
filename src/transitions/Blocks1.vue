@@ -1,6 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import usePartials, { baseProps } from '@/models/partials/transition.js';
+	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	const $grid = ref(null);
@@ -14,7 +14,7 @@
 		tileDelay: 1000,
 	});
 
-	usePartials(props.options, conf);
+	useTransitionMixin(props.options, conf);
 
 	if (!props.options.rows) {
 		const divider = props.size.width / conf.cols;

@@ -1,4 +1,4 @@
-export default class TransitionsController {
+export default class Transitions {
 
 	constructor(vf) {
 		this.vf = vf;

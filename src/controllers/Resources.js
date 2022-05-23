@@ -1,6 +1,6 @@
 import Img from '../models/resources/Img';
 
-export default class ResourcesController {
+export default class Resources {
 	$current;
 	$last;
 

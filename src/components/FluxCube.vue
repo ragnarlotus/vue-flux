@@ -1,10 +1,9 @@
 <script setup>
 	import { ref, reactive, computed } from 'vue';
 	import FluxImage from '@/components/FluxImage.vue';
-	import {
+	import useComponentMixin, {
 		baseProps,
-		default as usePartials,
-	} from '@/models/partials/component.js';
+	} from '@/models/mixins/component.js';
 
 	const cube = ref(null);
 
@@ -51,7 +50,7 @@
 		transform,
 		show,
 		hide,
-	} = usePartials(cube, props, styles);
+	} = useComponentMixin(cube, props, styles);
 
 	const rotate = {
 		x: {

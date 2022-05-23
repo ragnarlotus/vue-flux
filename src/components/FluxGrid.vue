@@ -1,10 +1,9 @@
 <script setup>
 	import { ref, reactive, computed } from 'vue';
-	import { floor, ceil } from '@/models/partials/math.js';
-	import {
+	import { floor, ceil } from '@/models/libs/math.js';
+	import useComponentMixin, {
 		baseProps,
-		default as usePartials
-	} from '@/models/partials/component.js';
+	} from '@/models/mixins/component.js';
 	import FluxImage from './FluxImage.vue';
 	import FluxGrid from './FluxGrid.vue';
 
@@ -44,7 +43,7 @@
 		setCss,
 		show,
 		hide,
-	} = usePartials($el, props, styles);
+	} = useComponentMixin($el, props, styles);
 
 	const component = computed(() => props.rscs? FluxGrid : FluxImage);
 

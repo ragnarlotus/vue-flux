@@ -1,6 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import usePartials, { baseProps } from '@/models/partials/transition.js';
+	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
 	import FluxWrapper from '@/components/FluxWrapper.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
@@ -26,7 +26,7 @@
 		},
 	});
 
-	usePartials(props.options, conf);
+	useTransitionMixin(props.options, conf);
 
 	const transition = `transform ${conf.totalDuration}ms ${conf.easing}`;
 

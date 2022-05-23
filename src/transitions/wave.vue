@@ -1,6 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import usePartials, { baseProps } from '@/models/partials/transition.js';
+	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	const $grid = ref(null);
@@ -24,7 +24,7 @@
 		colors: {},
 	});
 
-	usePartials(props.options, conf);
+	useTransitionMixin(props.options, conf);
 
 	// eslint-disable-next-line vue/no-mutating-props
 	props.maskStyle.overflow = 'visible';

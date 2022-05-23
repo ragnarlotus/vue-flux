@@ -1,6 +1,24 @@
+import { reactive } from 'vue';
+
 export default class Display {
-	constructor(vf) {
+	size = reactive({});
+
+	constructor(vf, size) {
 		this.vf = vf;
+		Object.assign(this.size, size);
+	}
+
+	static fromNode(vf, node) {
+		if (node instanceof Element === false) {
+			throw new Error(node +' is not an HTML node element');
+		}
+
+		let { width, height } = getComputedStyle(node);
+
+		if (['auto', null].includes(height))
+			height = width / vf.config.aspectRatio;
+
+		return new Display(vf, { width, height });
 	}
 
 	inFullScreen = () => !!document.fullscreenElement;

@@ -1,7 +1,7 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import { floor } from '@/models/partials/math.js';
-	import usePartials, { baseProps } from '@/models/partials/transition.js';
+	import { floor } from '@/models/libs/math.js';
+	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
 	import FluxImage from '@/components/FluxImage.vue';
 
 	const $image = ref(null);
@@ -52,7 +52,7 @@
 		css: {},
 	});
 
-	usePartials(props.options, conf);
+	useTransitionMixin(props.options, conf);
 
 	conf.css.transformOrigin = conf.transform.originX +' '+ conf.transform.originY;
 

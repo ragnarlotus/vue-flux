@@ -1,4 +1,5 @@
 import { ref, reactive, computed } from 'vue';
+import { aspectRatio } from '@/models/libs/math.js';
 
 const status = {
 	loading: 'loading',
@@ -53,7 +54,7 @@ export default class Img {
 			height: img.naturalHeight || img.height,
 		};
 
-		this.aspectRatio = this.size.width / this.size.height;
+		this.aspectRatio = aspectRatio(this.size);
 		this.status.value = status.loaded;
 
 		resolve();
@@ -69,7 +70,7 @@ export default class Img {
 	adaptToSize = reactive({});
 
 	adaptedStyle = computed(() => {
-		const adaptedAspectRatio = this.adaptToSize.width / this.adaptToSize.height;
+		const adaptedAspectRatio = aspectRatio(this.adaptToSize);
 
 		const adaptedSize = this.getAdaptedSize(adaptedAspectRatio);
 		const adaptedPosition = this.getAdaptedPosition(adaptedAspectRatio, adaptedSize);

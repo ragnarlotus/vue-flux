@@ -1,7 +1,7 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import { ceil } from '@/models/partials/math.js';
-	import usePartials, { baseProps } from '@/models/partials/transition.js';
+	import { ceil } from '@/models/libs/math.js';
+	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
 	import FluxCube from '@/components/FluxCube.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
@@ -38,7 +38,7 @@
 		},
 	});
 
-	usePartials(props.options, conf);
+	useTransitionMixin(props.options, conf);
 
 	const halfWidth = () => ceil(props.size.width / 2);
 

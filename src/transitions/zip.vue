@@ -1,6 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import usePartials, { baseProps } from '@/models/partials/transition.js';
+	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	const $grid = ref(null);
@@ -15,7 +15,7 @@
 		tileDelay: 80,
 	});
 
-	usePartials(props.options, conf);
+	useTransitionMixin(props.options, conf);
 
 	const totalDuration = conf.tileDelay * conf.cols + conf.tileDuration;
 

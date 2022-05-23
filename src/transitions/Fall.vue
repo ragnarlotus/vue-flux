@@ -1,6 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import usePartials, { baseProps } from '@/models/partials/transition.js';
+	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
 	import FluxImage from '@/components/FluxImage.vue';
 
 	const $image = ref(null);
@@ -14,7 +14,7 @@
 		},
 	});
 
-	usePartials(props.options, conf);
+	useTransitionMixin(props.options, conf);
 
 	Object.assign(props.maskStyle, {
 		perspective: '1600px',

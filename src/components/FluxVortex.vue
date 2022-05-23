@@ -1,11 +1,10 @@
 <script setup>
 	import { ref, reactive, computed } from 'vue';
-	import { round, ceil, diag } from '@/models/partials/math.js';
+	import { round, ceil, diag } from '@/models/libs/math.js';
 	import FluxImage from '@/components/FluxImage.vue';
-	import {
+	import useComponentMixin, {
 		baseProps,
-		default as usePartials,
-	} from '@/models/partials/component.js';
+	} from '@/models/mixins/component.js';
 
 	const $el = ref(null);
 
@@ -34,7 +33,7 @@
 		setCss,
 		show,
 		hide,
-	} = usePartials($el, props, styles);
+	} = useComponentMixin($el, props, styles);
 
 	const numCircles = computed(() => {
 		return round(props.circles);

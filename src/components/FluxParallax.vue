@@ -2,7 +2,7 @@
 	// holder (window), component, background
 
 	import { ref, reactive, computed, unref, onMounted, onUnmounted } from 'vue';
-	import { ceil } from '@/models/partials/math.js';
+	import { ceil, aspectRatio } from '@/models/libs/math.js';
 
 	const $el = ref(null);
 
@@ -46,14 +46,14 @@
 	const display = reactive({
 		width: null,
 		height: null,
-		aspectRatio: computed(() => display.width / display.height),
+		aspectRatio: computed(() => aspectRatio(display)),
 	});
 
 	const view = reactive({
 		top: null,
 		width: null,
 		height: null,
-		aspectRatio: computed(() => view.width / view.height),
+		aspectRatio: computed(() => aspectRatio(view)),
 	});
 
 	const background = reactive({

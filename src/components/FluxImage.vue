@@ -1,9 +1,8 @@
 <script setup>
 	import { ref, reactive, computed } from 'vue';
-	import {
+	import useComponentMixin, {
 		baseProps,
-		default as usePartials
-	} from '@/models/partials/component.js';
+	} from '@/models/mixins/component.js';
 
 	const $el = ref(null);
 
@@ -53,7 +52,7 @@
 		transform,
 		show,
 		hide,
-	} = usePartials($el, props, styles);
+	} = useComponentMixin($el, props, styles);
 
 	defineExpose(setCss, transform, show, hide);
 </script>

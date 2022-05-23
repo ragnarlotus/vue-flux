@@ -1,6 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import usePartials, { baseProps } from '@/models/partials/transition.js';
+	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
 	import FluxCube from '@/components/FluxCube.vue';
 
 	const $cube = ref(null);
@@ -17,7 +17,7 @@
 		cubeCss: {},
 	});
 
-	usePartials(props.options, conf);
+	useTransitionMixin(props.options, conf);
 
 	Object.assign(props.maskStyle, {
 		perspective: '1600px',

@@ -8,3 +8,5 @@ export const diag = size => {
 	const { width, height } = size;
 	return ceil(Math.sqrt(width * width + height * height));
 };
+
+export const aspectRatio = ({width , height}) => width / height;

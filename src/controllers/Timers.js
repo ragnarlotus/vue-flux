@@ -1,4 +1,4 @@
-export default class TimersController {
+export default class Timers {
 	timers = {};
 
 	set(timer, time, cb) {

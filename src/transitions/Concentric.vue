@@ -1,6 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import usePartials, { baseProps } from '@/models/partials/transition.js';
+	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
 	import FluxVortex from '@/components/FluxVortex.vue';
 
 	const $vortex = ref(null);
@@ -13,7 +13,7 @@
 		tileDelay: 150,
 	});
 
-	usePartials(props.options, conf);
+	useTransitionMixin(props.options, conf);
 
 	const totalDuration = conf.tileDelay * conf.circles + conf.tileDuration;
 

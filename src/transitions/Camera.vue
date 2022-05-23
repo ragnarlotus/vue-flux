@@ -1,7 +1,7 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import { diag } from '@/models/partials/math.js';
-	import usePartials, { baseProps } from '@/models/partials/transition.js';
+	import { diag } from '@/models/libs/math.js';
+	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
 	import FluxWrapper from '@/components/FluxWrapper.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
@@ -38,7 +38,7 @@
 		},
 	});
 
-	usePartials(props.options, conf);
+	useTransitionMixin(props.options, conf);
 
 	Object.assign(conf.wrapper.css, {
 		border: '0 solid '+ conf.backgroundColor,

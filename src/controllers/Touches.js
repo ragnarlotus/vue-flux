@@ -1,4 +1,4 @@
-export default class TouchesController {
+export default class Touches {
 	startX = 0;
 	startY = 0;
 	startTime = 0;
