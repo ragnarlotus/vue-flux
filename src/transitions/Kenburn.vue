@@ -57,14 +57,17 @@
 	conf.css.transformOrigin = conf.transform.originX +' '+ conf.transform.originY;
 
 	const onPlay = () => {
-		$image.transform({
+		$image.value.transform({
 			transition: `all ${conf.totalDuration}ms ${conf.easing}`,
 			transform: `scale(${conf.transform.scale}) translate(${conf.transform.translateX}, ${conf.transform.translateY})`,
 			opacity: 0,
 		});
 	};
 
-	defineExpose(onPlay, conf.totalDuration);
+	defineExpose({
+		onPlay,
+		totalDuration: conf.totalDuration,
+	});
 </script>
 
 <template>

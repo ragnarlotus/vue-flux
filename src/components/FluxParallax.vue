@@ -210,7 +210,9 @@
 		},
 	};
 
-	defineExpose(resize);
+	defineExpose({
+		resize,
+	});
 </script>
 
 <template>

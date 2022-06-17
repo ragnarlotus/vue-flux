@@ -1,5 +1,5 @@
 import { ref, reactive, computed } from 'vue';
-import { aspectRatio } from '@/models/libs/math.js';
+import { ceil, aspectRatio } from '@/models/libs/math.js';
 
 const status = {
 	loading: 'loading',
@@ -11,12 +11,15 @@ export default class Img {
 	status = ref(null);
 	errorMessage;
 
-	size;
-	aspectRatio;
+	realSize;
+	realAspectRatio;
+	adaptedSize = reactive({});
+	adaptedAspectRatio;
+	adaptedPosition = reactive({});
 
 	constructor(src, resizeType = 'fill') {
 		this.src = src;
-		this.resizeType = resizeType; // fill | fitsize
+		this.resizeType = resizeType; // fill | fit
 		this.loader = this.load();
 	}
 
@@ -49,12 +52,12 @@ export default class Img {
 	}
 
 	onLoad(img, resolve) {
-		this.size = {
+		this.realSize = {
 			width: img.naturalWidth || img.width,
 			height: img.naturalHeight || img.height,
 		};
 
-		this.aspectRatio = aspectRatio(this.size);
+		this.realAspectRatio = aspectRatio(this.realSize);
 		this.status.value = status.loaded;
 
 		resolve();
@@ -67,45 +70,43 @@ export default class Img {
 		reject(this.errorMessage);
 	}
 
-	adaptToSize = reactive({});
+	adaptToSize = size => {
+		this.adaptedAspectRatio = aspectRatio(size);
 
-	adaptedStyle = computed(() => {
-		const adaptedAspectRatio = aspectRatio(this.adaptToSize);
+		Object.assign(this.adaptedSize, this.getAdaptedSize(size));
+		Object.assign(this.adaptedPosition, this.getAdaptedPosition(size));
+	};
 
-		const adaptedSize = this.getAdaptedSize(adaptedAspectRatio);
-		const adaptedPosition = this.getAdaptedPosition(adaptedAspectRatio, adaptedSize);
+	adaptedStyle = computed(() => ({
+		...this.adaptedSize,
+		...this.adaptedPosition,
+	}));
 
-		return {
-			...adaptedSize,
-			...adaptedPosition,
-		};
-	});
-
-	getAdaptedSize(adaptedAspectRatio) {
-		if (this.aspectRatio <= adaptedAspectRatio) {
+	getAdaptedSize(size) {
+		if (this.realAspectRatio <= this.adaptedAspectRatio) {
 			return {
-				width: this.adaptToSize.width,
-				height: this.adaptToSize.width / this.aspectRatio,
+				width: size.width,
+				height: ceil(size.width / this.realAspectRatio),
 			};
 		}
 
 		return {
-			width: this.aspectRatio * this.adaptToSize.height,
-			height: this.adaptToSize.height,
+			width: ceil(this.realAspectRatio * size.height),
+			height: size.height,
 		};
 	}
 
-	getAdaptedPosition(adaptedAspectRatio, adaptedSize) {
-		if (this.aspectRatio <= adaptedAspectRatio) {
+	getAdaptedPosition(size) {
+		if (this.realAspectRatio <= this.adaptedAspectRatio) {
 			return {
-				top: (this.adaptToSize.height - adaptedSize.height) / 2,
+				top: (size.height - this.adaptedSize.height) / 2,
 				left: 0,
 			};
 		}
 
 		return {
 			top: 0,
-			left: (this.adaptToSize.width - adaptedSize.width) / 2,
+			left: (size.width - this.adaptedSize.width) / 2,
 		};
 	}
 

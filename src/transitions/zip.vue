@@ -25,7 +25,7 @@
 	};
 
 	const onPlay = () => {
-		$grid.transform((tile, i) => {
+		$grid.value.transform((tile, i) => {
 			tile.transform({
 				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay[conf.direction](i)}ms`,
 				opacity: '0.1',
@@ -34,7 +34,10 @@
 		});
 	};
 
-	defineExpose(onPlay, totalDuration);
+	defineExpose({
+		onPlay,
+		totalDuration,
+	});
 </script>
 
 <template>

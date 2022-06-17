@@ -47,22 +47,25 @@
 	});
 
 	const onPlay = () => {
-		$wrapper.transform({
+		$wrapper.value.transform({
 			transition: `all ${conf.totalDuration / 2 - 50}ms ${conf.easing} 0ms`,
 			borderWidth: (conf.diag / 2) +'px',
 		});
 
 		setTimeout(() => {
-			$image.hide();
+			$image.value.hide();
 
-			$wrapper.transform({
+			$wrapper.value.transform({
 				transition: `all ${conf.totalDuration / 2 - 50}ms ${conf.easing} 0ms`,
 				borderWidth: 0,
 			});
 		}, conf.totalDuration / 2 + 50);
 	};
 
-	defineExpose(onPlay, conf.totalDuration);
+	defineExpose({
+		onPlay,
+		totalDuration: conf.totalDuration,
+	});
 </script>
 
 <template>

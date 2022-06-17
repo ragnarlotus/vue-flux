@@ -31,8 +31,8 @@
 	const totalDuration = (conf.cols / 2 + conf.rows / 2) * (conf.tileDelay * 2);
 
 	const getDelay = i => {
-		const row = $grid.getRowNumber(i);
-		const col = $grid.getColNumber(i);
+		const row = $grid.value.getRowNumber(i);
+		const col = $grid.value.getColNumber(i);
 
 		const rowDelay = Math.abs(conf.rows / 2 - 0.5 - row);
 		const colDelay = Math.abs(conf.cols / 2 - 0.5 - col);
@@ -42,7 +42,7 @@
 	};
 
 	const onPlay = () => {
-		$grid.transform((tile, i) => {
+		$grid.value.transform((tile, i) => {
 			tile.transform({
 				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(i)}ms`,
 				borderRadius: '100%',
@@ -52,7 +52,10 @@
 		});
 	};
 
-	defineExpose(onPlay, totalDuration);
+	defineExpose({
+		onPlay,
+		totalDuration,
+	});
 </script>
 
 <template>

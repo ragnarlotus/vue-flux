@@ -44,13 +44,13 @@ export default ($el, props, styles) => {
 		...unref(styles.base),
 	}));
 
-	const setCss = css => ({
-		...toRefs(styles.base),
-		...css,
-	});
+	const setCss = css => {
+		Object.assign(styles.base, css);
+	};
 
 	const transform = css => {
-		$el.clientHeight;
+		console.log(css);
+		$el.value.clientHeight;
 		setCss(css);
 	};
 

@@ -167,7 +167,7 @@
 
 	const turnRight = () => turn('right');
 
-	defineExpose(
+	defineExpose({
 		setCss,
 		transform,
 		show,
@@ -175,12 +175,11 @@
 		getSide,
 		turn,
 		turnTop,
-		turnTop,
 		turnBack,
 		turnBottom,
 		turnLeft,
 		turnRight
-	);
+	});
 </script>
 
 <template>

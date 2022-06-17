@@ -1,4 +1,6 @@
 <script setup>
+	import { ref } from 'vue';
+
 	/* eslint-disable no-unused-vars */
 	import { VcParagraph } from 'vue-cosk';
 
@@ -12,7 +14,9 @@
 	import FluxTransition from './components/FluxTransition.vue';
 
 	// Flux transitions
-	// import blinds2d from './transitions/blinds2d.vue';
+	import Blinds2D from './transitions/Blinds2D.vue';
+	import Book from './transitions/Book.vue';
+	import Fade from './transitions/Fade.vue';
 
 	// Resources
 	import Img from './models/resources/Img.js';
@@ -38,10 +42,23 @@
 		top: image05,
 		bottom: image06,
 	};
+
+	const $fluxTransition = ref(null);
+
+	setTimeout(() => {
+		//console.log($fluxTransition.value.start);
+		$fluxTransition.value.start();
+	}, 2000);
 </script>
 
 <template>
-	<FluxTransition :size="{ width: 640, height: 360 }" :transition="blinds2d" :from="image01" :to="image02" />
+	<FluxTransition
+		ref="$fluxTransition" 
+		:size="{ width: 640, height: 360 }"
+		:transition="Fade"
+		:from="image05"
+		:to="image02"
+	/>
 	<!-- <FluxWrapper><FluxImage :rsc="image01" :size="size" /></FluxWrapper> -->
 	<!-- <FluxImage :rsc="image01" :size="size" /> -->
 	<!-- <FluxVortex :rsc="image01" :size="size" :circles="5" /> -->

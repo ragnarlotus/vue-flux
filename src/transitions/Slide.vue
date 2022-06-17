@@ -47,14 +47,14 @@
 
 	const play = {
 		prev: () => {
-			$wrapper.transform({
+			$wrapper.value.transform({
 				transition: transition,
 				transform: 'translateX(0)',
 			});
 		},
 
 		next: () => {
-			$wrapper.transform({
+			$wrapper.value.transform({
 				transition: transition,
 				transform: 'translateX(-50%)'
 			});
@@ -65,7 +65,10 @@
 		play[conf.direction]();
 	};
 
-	defineExpose(onPlay, conf.totalDuration);
+	defineExpose({
+		onPlay,
+		totalDuration: conf.totalDuration,
+	});
 </script>
 
 <template>

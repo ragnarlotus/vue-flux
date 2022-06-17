@@ -67,7 +67,6 @@
 
 		for (let i = 0; i < numTiles.value; i++) {
 			const tile = {
-				ref: `$tiles[${i}]`,
 				row: getRowNumber(i),
 				col: getColNumber(i),
 			};
@@ -104,17 +103,27 @@
 		return tiles;
 	});
 
-	const transform = cb => tiles.forEach((tile, i) => cb(tile, i));
+	const $tiles = ref([]);
 
-	defineExpose(setCss, transform, show, hide);
+	const transform = cb => {
+		$tiles.value.forEach((tile, i) => cb(tile, i));
+	};
+
+	defineExpose({
+		setCss,
+		transform,
+		show,
+		hide,
+	});
 </script>
 
 <template>
 	<div ref="$el" :style="style">
 		<component
 			:is="component"
-			v-for="tile in tiles"
-			:key="tile.ref"
+			v-for="(tile, index) in tiles"
+			:ref="el => $tiles.push(el)"
+			:key="index"
 			:size="size"
 			v-bind="tile"
 			:color="color"

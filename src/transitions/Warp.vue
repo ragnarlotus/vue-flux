@@ -25,7 +25,7 @@
 	const getDeg = i => i % 2 === 0? '-90' : '90';
 
 	const onPlay = () => {
-		$vortex.transform((tile, i) => {
+		$vortex.value.transform((tile, i) => {
 			tile.transform({
 				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay[conf.direction](i)}ms`,
 				opacity: '0',
@@ -34,7 +34,10 @@
 		});
 	};
 
-	defineExpose(onPlay, totalDuration);
+	defineExpose({
+		onPlay,
+		totalDuration,
+	});
 </script>
 
 <template>

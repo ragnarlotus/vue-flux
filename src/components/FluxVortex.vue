@@ -93,7 +93,12 @@
 		$tiles.forEach((tile, i) => func(tile, i));
 	};
 
-	defineExpose(setCss, transform, show, hide);
+	defineExpose({
+		setCss,
+		transform,
+		show,
+		hide,
+	});
 </script>
 
 <template>

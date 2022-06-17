@@ -28,7 +28,7 @@
 			if (!rsc || rsc.isLoading() || !$el.value)
 				return {};
 
-			Object.assign(rsc.adaptToSize, props.size);
+			rsc.adaptToSize(props.size);
 
 			const bgStyle = { ...rsc.adaptedStyle.value };
 
@@ -54,7 +54,12 @@
 		hide,
 	} = useComponentMixin($el, props, styles);
 
-	defineExpose(setCss, transform, show, hide);
+	defineExpose({
+		setCss,
+		transform,
+		show,
+		hide,
+	});
 </script>
 
 <template>

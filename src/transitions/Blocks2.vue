@@ -63,8 +63,8 @@
 	setup[conf.direction]();
 
 	const getDelay = i => {
-		const row = $grid.getRowNumber(i);
-		const col = $grid.getColNumber(i);
+		const row = $grid.value.getRowNumber(i);
+		const col = $grid.value.getColNumber(i);
 		let delay = col + row;
 
 		if (conf.direction === 'prev')
@@ -75,7 +75,7 @@
 
 	const play = {
 		prev: () => {
-			$grid.transform((tile, i) => {
+			$grid.value.transform((tile, i) => {
 				tile.transform({
 					transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(i)}ms`,
 					opacity: 1,
@@ -85,7 +85,7 @@
 		},
 
 		next: () => {
-			$grid.transform((tile, i) => {
+			$grid.value.transform((tile, i) => {
 				tile.transform({
 					transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(i)}ms`,
 					opacity: 0,
@@ -99,7 +99,10 @@
 		play[conf.direction]();
 	};
 
-	defineExpose(onPlay, totalDuration);
+	defineExpose({
+		onPlay,
+		totalDuration,
+	});
 </script>
 
 <template>

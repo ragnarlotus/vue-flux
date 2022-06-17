@@ -85,13 +85,16 @@
 	}[conf.direction]);
 
 	const onPlay = () => {
-		this.$cube.transform({
+		$cube.value.transform({
 			transition: `transform ${props.totalDuration}ms ${props.easing}`,
 			transform: `rotateY(${getDeg()}deg)`,
 		});
 	};
 
-	defineExpose(onPlay, conf.totalDuration);
+	defineExpose({
+		onPlay,
+		totalDuration: conf.totalDuration,
+	});
 </script>
 
 <template>

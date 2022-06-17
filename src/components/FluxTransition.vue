@@ -57,10 +57,10 @@
 		};
 	});
 
-	const getDuration = () => !$transition? 1 : $transition.totalDuration;
+	const getDuration = () => !$transition? 1 : $transition.value.totalDuration;
 
 	const start = () => {
-		$transition.onPlay();
+		$transition.value.onPlay();
 
 		emit('start', {
 			transition: props.transition,
@@ -88,8 +88,10 @@
 			props.current.show();
 	});
 
-	defineExpose(start, end);
-	defineEmits('start', 'end');
+	defineExpose({
+		start,
+		end,
+	});
 </script>
 
 <template>

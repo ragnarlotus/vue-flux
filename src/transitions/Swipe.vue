@@ -43,13 +43,16 @@
 	setup[conf.direction]();
 
 	const onPlay = () => {
-		$wrapper.transform({
+		$wrapper.value.transform({
 			transition: `width ${conf.totalDuration}ms ${conf.easing}`,
 			width: 0,
 		});
 	};
 
-	defineExpose(onPlay, conf.totalDuration);
+	defineExpose({
+		onPlay,
+		totalDuration: conf.totalDuration,
+	});
 </script>
 
 <template>

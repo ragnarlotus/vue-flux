@@ -45,7 +45,7 @@
 			right: conf.sideColor,
 		});
 
-		$grid.transform((tile, i) => {
+		$grid.value.transform((tile, i) => {
 			tile.setCss({
 				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay[conf.direction](i)}ms`,
 			});
@@ -54,7 +54,10 @@
 		});
 	};
 
-	defineExpose(onPlay, totalDuration);
+	defineExpose({
+		onPlay,
+		totalDuration,
+	});
 </script>
 
 <template>

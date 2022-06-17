@@ -22,13 +22,16 @@
 	});
 
 	const onPlay = () => {
-		$image.transform({
+		$image.value.transform({
 			transition: `transform ${conf.totalDuration}ms ${conf.easing}`,
 			transform: 'rotateX(-83deg)',
 		});
 	};
 
-	defineExpose(onPlay, conf.totalDuration);
+	defineExpose({
+		onPlay,
+		totalDuration: conf.totalDuration,
+	});
 </script>
 
 <template>

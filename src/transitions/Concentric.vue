@@ -25,7 +25,7 @@
 			next: '90',
 		};
 
-		$vortex.transform((tile, i) => {
+		$vortex.value.transform((tile, i) => {
 			tile.transform({
 				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(i)}ms`,
 				opacity: '0',
@@ -34,7 +34,10 @@
 		});
 	};
 
-	defineExpose(onPlay, totalDuration);
+	defineExpose({
+		onPlay,
+		totalDuration,
+	});
 </script>
 
 <template>

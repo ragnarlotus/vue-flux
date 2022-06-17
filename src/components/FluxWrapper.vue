@@ -22,7 +22,12 @@
 		hide,
 	} = useComponentMixin($el, props, styles);
 
-	defineExpose(setCss, transform, show, hide);
+	defineExpose({
+		setCss,
+		transform,
+		show,
+		hide,
+	});
 </script>
 
 <template>

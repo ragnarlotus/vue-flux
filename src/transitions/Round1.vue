@@ -37,8 +37,8 @@
 	const totalDuration = conf.tileDelay * multiplier * 2;
 
 	const getDelay = i => {
-		const row = $grid.getRowNumber(i);
-		const col = $grid.getColNumber(i);
+		const row = $grid.value.getRowNumber(i);
+		const col = $grid.value.getColNumber(i);
 		let delay = col + row;
 
 		if (conf.direction === 'prev')
@@ -56,7 +56,7 @@
 			next: 'backr',
 		};
 
-		$grid.transform((tile, i) => {
+		$grid.value.transform((tile, i) => {
 			tile.setCss({
 				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(i)}ms`,
 			});
@@ -65,7 +65,10 @@
 		});
 	}
 
-	defineExpose(onPlay, totalDuration);
+	defineExpose({
+		onPlay,
+		totalDuration,
+	});
 </script>
 
 <template>

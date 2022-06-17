@@ -17,13 +17,16 @@
 	useTransitionMixin(props.options, conf);
 
 	const onPlay = () => {
-		$image.transform({
-			transition: `opacity ${props.totalDuration}ms ${props.easing}`,
+		$image.value.transform({
+			transition: `opacity ${conf.totalDuration}ms ${conf.easing}`,
 			opacity: 0,
 		});
 	};
 
-	defineExpose(onPlay, conf.totalDuration);
+	defineExpose({
+		onPlay,
+		totalDuration: conf.totalDuration,
+	});
 </script>
 
 <template>

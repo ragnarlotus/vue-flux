@@ -35,10 +35,13 @@
 			prev: 'right',
 		};
 
-		$cube.turn(sides[conf.direction]);
+		$cube.value.turn(sides[conf.direction]);
 	};
 
-	defineExpose(onPlay, conf.totalDuration);
+	defineExpose({
+		onPlay,
+		totalDuration: conf.totalDuration,
+	});
 </script>
 
 <template>
