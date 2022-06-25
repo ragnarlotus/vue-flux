@@ -8,18 +8,12 @@
 	const props = defineProps(baseProps);
 
 	const conf = reactive({
-		rows: 9,
+		rows: null,
 		cols: 9,
 		tileDuration: 800,
-		rotateX: '-540',
-		easing: 'linear',
 		tileDelay: 100,
-		gridCss: {
-			perspective: '1200px',
-		},
-		tileCss: {
-			backfaceVisibility: 'hidden',
-		},
+		easing: 'linear',
+		rotateX: '-540',
 	});
 
 	useTransitionMixin(props.options, conf);
@@ -27,7 +21,15 @@
 	// eslint-disable-next-line vue/no-mutating-props
 	props.maskStyle.overflow = 'visible';
 
-	if (!props.options.rows) {
+	const gridCss = {
+		perspective: '1200px',
+	};
+
+	const tileCss = {
+		backfaceVisibility: 'hidden',
+	};
+
+	if (!conf.rows) {
 		const divider = props.size.width / conf.cols;
 		conf.rows = floor(props.size.height / divider);
 	}
@@ -77,8 +79,8 @@
 		:cols="conf.cols"
 		:size="size"
 		:depth="0"
-		:rscs="from"
-		:css="conf.gridCss"
-		:tile-css="conf.tileCss"
+		:rsc="from"
+		:css="gridCss"
+		:tile-css="tileCss"
 	/>
 </template>

@@ -9,9 +9,6 @@
 	const conf = reactive({
 		totalDuration: 1600,
 		easing: 'ease-in',
-		style: {
-			transformOrigin: 'center bottom',
-		},
 	});
 
 	useTransitionMixin(props.options, conf);
@@ -21,10 +18,14 @@
 		overflow: 'visible',
 	});
 
+	const style = {
+		transformOrigin: 'center bottom',
+	};
+
 	const onPlay = () => {
 		$image.value.transform({
 			transition: `transform ${conf.totalDuration}ms ${conf.easing}`,
-			transform: 'rotateX(-83deg)',
+			transform: 'rotateX(-83.6deg)',
 		});
 	};
 
@@ -39,6 +40,6 @@
 		ref="$image"
 		:rsc="from"
 		:size="size"
-		:style="conf.style"
+		:style="style"
 	/>
 </template>

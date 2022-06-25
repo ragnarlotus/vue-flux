@@ -13,29 +13,25 @@
 		cols: 8,
 		tileDuration: 800,
 		tileDelay: 80,
-		tileCss: {},
 		easing: 'ease',
-		grid: {
-			rsc: null,
-			css: {
-				position: 'absolute',
-				top: 0,
-				left: 0,
-				zIndex: 2,
-			},
-		},
-		background: {
-			rsc: null,
-			css: {
-				position: 'absolute',
-				top: 0,
-				left: 0,
-				zIndex: 1,
-			},
-		},
 	});
 
 	useTransitionMixin(props.options, conf);
+
+	let tileCss = {};
+
+	const background = {
+		rsc: null,
+		css: {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			zIndex: 1,
+		},
+	};
+
+	const grid = JSON.parse(JSON.stringify(background));
+	grid.css.zIndex = 2;
 
 	const totalDuration = conf.tileDelay * (conf.rows + conf.cols) + conf.tileDuration;
 
@@ -46,17 +42,17 @@
 
 	const setup = {
 		prev: () => {
-			conf.grid.rsc = props.to;
-			conf.background.rsc = props.from;
+			grid.rsc = props.to;
+			background.rsc = props.from;
 
-			conf.tileCss = {
+			tileCss = {
 				opacity: 0,
 				transform: 'scale(0.3)',
 			};
 		},
 
 		next: () => {
-			conf.grid.rsc = props.from;
+			grid.rsc = props.from;
 		},
 	};
 
@@ -112,17 +108,15 @@
 			:rows="conf.rows"
 			:cols="conf.cols"
 			:size="size"
-			:rsc="grid.rsc"
 			:tile-css="tileCss"
-			:css="grid.css"
+			v-bind="grid"
 		/>
 
 		<FluxImage
 			v-if="background.rsc"
 			ref="$background"
 			:size="size"
-			:rsc="background.rsc"
-			:css="background.css"
+			v-bind="background"
 		/>
 	</div>
 </template>

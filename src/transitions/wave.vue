@@ -13,21 +13,27 @@
 		tileDelay: 110,
 		easing: 'cubic-bezier(0.3, -0.3, 0.735, 0.285)',
 		sideColor: '#333',
-		gridCss: {
-			overflow: 'visible',
-			perspective: '1200px',
-		},
-		rscs: {
-			front: props.from,
-			top: props.to,
-		},
-		colors: {},
 	});
 
 	useTransitionMixin(props.options, conf);
 
 	// eslint-disable-next-line vue/no-mutating-props
 	props.maskStyle.overflow = 'visible';
+
+	const rscs = {
+		front: props.from,
+		top: props.to,
+	};
+
+	const color = {
+		left: conf.sideColor,
+		right: conf.sideColor,
+	};
+
+	const gridCss = {
+		overflow: 'visible',
+		perspective: '1200px',
+	};
 
 	const totalDuration = conf.tileDelay * conf.cols + conf.tileDuration;
 
@@ -39,11 +45,6 @@
 	const onPlay = () => {
 		if (props.current)
 			props.current.hide();
-
-		Object.assign(conf.colors, {
-			left: conf.sideColor,
-			right: conf.sideColor,
-		});
 
 		$grid.value.transform((tile, i) => {
 			tile.setCss({
@@ -66,9 +67,9 @@
 		:rows="conf.rows"
 		:cols="conf.cols"
 		:size="size"
-		:rscs="conf.rscs"
-		:colors="conf.colors"
+		:rscs="rscs"
+		:color="color"
 		:depth="size.height"
-		:css="conf.gridCss"
+		:css="gridCss"
 	/>
 </template>

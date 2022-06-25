@@ -10,7 +10,6 @@
 		rows: 1,
 		cols: 10,
 		tileDuration: 600,
-		totalDuration: 0,
 		easing: 'ease-in',
 		tileDelay: 80,
 	});

@@ -9,12 +9,13 @@
 	const conf = reactive({
 		totalDuration: 1200,
 		easing: 'ease-in',
-		imageCss: {
-			zIndex: 1,
-		},
 	});
 
 	useTransitionMixin(props.options, conf);
+
+	const imageCss = {
+		zIndex: 1,
+	};
 
 	const onPlay = () => {
 		$image.value.transform({
@@ -34,6 +35,6 @@
 		ref="$image"
 		:rsc="from"
 		:size="size"
-		:css="conf.imageCss"
+		:css="imageCss"
 	/>
 </template>

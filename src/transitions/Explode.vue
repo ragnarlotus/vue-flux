@@ -13,12 +13,13 @@
 		tileDuration: 300,
 		easing: 'linear',
 		tileDelay: 100,
-		cssGrid: {
-			overflow: 'visible',
-		},
 	});
 
 	useTransitionMixin(props.options, conf);
+
+	const cssGrid = {
+		overflow: 'visible',
+	};
 
 	// eslint-disable-next-line vue/no-mutating-props
 	props.maskStyle.overflow = 'visible';
@@ -47,7 +48,7 @@
 				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(i)}ms`,
 				borderRadius: '100%',
 				opacity: '0',
-				transform: 'scale(1.6, 1.6)',
+				transform: 'scale(2)',
 			});
 		});
 	};
@@ -64,7 +65,7 @@
 		:rows="conf.rows"
 		:cols="conf.cols"
 		:size="size"
-		:rscs="from"
-		:css="conf.cssGrid"
+		:rsc="from"
+		:css="cssGrid"
 	/>
 </template>

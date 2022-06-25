@@ -8,26 +8,28 @@
 	const props = defineProps(baseProps);
 
 	const conf = reactive({
-		rows: 8,
+		rows: null,
 		cols: 8,
 		tileDuration: 800,
 		easing: 'ease-out',
 		tileDelay: 150,
-		rscs: {
-			front: props.from,
-			back: props.to,
-		},
-		gridCss: {
-			perspective: '800px',
-		},
 	});
 
 	useTransitionMixin(props.options, conf);
 
+	const rscs = {
+		front: props.from,
+		back: props.to,
+	};
+
+	const gridCss = {
+		perspective: '800px',
+	};
+
 	// eslint-disable-next-line vue/no-mutating-props
 	props.maskStyle.overflow = 'visible';
 
-	if (!props.options.rows) {
+	if (!conf.rows) {
 		const divider = props.size.width / conf.cols;
 		conf.rows = floor(props.size.height / divider);
 	}
@@ -77,7 +79,7 @@
 		:rows="conf.rows"
 		:cols="conf.cols"
 		:size="size"
-		:rscs="conf.rscs"
-		:css="conf.gridCss"
+		:rscs="rscs"
+		:css="gridCss"
 	/>
 </template>

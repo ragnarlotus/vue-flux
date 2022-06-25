@@ -14,42 +14,42 @@
 		totalDuration: 900,
 		easing: 'cubic-bezier(0.385, 0, 0.795, 0.560)',
 		backgroundColor: '#111',
-		diag: diag(props.size),
-		image: {
-			rsc: props.from,
-			css: {
-				alignSelf: 'center',
-				flex: 'none',
-			},
-		},
-		wrapper: {
-			size: {
-				width: diag,
-				height: diag,
-			},
-			css: {
-				boxSizing: 'border-box',
-				position: 'absolute',
-				display: 'flex',
-				justifyContent: 'center',
-				overflow: 'hidden',
-				borderRadius: '50%',
-			},
-		},
 	});
 
 	useTransitionMixin(props.options, conf);
 
-	Object.assign(conf.wrapper.css, {
-		border: '0 solid '+ conf.backgroundColor,
-		top: ((props.size.height - conf.diag) / 2) +'px',
-		left: ((props.size.width - conf.diag) / 2) +'px',
-	});
+	const diagSize = diag(props.size);
+
+	const image = {
+		rsc: props.from,
+		css: {
+			alignSelf: 'center',
+			flex: 'none',
+		},
+	};
+
+	const wrapper = {
+		size: {
+			width: diagSize,
+			height: diagSize,
+		},
+		css: {
+			boxSizing: 'border-box',
+			position: 'absolute',
+			display: 'flex',
+			justifyContent: 'center',
+			overflow: 'hidden',
+			borderRadius: '50%',
+			border: '0 solid '+ conf.backgroundColor,
+			top: ((props.size.height - diagSize) / 2) +'px',
+			left: ((props.size.width - diagSize) / 2) +'px',
+		},
+	};
 
 	const onPlay = () => {
 		$wrapper.value.transform({
 			transition: `all ${conf.totalDuration / 2 - 50}ms ${conf.easing} 0ms`,
-			borderWidth: (conf.diag / 2) +'px',
+			borderWidth: (diagSize / 2) +'px',
 		});
 
 		setTimeout(() => {
@@ -71,14 +71,12 @@
 <template>
 	<FluxWrapper
 		ref="$wrapper"
-		:size="conf.wrapper.size"
-		:css="conf.wrapper.css"
+		v-bind="wrapper"
 	>
 		<FluxImage
 			ref="$image"
-			:rsc="conf.image.rsc"
 			:size="size"
-			:css="conf.image.css"
+			v-bind="image"
 		/>
 	</FluxWrapper>
 </template>

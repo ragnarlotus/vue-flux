@@ -12,16 +12,18 @@
 		tileDuration: 800,
 		easing: 'ease-out',
 		tileDelay: 150,
-		gridCss: {
-			perspective: '800px',
-		},
-		rscs: {
-			front: props.from,
-			back: props.to,
-		},
 	});
 
 	useTransitionMixin(props.options, conf);
+
+	const gridCss = {
+		perspective: '800px',
+	};
+
+	const rscs = {
+		front: props.from,
+		back: props.to,
+	};
 
 	const totalDuration = conf.tileDelay * conf.cols + conf.tileDuration;
 
@@ -63,7 +65,7 @@
 		:rows="conf.rows"
 		:cols="conf.cols"
 		:size="size"
-		:rscs="conf.rscs"
-		:css="conf.gridCss"
+		:rscs="rscs"
+		:css="gridCss"
 	/>
 </template>

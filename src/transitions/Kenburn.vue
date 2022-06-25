@@ -7,7 +7,7 @@
 	const $image = ref(null);
 	const props = defineProps(baseProps);
 
-	const getTransform = () => {
+	const getTransform = (i) => {
 		const transform = {
 			1: {
 				scale: '1.7',
@@ -42,24 +42,26 @@
 			},
 		};
 
-		return transform[floor((Math.random() * 4) + 1)]
+		return transform[i];
 	};
 
 	const conf = reactive({
 		totalDuration: 1500,
 		easing: 'linear',
-		transform: getTransform(),
-		css: {},
 	});
 
 	useTransitionMixin(props.options, conf);
 
-	conf.css.transformOrigin = conf.transform.originX +' '+ conf.transform.originY;
+	const transform = getTransform(floor((Math.random() * 4) + 1));
+
+	const css = {
+		transformOrigin: transform.originX +' '+ transform.originY,
+	};
 
 	const onPlay = () => {
 		$image.value.transform({
 			transition: `all ${conf.totalDuration}ms ${conf.easing}`,
-			transform: `scale(${conf.transform.scale}) translate(${conf.transform.translateX}, ${conf.transform.translateY})`,
+			transform: `scale(${transform.scale}) translate(${transform.translateX}, ${transform.translateY})`,
 			opacity: 0,
 		});
 	};
@@ -75,6 +77,6 @@
 		ref="$image"
 		:rsc="from"
 		:size="size"
-		:css="conf.css"
+		:css="css"
 	/>
 </template>

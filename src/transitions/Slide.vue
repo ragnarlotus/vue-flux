@@ -12,34 +12,35 @@
 	const conf = reactive({
 		totalDuration: 1400,
 		easing: 'ease-in-out',
-		left: null,
-		right: null,
-		wrapper: {
-			size: {
-				width: props.size.width * 2,
-				height: props.size.height,
-			},
-			css: {
-				display: 'flex',
-				flexWrap: 'nowrap',
-			}
-		},
 	});
 
 	useTransitionMixin(props.options, conf);
 
 	const transition = `transform ${conf.totalDuration}ms ${conf.easing}`;
 
+	const wrapper = {
+		size: {
+			width: props.size.width * 2,
+			height: props.size.height,
+		},
+		css: {
+			display: 'flex',
+			flexWrap: 'nowrap',
+		}
+	};
+
+	let left, right;
+
 	const setup = {
 		prev: () => {
-			conf.left = props.to;
-			conf.right = props.from;
-			conf.wrapper.css.transform = 'translateX(-50%)';
+			left = props.to;
+			right = props.from;
+			wrapper.css.transform = 'translateX(-50%)';
 		},
 
 		next: () => {
-			conf.left = props.from;
-			conf.right = props.to;
+			left = props.from;
+			right = props.to;
 		},
 	};
 
@@ -72,15 +73,15 @@
 </script>
 
 <template>
-	<FluxWrapper ref="$wrapper" :size="conf.wrapper.size" :css="conf.wrapper.css">
+	<FluxWrapper ref="$wrapper" v-bind="wrapper">
 		<FluxImage
 			ref="$left"
-			:rsc="conf.left"
+			:rsc="left"
 			:size="size"
 		/>
 		<FluxImage
 			ref="$right"
-			:rsc="conf.right"
+			:rsc="right"
 			:size="size"
 		/>
 	</FluxWrapper>

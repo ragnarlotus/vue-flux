@@ -11,29 +11,31 @@
 	const conf = reactive({
 		totalDuration: 1400,
 		easing: 'ease-in-out',
-		wrapperCss: {
-			position: 'absolute',
-			top: 0,
-			display: 'flex',
-			flexWrap: 'nowrap',
-		},
-		imageCss: {
-			flex: '0 0 auto',
-		},
 	});
 
 	useTransitionMixin(props.options, conf);
 
+	const wrapperCss = {
+		position: 'absolute',
+		top: 0,
+		display: 'flex',
+		flexWrap: 'nowrap',
+	};
+
+	const imageCss = {
+		flex: '0 0 auto',
+	};
+
 	const setup = {
 		prev: () => {
-			Object.assign(conf.wrapperCss, {
+			Object.assign(wrapperCss, {
 				right: 0,
 				justifyContent: 'flex-end',
 			});
 		},
 
 		next: () => {
-			Object.assign(conf.wrapperCss, {
+			Object.assign(wrapperCss, {
 				left: 0,
 				justifyContent: 'flex-start',
 			});
@@ -56,12 +58,12 @@
 </script>
 
 <template>
-	<FluxWrapper ref="$wrapper" :size="size" :css="conf.wrapperCss">
+	<FluxWrapper ref="$wrapper" :size="size" :css="wrapperCss">
 		<FluxImage
 			ref="$image"
 			:rsc="from"
 			:size="size"
-			:css="conf.imageCss"
+			:css="imageCss"
 		/>
 	</FluxWrapper>
 </template>

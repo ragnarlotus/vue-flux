@@ -47,6 +47,6 @@
 		:rows="conf.rows"
 		:cols="conf.cols"
 		:size="size"
-		:rscs="from"
+		:rsc="from"
 	/>
 </template>

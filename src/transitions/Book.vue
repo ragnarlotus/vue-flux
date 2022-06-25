@@ -12,65 +12,71 @@
 	const conf = reactive({
 		totalDuration: 1200,
 		easing: 'ease-out',
-		viewSize: {
-			width: ceil(props.size.width / 2),
-			height: props.size.height,
-		},
-		image: {
-			offset: {},
-			css: {
-				position: 'absolute',
-				top: 0,
-				left: 0,
-			},
-		},
-		cube: {
-			rscs: {
-				front: props.from,
-				back: props.to,
-			},
-			offsets: {},
-			css: {
-				position: 'absolute',
-				top: 0,
-				left: 0,
-			},
-		},
 	});
 
 	useTransitionMixin(props.options, conf);
 
-	const halfWidth = () => ceil(props.size.width / 2);
+	const viewSize = {
+		width: ceil(props.size.width / 2),
+		height: props.size.height,
+	};
 
-	const halfWidthPx = () => halfWidth +'px';
-
-	Object.assign(props.maskStyle, {
+	const wrapperStyle = {
 		perspective: '1600px',
-		overflow: 'visible',
-	});
+		width: '100%',
+		height: '100%',
+	};
+
+	const image = {
+		offset: {},
+		css: {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+		},
+	};
+
+	const cube = {
+		rscs: {
+			front: props.from,
+			back: props.to,
+		},
+		offsets: {},
+		css: {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+		},
+	};
+
+	const halfWidth = ceil(props.size.width / 2);
+	const halfWidthPx = halfWidth +'px';
+
+	// eslint-disable-next-line vue/no-mutating-props
+	props.maskStyle.overflow = 'visible';
 
 	const setup = {
 		prev: () => {
-			conf.image.offset.left = halfWidth;
-			conf.image.css.left = halfWidthPx;
+			image.offset.left = halfWidth;
+			image.css.left = halfWidthPx;
 
-			conf.cube.offsets.back = {
+			cube.offsets.back = {
 				left: halfWidth,
 			};
 
-			conf.cube.css = {
-				...conf.cube.css,
+			cube.css = {
+				...cube.css,
 				transformOrigin: 'right center',
 			};
 		},
 
 		next: () => {
-			conf.cube.offsets.front = {
+			cube.offsets.front = {
 				left: halfWidth,
 			};
 
-			conf.cube.css = {
-				...conf.cube.css,
+			cube.css = {
+				...cube.css,
 				left: halfWidthPx,
 				transformOrigin: 'left center',
 			};
@@ -86,7 +92,7 @@
 
 	const onPlay = () => {
 		$cube.value.transform({
-			transition: `transform ${props.totalDuration}ms ${props.easing}`,
+			transition: `transform ${conf.totalDuration}ms ${conf.easing}`,
 			transform: `rotateY(${getDeg()}deg)`,
 		});
 	};
@@ -98,24 +104,24 @@
 </script>
 
 <template>
-	<div>
+	<div :style="wrapperStyle">
 		<FluxImage
 			ref="$from"
 			:rsc="from"
 			:size="size"
-			:view-size="conf.viewSize"
-			:offset="conf.image.offset"
-			:css="conf.image.css"
+			:view-size="viewSize"
+			:offset="image.offset"
+			:css="image.css"
 		/>
 
 		<FluxCube
 			ref="$cube"
-			:rscs="conf.cube.rscs"
+			:rscs="cube.rscs"
 			:size="size"
-			:view-size="conf.viewSize"
-			:offsets="conf.cube.offsets"
-			:sides-css="conf.cube.sidesCss"
-			:css="conf.cube.css"
+			:view-size="viewSize"
+			:offsets="cube.offsets"
+			:sides-css="cube.sidesCss"
+			:css="cube.css"
 		/>
 	</div>
 </template>
