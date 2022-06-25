@@ -15,8 +15,25 @@
 
 	// Flux transitions
 	import Blinds2D from './transitions/Blinds2D.vue';
+	import Blinds3D from './transitions/Blinds3D.vue';
+	import Blocks1 from './transitions/Blocks1.vue';
+	import Blocks2 from './transitions/Blocks2.vue';
 	import Book from './transitions/Book.vue';
+	import Camera from './transitions/Camera.vue';
+	import Concentric from './transitions/Concentric.vue';
+	import Cube from './transitions/Cube.vue';
+	import Explode from './transitions/Explode.vue';
 	import Fade from './transitions/Fade.vue';
+	import Fall from './transitions/Fall.vue';
+	import Kenburn from './transitions/Kenburn.vue';
+	import Round1 from './transitions/Round1.vue';
+	import Round2 from './transitions/Round2.vue';
+	import Slide from './transitions/Slide.vue';
+	import Swipe from './transitions/Swipe.vue';
+	import Warp from './transitions/Warp.vue';
+	import Waterfall from './transitions/Waterfall.vue';
+	import Wave from './transitions/Wave.vue';
+	import Zip from './transitions/Zip.vue';
 
 	// Resources
 	import Img from './models/resources/Img.js';
@@ -52,21 +69,29 @@
 </script>
 
 <template>
-	<FluxTransition
-		ref="$fluxTransition" 
-		:size="{ width: 640, height: 360 }"
-		:transition="Fade"
-		:from="image05"
-		:to="image02"
-	/>
-	<!-- <FluxWrapper><FluxImage :rsc="image01" :size="size" /></FluxWrapper> -->
-	<!-- <FluxImage :rsc="image01" :size="size" /> -->
-	<!-- <FluxVortex :rsc="image01" :size="size" :circles="5" /> -->
-	<!-- <div style="perspective: 1600px; perspective-origin: center center;">
-		<FluxCube :rscs="cubeRscs" :size="size" style="transform: rotateX(0deg) rotateY(0deg); transformOrigin: 50% 50% -90px;" :depth="180" />
-	</div> -->
-	<!-- <FluxGrid :rsc="image01" :size="size" :rows="3" :cols="5" /> -->
-	<!-- <VcParagraph v-for="i of 12" :key="'a'+ i" mode="fill" style="margin-top: 24px;" /> -->
-	<!-- <FluxParallax :rsc="image01" style="height: 200px;" /> -->
-	<!-- <VcParagraph v-for="i of 12" :key="'b'+ i" mode="fill" style="margin-top: 24px;" /> -->
+	<main class="container mx-auto mb-4">
+		<VcParagraph v-for="i of 2" :key="'a'+ i" mode="fill" style="margin: 24px 0;" />
+
+		<div class="relative mx-auto" style="width: 640px; height: 360px;">
+			<FluxTransition
+				ref="$fluxTransition" 
+				:size="{ width: 640, height: 360 }"
+				:transition="Zip"
+				:from="image03"
+				:to="image05"
+			/>
+
+			<!-- <FluxVortex :rsc="image01" :size="size" :circles="5" /> -->
+		</div>
+
+		<!-- <FluxWrapper><FluxImage :rsc="image01" :size="size" /></FluxWrapper> -->
+		<!-- <FluxImage :rsc="image01" :size="size" /> -->
+		<!-- <div style="perspective: 1600px; perspective-origin: center center;">
+			<FluxCube :rscs="cubeRscs" :size="size" style="transform: rotateX(0deg) rotateY(0deg); transformOrigin: 50% 50% -90px;" :depth="180" />
+		</div> -->
+		<!-- <FluxGrid :rscs="cubeRscs" :size="size" :rows="3" :cols="5" /> -->
+		<!-- <FluxParallax :rsc="image01" style="height: 200px;" /> -->
+
+		<VcParagraph v-for="i of 2" :key="'b'+ i" mode="fill" style="margin: 24px 0;" />
+	</main>
 </template>

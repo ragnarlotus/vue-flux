@@ -33,8 +33,6 @@
 		current: Object,
 
 		options: Object,
-
-		rscs: Array,
 	});
 
 	const emit = defineEmits(['start', 'end']);
@@ -57,7 +55,7 @@
 		};
 	});
 
-	const getDuration = () => !$transition? 1 : $transition.value.totalDuration;
+	const getDuration = () => !$transition.value? 1 : $transition.value.totalDuration;
 
 	const start = () => {
 		$transition.value.onPlay();
@@ -104,7 +102,6 @@
 			:to="to"
 			:current="current"
 			:options="options"
-			:rscs="rscs"
 			:mask-style="styles.base"
 		/>
 	</div>

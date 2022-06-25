@@ -5,7 +5,7 @@
 		baseProps,
 	} from '@/models/mixins/component.js';
 
-	const cube = ref(null);
+	const $el = ref(null);
 
 	const props = defineProps({
 		...baseProps,
@@ -13,11 +13,6 @@
 		rscs: {
 			type: Object,
 			required: true,
-		},
-
-		colors: {
-			type: Object,
-			default: () => ({}),
 		},
 
 		offsets: {
@@ -50,7 +45,7 @@
 		transform,
 		show,
 		hide,
-	} = useComponentMixin(cube, props, styles);
+	} = useComponentMixin($el, props, styles);
 
 	const rotate = {
 		x: {
@@ -81,7 +76,7 @@
 
 	const sideNames = [ 'front', 'back', 'top', 'bottom', 'left', 'right' ];
 
-	const isSideDefined = side => props.rscs[side] || props.colors[side];
+	const isSideDefined = side => props.rscs[side] || props.color[side] || (typeof props.color === 'string' && props.color);
 
 	const definedSides = computed(() => sideNames.filter(side => isSideDefined(side)));
 
@@ -123,7 +118,7 @@
 			const side = {
 				ref: sideName,
 				rsc: props.rscs[sideName],
-				color: props.colors[sideName],
+				color: props.color[sideName] || props.color,
 				offset: props.offsets[sideName] || props.offset,
 				size: { ...props.size },
 				viewSize: { ...props.viewSize },
@@ -183,7 +178,7 @@
 </script>
 
 <template>
-	<div ref="cube" :style="style">
+	<div ref="$el" :style="style">
 		<FluxImage v-for="side in sides" :key="side.ref" v-bind="side" />
 	</div>
 </template>

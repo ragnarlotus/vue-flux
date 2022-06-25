@@ -86,12 +86,12 @@ export default class Img {
 		if (this.realAspectRatio <= this.adaptedAspectRatio) {
 			return {
 				width: size.width,
-				height: ceil(size.width / this.realAspectRatio),
+				height: size.width / this.realAspectRatio,
 			};
 		}
 
 		return {
-			width: ceil(this.realAspectRatio * size.height),
+			width: this.realAspectRatio * size.height,
 			height: size.height,
 		};
 	}

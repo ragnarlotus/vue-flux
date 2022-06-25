@@ -1,4 +1,4 @@
-import { computed, unref, toRefs } from 'vue';
+import { computed, unref } from 'vue';
 
 export const baseProps = {
 	color: [ String, Object ],
@@ -49,7 +49,6 @@ export default ($el, props, styles) => {
 	};
 
 	const transform = css => {
-		console.log(css);
 		$el.value.clientHeight;
 		setCss(css);
 	};

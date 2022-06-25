@@ -14,11 +14,11 @@
 		},
 
 		color: computed(() => {
-			if (!props.color || !props.color.value)
+			if (!props.color)
 				return {};
 
 			return {
-				backgroundColor: props.color.value,
+				backgroundColor: props.color,
 			};
 		}),
 

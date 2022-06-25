@@ -5,7 +5,7 @@
 		baseProps,
 	} from '@/models/mixins/component.js';
 	import FluxImage from './FluxImage.vue';
-	import FluxGrid from './FluxGrid.vue';
+	import FluxCube from './FluxCube.vue';
 
 	const $el = ref(null);
 
@@ -45,7 +45,7 @@
 		hide,
 	} = useComponentMixin($el, props, styles);
 
-	const component = computed(() => props.rscs? FluxGrid : FluxImage);
+	const component = computed(() => props.rscs? FluxCube : FluxImage);
 
 	const numRows = computed(() => ceil(props.rows));
 
@@ -114,6 +114,8 @@
 		transform,
 		show,
 		hide,
+		getRowNumber,
+		getColNumber,
 	});
 </script>
 
