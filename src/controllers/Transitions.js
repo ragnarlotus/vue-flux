@@ -1,3 +1,5 @@
+import { nextTick } from 'vue';
+
 export default class Transitions {
 
 	constructor(vf) {
@@ -99,7 +101,7 @@ export default class Transitions {
 		this.last = this.current;
 		this.reset();
 
-		vf.$nextTick(() => {
+		nextTick(() => {
 			vf.Images.last = vf.Images.current;
 
 			if (!vf.config.infinite && vf.Images.next.index === 0) {

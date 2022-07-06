@@ -1,292 +1,189 @@
 <script setup>
+	import {
+		getCurrentInstance,
+		onMounted,
+		onUnmounted,
+		ref,
+		computed,
+		watch,
+		nextTick,
+		defineExpose
+	} from 'vue';
+
 	// Controllers
 	import DisplayController from '@/controllers/Display.js';
 	import TimersController from '@/controllers/Timers.js';
 	import TransitionsController from '@/controllers/Transitions.js';
-	import ImagesController from '@/controllers/Images.js';
+	import ResourcesController from '@/controllers/Resources.js';
 	import TouchesController from '@/controllers/Touches.js';
+	import KeysController from '@/controllers/Keys.js';
+	import MouseController from '@/controllers/Mouse.js';
 
 	// Components
 	import FluxTransition from '@/components/FluxTransition.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
-	export default {
-		name: 'VueFlux',
+	const $renderingComponent = ref(null);
 
-		components: {
-			FluxImage,
-			FluxTransition,
+	const props = defineProps({
+		options: {
+			type: Object,
+			default: () => ({}),
 		},
 
-		props: {
-			options: {
-				type: Object,
-				default: () => ({}),
-			},
-
-			transitions: {
-				type: Array,
-				required: true,
-			},
-
-			images: {
-				type: Array,
-				default: () => ([]),
-			},
-
-			captions: {
-				type: Array,
-				default: () => ([]),
-			},
+		transitions: {
+			type: Array,
+			required: true,
 		},
 
-		data: () => ({
-			config: {
-				allowFullscreen: false,
-				allowToSkipTransition: true,
-				aspectRatio: '16:9',
-				autohideTime: 2500,
-				autoplay: false,
-				bindKeys: false,
-				delay: 5000,
-				enableGestures: false,
-				infinite: true,
-				lazyLoad: true,
-				lazyLoadAfter: 3,
-				path: '',
-			},
-			size: undefined,
-			loaded: false,
-			mouseOver: false,
-			Display: undefined,
-			Timers: undefined,
-			Transitions: undefined,
-			Touches: undefined,
-			Images: undefined,
-		}),
-
-		computed: {
-			style() {
-				if (!this.size)
-					return {};
-
-				if (this.Display.inFullScreen) {
-					return {
-						width: '100% !important',
-						height: '100% !important',
-					};
-				}
-
-				let { width, height } = this.size;
-
-				return {
-					width: width? width +'px' : 'auto',
-					height: height? height +'px' : 'auto',
-				};
-			},
+		rscs: {
+			type: Array,
+			default: () => ([]),
 		},
 
-		watch: {
-			options: {
-				handler() {
-					this.updateOptions();
-				},
-				deep: true,
-			},
-
-			transitions() {
-				let wasPlaying = this.config.autoplay;
-
-				this.stop(true);
-
-				this.Transitions.update(this.transitions);
-				wasPlaying && this.play();
-			},
-
-			images() {
-				let wasPlaying = this.config.autoplay;
-
-				this.stop(true);
-				this.loaded = false;
-
-				this.Images.update(this.images);
-				wasPlaying && this.play();
-			},
+		captions: {
+			type: Array,
+			default: () => ([]),
 		},
+	});
 
-		created() {
-			this.Display = new DisplayController(this);
-			this.Timers = new TimersController(this);
-			this.Images = new ImagesController(this);
-			this.Touches = new TouchesController(this);
-			this.Transitions = new TransitionsController(this);
-
-			this.updateOptions();
-
-			this.$emit('created');
-		},
-
-		mounted() {
-			this.resize();
-
-			this.Images.update(this.images);
-			this.Transitions.update(this.transitions);
-
-			this.$emit('mounted');
-		},
-
-		beforeDestroy() {
-			this.removeListeners();
-
-			this.Timers.clear();
-
-			this.$emit('destroyed');
-		},
-
-		methods: {
-			updateOptions() {
-				Object.assign(this.config, this.options);
-
-				if (this.config.autohideTime === 0)
-					this.mouseOver = true;
-
-				this.removeListeners();
-
-				window.addEventListener('resize', this.resize, {
-					passive: true,
-				});
-
-				if (this.config.bindKeys) {
-					window.addEventListener('keydown', this.keydown, {
-						passive: true,
-					});
-				}
-
-				this.$emit('options-updated');
-			},
-
-			async resize() {
-				if (!this.$refs.container)
-					return;
-
-				if (this.Transitions.current)
-					this.Transitions.end(true);
-
-				this.size = undefined;
-
-				await this.$nextTick();
-
-				let size = Dom.sizeFrom(this.$refs.container);
-
-				if (!size.height) {
-					const [ arWidth, arHeight ] = this.config.aspectRatio.split(':');
-					size.height = size.width / arWidth * arHeight;
-				}
-
-				this.size = size;
-			},
-
-			init() {
-				this.loaded = true;
-
-				if (this.config.autoplay === true)
-					this.play();
-
-				this.$emit('ready');
-			},
-
-			toggleMouseOver(over) {
-				if (this.config.autohideTime === 0)
-					return;
-
-				this.Timers.clear('mouseOver');
-
-				this.mouseOver = over;
-
-				if (this.mouseOver) {
-					this.Timers.set('mouseOver', this.config.autohideTime, () => {
-						this.mouseOver = false;
-					});
-
-				} else {
-					this.mouseOver = false;
-					this.Timers.clear('mouseOver');
-				}
-			},
-
-			toggleFullScreen() {
-				this.Display.toggleFullScreen();
-			},
-
-			play(index = 'next', delay) {
-				this.config.autoplay = true;
-
-				if (!this.Transitions.current) {
-					this.Timers.set('transition', delay || this.config.delay, () => {
-						this.show(index);
-					});
-				}
-
-				this.$emit('play', {
-					index,
-				});
-			},
-
-			stop(cancelTransition) {
-				this.config.autoplay = false;
-
-				this.Timers.clear('transition');
-
-				if (this.Transitions.current && cancelTransition)
-					this.Transitions.end(true);
-
-				this.$emit('stop');
-			},
-
-			show(index = 'next', transition) {
-				if (!this.loaded || !this.$refs.image)
-					return;
-
-				if (this.Transitions.current) {
-					if (this.config.allowToSkipTransition) {
-						this.Transitions.end(true);
-
-						this.$nextTick(() => {
-							this.show(index, transition);
-						});
-					}
-
-					return;
-				}
-
-				let from = this.Images.current;
-				let to = this.Images.getByIndex(index);
-				let direction = ['prev', 'next'].includes(index)? index : undefined;
-
-				this.Transitions.run(transition, from, to, direction);
-
-				this.$emit('show', {
-					transition,
-					from,
-					to,
-					direction,
-				});
-			},
-
-			keydown(event) {
-				if (/ArrowLeft|Left/.test(event.key))
-					this.show('prev');
-
-				else if (/ArrowRight|Right/.test(event.key))
-					this.show('next');
-			},
-
-			removeListeners() {
-				window.removeEventListener('resize', this.resize);
-				window.removeEventListener('keydown', this.keydown);
-			},
-		},
+	const config = {
+		allowFullscreen: false,
+		allowToSkipTransition: true,
+		aspectRatio: '16:9',
+		autohideTime: 2500,
+		autoplay: false,
+		bindKeys: false,
+		delay: 5000,
+		enableGestures: false,
+		infinite: true,
+		lazyLoad: true,
+		lazyLoadAfter: 3,
+		path: '',
 	};
+
+	const instance = getCurrentInstance();
+	let loaded = false;
+
+	const display = new DisplayController(instance);
+	const timers = new TimersController(instance);
+	const resources = new ResourcesController(instance);
+	const keys = new KeysController(instance);
+	const mouse = new MouseController(instance);
+	const touches = new TouchesController(instance);
+	const transitions = new TransitionsController(instance);
+
+	const setup = () => {
+		Object.assign(config, props.options);
+
+		mouse.setup();
+		keys.setup();
+	};
+
+	onMounted(() => {
+		display.updateSize();
+		setup();
+	});
+
+	onUnmounted(() => {
+		display.removeResizeListener();
+		keys.removeKeyListener();
+		timers.clear();
+	});
+
+	watch(props.options, () => {
+		setup();
+	});
+
+	watch(props.rscs, () => {
+		updateFromProps('rscs');
+	});
+
+	watch(props.transitions, () => {
+		updateFromProps('transitions');
+	});
+
+	const updateFromProps = prop => {
+		const wasPlaying = this.config.autoplay;
+
+		stop(true);
+
+		const toUpdate = {
+			rscs: () => resources.update(props.rscs),
+			transitions: () => transitions.update(props.transitions),
+		};
+
+		toUpdate[prop]();
+
+		wasPlaying && play();
+	};
+
+	const play = (index = 'next', delay) => {
+		config.autoplay = true;
+
+		if (!transitions.current) {
+			timers.set('transition', delay || config.delay, () => {
+				show(index);
+			});
+		}
+	};
+
+	const stop = (cancelTransition = false) => {
+		config.autoplay = false;
+
+		timers.clear('transition');
+
+		if (transitions.current && cancelTransition)
+			transitions.end(true);
+	};
+
+	const show = (index = 'next', transition) => {
+		if (!loaded || !$renderingComponent.value)
+			return;
+
+		if (transitions.current) {
+			if (config.allowToSkipTransition) {
+				transitions.end(true);
+
+				nextTick(() => {
+					show(index, transition);
+				});
+			}
+
+			return;
+		}
+
+		const from = resources.current;
+		const to = resources.getByIndex(index);
+		const direction = ['prev', 'next'].includes(index)? index : undefined;
+
+		transitions.run(transition, from, to, direction);
+	};
+
+	const style = computed(() => {
+		if (!display.size.height)
+			return {};
+
+		if (display.inFullScreen) {
+			return {
+				width: '100% !important',
+				height: '100% !important',
+			};
+		}
+
+		const { width, height } = display.size;
+
+		return {
+			width: width +'px',
+			height: height +'px',
+		};
+	});
+
+	defineExpose({
+		show,
+		play,
+		stop,
+	});
 </script>
 
 <template>
@@ -294,34 +191,34 @@
 		ref="container"
 		class="vue-flux"
 		:style="style"
-		@mousemove="toggleMouseOver(true)"
-		@mouseleave="toggleMouseOver(false)"
-		@dblclick="Display.toggleFullScreen()"
-		@touchstart="Touches.start($event)"
-		@touchend="Touches.end($event)"
+		@mousemove="mouse.toggle(true)"
+		@mouseleave="mouse.toggle(false)"
+		@dblclick="display.toggleFullScreen()"
+		@touchstart="touches.start($event)"
+		@touchend="touches.end($event)"
 	>
 		<FluxTransition
-			v-if="Transitions.current"
+			v-if="transitions.current"
 			ref="transition"
-			:transition="Transitions.current"
+			:transition="transitions.current"
 			:size="size"
-			:from="Transitions.from"
-			:to="Transitions.to"
+			:from="transitions.from"
+			:to="transitions.to"
 			:rendering-component="$renderingComponent"
-			:options="Transitions.current.options"
-			:images="Images.imgs"
-			@start="Transitions.start()"
-			@end="Transitions.end()"
+			:options="transitions.current.options"
+			:images="resources.list"
+			@start="transitions.start()"
+			@end="transitions.end()"
 		/>
 
 		<FluxImage
-			v-if="Images.current"
+			v-if="resources.current"
 			ref="$renderingComponent"
 			:size="size"
-			:rsc="Images.current"
+			:rsc="resources.current"
 		/>
 
-		<div v-if="size" class="complements">
+		<div v-if="size.height" class="complements">
 			<slot name="preloader" />
 			<slot name="caption" />
 			<div class="remainder upper" />

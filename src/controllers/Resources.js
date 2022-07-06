@@ -72,6 +72,8 @@ export default class Resources {
 	}
 
 	update(srcs) {
+		this.vf.loaded = false;
+
 		this.reset();
 
 		this.srcs = [...srcs];
@@ -118,7 +120,8 @@ export default class Resources {
 		if (this.loaded.total < this.srcs.length)
 			this.lazyLoadStart();
 
-		vf.init();
+		vf.loaded = true;
+		vf.config.autoplay && vf.play();
 	}
 
 	lazyLoadStart() {

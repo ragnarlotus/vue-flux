@@ -21,7 +21,7 @@ export default ($el, props, styles) => {
 	styles.size = computed(() => {
 		const size = props.size;
 
-		if (!size || !('width' in size) || !('height' in size)) {
+		if (!size || !size.width || !size.height) {
 			return {};
 		}
 

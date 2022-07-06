@@ -141,7 +141,7 @@
 
 				let { index } = this.$refs;
 
-				this.$nextTick(() => {
+				nextTick(() => {
 					index.clientHeight;
 					index.style.marginTop = 0;
 				});
