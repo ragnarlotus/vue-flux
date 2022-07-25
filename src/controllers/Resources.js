@@ -1,8 +1,8 @@
 import Img from '../models/resources/Img';
 
 export default class Resources {
-	$current;
-	$last;
+	currentIndex;
+	lastIndex;
 
 	constructor(vf) {
 		this.vf = vf;
@@ -203,6 +203,13 @@ export default class Resources {
 
 	updateIndexes() {
 		this.imgs.forEach((img, i) => img.index = i);
+	}
+
+	getDirection(index) {
+		if (['prev', 'next'].includes(index))
+			return index;
+
+		return this.current < index? 'next' : 'prev';
 	}
 
 	getByIndex(index) {

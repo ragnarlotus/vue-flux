@@ -12,6 +12,7 @@
 	import FluxParallax from './components/FluxParallax.vue';
 	import FluxWrapper from './components/FluxWrapper.vue';
 	import FluxTransition from './components/FluxTransition.vue';
+	import FluxFlux from './components/FluxFlux.vue';
 
 	// Flux transitions
 	import Blinds2D from './transitions/Blinds2D.vue';

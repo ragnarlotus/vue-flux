@@ -6,7 +6,6 @@
 		ref,
 		computed,
 		watch,
-		nextTick,
 		defineExpose
 	} from 'vue';
 
@@ -18,11 +17,14 @@
 	import TouchesController from '@/controllers/Touches.js';
 	import KeysController from '@/controllers/Keys.js';
 	import MouseController from '@/controllers/Mouse.js';
+	import ControllerController from '@/controllers/Controller.js';
 
 	// Components
 	import FluxTransition from '@/components/FluxTransition.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
+	const $container = ref(null);
+	const $transition = ref(null);
 	const $renderingComponent = ref(null);
 
 	const props = defineProps({
@@ -63,7 +65,7 @@
 	};
 
 	const instance = getCurrentInstance();
-	let loaded = false;
+	const loaded = ref(false);
 
 	const display = new DisplayController(instance);
 	const timers = new TimersController(instance);
@@ -72,6 +74,7 @@
 	const mouse = new MouseController(instance);
 	const touches = new TouchesController(instance);
 	const transitions = new TransitionsController(instance);
+	const controller = new ControllerController(instance);
 
 	const setup = () => {
 		Object.assign(config, props.options);
@@ -79,17 +82,6 @@
 		mouse.setup();
 		keys.setup();
 	};
-
-	onMounted(() => {
-		display.updateSize();
-		setup();
-	});
-
-	onUnmounted(() => {
-		display.removeResizeListener();
-		keys.removeKeyListener();
-		timers.clear();
-	});
 
 	watch(props.options, () => {
 		setup();
@@ -115,50 +107,22 @@
 
 		toUpdate[prop]();
 
-		wasPlaying && play();
+		wasPlaying && controller.play();
 	};
 
-	const play = (index = 'next', delay) => {
-		config.autoplay = true;
+	onMounted(() => {
+		display.updateSize();
+		setup();
 
-		if (!transitions.current) {
-			timers.set('transition', delay || config.delay, () => {
-				show(index);
-			});
-		}
-	};
+		resources.update(props.rscs);
+		transitions.update(props.transitions);
+	});
 
-	const stop = (cancelTransition = false) => {
-		config.autoplay = false;
-
-		timers.clear('transition');
-
-		if (transitions.current && cancelTransition)
-			transitions.end(true);
-	};
-
-	const show = (index = 'next', transition) => {
-		if (!loaded || !$renderingComponent.value)
-			return;
-
-		if (transitions.current) {
-			if (config.allowToSkipTransition) {
-				transitions.end(true);
-
-				nextTick(() => {
-					show(index, transition);
-				});
-			}
-
-			return;
-		}
-
-		const from = resources.current;
-		const to = resources.getByIndex(index);
-		const direction = ['prev', 'next'].includes(index)? index : undefined;
-
-		transitions.run(transition, from, to, direction);
-	};
+	onUnmounted(() => {
+		display.removeResizeListener();
+		keys.removeKeyListener();
+		timers.clear();
+	});
 
 	const style = computed(() => {
 		if (!display.size.height)
@@ -180,15 +144,15 @@
 	});
 
 	defineExpose({
-		show,
-		play,
-		stop,
+		show: controller.show,
+		play: controller.play,
+		stop: controller.stop,
 	});
 </script>
 
 <template>
 	<div
-		ref="container"
+		ref="$container"
 		class="vue-flux"
 		:style="style"
 		@mousemove="mouse.toggle(true)"
@@ -198,15 +162,15 @@
 		@touchend="touches.end($event)"
 	>
 		<FluxTransition
-			v-if="transitions.current"
-			ref="transition"
-			:transition="transitions.current"
+			v-if="controller.transition"
+			ref="$transition"
+			:transition="transitions.list[transitions.current]"
 			:size="size"
-			:from="transitions.from"
-			:to="transitions.to"
+			:from="controller.resource.from"
+			:to="controller.resource.to"
 			:rendering-component="$renderingComponent"
 			:options="transitions.current.options"
-			:images="resources.list"
+			:rscs="resources.list"
 			@start="transitions.start()"
 			@end="transitions.end()"
 		/>

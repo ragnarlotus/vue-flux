@@ -68,8 +68,6 @@ export default class Display {
 		const { $container } = this.vf;
 
 		methods.find(method => method in $container? $container[method]() || true : false);
-
-		this.vf.$emit('fullscreen-enter');
 	}
 
 	async exitFullScreen() {
@@ -81,8 +79,6 @@ export default class Display {
 		];
 
 		methods.find(method => method in document? document[method]() || true : false);
-
-		this.vf.$emit('fullscreen-exit');
 	}
 
 }

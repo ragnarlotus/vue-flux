@@ -3,6 +3,7 @@
 		ref,
 		reactive,
 		computed,
+		onMounted,
 		onUnmounted,
 	} from 'vue';
 
@@ -80,6 +81,10 @@
 			options: props.options,
 		});
 	};
+
+	onMounted(() => {
+		start();
+	});
 
 	onUnmounted(() => {
 		if (props.current)
