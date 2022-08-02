@@ -43,8 +43,8 @@
 	};
 
 	const onPlay = () => {
-		if (props.current)
-			props.current.hide();
+		if (props.displayComponent)
+			props.displayComponent.hide();
 
 		$grid.value.transform((tile, i) => {
 			tile.setCss({

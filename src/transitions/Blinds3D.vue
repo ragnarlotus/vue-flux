@@ -36,8 +36,8 @@
 	};
 
 	const onPlay = () => {
-		if (props.current)
-			props.current.hide();
+		if (props.displayComponent)
+			props.displayComponent.hide();
 
 		const sides = {
 			prev: 'backl',

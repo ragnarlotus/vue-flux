@@ -184,11 +184,11 @@
 			if (positionY < view.height)
 				pct = 0;
 
-			else if (positionY > view.height)
+			else if (positionY > display.height)
 				pct = 100;
 
 			else
-				pct = (positionY - view.height) * 100 / (view.height - view.height);
+				pct = (positionY - view.height) * 100 / (display.height - view.height);
 
 			moveBackgroundByPct(pct);
 		},

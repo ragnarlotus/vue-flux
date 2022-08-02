@@ -16,12 +16,16 @@ export default class Controller {
 	}
 
 	play(index = 'next', delay = 0) {
-		const { vf } = this;
+		const { vf: {
+			config,
+			transitions,
+			timers,
+		} } = this;
 
-		vf.config.autoplay = true;
+		config.autoplay = true;
 
-		if (!this.transition) {
-			vf.timers.set('transition', delay || vf.config.delay, () => {
+		if (!transitions.current.value) {
+			timers.set('transition', delay || config.delay, () => {
 				this.show(index);
 			});
 		}
@@ -38,17 +42,22 @@ export default class Controller {
 			vf.transitions.end(true);
 	}
 
-	show(resource = 'next', transition = null) {
-		const { vf } = this;
+	show(resource = 'next', transition = 'next') {
+		const {
+			vf: {
+				loaded,
+				config,
+				transitions,
+				$displayComponent,
+			},
+		} = this;
 
-		vf.timers.clear('transition');
-
-		if (!vf.loaded.value || !this.resource.current)
+		if (!loaded.value || !$displayComponent.value)
 			return;
 
-		if (this.transition.current) {
-			if (vf.config.allowToSkipTransition) {
-				vf.transitions.end(true);
+		if (transitions.current.value !== null) {
+			if (config.allowToSkipTransition) {
+				transitions.end(true);
 
 				nextTick(() => {
 					this.show(resource, transition);
@@ -58,24 +67,7 @@ export default class Controller {
 			return;
 		}
 
-		this.from = from;
-		this.to = to;
-		this.current = transition;
-
-
-		let direction = vf.resources.getDirection(resource);
-
-		this.vf.timers.clear('transition');
-
-		if (!transition.options.direction) {
-			if (!direction)
-				direction = this.resource.from < this.resource.to? 'next' : 'prev';
-
-			transition.options.direction = direction;
-		}
-
-		vf.transitions.run(transition, vf.resources.current, resource, direction);
-
+		transitions.run(transition, resource);
 	}
 
 	transitionStart() {

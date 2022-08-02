@@ -15,11 +15,6 @@
 			required: true,
 		},
 
-		offsets: {
-			type: Object,
-			default: () => ({}),
-		},
-
 		depth: {
 			type: Number,
 			default: 0,
@@ -76,7 +71,7 @@
 
 	const sideNames = [ 'front', 'back', 'top', 'bottom', 'left', 'right' ];
 
-	const isSideDefined = side => props.rscs[side] || props.color[side] || (typeof props.color === 'string' && props.color);
+	const isSideDefined = side => props.rscs[side] || (props.color !== null && props.color[side] || (typeof props.color === 'string' && props.color.length));
 
 	const definedSides = computed(() => sideNames.filter(side => isSideDefined(side)));
 
@@ -118,8 +113,8 @@
 			const side = {
 				ref: sideName,
 				rsc: props.rscs[sideName],
-				color: props.color[sideName] || props.color,
-				offset: props.offsets[sideName] || props.offset,
+				color: props.color !== null? props.color[sideName] || props.color : null,
+				offset: props.offset !== null? props.offset[sideName] || props.offset : null,
 				size: { ...props.size },
 				viewSize: { ...props.viewSize },
 				style: {

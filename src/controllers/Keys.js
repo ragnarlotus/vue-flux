@@ -22,12 +22,12 @@ export default class Keys {
 
 	keydown(event) {
 		if (['ArrowLeft', 'Left'].includes(event.key)) {
-			this.vf.show('prev');
+			this.vf.controller.show('prev');
 			return;
 		}
 
 		if (['ArrowRight', 'Right'].includes(event.key)) {
-			this.vf.show('next');
+			this.vf.controller.show('next');
 			return;
 		}
 	}

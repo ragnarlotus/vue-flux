@@ -12,7 +12,7 @@
 	import FluxParallax from './components/FluxParallax.vue';
 	import FluxWrapper from './components/FluxWrapper.vue';
 	import FluxTransition from './components/FluxTransition.vue';
-	import FluxFlux from './components/FluxFlux.vue';
+	import VueFlux from './components/VueFlux.vue';
 
 	// Flux transitions
 	import Blinds2D from './transitions/Blinds2D.vue';
@@ -64,7 +64,7 @@
 	const $fluxTransition = ref(null);
 
 	setTimeout(() => {
-		//console.log($fluxTransition.value.start);
+		// console.log($fluxTransition.value.start);
 		$fluxTransition.value.start();
 	}, 2000);
 </script>
@@ -77,7 +77,7 @@
 			<FluxTransition
 				ref="$fluxTransition" 
 				:size="{ width: 640, height: 360 }"
-				:transition="Zip"
+				:transition="Explode"
 				:from="image03"
 				:to="image05"
 			/>
@@ -91,7 +91,7 @@
 			<FluxCube :rscs="cubeRscs" :size="size" style="transform: rotateX(0deg) rotateY(0deg); transformOrigin: 50% 50% -90px;" :depth="180" />
 		</div> -->
 		<!-- <FluxGrid :rscs="cubeRscs" :size="size" :rows="3" :cols="5" /> -->
-		<!-- <FluxParallax :rsc="image01" style="height: 200px;" /> -->
+		<!-- <FluxParallax :rsc="image01" type="visible" style="height: 200px;" /> -->
 
 		<VcParagraph v-for="i of 2" :key="'b'+ i" mode="fill" style="margin: 24px 0;" />
 	</main>

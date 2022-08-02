@@ -31,12 +31,12 @@
 			required: true,
 		},
 
-		current: Object,
+		displayComponent: Object,
 
 		options: Object,
 	});
 
-	const emit = defineEmits(['start', 'end']);
+	const emit = defineEmits(['ready', 'start', 'end']);
 
 	const styles = reactive({
 		base: {
@@ -83,12 +83,12 @@
 	};
 
 	onMounted(() => {
-		start();
+		emit('ready');
 	});
 
 	onUnmounted(() => {
-		if (props.current)
-			props.current.show();
+		if (props.displayComponent)
+			props.displayComponent.show();
 	});
 
 	defineExpose({
@@ -105,7 +105,7 @@
 			:size="size"
 			:from="from"
 			:to="to"
-			:current="current"
+			:display-component="displayComponent"
 			:options="options"
 			:mask-style="styles.base"
 		/>

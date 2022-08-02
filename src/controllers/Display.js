@@ -58,27 +58,11 @@ export default class Display {
 		if (!this.vf.config.allowFullscreen)
 			return;
 
-		const methods = [
-			'requestFullscreen',
-			'mozRequestFullScreen',
-			'webkitRequestFullscreen',
-			'msRequestFullscreen',
-		];
-
-		const { $container } = this.vf;
-
-		methods.find(method => method in $container? $container[method]() || true : false);
+		this.vf.$container.requestFullscreen();
 	}
 
 	async exitFullScreen() {
-		const methods = [
-			'exitFullscreen',
-			'mozCancelFullScreen',
-			'webkitExitFullscreen',
-			'msExitFullscreen',
-		];
-
-		methods.find(method => method in document? document[method]() || true : false);
+		this.vf.$container.exitFullscreen();
 	}
 
 }

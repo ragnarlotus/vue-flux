@@ -6,7 +6,6 @@
 		ref,
 		computed,
 		watch,
-		defineExpose
 	} from 'vue';
 
 	// Controllers
@@ -25,7 +24,7 @@
 
 	const $container = ref(null);
 	const $transition = ref(null);
-	const $renderingComponent = ref(null);
+	const $displayComponent = ref(null);
 
 	const props = defineProps({
 		options: {
@@ -68,7 +67,7 @@
 	const loaded = ref(false);
 
 	const display = new DisplayController(instance);
-	const timers = new TimersController(instance);
+	const timers = new TimersController();
 	const resources = new ResourcesController(instance);
 	const keys = new KeysController(instance);
 	const mouse = new MouseController(instance);
@@ -162,13 +161,13 @@
 		@touchend="touches.end($event)"
 	>
 		<FluxTransition
-			v-if="controller.transition"
+			v-if="transitions.current.value"
 			ref="$transition"
-			:transition="transitions.list[transitions.current]"
-			:size="size"
+			:transition="transitions.list[transitions.current.value]"
+			:size="display.size"
 			:from="controller.resource.from"
 			:to="controller.resource.to"
-			:rendering-component="$renderingComponent"
+			:display-component="$displayComponent"
 			:options="transitions.current.options"
 			:rscs="resources.list"
 			@start="transitions.start()"
@@ -177,7 +176,7 @@
 
 		<FluxImage
 			v-if="resources.current"
-			ref="$renderingComponent"
+			ref="$displayComponent"
 			:size="size"
 			:rsc="resources.current"
 		/>

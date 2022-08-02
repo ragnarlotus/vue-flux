@@ -110,4 +110,12 @@ export default class Img {
 		};
 	}
 
+	renderTransitionComponent() {
+
+	}
+
+	renderDisplayComponent() {
+
+	}
+
 }

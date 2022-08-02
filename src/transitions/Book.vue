@@ -41,7 +41,7 @@
 			front: props.from,
 			back: props.to,
 		},
-		offsets: {},
+		offset: {},
 		css: {
 			position: 'absolute',
 			top: 0,
@@ -60,7 +60,7 @@
 			image.offset.left = halfWidth;
 			image.css.left = halfWidthPx;
 
-			cube.offsets.back = {
+			cube.offset.back = {
 				left: halfWidth,
 			};
 
@@ -71,7 +71,7 @@
 		},
 
 		next: () => {
-			cube.offsets.front = {
+			cube.offset.front = {
 				left: halfWidth,
 			};
 
@@ -119,7 +119,7 @@
 			:rscs="cube.rscs"
 			:size="size"
 			:view-size="viewSize"
-			:offsets="cube.offsets"
+			:offset="cube.offset"
 			:sides-css="cube.sidesCss"
 			:css="cube.css"
 		/>

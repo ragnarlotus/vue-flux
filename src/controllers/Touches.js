@@ -37,7 +37,7 @@ export default class Touches {
 		const offsetY = event.changedTouches[0].clientY - this.startY;
 
 		if (this.tap(offsetX, offsetY)) {
-			vf.toggleMouseOver(true);
+			vf.mouse.toggle(true);
 			return;
 		}
 
@@ -55,12 +55,12 @@ export default class Touches {
 
 	doubleTap = () => this.endTime - this.prevTouchTime < this.doubleTapThreshold;
 
-	slideLeft = offsetX => offsetX < 0 && offsetX < -(this.vf.size.width * this.slideTrigger);
+	slideLeft = offsetX => offsetX < 0 && offsetX < -(this.vf.display.size.width * this.slideTrigger);
 
-	slideRight = offsetX => offsetX > 0 && offsetX > this.vf.size.width * this.slideTrigger;
+	slideRight = offsetX => offsetX > 0 && offsetX > this.vf.display.size.width * this.slideTrigger;
 
-	slideUp = offsetY => offsetY < 0 && offsetY < -(this.vf.size.height * this.slideTrigger);
+	slideUp = offsetY => offsetY < 0 && offsetY < -(this.vf.display.size.height * this.slideTrigger);
 
-	slideDown = offsetY => offsetY > 0 && offsetY > this.vf.size.height * this.slideTrigger;
+	slideDown = offsetY => offsetY > 0 && offsetY > this.vf.display.size.height * this.slideTrigger;
 
 }

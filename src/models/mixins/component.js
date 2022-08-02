@@ -1,7 +1,10 @@
 import { computed, unref } from 'vue';
 
 export const baseProps = {
-	color: [ String, Object ],
+	color: {
+		type: [ String, Object ],
+		default: () => (null),
+	},
 
 	rsc: Object,
 
@@ -12,7 +15,10 @@ export const baseProps = {
 		default: () => ({}),
 	},
 
-	offset: Object,
+	offset: {
+		type: [ Number, Object ],
+		default: () => ({}),
+	},
 
 	css: Object,
 };

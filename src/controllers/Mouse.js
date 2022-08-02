@@ -25,13 +25,13 @@ export default class Mouse {
 		this[over? 'over' : 'out']();
 	}
 
-	over() {
+	out() {
 		this.vf.timers.set('mouseOver', this.vf.config.autohideTime, () => {
 			this.isOver.value = false;
 		});
 	}
 
-	out() {
+	over() {
 		this.vf.timers.clear('mouseOver');
 	}
 

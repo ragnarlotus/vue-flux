@@ -1,12 +1,32 @@
+import { ref, reactive } from 'vue';
 import Img from '../models/resources/Img';
 
 export default class Resources {
-	currentIndex;
-	lastIndex;
+	list = reactive([]);
+	current = ref(null);
+	last = ref(null);
 
 	constructor(vf) {
 		this.vf = vf;
 		this.reset(true);
+	}
+
+	getPrevIndex() {
+		const index = this.last.value - 1;
+
+		if (index < 0)
+			return this.list.length - 1;
+
+		return index;
+	}
+
+	getNextIndex() {
+		const index = this.last.value + 1;
+
+		if (index >= this.list.length)
+			return 0;
+
+		return index;
 	}
 
 	get prev() {
@@ -16,25 +36,6 @@ export default class Resources {
 			index = this.imgs.length - 1;
 
 		return this.imgs[index];
-	}
-
-	get last() {
-		return this.$last;
-	}
-
-	set last(image) {
-		this.$last = image;
-	}
-
-	get current() {
-		return this.$current;
-	}
-
-	set current(image) {
-		if (this.$current)
-			this.last = this.$current;
-
-		this.$current = image;
 	}
 
 	get next() {
@@ -201,28 +202,27 @@ export default class Resources {
 		this.loaded.current = 0;
 	}
 
-	updateIndexes() {
-		this.imgs.forEach((img, i) => img.index = i);
-	}
-
 	getDirection(index) {
 		if (['prev', 'next'].includes(index))
 			return index;
 
-		return this.current < index? 'next' : 'prev';
+		return this.current.value < index? 'next' : 'prev';
 	}
 
 	getByIndex(index) {
-		if (index === 'next')
-			return this.next;
-
 		if (index === 'prev')
-			return this.prev;
+			index = this.getPrevIndex();
 
-		if (!this.imgs[index])
+		else if (index === 'next')
+			index = this.getNextIndex();
+
+		else if (!this.list[index])
 			throw new ReferenceError(`Image ${index} not found`);
 
-		return this.imgs[index];
+		return {
+			index,
+			resource: this.list[index],
+		};
 	}
 
 }
