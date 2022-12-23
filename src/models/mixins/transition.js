@@ -2,11 +2,11 @@ export const baseProps = {
 	size: Object,
 
 	from: {
-		type: [ String, Object ],
+		type: [String, Object],
 		required: true,
 	},
 
-	to: [ String, Object ],
+	to: [String, Object],
 
 	current: Object,
 
@@ -16,8 +16,10 @@ export const baseProps = {
 	},
 
 	maskStyle: Object,
+
+	displayComponent: Object,
 };
 
 export default (options, conf) => {
 	Object.assign(conf, { direction: 'next' }, options);
-}
+};

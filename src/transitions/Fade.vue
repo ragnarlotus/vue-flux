@@ -1,6 +1,8 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
+	import useTransitionMixin, {
+		baseProps,
+	} from '@/models/mixins/transition.js';
 	import FluxImage from '@/components/FluxImage.vue';
 
 	const $image = ref(null);
@@ -31,10 +33,5 @@
 </script>
 
 <template>
-	<FluxImage
-		ref="$image"
-		:rsc="from"
-		:size="size"
-		:css="imageCss"
-	/>
+	<FluxImage ref="$image" :rsc="from" :size="size" :css="imageCss" />
 </template>

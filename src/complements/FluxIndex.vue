@@ -30,8 +30,8 @@
 
 <script>
 	import BaseComplement from '@/mixins/BaseComplement';
-	import FluxButton from '@/components/FluxButton';
-	import FluxImage from '@/components/FluxImage';
+	import FluxButton from '@/components/FluxButton.vue';
+	import FluxImage from '@/components/FluxImage.vue';
 
 	export default {
 		name: 'FluxIndex',

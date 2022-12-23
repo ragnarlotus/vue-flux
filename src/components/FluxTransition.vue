@@ -5,6 +5,7 @@
 		computed,
 		onMounted,
 		onUnmounted,
+		nextTick,
 	} from 'vue';
 
 	const $el = ref(null);
@@ -36,14 +37,14 @@
 		options: Object,
 	});
 
-	const emit = defineEmits(['ready', 'start', 'end']);
+	const emit = defineEmits(['start', 'end']);
 
 	const styles = reactive({
 		base: {
 			overflow: 'hidden',
 			perspective: 'none',
 			zIndex: 3,
-		}
+		},
 	});
 
 	const style = computed(() => {
@@ -51,16 +52,15 @@
 
 		return {
 			...styles.base,
-			width: width +'px',
-			height: height +'px',
+			width: width + 'px',
+			height: height + 'px',
 		};
 	});
 
-	const getDuration = () => !$transition.value? 1 : $transition.value.totalDuration;
+	const getDuration = () =>
+		!$transition.value ? 1 : $transition.value.totalDuration;
 
-	const start = () => {
-		$transition.value.onPlay();
-
+	onMounted(async () => {
 		emit('start', {
 			transition: props.transition,
 			from: props.from,
@@ -68,32 +68,24 @@
 			options: props.options,
 		});
 
+		await nextTick();
+
+		$transition.value.onPlay();
+
 		setTimeout(() => {
-			end();
+			emit('end', {
+				transition: props.transition,
+				from: props.from,
+				to: props.to,
+				options: props.options,
+			});
 		}, getDuration());
-	};
-
-	const end = () => {
-		emit('end', {
-			transition: props.transition,
-			from: props.from,
-			to: props.to,
-			options: props.options,
-		});
-	};
-
-	onMounted(() => {
-		emit('ready');
 	});
 
 	onUnmounted(() => {
-		if (props.displayComponent)
+		if (props.displayComponent) {
 			props.displayComponent.show();
-	});
-
-	defineExpose({
-		start,
-		end,
+		}
 	});
 </script>
 

@@ -1,30 +1,33 @@
-import { reactive, nextTick } from 'vue';
+import { shallowRef, shallowReactive, nextTick } from 'vue';
 
 export default class Controller {
-	transition = reactive({
-		current: null,
-		last: null,
-	});
+	transition = shallowRef(null);
 
-	resource = reactive({
+	resource = shallowReactive({
 		from: null,
 		to: null,
 	});
 
-	constructor(vf) {
-		this.vf = vf;
+	setup(config, transitions, resources, timers, $displayComponent) {
+		this.config = config;
+		this.transitions = transitions;
+		this.resources = resources;
+		this.timers = timers;
+		this.$displayComponent = $displayComponent;
+	}
+
+	reset() {
+		this.transition.value = null;
+		this.resource.from = null;
+		this.resource.to = null;
 	}
 
 	play(index = 'next', delay = 0) {
-		const { vf: {
-			config,
-			transitions,
-			timers,
-		} } = this;
+		const { config, timers } = this;
 
 		config.autoplay = true;
 
-		if (!transitions.current.value) {
+		if (!this.transition.value !== null) {
 			timers.set('transition', delay || config.delay, () => {
 				this.show(index);
 			});
@@ -32,32 +35,27 @@ export default class Controller {
 	}
 
 	stop(cancelTransition = false) {
-		const { vf } = this;
+		const { config, transitions, timers } = this;
 
-		vf.config.autoplay = false;
+		config.autoplay = false;
 
-		vf.timers.clear('transition');
+		timers.clear('transition');
 
-		if (this.transition && cancelTransition)
-			vf.transitions.end(true);
+		if (this.transition.value && cancelTransition) {
+			transitions.end();
+		}
 	}
 
 	show(resource = 'next', transition = 'next') {
-		const {
-			vf: {
-				loaded,
-				config,
-				transitions,
-				$displayComponent,
-			},
-		} = this;
+		const { resources, config, transitions, $displayComponent } = this;
 
-		if (!loaded.value || !$displayComponent.value)
+		if (resources.ready.value === false || $displayComponent.value === null) {
 			return;
+		}
 
-		if (transitions.current.value !== null) {
+		if (this.transition.value !== null) {
 			if (config.allowToSkipTransition) {
-				transitions.end(true);
+				transitions.end();
 
 				nextTick(() => {
 					this.show(resource, transition);
@@ -69,13 +67,4 @@ export default class Controller {
 
 		transitions.run(transition, resource);
 	}
-
-	transitionStart() {
-	}
-
-
-	transitionFinish() {
-
-	}
-
 }

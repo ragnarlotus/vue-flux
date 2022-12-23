@@ -1,228 +1,187 @@
-import { ref, reactive } from 'vue';
-import Img from '../models/resources/Img';
+import { ref, shallowRef, toRaw } from 'vue';
+import { ceil } from '../models/libs/math.js';
 
 export default class Resources {
-	list = reactive([]);
-	current = ref(null);
-	last = ref(null);
+	ready = ref(false);
+	list = [];
+	current = shallowRef(null);
+	last = null;
 
-	constructor(vf) {
-		this.vf = vf;
-		this.reset(true);
+	setup(config, controller, display) {
+		this.config = config;
+		this.controller = controller;
+		this.display = display;
 	}
 
 	getPrevIndex() {
-		const index = this.last.value - 1;
-
-		if (index < 0)
-			return this.list.length - 1;
-
-		return index;
+		return this.last === null || this.last.index === 0
+			? this.list.length - 1
+			: this.last.index - 1;
 	}
 
 	getNextIndex() {
-		const index = this.last.value + 1;
-
-		if (index >= this.list.length)
-			return 0;
-
-		return index;
+		return this.current.value.index >= this.list.length - 1
+			? 0
+			: this.current.value.index + 1;
 	}
 
-	get prev() {
-		let index = this.$current.index - 1;
+	getByIndex(index) {
+		if (index === 'prev') {
+			index = this.getPrevIndex();
+		} else if (index === 'next') {
+			index = this.getNextIndex();
+		} else if (!this.list[index]) {
+			throw new ReferenceError(`Image ${index} not found`);
+		}
 
-		if (index < 0)
-			index = this.imgs.length - 1;
-
-		return this.imgs[index];
+		return {
+			index,
+			rsc: this.list[index],
+		};
 	}
 
-	get next() {
-		let index = this.$current.index + 1;
+	reset() {
+		this.ready.value = false;
+		this.list.length = 0;
+		this.current.value = null;
+		this.last = null;
 
-		if (index >= this.imgs.length)
-			index = 0;
-
-		return this.imgs[index];
-	}
-
-	reset(hard = false) {
-		if (hard)
-			this.$last = undefined;
-
-		this.srcs = [];
-		this.imgs = [];
 		this.loading = [];
-
-		this.loaded = {
-			current: 0,
+		this.loadCounter = {
 			success: 0,
 			error: 0,
 			total: 0,
 		};
 		this.progress = 0;
 
-		this.toPreload = 0;
-		this.toLazyload = 0;
+		this.isPreloading = false;
+		this.numToPreload = 0;
 
-		this.preloading = false;
-		this.lazyloading = false;
-
-		this.$current = undefined;
+		this.isLazyloading = false;
+		this.numToLazyload = 0;
 	}
 
-	update(srcs) {
-		this.vf.loaded = false;
-
+	update(rscs) {
 		this.reset();
+		this.loading = [...toRaw(rscs)];
 
-		this.srcs = [...srcs];
+		this.numToPreload = this.config.lazyLoad
+			? this.config.lazyLoadAfter
+			: this.loading.length;
 
-		const { config } = this.vf;
-
-		this.toPreload = config.lazyLoad? config.lazyLoadAfter : this.srcs.length;
-
-		if (this.toPreload >= this.srcs.length) {
-			this.toPreload = this.srcs.length;
+		if (this.numToPreload >= this.loading.length) {
+			this.numToPreload = this.loading.length;
 		} else {
-			this.toLazyload = this.srcs.length - this.toPreload;
+			this.numToLazyload = this.loading.length - this.numToPreload;
 		}
 
 		this.preloadStart();
 	}
 
 	preloadStart() {
-		const { vf, loaded } = this;
+		this.isPreloading = true;
 
-		this.preloading = true;
-		vf.$emit('images-preload-start');
+		const { loadCounter } = this;
 
-		const toLoad = this.toPreload - loaded.success;
-		this.loading = this.srcs.slice(loaded.total, loaded.total + toLoad);
+		const numToLoad = this.numToPreload - loadCounter.success;
 
-		this.loaded.current = 0;
-		this.loading.forEach((src, i) => this.addImg(src, i, loaded.total));
+		this.loading
+			.slice(loadCounter.total, loadCounter.total + numToLoad)
+			.forEach((rsc, index) => this.load(rsc, index));
 	}
 
 	preloadEnd() {
-		const { vf } = this;
+		if (
+			this.loadCounter.success < this.numToPreload &&
+			this.loadCounter.total < this.numToPreload
+		) {
+			this.preloadStart();
+			return;
+		}
 
-		this.addLoadedSuccessfully();
+		this.isPreloading = false;
 
-		if (this.loaded.success < this.toPreload && this.loaded.total < this.toPreload)
-			return this.preloadStart();
+		this.list.splice(
+			0,
+			this.list.filter((rsc) => rsc.isLoaded())
+		);
 
-		this.updateIndexes();
+		this.current.value = this.getByIndex(0);
 
-		this.preloading = false;
-		vf.$emit('images-preload-end');
-
-		if (this.loaded.total < this.srcs.length)
+		if (this.loadCounter.total < this.loading.length) {
 			this.lazyLoadStart();
+		}
 
-		vf.loaded = true;
-		vf.config.autoplay && vf.play();
-	}
+		this.ready.value = true;
 
-	lazyLoadStart() {
-		const { vf, loaded } = this;
-
-		this.lazyloading = true;
-		vf.$emit('images-lazy-load-start');
-
-		this.loading = this.srcs.slice(loaded.total);
-		this.loaded.current = 0;
-		this.loading.forEach((src, i) => this.addImg(src, i, loaded.total));
-	}
-
-	lazyLoadEnd() {
-		this.addLoadedSuccessfully();
-		this.updateIndexes();
-
-		this.lazyloading = false;
-		this.vf.$emit('images-lazy-load-end');
-	}
-
-	addImg(src, i, totalLoaded) {
-		const { config } = this.vf;
-		const img = this.loading[i] = new Img(config.path + src, i + totalLoaded);
-
-		return img.load().then(() => {
-			this.loadSuccess(img);
-
-		}).catch(error => {
-			this.loadError(error);
-
-		}).finally(() => {
-			this.loaded.current++;
-			this.loaded.total++;
-
-			if (this.preloading)
-				this.updateProgress();
-
-			if (this.loaded.current === this.loading.length)
-				this.preloading? this.preloadEnd() : this.lazyLoadEnd();
-		});
-	}
-
-	loadSuccess() {
-		this.loaded.success++;
-
-		if (this.preloading && !this.current) {
-			for (const img of this.loading) {
-				if (img.status === 'error')
-					continue;
-
-				if (img.status === 'loaded')
-					this.current = img;
-
-				break;
-			}
+		if (this.config.autoplay) {
+			this.controller.play();
 		}
 	}
 
+	lazyLoadStart() {
+		this.isLazyloading = true;
+
+		const load = this.loading.slice(this.loadCounter.total);
+		const numPreloadedResources = this.list.length;
+
+		load.forEach((rsc, index) =>
+			this.load(rsc, numPreloadedResources + index)
+		);
+	}
+
+	lazyLoadEnd() {
+		this.lazyloading = false;
+	}
+
+	load(rsc, index) {
+		rsc.load()
+			.then(() => {
+				this.loadSuccess(rsc, index);
+			})
+			.catch((error) => {
+				this.loadError(error);
+			})
+			.finally(() => {
+				this.loadCounter.total++;
+
+				if (this.isPreloading) {
+					this.updateProgress();
+				}
+
+				if (this.loadCounter.total === this.numToPreload) {
+					this.preloadEnd();
+				} else if (this.loadCounter.total === this.loading.length) {
+					this.lazyLoadEnd();
+				}
+			});
+	}
+
+	loadSuccess(rsc, index) {
+		this.loadCounter.success++;
+
+		rsc.adaptToSize(this.display.size);
+
+		this.list[index] = rsc;
+	}
+
 	loadError(error) {
-		this.loaded.error++;
+		this.loadCounter.error++;
 
 		// eslint-disable-next-line
 		console.warn(error);
 	}
 
 	updateProgress() {
-		this.progress = Math.ceil(this.loaded.success * 100 / this.toPreload) || 0;
-	}
-
-	addLoadedSuccessfully() {
-		const loaded = this.loading.filter(img => img.status === 'loaded');
-
-		this.imgs.push(...loaded)
-
-		this.loading = [];
-		this.loaded.current = 0;
+		this.progress =
+			ceil((this.loadCounter.success * 100) / this.numToPreload) || 0;
 	}
 
 	getDirection(index) {
-		if (['prev', 'next'].includes(index))
+		if (['prev', 'next'].includes(index)) {
 			return index;
+		}
 
-		return this.current.value < index? 'next' : 'prev';
+		return this.current.value.index < index ? 'next' : 'prev';
 	}
-
-	getByIndex(index) {
-		if (index === 'prev')
-			index = this.getPrevIndex();
-
-		else if (index === 'next')
-			index = this.getNextIndex();
-
-		else if (!this.list[index])
-			throw new ReferenceError(`Image ${index} not found`);
-
-		return {
-			index,
-			resource: this.list[index],
-		};
-	}
-
 }

@@ -1,6 +1,8 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
+	import useTransitionMixin, {
+		baseProps,
+	} from '@/models/mixins/transition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	const $grid = ref(null);
@@ -19,14 +21,16 @@
 	const totalDuration = conf.tileDelay * conf.cols + conf.tileDuration;
 
 	const getDelay = {
-		prev: i => (conf.cols - i - 1) * conf.tileDelay,
-		next: i => i * conf.tileDelay,
+		prev: (i) => (conf.cols - i - 1) * conf.tileDelay,
+		next: (i) => i * conf.tileDelay,
 	};
 
 	const onPlay = () => {
 		$grid.value.transform((tile, i) => {
 			tile.transform({
-				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay[conf.direction](i)}ms`,
+				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay[
+					conf.direction
+				](i)}ms`,
 				opacity: '0.1',
 				transform: 'scaleX(0)',
 			});
@@ -35,7 +39,7 @@
 
 	defineExpose({
 		onPlay,
-		totalDuration
+		totalDuration,
 	});
 </script>
 

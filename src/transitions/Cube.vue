@@ -1,6 +1,8 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
+	import useTransitionMixin, {
+		baseProps,
+	} from '@/models/mixins/transition.js';
 	import FluxCube from '@/components/FluxCube.vue';
 
 	const $cube = ref(null);
@@ -29,8 +31,9 @@
 	};
 
 	const onPlay = () => {
-		if (props.displayComponent)
+		if (props.displayComponent.value !== null) {
 			props.displayComponent.hide();
+		}
 
 		const sides = {
 			next: 'left',

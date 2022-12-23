@@ -1,9 +1,7 @@
 <script setup>
 	import { ref, reactive, computed } from 'vue';
 	import { floor, ceil } from '@/models/libs/math.js';
-	import useComponentMixin, {
-		baseProps,
-	} from '@/models/mixins/component.js';
+	import useComponentMixin, { baseProps } from '@/models/mixins/component.js';
 	import FluxImage from './FluxImage.vue';
 	import FluxCube from './FluxCube.vue';
 
@@ -12,7 +10,10 @@
 	const props = defineProps({
 		...baseProps,
 
-		rscs: Object,
+		rscs: {
+			type: Object,
+			default: null,
+		},
 
 		rows: {
 			type: Number,
@@ -38,14 +39,11 @@
 		},
 	});
 
-	const {
-		style,
-		setCss,
-		show,
-		hide,
-	} = useComponentMixin($el, props, styles);
+	const { style, setCss, show, hide } = useComponentMixin($el, props, styles);
 
-	const component = computed(() => props.rscs? FluxCube : FluxImage);
+	const component = computed(() =>
+		props.rscs !== null ? FluxCube : FluxImage
+	);
 
 	const numRows = computed(() => ceil(props.rows));
 
@@ -58,9 +56,9 @@
 		height: floor(props.size.height / numRows.value),
 	}));
 
-	const getRowNumber = i => floor(i / numCols.value);
+	const getRowNumber = (i) => floor(i / numCols.value);
 
-	const getColNumber = i => i % numCols.value;
+	const getColNumber = (i) => i % numCols.value;
 
 	const tiles = computed(() => {
 		const tiles = [];
@@ -92,9 +90,9 @@
 			tile.css = {
 				...props.tileCss,
 				position: 'absolute',
-				left: tile.offset.left +'px',
-				top: tile.offset.top +'px',
-				zIndex: i + 1 < numTiles.value / 2? i + 1 : numTiles.value - i,
+				left: tile.offset.left + 'px',
+				top: tile.offset.top + 'px',
+				zIndex: i + 1 < numTiles.value / 2 ? i + 1 : numTiles.value - i,
 			};
 
 			tiles.push(tile);
@@ -105,7 +103,7 @@
 
 	const $tiles = ref([]);
 
-	const transform = cb => {
+	const transform = (cb) => {
 		$tiles.value.forEach((tile, i) => cb(tile, i));
 	};
 
@@ -124,7 +122,7 @@
 		<component
 			:is="component"
 			v-for="(tile, index) in tiles"
-			:ref="el => $tiles.push(el)"
+			:ref="(el) => $tiles.push(el)"
 			:key="index"
 			:size="size"
 			v-bind="tile"

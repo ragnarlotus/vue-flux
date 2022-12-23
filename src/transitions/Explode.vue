@@ -1,7 +1,9 @@
 <script setup>
 	import { ref, reactive } from 'vue';
 	import { floor } from '@/models/libs/math.js';
-	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
+	import useTransitionMixin, {
+		baseProps,
+	} from '@/models/mixins/transition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	const $grid = ref(null);
@@ -31,7 +33,7 @@
 
 	const totalDuration = (conf.cols / 2 + conf.rows / 2) * (conf.tileDelay * 2);
 
-	const getDelay = i => {
+	const getDelay = (i) => {
 		const row = $grid.value.getRowNumber(i);
 		const col = $grid.value.getColNumber(i);
 
@@ -45,7 +47,9 @@
 	const onPlay = () => {
 		$grid.value.transform((tile, i) => {
 			tile.transform({
-				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(i)}ms`,
+				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(
+					i
+				)}ms`,
 				borderRadius: '100%',
 				opacity: '0',
 				transform: 'scale(2)',

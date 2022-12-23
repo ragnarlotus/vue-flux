@@ -1,5 +1,6 @@
-import { ref, reactive, computed } from 'vue';
-import { ceil, aspectRatio } from '@/models/libs/math.js';
+import { ref, reactive, computed, toRaw } from 'vue';
+import { aspectRatio } from '@/models/libs/math.js';
+import FluxImage from '@/components/FluxImage.vue';
 
 const status = {
 	loading: 'loading',
@@ -8,7 +9,7 @@ const status = {
 };
 
 export default class Img {
-	status = ref(null);
+	loader;
 	errorMessage;
 
 	realSize;
@@ -18,9 +19,19 @@ export default class Img {
 	adaptedPosition = reactive({});
 
 	constructor(src, resizeType = 'fill') {
+		this.status = ref(null);
 		this.src = src;
 		this.resizeType = resizeType; // fill | fit
-		this.loader = this.load();
+
+		this.display = {
+			component: FluxImage,
+			props: {},
+		};
+
+		this.transition = {
+			component: FluxImage,
+			props: {},
+		};
 	}
 
 	isLoading = () => this.status.value === status.loading;
@@ -30,25 +41,30 @@ export default class Img {
 	isError = () => this.status.value === status.error;
 
 	load() {
-		if (this.isLoading())
+		if (this.isLoading()) {
 			return this.loader;
+		}
 
-		return new Promise((resolve, reject) => {
-			if (this.isLoaded())
+		this.loader = new Promise((resolve, reject) => {
+			if (this.isLoaded()) {
 				return resolve();
+			}
 
-			if (this.isError())
+			if (this.isError()) {
 				return reject(this.errorMessage);
+			}
 
 			this.status.value = status.loading;
 
 			const img = new Image();
 
 			img.onload = () => this.onLoad(img, resolve);
-			img.onerror = () => this.onError(img, reject);
+			img.onerror = () => this.onError(reject);
 
 			img.src = this.src;
 		});
+
+		return this.loader;
 	}
 
 	onLoad(img, resolve) {
@@ -63,24 +79,19 @@ export default class Img {
 		resolve();
 	}
 
-	onError(img, reject) {
+	onError(reject) {
 		this.status.value = status.error;
 		this.errorMessage = `Image ${this.src} could not be loaded`;
 
 		reject(this.errorMessage);
 	}
 
-	adaptToSize = size => {
+	adaptToSize = (size) => {
 		this.adaptedAspectRatio = aspectRatio(size);
 
 		Object.assign(this.adaptedSize, this.getAdaptedSize(size));
 		Object.assign(this.adaptedPosition, this.getAdaptedPosition(size));
 	};
-
-	adaptedStyle = computed(() => ({
-		...this.adaptedSize,
-		...this.adaptedPosition,
-	}));
 
 	getAdaptedSize(size) {
 		if (this.realAspectRatio <= this.adaptedAspectRatio) {
@@ -109,13 +120,4 @@ export default class Img {
 			left: (size.width - this.adaptedSize.width) / 2,
 		};
 	}
-
-	renderTransitionComponent() {
-
-	}
-
-	renderDisplayComponent() {
-
-	}
-
 }

@@ -1,94 +1,109 @@
-import { ref, reactive, nextTick } from 'vue';
+import { shallowRef, toRaw, nextTick } from 'vue';
+
+//const emit = defineEmits(['transition-start', 'transition-end']);
 
 export default class Transitions {
-	list = reactive([]);
-	current = ref(null);
-	last = ref(null);
+	list = [];
+	last = shallowRef(null);
 
-	constructor(vf) {
-		this.vf = vf;
+	setup(config, controller, resources, timers) {
+		this.config = config;
+		this.controller = controller;
+		this.resources = resources;
+		this.timers = timers;
 	}
 
 	update(transitions) {
-		this.list.length = 0;
-		this.list = transitions;
-		this.current.value = null;
-		this.last.value = this.list.length - 1;
+		this.list = toRaw(transitions);
+		this.last.value = this.getByIndex(this.list.length - 1);
+
+		this.controller.reset();
 	}
 
 	getPrevIndex() {
-		const index = this.last.value - 1;
-
-		if (index < 0)
-			return this.list.length - 1;
-
-		return index;
+		return this.last.value.index === 0
+			? this.list.length - 1
+			: this.last.value.index - 1;
 	}
 
 	getNextIndex() {
-		const index = this.last.value + 1;
-
-		if (index >= this.list.length)
-			return 0;
-
-		return index;
+		return this.last.value.index < this.list.length - 1
+			? this.last.value.index + 1
+			: 0;
 	}
 
 	getByIndex(index) {
-		if (index === 'prev')
+		if (index === 'prev') {
 			index = this.getPrevIndex();
-
-		else if (index === 'next')
+		} else if (index === 'next') {
 			index = this.getNextIndex();
-
-		else if (!this.list[index])
+		} else if (!this.list[index]) {
 			throw new ReferenceError(`Transition ${index} not found`);
+		}
 
 		return {
 			index,
-			transition: this.list[index],
+			component: this.list[index].component ?? this.list[index],
+			options: this.list[index].options ?? {},
 		};
 	}
 
-	start(transitionIndex, toResourceIndex) {
-		const {
-			vf: {
-				resources,
-				timers,
-			}
-		} = this.vf;
+	run(transitionIndex, toResourceIndex) {
+		this.timers.clear('transition');
 
-		timers.clear('transition');
+		this.controller.resource.from = this.resources.current.value;
+		this.controller.resource.to = this.resources.getByIndex(toResourceIndex);
 
-		let direction = resources.getDirection(toResourceIndex);
+		const transition = this.getByIndex(transitionIndex);
 
-		const { transition } = this.getByIndex(transitionIndex);
+		if (!transition.options.direction) {
+			transition.options.direction =
+				this.resources.getDirection(toResourceIndex);
+		}
 
-		if (transition.options.direction)
-			direction = transition.options.direction;
+		this.controller.transition.value = transition;
+	}
 
+	start() {
+		const { resources, controller } = this;
+
+		resources.current.value = controller.resource.to;
+
+		/* 		emit('transition-start', {
+			transition: controller.transition.value,
+			from: controller.resource.from,
+			to: controller.resource.to,
+		}); */
 	}
 
 	end() {
-		let { vf } = this;
+		const { config, resources, timers, controller } = this;
 
-		this.last.value = this.current.value;
-		this.current.value = null;
+		/* 		emit('transition-end', {
+			transition: controller.transition.value,
+			from: controller.resource.from,
+			to: controller.resource.to,
+		});
+ */
+		this.last.value = controller.transition.value;
+		resources.last = controller.resource.to;
+
+		controller.reset();
 
 		nextTick(() => {
-			vf.resources.last.value = vf.resources.current.value;
-
-			if (!vf.config.infinite && vf.resources.last.value >= vf.resources.list.length) {
-				vf.controller.stop();
+			if (
+				!config.infinite &&
+				resources.last.index >= resources.list.length
+			) {
+				controller.stop();
 				return;
 			}
 
-			if (vf.config.autoplay) {
-				vf.timers.set('transition', vf.config.delay, () => {
-					vf.controller.show();
+			if (config.autoplay) {
+				timers.set('transition', config.delay, () => {
+					controller.show();
 				});
 			}
 		});
 	}
-
 }

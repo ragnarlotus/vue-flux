@@ -1,13 +1,11 @@
 export default class Keys {
-	construct(vf) {
-		this.vf = vf;
-	}
+	setup(config, controller) {
+		this.config = config;
+		this.controller = controller;
 
-	setup() {
 		this.removeKeyListener();
 
-		if (this.vf.config.bindKeys)
-			this.addKeyListener();
+		if (this.config.bindKeys) this.addKeyListener();
 	}
 
 	addKeyListener() {
@@ -22,14 +20,13 @@ export default class Keys {
 
 	keydown(event) {
 		if (['ArrowLeft', 'Left'].includes(event.key)) {
-			this.vf.controller.show('prev');
+			this.controller.show('prev');
 			return;
 		}
 
 		if (['ArrowRight', 'Right'].includes(event.key)) {
-			this.vf.controller.show('next');
+			this.controller.show('next');
 			return;
 		}
 	}
-
 }

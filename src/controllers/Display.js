@@ -1,24 +1,25 @@
-import { nextTick } from 'vue';
+import { reactive, nextTick } from 'vue';
 
 export default class Display {
-	size = {
+	size = reactive({
 		width: null,
 		height: null,
-	};
+	});
 
-	constructor(vf, node) {
+	setup(config, node, resources) {
 		if (node instanceof Element === false) {
-			throw new Error(node +' is not an HTML node element');
+			throw new Error(node + ' is not an HTML node element');
 		}
 
-		this.vf = vf;
+		this.config = config;
 		this.node = node;
+		this.resources = resources;
 
-		this.addResizeListener();
+		this.updateSize();
 	}
 
 	addResizeListener() {
-		window.addEventListener('resize', this.updateSize, {
+		window.addEventListener('resize', () => this.updateSize(), {
 			passive: true,
 		});
 	}
@@ -36,33 +37,38 @@ export default class Display {
 		await nextTick();
 
 		let { width, height } = getComputedStyle(this.node);
+		width = parseFloat(width);
 
-		if (['auto', null].includes(height)) {
-			const [ arWidth, arHeight ] = this.vf.config.aspectRatio.split(':');
-			height = width / arWidth * arHeight;
+		if (['0px', 'auto', null].includes(height)) {
+			const [arWidth, arHeight] = this.config.aspectRatio.split(':');
+			height = (width / arWidth) * arHeight;
+		} else {
+			height = parseFloat(height);
 		}
 
 		Object.assign(this.size, {
 			width,
 			height,
 		});
+
+		this.resources.list.forEach((rsc) => rsc.adaptToSize(this.size));
 	}
 
 	inFullScreen = () => !!document.fullscreenElement;
 
 	toggleFullScreen() {
-		this.inFullScreen? this.exitFullScreen() : this.enterFullScreen();
+		this.inFullScreen ? this.exitFullScreen() : this.enterFullScreen();
 	}
 
 	async enterFullScreen() {
-		if (!this.vf.config.allowFullscreen)
+		if (!this.config.allowFullscreen) {
 			return;
+		}
 
-		this.vf.$container.requestFullscreen();
+		this.node.requestFullscreen();
 	}
 
 	async exitFullScreen() {
-		this.vf.$container.exitFullscreen();
+		this.node.exitFullscreen();
 	}
-
 }

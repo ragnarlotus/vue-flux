@@ -1,8 +1,6 @@
 <script setup>
 	import { ref, reactive, computed } from 'vue';
-	import useComponentMixin, {
-		baseProps,
-	} from '@/models/mixins/component.js';
+	import useComponentMixin, { baseProps } from '@/models/mixins/component.js';
 
 	const $el = ref(null);
 
@@ -14,8 +12,7 @@
 		},
 
 		color: computed(() => {
-			if (!props.color)
-				return {};
+			if (!props.color) return {};
 
 			return {
 				backgroundColor: props.color,
@@ -25,16 +22,21 @@
 		image: computed(() => {
 			const { rsc } = props;
 
-			if (!rsc || rsc.isLoading() || !$el.value)
+			if (!rsc || rsc.isLoading() || !$el.value) {
 				return {};
+			}
 
-			rsc.adaptToSize(props.size);
-
-			const bgStyle = { ...rsc.adaptedStyle.value };
+			const bgStyle = {
+				width: rsc.adaptedSize.width,
+				height: rsc.adaptedSize.height,
+				top: rsc.adaptedPosition.top,
+				left: rsc.adaptedPosition.left,
+			};
 
 			if (props.offset) {
-				for (const side of ['top', 'left'])
+				for (const side of ['top', 'left']) {
 					bgStyle[side] -= props.offset[side] || 0;
+				}
 			}
 
 			return {
@@ -46,13 +48,11 @@
 		}),
 	});
 
-	const {
-		style,
-		setCss,
-		transform,
-		show,
-		hide,
-	} = useComponentMixin($el, props, styles);
+	const { style, setCss, transform, show, hide } = useComponentMixin(
+		$el,
+		props,
+		styles
+	);
 
 	defineExpose({
 		setCss,

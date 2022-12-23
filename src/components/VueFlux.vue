@@ -4,23 +4,16 @@
 		onMounted,
 		onUnmounted,
 		ref,
+		reactive,
 		computed,
 		watch,
 	} from 'vue';
 
 	// Controllers
-	import DisplayController from '@/controllers/Display.js';
-	import TimersController from '@/controllers/Timers.js';
-	import TransitionsController from '@/controllers/Transitions.js';
-	import ResourcesController from '@/controllers/Resources.js';
-	import TouchesController from '@/controllers/Touches.js';
-	import KeysController from '@/controllers/Keys.js';
-	import MouseController from '@/controllers/Mouse.js';
-	import ControllerController from '@/controllers/Controller.js';
+	import * as Controllers from '@/controllers';
 
 	// Components
 	import FluxTransition from '@/components/FluxTransition.vue';
-	import FluxImage from '@/components/FluxImage.vue';
 
 	const $container = ref(null);
 	const $transition = ref(null);
@@ -29,7 +22,7 @@
 	const props = defineProps({
 		options: {
 			type: Object,
-			default: () => ({}),
+			default: () => reactive({}),
 		},
 
 		transitions: {
@@ -39,12 +32,12 @@
 
 		rscs: {
 			type: Array,
-			default: () => ([]),
+			default: () => [],
 		},
 
 		captions: {
 			type: Array,
-			default: () => ([]),
+			default: () => [],
 		},
 	});
 
@@ -60,59 +53,76 @@
 		infinite: true,
 		lazyLoad: true,
 		lazyLoadAfter: 3,
-		path: '',
 	};
 
-	const instance = getCurrentInstance();
-	const loaded = ref(false);
-
-	const display = new DisplayController(instance);
-	const timers = new TimersController();
-	const resources = new ResourcesController(instance);
-	const keys = new KeysController(instance);
-	const mouse = new MouseController(instance);
-	const touches = new TouchesController(instance);
-	const transitions = new TransitionsController(instance);
-	const controller = new ControllerController(instance);
+	const display = new Controllers.Display();
+	const timers = new Controllers.Timers();
+	const resources = new Controllers.Resources();
+	const keys = new Controllers.Keys();
+	const mouse = new Controllers.Mouse();
+	const touches = new Controllers.Touches();
+	const transitions = new Controllers.Transitions();
+	const controller = new Controllers.Controller();
 
 	const setup = () => {
 		Object.assign(config, props.options);
 
-		mouse.setup();
-		keys.setup();
+		display.setup(config, $container.value, resources);
 	};
 
-	watch(props.options, () => {
-		setup();
-	});
+	watch(
+		() => props.options,
+		() => {
+			setup();
+		}
+	);
 
-	watch(props.rscs, () => {
-		updateFromProps('rscs');
-	});
+	watch(
+		() => props.rscs,
+		() => {
+			updateFromProps('rscs');
+		}
+	);
 
-	watch(props.transitions, () => {
-		updateFromProps('transitions');
-	});
+	watch(
+		() => props.transitions,
+		() => {
+			updateFromProps('transitions');
+		}
+	);
 
-	const updateFromProps = prop => {
-		const wasPlaying = this.config.autoplay;
+	const updateFromProps = (prop) => {
+		const wasPlaying = config.autoplay;
 
 		stop(true);
 
-		const toUpdate = {
+		({
 			rscs: () => resources.update(props.rscs),
 			transitions: () => transitions.update(props.transitions),
-		};
+		}[prop]());
 
-		toUpdate[prop]();
-
-		wasPlaying && controller.play();
+		if (wasPlaying) {
+			controller.play();
+		}
 	};
 
 	onMounted(() => {
-		display.updateSize();
 		setup();
 
+		mouse.setup(config, timers);
+		keys.setup(config, controller);
+		resources.setup(config, controller, display);
+		transitions.setup(config, controller, resources, timers);
+		touches.setup(config, display, controller, mouse);
+		controller.setup(
+			config,
+			transitions,
+			resources,
+			timers,
+			$displayComponent
+		);
+
+		display.addResizeListener();
 		resources.update(props.rscs);
 		transitions.update(props.transitions);
 	});
@@ -124,10 +134,11 @@
 	});
 
 	const style = computed(() => {
-		if (!display.size.height)
+		if (!display || !display.size.height) {
 			return {};
+		}
 
-		if (display.inFullScreen) {
+		if (display.inFullScreen()) {
 			return {
 				width: '100% !important',
 				height: '100% !important',
@@ -137,15 +148,23 @@
 		const { width, height } = display.size;
 
 		return {
-			width: width +'px',
-			height: height +'px',
+			width: width + 'px',
+			height: height + 'px',
 		};
 	});
 
 	defineExpose({
-		show: controller.show,
-		play: controller.play,
-		stop: controller.stop,
+		display,
+		timers,
+		resources,
+		keys,
+		mouse,
+		touches,
+		transitions,
+		ready: () => resources.ready(),
+		show: () => controller.show(),
+		play: () => controller.play(),
+		stop: () => controller.stop(),
 	});
 </script>
 
@@ -161,34 +180,35 @@
 		@touchend="touches.end($event)"
 	>
 		<FluxTransition
-			v-if="transitions.current.value"
+			v-if="controller.transition.value !== null"
 			ref="$transition"
-			:transition="transitions.list[transitions.current.value]"
+			:transition="controller.transition.value.component"
 			:size="display.size"
-			:from="controller.resource.from"
-			:to="controller.resource.to"
+			:from="controller.resource.from.rsc"
+			:to="controller.resource.to.rsc"
 			:display-component="$displayComponent"
-			:options="transitions.current.options"
-			:rscs="resources.list"
+			:options="controller.transition.value.options"
 			@start="transitions.start()"
 			@end="transitions.end()"
 		/>
 
-		<FluxImage
-			v-if="resources.current"
+		<component
+			:is="resources.current.value.rsc.display.component"
+			v-if="resources.current.value !== null"
 			ref="$displayComponent"
-			:size="size"
-			:rsc="resources.current"
+			:size="display.size"
+			:rsc="resources.current.value.rsc"
+			v-bind="resources.current.value.rsc.display.props"
 		/>
 
-		<div v-if="size.height" class="complements">
+		<div v-if="display.size.height" class="complements">
 			<slot name="preloader" />
 			<slot name="caption" />
 			<div class="remainder upper" />
 			<slot name="controls" />
 			<div class="remainder lower" />
 			<slot name="index" />
-			<slot v-if="loaded" name="pagination" />
+			<slot v-if="resources.ready" name="pagination" />
 			<slot name="description" />
 		</div>
 	</div>
