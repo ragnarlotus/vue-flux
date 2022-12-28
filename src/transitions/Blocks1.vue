@@ -1,6 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
+	import useTransitionMixin, { baseProps } from '@/mixins/transition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	const $grid = ref(null);
@@ -28,7 +28,9 @@
 	const onPlay = () => {
 		$grid.value.transform((tile, i) => {
 			tile.transform({
-				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(i)}ms`,
+				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(
+					i
+				)}ms`,
 				opacity: '0',
 				transform: 'scale(0.3, 0.3)',
 			});

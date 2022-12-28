@@ -1,6 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
+	import useTransitionMixin, { baseProps } from '@/mixins/transition.js';
 	import FluxWrapper from '@/components/FluxWrapper.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
@@ -26,7 +26,7 @@
 		css: {
 			display: 'flex',
 			flexWrap: 'nowrap',
-		}
+		},
 	};
 
 	let left, right;
@@ -57,7 +57,7 @@
 		next: () => {
 			$wrapper.value.transform({
 				transition: transition,
-				transform: 'translateX(-50%)'
+				transform: 'translateX(-50%)',
 			});
 		},
 	};
@@ -74,15 +74,7 @@
 
 <template>
 	<FluxWrapper ref="$wrapper" v-bind="wrapper">
-		<FluxImage
-			ref="$left"
-			:rsc="left"
-			:size="size"
-		/>
-		<FluxImage
-			ref="$right"
-			:rsc="right"
-			:size="size"
-		/>
+		<FluxImage ref="$left" :rsc="left" :size="size" />
+		<FluxImage ref="$right" :rsc="right" :size="size" />
 	</FluxWrapper>
 </template>

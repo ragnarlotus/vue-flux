@@ -1,6 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
+	import useTransitionMixin, { baseProps } from '@/mixins/transition.js';
 	import FluxWrapper from '@/components/FluxWrapper.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
@@ -59,11 +59,6 @@
 
 <template>
 	<FluxWrapper ref="$wrapper" :size="size" :css="wrapperCss">
-		<FluxImage
-			ref="$image"
-			:rsc="from"
-			:size="size"
-			:css="imageCss"
-		/>
+		<FluxImage ref="$image" :rsc="from" :size="size" :css="imageCss" />
 	</FluxWrapper>
 </template>

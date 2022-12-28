@@ -1,8 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import useTransitionMixin, {
-		baseProps,
-	} from '@/models/mixins/transition.js';
+	import useTransitionMixin, { baseProps } from '@/mixins/transition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	const $grid = ref(null);

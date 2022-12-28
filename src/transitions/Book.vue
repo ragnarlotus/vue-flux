@@ -1,7 +1,7 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import { ceil } from '@/models/libs/math.js';
-	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
+	import { ceil } from '@/libs/Maths.js';
+	import useTransitionMixin, { baseProps } from '@/mixins/transition.js';
 	import FluxCube from '@/components/FluxCube.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
@@ -50,7 +50,7 @@
 	};
 
 	const halfWidth = ceil(props.size.width / 2);
-	const halfWidthPx = halfWidth +'px';
+	const halfWidthPx = halfWidth + 'px';
 
 	// eslint-disable-next-line vue/no-mutating-props
 	props.maskStyle.overflow = 'visible';
@@ -85,10 +85,11 @@
 
 	setup[conf.direction]();
 
-	const getDeg = () => ({
-		prev: '180',
-		next: '-180',
-	}[conf.direction]);
+	const getDeg = () =>
+		({
+			prev: '180',
+			next: '-180',
+		}[conf.direction]);
 
 	const onPlay = () => {
 		$cube.value.transform({

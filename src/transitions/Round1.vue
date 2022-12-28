@@ -1,7 +1,7 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import { floor } from '@/models/libs/math.js';
-	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
+	import { floor } from '@/libs/Maths.js';
+	import useTransitionMixin, { baseProps } from '@/mixins/transition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	const $grid = ref(null);
@@ -34,24 +34,22 @@
 		conf.rows = floor(props.size.height / divider);
 	}
 
-	const multiplier = conf.rows > conf.cols? conf.rows : conf.cols;
+	const multiplier = conf.rows > conf.cols ? conf.rows : conf.cols;
 
 	const totalDuration = conf.tileDelay * multiplier * 2;
 
-	const getDelay = i => {
+	const getDelay = (i) => {
 		const row = $grid.value.getRowNumber(i);
 		const col = $grid.value.getColNumber(i);
 		let delay = col + row;
 
-		if (conf.direction === 'prev')
-			delay = conf.rows + conf.cols - delay - 1;
+		if (conf.direction === 'prev') delay = conf.rows + conf.cols - delay - 1;
 
 		return delay * conf.tileDelay;
 	};
 
 	const onPlay = () => {
-		if (props.displayComponent)
-			props.displayComponent.hide();
+		if (props.displayComponent) props.displayComponent.hide();
 
 		const sides = {
 			prev: 'backl',
@@ -60,12 +58,14 @@
 
 		$grid.value.transform((tile, i) => {
 			tile.setCss({
-				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(i)}ms`,
+				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(
+					i
+				)}ms`,
 			});
 
 			tile.turn(sides[conf.direction]);
 		});
-	}
+	};
 
 	defineExpose({
 		onPlay,

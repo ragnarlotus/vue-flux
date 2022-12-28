@@ -1,9 +1,7 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import { floor } from '@/models/libs/math.js';
-	import useTransitionMixin, {
-		baseProps,
-	} from '@/models/mixins/transition.js';
+	import { floor } from '@/libs/Maths.js';
+	import useTransitionMixin, { baseProps } from '@/mixins/transition.js';
 	import FluxGrid from '@/components/FluxGrid.vue';
 
 	const $grid = ref(null);

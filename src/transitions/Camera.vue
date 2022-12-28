@@ -1,7 +1,7 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import { diag } from '@/models/libs/math.js';
-	import useTransitionMixin, { baseProps } from '@/models/mixins/transition.js';
+	import { diag } from '@/libs/maths.js';
+	import useTransitionMixin, { baseProps } from '@/mixins/transition.js';
 	import FluxWrapper from '@/components/FluxWrapper.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
@@ -40,23 +40,25 @@
 			justifyContent: 'center',
 			overflow: 'hidden',
 			borderRadius: '50%',
-			border: '0 solid '+ conf.backgroundColor,
-			top: ((props.size.height - diagSize) / 2) +'px',
-			left: ((props.size.width - diagSize) / 2) +'px',
+			border: '0 solid ' + conf.backgroundColor,
+			top: (props.size.height - diagSize) / 2 + 'px',
+			left: (props.size.width - diagSize) / 2 + 'px',
 		},
 	};
 
 	const onPlay = () => {
 		$wrapper.value.transform({
 			transition: `all ${conf.totalDuration / 2 - 50}ms ${conf.easing} 0ms`,
-			borderWidth: (diagSize / 2) +'px',
+			borderWidth: diagSize / 2 + 'px',
 		});
 
 		setTimeout(() => {
 			$image.value.hide();
 
 			$wrapper.value.transform({
-				transition: `all ${conf.totalDuration / 2 - 50}ms ${conf.easing} 0ms`,
+				transition: `all ${conf.totalDuration / 2 - 50}ms ${
+					conf.easing
+				} 0ms`,
 				borderWidth: 0,
 			});
 		}, conf.totalDuration / 2 + 50);
@@ -69,14 +71,7 @@
 </script>
 
 <template>
-	<FluxWrapper
-		ref="$wrapper"
-		v-bind="wrapper"
-	>
-		<FluxImage
-			ref="$image"
-			:size="size"
-			v-bind="image"
-		/>
+	<FluxWrapper ref="$wrapper" v-bind="wrapper">
+		<FluxImage ref="$image" :size="size" v-bind="image" />
 	</FluxWrapper>
 </template>
