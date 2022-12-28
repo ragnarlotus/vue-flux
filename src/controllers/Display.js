@@ -1,6 +1,7 @@
-import { reactive, nextTick } from 'vue';
+import { ref, reactive, computed, nextTick } from 'vue';
 
 export default class Display {
+	ready = ref(false);
 	size = reactive({
 		width: null,
 		height: null,
@@ -9,6 +10,10 @@ export default class Display {
 	constructor(config, resources) {
 		this.config = config;
 		this.resources = resources;
+
+		this.ready = computed(() => {
+			return this.size.width !== null && this.size.height != null;
+		});
 	}
 
 	setup(node) {
@@ -60,7 +65,7 @@ export default class Display {
 	inFullScreen = () => !!document.fullscreenElement;
 
 	toggleFullScreen() {
-		this.inFullScreen ? this.exitFullScreen() : this.enterFullScreen();
+		this.inFullScreen() ? this.exitFullScreen() : this.enterFullScreen();
 	}
 
 	async enterFullScreen() {
@@ -72,6 +77,6 @@ export default class Display {
 	}
 
 	async exitFullScreen() {
-		this.node.exitFullscreen();
+		document.exitFullscreen();
 	}
 }

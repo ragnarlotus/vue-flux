@@ -1,9 +1,9 @@
-import { toRaw } from 'vue';
+import { ref, shallowReactive, toRaw } from 'vue';
 import ResourceLoader from '../libs/ResourceLoader';
 
 export default class Resources {
-	list = [];
-	loadProgress = null;
+	list = shallowReactive([]);
+	loadProgress = ref(0);
 
 	constructor(config) {
 		this.config = config;
@@ -41,27 +41,28 @@ export default class Resources {
 	update(rscs) {
 		this.player.resetResource();
 
-		this.list.length = 0;
+		this.list.splice(0);
+		this.loadProgress.value = 0;
 
 		const resources = [...toRaw(rscs)];
 
-		const loader = new ResourceLoader(
+		new ResourceLoader(
 			resources,
 			this.config.lazyLoad ? this.config.lazyLoadAfter : resources.length,
 			this.display.size,
+			this.loadProgress,
 			(loaded) => this.preloadFinished(loaded),
 			(loaded) => this.lazyloadFinished(loaded)
 		);
-
-		this.loadProgress = loader.progress;
 	}
 
 	preloadFinished(loaded) {
-		this.list = loaded;
+		loaded.forEach((rsc) => this.list.push(rsc));
+		this.loadProgress.value = 100;
 		this.player.initResource();
 	}
 
 	lazyloadFinished(loaded) {
-		this.list = this.list.concat(loaded);
+		loaded.forEach((rsc) => this.list.push(rsc));
 	}
 }

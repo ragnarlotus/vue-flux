@@ -41,7 +41,7 @@
 				enableGestures: false,
 				infinite: true,
 				lazyLoad: true,
-				lazyLoadAfter: 3,
+				lazyLoadAfter: 5,
 			},
 			props.options
 		)
@@ -64,34 +64,28 @@
 
 	watch(
 		() => props.options,
-		() => {
-			setup();
-		}
+		() => setup()
 	);
 
 	watch(
 		() => props.rscs,
-		() => {
-			updateFromProps('rscs');
-		}
+		() => updateFromProps('rscs')
 	);
 
 	watch(
 		() => props.transitions,
-		() => {
-			updateFromProps('transitions');
-		}
+		() => updateFromProps('transitions')
 	);
 
-	const updateFromProps = (prop) => {
+	const updateFromProps = (elements) => {
 		const wasPlaying = config.autoplay;
 
-		stop(true);
+		player.stop(true);
 
 		({
 			rscs: () => resources.update(props.rscs),
 			transitions: () => transitions.update(props.transitions),
-		}[prop]());
+		}[elements]());
 
 		if (wasPlaying) {
 			config.autoplay = true;
@@ -112,13 +106,13 @@
 	});
 
 	onUnmounted(() => {
+		timers.clear();
 		display.removeResizeListener();
 		keys.removeKeyListener();
-		timers.clear();
 	});
 
 	const style = computed(() => {
-		if (!display || !display.size.height) {
+		if (display.ready.value === false) {
 			return {};
 		}
 
@@ -138,9 +132,10 @@
 	});
 
 	defineExpose({
-		show: () => player.show(),
-		play: () => player.play(),
-		stop: () => player.stop(),
+		show: (resourceIndex, transitionIndex) =>
+			player.show(resourceIndex, transitionIndex),
+		play: (index, delay) => player.play(index, delay),
+		stop: (cancelTransition) => player.stop(cancelTransition),
 	});
 </script>
 
@@ -177,10 +172,17 @@
 			v-bind="player.resource.current.rsc.display.props"
 		/>
 
-		<div v-if="display.size.height" class="complements">
-			<slot name="preloader" />
-			<slot name="caption" />
+		<div v-if="display.ready" class="complements">
+			<slot name="preloader" :resources="resources" />
+
+			<slot
+				name="caption"
+				:current-resource="player.resource.current"
+				:current-transition="player.transition.current"
+			/>
+
 			<div class="remainder upper" />
+
 			<slot
 				name="controls"
 				:current-resource="player.resource.current"
@@ -188,10 +190,25 @@
 				:player="player"
 				:config="config"
 			/>
+
 			<div class="remainder lower" />
-			<slot name="index" />
-			<slot v-if="resources.list.length" name="pagination" />
-			<slot name="description" />
+
+			<slot
+				name="index"
+				:mouse-over="mouse.isOver"
+				:display-size="display.size"
+				:resources="resources"
+				:player="player"
+			/>
+
+			<slot
+				name="pagination"
+				:display-ready="display.ready"
+				:resources="resources"
+				:current-resource="player.resource.current"
+				:current-transition="player.transition.current"
+				:show="(index) => player.show(index)"
+			/>
 		</div>
 	</div>
 </template>

@@ -1,197 +1,184 @@
+<script setup>
+	import { ref, computed, nextTick } from 'vue';
+	import FluxButton from '@/components/FluxButton.vue';
+
+	const $list = ref(null);
+
+	const props = defineProps({
+		mouseOver: {
+			type: Object,
+			required: true,
+		},
+
+		displaySize: {
+			type: Object,
+			required: true,
+		},
+
+		resources: {
+			type: Object,
+			required: true,
+		},
+
+		player: {
+			type: Object,
+			required: true,
+		},
+	});
+
+	const visible = computed(() => props.resources.list.length > 0);
+
+	const button = {
+		rectSize: 12,
+		rectangles: [],
+		visible: computed(() => props.mouseOver.value),
+
+		setup: () => {
+			const rows = 3;
+			const cols = 3;
+			const padding = 6;
+
+			let rowsGap =
+				(100 - padding * 2 - button.rectSize * rows) / (rows + 1);
+
+			let colsGap =
+				(100 - padding * 2 - button.rectSize * cols) / (cols + 1);
+
+			for (let r = 0; r < rows; r++) {
+				for (let c = 0; c < cols; c++) {
+					button.rectangles.push({
+						x: padding + rowsGap + rowsGap * r + button.rectSize * r,
+						y: padding + colsGap + colsGap * c + button.rectSize * c,
+					});
+				}
+			}
+		},
+	};
+
+	const buttonVisible = button.visible;
+
+	const list = {
+		animationTime: 500,
+		visible: ref(false),
+
+		class: computed(() => {
+			const htmlClass = [];
+
+			if (list.visible.value) {
+				htmlClass.push('visible');
+			}
+
+			if (props.mouseOver.value) {
+				htmlClass.push('mouse-over');
+			}
+
+			return htmlClass;
+		}),
+
+		show: () => {
+			props.player.stop();
+			list.visible.value = true;
+
+			nextTick(() => {
+				$list.value.clientHeight;
+				$list.value.style.marginTop = 0;
+			});
+		},
+
+		hide: (index = null) => {
+			$list.value.clientHeight;
+			$list.value.style.marginTop = '100%';
+
+			setTimeout(() => {
+				list.visible.value = false;
+
+				if (index !== null) {
+					props.player.show(index);
+				}
+			}, list.animationTime);
+		},
+	};
+
+	const listClass = list.class;
+
+	const thumbs = {
+		size: computed(() => {
+			let { width, height } = props.displaySize;
+
+			width = width / 4.2;
+			height = (width * 90) / 160;
+
+			if (width > 160) {
+				width = 160;
+				height = 90;
+			}
+
+			return {
+				width,
+				height,
+			};
+		}),
+
+		getClass: (index) => {
+			return props.player.resource.current !== null &&
+				props.player.resource.current.index === index
+				? 'current'
+				: '';
+		},
+	};
+
+	const thumbsSize = thumbs.size;
+
+	const showResource = (index) => {
+		if (list.visible.value) {
+			list.hide(index);
+			return;
+		}
+
+		props.player.show(index);
+	};
+
+	button.setup();
+</script>
+
 <template>
-	<div v-if="display" class="flux-index">
+	<div v-if="visible" class="flux-index">
 		<transition name="fade">
-			<flux-button
-				v-if="displayButton"
+			<FluxButton
+				v-if="buttonVisible"
 				class="toggle bottom left"
-				@click="showIndex($event)"
+				@click="list.show()"
 			>
 				<rect
-					v-for="(coord, i) in coords"
+					v-for="(coord, i) in button.rectangles"
 					:key="i"
 					:x="coord.x"
 					:y="coord.y"
-					:width="buttonRectSize + 'px'"
-					:height="buttonRectSize + 'px'"
+					:width="button.rectSize + 'px'"
+					:height="button.rectSize + 'px'"
 				/>
-			</flux-button>
+			</FluxButton>
 		</transition>
 
-		<nav :class="listClass" @click="hideIndex()">
-			<ul ref="index">
+		<nav :class="listClass" @click="list.hide()">
+			<ul ref="$list">
 				<li
-					v-for="(image, i) in images"
-					:key="i"
-					:class="thumbClass(i)"
-					@click="showImage(i)"
+					v-for="(rsc, index) in resources.list"
+					:key="index"
+					:class="thumbs.getClass(index)"
+					@click="showResource(index)"
 				>
-					<flux-image
-						ref="thumbs"
-						:image="images[i]"
-						:size="thumbSize"
-						:title="getCaptionText(image.initIndex)"
+					<component
+						:is="rsc.display.component"
+						:rsc="rsc"
+						:size="thumbsSize"
+						:title="rsc.caption"
 					/>
 				</li>
 			</ul>
 		</nav>
 	</div>
 </template>
-
-<script>
-	import FluxButton from '@/components/FluxButton.vue';
-	import FluxImage from '@/components/FluxImage.vue';
-
-	export default {
-		name: 'FluxIndex',
-
-		components: {
-			FluxButton,
-			FluxImage,
-		},
-
-		props: {
-			buttonRows: {
-				type: Number,
-				default: 3,
-			},
-
-			buttonCols: {
-				type: Number,
-				default: 3,
-			},
-
-			buttonRectSize: {
-				type: Number,
-				default: 12,
-			},
-
-			buttonPadding: {
-				type: Number,
-				default: 6,
-			},
-		},
-
-		data: () => ({
-			visible: false,
-			rectSize: 14,
-			delay: 500,
-			coords: [],
-		}),
-
-		computed: {
-			images() {
-				if (!this.vf) return [];
-
-				return this.Images.imgs;
-			},
-
-			display() {
-				return this.vf && this.vf.loaded;
-			},
-
-			displayButton() {
-				return this.vf.mouseOver;
-			},
-
-			listClass() {
-				let listClass = '';
-
-				if (this.visible) listClass += 'visible';
-
-				if (this.vf.mouseOver) listClass += ' mouse-over';
-
-				return listClass;
-			},
-
-			thumbSize() {
-				let { width, height } = this.vf.size;
-
-				width = width / 4.2;
-				height = (width * 90) / 160;
-
-				if (width > 160) {
-					width = 160;
-					height = 90;
-				}
-
-				return {
-					width,
-					height,
-				};
-			},
-		},
-
-		created() {
-			let rowsGap =
-				(100 - this.buttonPadding * 2 - this.rectSize * this.buttonRows) /
-				(this.buttonRows + 1);
-			let colsGap =
-				(100 - this.buttonPadding * 2 - this.rectSize * this.buttonCols) /
-				(this.buttonCols + 1);
-
-			for (let r = 0; r < this.buttonRows; r++) {
-				for (let c = 0; c < this.buttonCols; c++) {
-					this.coords.push({
-						x:
-							this.buttonPadding +
-							rowsGap +
-							rowsGap * r +
-							this.rectSize * r,
-						y:
-							this.buttonPadding +
-							colsGap +
-							colsGap * c +
-							this.rectSize * c,
-					});
-				}
-			}
-		},
-
-		methods: {
-			showIndex() {
-				this.vf.stop();
-				this.visible = true;
-
-				let { index } = this.$refs;
-
-				nextTick(() => {
-					index.clientHeight;
-					index.style.marginTop = 0;
-				});
-			},
-
-			hideIndex(imageIndex) {
-				let { index } = this.$refs;
-
-				index.clientHeight;
-				index.style.marginTop = '100%';
-
-				setTimeout(() => {
-					this.visible = false;
-
-					if (imageIndex !== undefined) this.showImage(imageIndex);
-				}, this.delay);
-			},
-
-			thumbClass(imageIndex) {
-				return this.Images.current &&
-					this.Images.current.index === imageIndex
-					? 'current'
-					: '';
-			},
-
-			showImage(imageIndex) {
-				if (this.visible) {
-					this.hideIndex(imageIndex);
-					return;
-				}
-
-				if (this.Images.current.index !== imageIndex)
-					this.vf.show(imageIndex);
-			},
-		},
-	};
-</script>
 
 <style lang="scss">
 	.vue-flux .flux-index {

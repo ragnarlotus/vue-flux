@@ -112,13 +112,19 @@ export default class Player {
 			return;
 		}
 
-		this.timers.clear('transition');
-
-		this.resource.from = this.resource.current;
-		this.resource.to = resources.getByIndex(
+		const resourceTo = resources.getByIndex(
 			resourceIndex,
 			this.resource.current
 		);
+
+		if (this.resource.current.index === resourceTo.index) {
+			return;
+		}
+
+		this.timers.clear('transition');
+
+		this.resource.from = this.resource.current;
+		this.resource.to = resourceTo;
 
 		const transition = transitions.getByIndex(
 			transitionIndex,

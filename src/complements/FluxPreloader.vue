@@ -1,66 +1,26 @@
+<script setup>
+	import { computed } from 'vue';
+
+	const props = defineProps({
+		resources: {
+			type: Object,
+			required: true,
+		},
+	});
+
+	const visible = computed(() => props.resources.loadProgress.value < 100);
+</script>
+
 <template>
 	<div class="preloader">
 		<slot name="spinner">
-			<div v-if="displaySpinner" class="spinner">
-				<div class="pct">{{ Images.progress }}%</div>
+			<div v-if="visible" class="spinner">
+				<div class="pct">{{ resources.loadProgress }}%</div>
 				<div class="border" />
 			</div>
 		</slot>
 	</div>
 </template>
-
-<script>
-	export default {
-		name: 'FluxPreloader',
-
-		props: {
-			spinner: {
-				type: Boolean,
-				default: true,
-			},
-		},
-
-		data: () => ({
-			transitionName: undefined,
-			imageCss: {
-				zIndex: 13,
-			},
-		}),
-
-		computed: {
-			displaySpinner() {
-				return this.spinner && this.vf.Images.preloading;
-			},
-		},
-
-		watch: {
-			'vf.images': function () {
-				let { Images, Transitions } = this;
-
-				if (Images.last && !Transitions.current)
-					Images.current = Images.last;
-			},
-
-			'vf.Images.preloading': function (preloading) {
-				let { Images } = this;
-
-				if (!Images.last || preloading) return;
-
-				if (Images.current === Images.last) this.transitionStart();
-			},
-		},
-
-		methods: {
-			transitionStart() {
-				let { Images, Transitions } = this;
-
-				if (Transitions.current) Transitions.end(true);
-
-				Transitions.run(undefined, Images.current, Images.imgs[0], 'next');
-			},
-		},
-	};
-</script>
 
 <style lang="scss">
 	.vue-flux .preloader {

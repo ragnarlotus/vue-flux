@@ -1,4 +1,4 @@
-import { ref, reactive } from 'vue';
+import { ref, reactive, toRaw } from 'vue';
 import { aspectRatio } from '@/libs/Maths.js';
 import FluxImage from '@/components/FluxImage.vue';
 
@@ -11,16 +11,18 @@ const status = {
 export default class Img {
 	loader;
 	errorMessage;
+	status = ref(null);
 
 	realSize;
 	realAspectRatio;
+	displaySize = reactive({});
 	adaptedSize = reactive({});
 	adaptedAspectRatio;
 	adaptedPosition = reactive({});
 
-	constructor(src, resizeType = 'fill') {
-		this.status = ref(null);
+	constructor(src, caption = null, resizeType = 'fill') {
 		this.src = src;
+		this.caption = caption;
 		this.resizeType = resizeType; // fill | fit
 
 		this.display = {
@@ -86,15 +88,27 @@ export default class Img {
 		reject(this.errorMessage);
 	}
 
-	adaptToSize = (size) => {
-		this.adaptedAspectRatio = aspectRatio(size);
+	adaptToSize(newSize) {
+		Object.assign(this.displaySize, newSize);
+		this.adaptedAspectRatio = aspectRatio(newSize);
 
-		Object.assign(this.adaptedSize, this.getAdaptedSize(size));
-		Object.assign(this.adaptedPosition, this.getAdaptedPosition(size));
-	};
+		Object.assign(
+			this.adaptedSize,
+			this.getAdaptedSize(newSize, this.adaptedAspectRatio)
+		);
 
-	getAdaptedSize(size) {
-		if (this.realAspectRatio <= this.adaptedAspectRatio) {
+		Object.assign(
+			this.adaptedPosition,
+			this.getAdaptedPosition(
+				newSize,
+				this.adaptedSize,
+				this.adaptedAspectRatio
+			)
+		);
+	}
+
+	getAdaptedSize(size, adaptedAspectRatio) {
+		if (this.realAspectRatio <= adaptedAspectRatio) {
 			return {
 				width: size.width,
 				height: size.width / this.realAspectRatio,
@@ -107,17 +121,42 @@ export default class Img {
 		};
 	}
 
-	getAdaptedPosition(size) {
-		if (this.realAspectRatio <= this.adaptedAspectRatio) {
+	getAdaptedPosition(newSize, adaptedSize, adaptedAspectRatio) {
+		if (this.realAspectRatio <= adaptedAspectRatio) {
 			return {
-				top: (size.height - this.adaptedSize.height) / 2,
+				top: (newSize.height - adaptedSize.height) / 2,
 				left: 0,
 			};
 		}
 
 		return {
 			top: 0,
-			left: (size.width - this.adaptedSize.width) / 2,
+			left: (newSize.width - adaptedSize.width) / 2,
+		};
+	}
+
+	getAdaptedProps(newSize) {
+		if (
+			newSize.width === this.displaySize.width &&
+			newSize.height === this.displaySize.height
+		) {
+			return {
+				...toRaw(this.adaptedSize),
+				...toRaw(this.adaptedPosition),
+			};
+		}
+
+		const adaptedAspectRatio = aspectRatio(newSize);
+		const adaptedSize = this.getAdaptedSize(newSize, adaptedAspectRatio);
+		const adaptedPosition = this.getAdaptedPosition(
+			newSize,
+			adaptedSize,
+			adaptedAspectRatio
+		);
+
+		return {
+			...adaptedSize,
+			...adaptedPosition,
 		};
 	}
 }

@@ -13,23 +13,23 @@ export default class Keys {
 	}
 
 	addKeyListener() {
-		window.addEventListener('keydown', this.keydown, {
+		window.addEventListener('keydown', (event) => this.keydown(event), {
 			passive: true,
 		});
 	}
 
 	removeKeyListener() {
-		window.removeEventListener('keydown', this.keydown);
+		window.removeEventListener('keydown', () => this.keydown);
 	}
 
 	keydown(event) {
 		if (['ArrowLeft', 'Left'].includes(event.key)) {
-			this.player.start('prev');
+			this.player.show('prev');
 			return;
 		}
 
 		if (['ArrowRight', 'Right'].includes(event.key)) {
-			this.player.start('next');
+			this.player.show('next');
 			return;
 		}
 	}

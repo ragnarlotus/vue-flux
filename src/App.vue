@@ -1,5 +1,5 @@
 <script setup>
-	import { ref, shallowReactive, onMounted } from 'vue';
+	import { ref, shallowReactive } from 'vue';
 
 	/* eslint-disable no-unused-vars */
 	import { VcParagraph } from 'vue-cosk';
@@ -10,41 +10,30 @@
 	// Flux transitions
 	import * as Transitions from './transitions';
 
+	// Flux complements
+	import * as Complements from './complements';
+
 	// Resources
-	import Img from './models/resources/Img.js';
+	import Img from './resources/Img.js';
 
-	// Images
-	const image01 = new Img('/images/01.jpg');
-	const image02 = new Img('/images/02.jpg');
-	const image03 = new Img('/images/03.jpg');
-	const image04 = new Img('/images/04.jpg');
-	const image05 = new Img('/images/05.jpg');
-	const image06 = new Img('/images/06.jpg');
+	const images = [];
+	for (let i = 1; i < 20; i++) {
+		const fileName = i.toString().padStart(2, '0');
+		const image = new Img(`/images/${fileName}.jpg`, 'img ' + i);
+		images.push(image);
+	}
 
-	const size = {
-		width: 640,
-		height: 360,
-	};
-
-	/* 	const cubeRscs = {
-		front: image01,
-		right: image02,
-		left: image03,
-		back: image04,
-		top: image05,
-		bottom: image06,
-	}; */
-
-	const $fluxTransition = ref(null);
 	const $vueFlux = ref(null);
 
 	const transitions = shallowReactive(Object.values(Transitions));
-	const rscs = shallowReactive([image01, image02, image03]);
-	const options = shallowReactive({ autoplay: true });
-
-	onMounted(() => {
-		// console.log($fluxTransition.value.start);
-		// $vueFlux.value.play();
+	//const transitions = shallowReactive([Transitions.Camera]);
+	const rscs = shallowReactive(images);
+	const options = shallowReactive({
+		allowFullscreen: true,
+		autoplay: false,
+		bindKeys: true,
+		infinite: false,
+		lazyLoadAfter: 10,
 	});
 </script>
 
@@ -63,25 +52,28 @@
 				:transitions="transitions"
 				:rscs="rscs"
 				:options="options"
-			/>
+			>
+				<template #preloader="preloaderProps">
+					<Complements.FluxPreloader v-bind="preloaderProps" />
+				</template>
 
-			<!-- 			<FluxComponents.FluxTransition
-				ref="$fluxTransition"
-				:size="size"
-				:transition="Transitions.Explode"
-				:from="image03"
-				:to="image05"
-			/> -->
+				<template #caption="captionProps">
+					<Complements.FluxCaption v-bind="captionProps" />
+				</template>
+
+				<template #controls="controlsProps">
+					<Complements.FluxControls v-bind="controlsProps" />
+				</template>
+
+				<template #pagination="paginationProps">
+					<Complements.FluxPagination v-bind="paginationProps" />
+				</template>
+
+				<template #index="indexProps">
+					<Complements.FluxIndex v-bind="indexProps" />
+				</template>
+			</FluxComponents.VueFlux>
 		</div>
-
-		<!-- <FluxComponents.FluxVortex :rsc="image01" :size="size" :circles="5" /> -->
-		<!-- <FluxComponents.FluxWrapper><FluxComponents.FluxImage :rsc="image01" :size="size" /></FluxComponents.FluxWrapper> -->
-		<!-- <FluxComponents.FluxImage :rsc="image01" :size="size" /> -->
-		<!-- <div style="perspective: 1600px; perspective-origin: center center;">
-			<FluxComponents.FluxCube :rscs="cubeRscs" :size="size" style="transform: rotateX(0deg) rotateY(0deg); transformOrigin: 50% 50% -90px;" :depth="180" />
-		</div> -->
-		<!-- <FluxComponents.FluxGrid :rscs="cubeRscs" :size="size" :rows="3" :cols="5" /> -->
-		<!-- <FluxComponents.FluxParallax :rsc="image01" type="visible" style="height: 200px;" /> -->
 
 		<VcParagraph
 			v-for="i of 2"

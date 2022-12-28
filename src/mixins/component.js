@@ -2,8 +2,9 @@ import { computed, unref } from 'vue';
 
 export const baseProps = {
 	color: {
-		type: [ String, Object ],
-		default: () => (null),
+		type: [String, Object],
+		required: false,
+		default: null,
 	},
 
 	rsc: Object,
@@ -16,8 +17,9 @@ export const baseProps = {
 	},
 
 	offset: {
-		type: [ Number, Object ],
-		default: () => ({}),
+		type: [Number, Object],
+		required: false,
+		default: null,
 	},
 
 	css: Object,
@@ -31,14 +33,11 @@ export default ($el, props, styles) => {
 			return {};
 		}
 
-		const {
-			width = size.width,
-			height = size.height,
-		} = props.viewSize;
+		const { width = size.width, height = size.height } = props.viewSize;
 
 		return {
-			width: width +'px',
-			height: height +'px',
+			width: width + 'px',
+			height: height + 'px',
 		};
 	});
 
@@ -50,11 +49,11 @@ export default ($el, props, styles) => {
 		...unref(styles.base),
 	}));
 
-	const setCss = css => {
+	const setCss = (css) => {
 		Object.assign(styles.base, css);
 	};
 
-	const transform = css => {
+	const transform = (css) => {
 		$el.value.clientHeight;
 		setCss(css);
 	};
@@ -78,4 +77,4 @@ export default ($el, props, styles) => {
 		show,
 		hide,
 	};
-}
+};

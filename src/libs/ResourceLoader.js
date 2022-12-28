@@ -17,6 +17,7 @@ export default class ResourceLoader {
 		rscs,
 		toPreload,
 		displaySize,
+		progress,
 		onPreloadFinished,
 		onLazyloadFinished
 	) {
@@ -24,6 +25,7 @@ export default class ResourceLoader {
 		this.toPreload =
 			toPreload >= this.rscs.length ? this.rscs.length : toPreload;
 		this.displaySize = displaySize;
+		this.progress = progress;
 		this.onPreloadFinished = onPreloadFinished;
 		this.onLazyloadFinished = onLazyloadFinished;
 

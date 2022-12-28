@@ -26,17 +26,12 @@
 				return {};
 			}
 
-			const bgStyle = {
-				width: rsc.adaptedSize.width,
-				height: rsc.adaptedSize.height,
-				top: rsc.adaptedPosition.top,
-				left: rsc.adaptedPosition.left,
-			};
+			const bgStyle = rsc.getAdaptedProps(props.size);
 
-			if (props.offset) {
-				for (const side of ['top', 'left']) {
-					bgStyle[side] -= props.offset[side] || 0;
-				}
+			if (props.offset !== null) {
+				['top', 'left'].forEach(
+					(side) => (bgStyle[side] -= props.offset[side] || 0)
+				);
 			}
 
 			return {

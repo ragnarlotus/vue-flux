@@ -20,7 +20,7 @@ export default class Mouse {
 		if (this.config.autohideTime === 0) {
 			return;
 		}
-		console.log(over);
+
 		this.isOver.value = over;
 
 		this[over ? 'over' : 'out']();

@@ -2,14 +2,29 @@
 	import { computed } from 'vue';
 	import FluxButton from '@/components/FluxButton.vue';
 
-	const props = defineProps([
-		'currentResource',
-		'config',
-		'mouseOver',
-		'player',
-	]);
+	const props = defineProps({
+		config: {
+			type: Object,
+			required: true,
+		},
 
-	const display = computed(() => {
+		currentResource: {
+			type: [Object, null],
+			required: true,
+		},
+
+		mouseOver: {
+			type: Object,
+			required: true,
+		},
+
+		player: {
+			type: Object,
+			required: true,
+		},
+	});
+
+	const visible = computed(() => {
 		if (props.currentResource === null) {
 			return false;
 		}
@@ -24,7 +39,7 @@
 
 <template>
 	<transition name="fade">
-		<div v-if="display" class="flux-controls">
+		<div v-if="visible" class="flux-controls">
 			<FluxButton class="prev top left" @click="player.show('prev')">
 				<polyline points="64,18 22,50 64,82" />
 			</FluxButton>

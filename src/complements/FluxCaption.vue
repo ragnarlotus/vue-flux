@@ -1,34 +1,49 @@
+<script setup>
+	import { computed } from 'vue';
+
+	const props = defineProps({
+		currentResource: {
+			type: [Object, null],
+			required: false,
+		},
+
+		currentTransition: {
+			type: [Object, null],
+			required: false,
+		},
+	});
+
+	const caption = computed(() => {
+		if (
+			props.currentResource === null ||
+			props.currentResource.rsc.caption === null
+		) {
+			return '&nbsp;';
+		}
+
+		return props.currentResource.rsc.caption;
+	});
+
+	const htmlClass = computed(() => {
+		const css = ['flux-caption'];
+
+		if (
+			props.currentTransition === null &&
+			props.currentResource !== null &&
+			props.currentResource.rsc.caption !== null
+		) {
+			css.push('visible');
+		}
+
+		return css;
+	});
+</script>
+
 <template>
-	<div v-if="caption" :class="htmlClass">
-		<slot :caption="caption" :text="getCaptionText()">
-			{{ getCaptionText() }}
-		</slot>
+	<div :class="htmlClass">
+		{{ caption }}
 	</div>
 </template>
-
-<script>
-	export default {
-		name: 'FluxCaption',
-
-		computed: {
-			caption() {
-				if (!this.vf) return '';
-
-				if (!this.vf.loaded) return '';
-
-				return this.getCaption();
-			},
-
-			htmlClass() {
-				const css = ['flux-caption'];
-
-				if (!this.Transitions.current) css.push('visible');
-
-				return css;
-			},
-		},
-	};
-</script>
 
 <style lang="scss">
 	.vue-flux .flux-caption {

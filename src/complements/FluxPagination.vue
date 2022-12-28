@@ -1,73 +1,75 @@
+<script setup>
+	import { computed } from 'vue';
+
+	const props = defineProps({
+		displayReady: {
+			type: Object,
+			required: true,
+		},
+
+		resources: {
+			type: Object,
+			required: true,
+		},
+
+		currentResource: {
+			type: Object,
+			required: false,
+		},
+
+		currentTransition: {
+			type: Object,
+			required: false,
+		},
+
+		show: {
+			type: Function,
+			required: true,
+		},
+	});
+
+	const visible = computed(
+		() => props.displayReady.value === true && props.resources.list.length > 0
+	);
+
+	const getTitle = (rsc) => {
+		return rsc.caption;
+	};
+
+	const getClass = (index) => {
+		const htmlClass = ['pagination-item'];
+
+		let active = props.currentResource.index === index;
+
+		if (props.currentTransition !== null) {
+			active = false;
+		}
+
+		if (active) {
+			htmlClass.push('active');
+		}
+
+		return htmlClass;
+	};
+</script>
+
 <template>
-	<nav v-if="display" class="flux-pagination">
+	<nav v-if="visible" class="flux-pagination">
 		<ul>
-			<li v-for="(img, index) in Images.imgs" :key="index">
-				<slot :item="getItem(img, index)">
-					<span
-						:title="getCaptionText(img.initIndex)"
-						class="pagination-item"
-						:class="getClass(index)"
-						@click="show(index)"
-					/>
-				</slot>
+			<li v-for="(rsc, index) in resources.list" :key="index">
+				<span
+					:title="getTitle(rsc)"
+					:class="getClass(index)"
+					@click="show(index)"
+				/>
 			</li>
 		</ul>
 	</nav>
 </template>
 
-<script>
-	export default {
-		name: 'FluxPagination',
-
-		computed: {
-			display() {
-				if (!this.vf) return false;
-
-				return true;
-			},
-		},
-
-		methods: {
-			getItem(img, index) {
-				return {
-					index: index,
-					title: this.getCaptionText(img.initIndex),
-					onClick: this.show,
-					active: this.getClass(index) === 'active',
-				};
-			},
-
-			getClass(i) {
-				if (
-					this.Transitions.current !== undefined &&
-					this.Transitions.from.index === i
-				)
-					return 'active';
-
-				if (!this.Images.current) return '';
-
-				if (
-					this.Transitions.current === undefined &&
-					this.Images.current.index === i
-				)
-					return 'active';
-
-				return '';
-			},
-
-			show(index, event) {
-				this.vf.show(index);
-
-				if (event) event.preventDefault();
-			},
-		},
-	};
-</script>
-
 <style lang="scss">
 	.vue-flux .flux-pagination {
 		flex: none;
-		margin-bottom: 0.5%;
 
 		ul {
 			display: flex;

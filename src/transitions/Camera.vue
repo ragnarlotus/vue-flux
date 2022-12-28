@@ -1,6 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import { diag } from '@/libs/maths.js';
+	import { diag } from '@/libs/Maths.js';
 	import useTransitionMixin, { baseProps } from '@/mixins/transition.js';
 	import FluxWrapper from '@/components/FluxWrapper.vue';
 	import FluxImage from '@/components/FluxImage.vue';
