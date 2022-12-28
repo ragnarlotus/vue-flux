@@ -6,14 +6,17 @@ export default class Display {
 		height: null,
 	});
 
-	setup(config, node, resources) {
+	constructor(config, resources) {
+		this.config = config;
+		this.resources = resources;
+	}
+
+	setup(node) {
 		if (node instanceof Element === false) {
 			throw new Error(node + ' is not an HTML node element');
 		}
 
-		this.config = config;
 		this.node = node;
-		this.resources = resources;
 
 		this.updateSize();
 	}

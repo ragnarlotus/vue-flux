@@ -1,3 +1,5 @@
+const abs = Math.abs;
+
 export default class Touches {
 	startX = 0;
 	startY = 0;
@@ -14,10 +16,10 @@ export default class Touches {
 	// Distance in percentage to trigger slide
 	slideTrigger = 0.3;
 
-	setup(config, display, controller, mouse) {
+	constructor(config, display, player, mouse) {
 		this.config = config;
 		this.display = display;
-		this.controller = controller;
+		this.player = player;
 		this.mouse = mouse;
 	}
 
@@ -48,15 +50,14 @@ export default class Touches {
 		}
 
 		if (this.slideRight(offsetX)) {
-			this.controller.show('prev');
+			this.player.start('prev');
 		} else if (this.slideLeft(offsetX)) {
-			this.controller.show('next');
+			this.player.start('next');
 		}
 	}
 
 	tap = (offsetX, offsetY) =>
-		Math.abs(offsetX) < this.tapThreshold &&
-		Math.abs(offsetY) < this.tapThreshold;
+		abs(offsetX) < this.tapThreshold && abs(offsetY) < this.tapThreshold;
 
 	doubleTap = () =>
 		this.endTime - this.prevTouchTime < this.doubleTapThreshold;

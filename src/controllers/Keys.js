@@ -1,11 +1,15 @@
 export default class Keys {
-	setup(config, controller) {
+	constructor(config, player) {
 		this.config = config;
-		this.controller = controller;
+		this.player = player;
+	}
 
+	setup() {
 		this.removeKeyListener();
 
-		if (this.config.bindKeys) this.addKeyListener();
+		if (this.config.bindKeys) {
+			this.addKeyListener();
+		}
 	}
 
 	addKeyListener() {
@@ -20,12 +24,12 @@ export default class Keys {
 
 	keydown(event) {
 		if (['ArrowLeft', 'Left'].includes(event.key)) {
-			this.controller.show('prev');
+			this.player.start('prev');
 			return;
 		}
 
 		if (['ArrowRight', 'Right'].includes(event.key)) {
-			this.controller.show('next');
+			this.player.start('next');
 			return;
 		}
 	}
