@@ -1,14 +1,18 @@
 <template>
 	<div v-if="display" class="flux-index">
 		<transition name="fade">
-			<flux-button v-if="displayButton" class="toggle bottom left" @click="showIndex($event)">
+			<flux-button
+				v-if="displayButton"
+				class="toggle bottom left"
+				@click="showIndex($event)"
+			>
 				<rect
 					v-for="(coord, i) in coords"
 					:key="i"
 					:x="coord.x"
 					:y="coord.y"
-					:width="buttonRectSize +'px'"
-					:height="buttonRectSize +'px'"
+					:width="buttonRectSize + 'px'"
+					:height="buttonRectSize + 'px'"
 				/>
 			</flux-button>
 		</transition>
@@ -21,7 +25,12 @@
 					:class="thumbClass(i)"
 					@click="showImage(i)"
 				>
-					<flux-image ref="thumbs" :image="images[i]" :size="thumbSize" :title="getCaptionText(image.initIndex)" />
+					<flux-image
+						ref="thumbs"
+						:image="images[i]"
+						:size="thumbSize"
+						:title="getCaptionText(image.initIndex)"
+					/>
 				</li>
 			</ul>
 		</nav>
@@ -29,7 +38,6 @@
 </template>
 
 <script>
-	import BaseComplement from '@/mixins/BaseComplement';
 	import FluxButton from '@/components/FluxButton.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 
@@ -40,10 +48,6 @@
 			FluxButton,
 			FluxImage,
 		},
-
-		mixins: [
-			BaseComplement,
-		],
 
 		props: {
 			buttonRows: {
@@ -76,8 +80,7 @@
 
 		computed: {
 			images() {
-				if (!this.vf)
-					return [];
+				if (!this.vf) return [];
 
 				return this.Images.imgs;
 			},
@@ -93,11 +96,9 @@
 			listClass() {
 				let listClass = '';
 
-				if (this.visible)
-					listClass += 'visible';
+				if (this.visible) listClass += 'visible';
 
-				if (this.vf.mouseOver)
-					listClass += ' mouse-over';
+				if (this.vf.mouseOver) listClass += ' mouse-over';
 
 				return listClass;
 			},
@@ -106,7 +107,7 @@
 				let { width, height } = this.vf.size;
 
 				width = width / 4.2;
-				height = width * 90 / 160;
+				height = (width * 90) / 160;
 
 				if (width > 160) {
 					width = 160;
@@ -117,18 +118,30 @@
 					width,
 					height,
 				};
-			}
+			},
 		},
 
 		created() {
-			let rowsGap = (100 - this.buttonPadding * 2 - this.rectSize * this.buttonRows) / (this.buttonRows + 1);
-			let colsGap = (100 - this.buttonPadding * 2 - this.rectSize * this.buttonCols) / (this.buttonCols + 1);
+			let rowsGap =
+				(100 - this.buttonPadding * 2 - this.rectSize * this.buttonRows) /
+				(this.buttonRows + 1);
+			let colsGap =
+				(100 - this.buttonPadding * 2 - this.rectSize * this.buttonCols) /
+				(this.buttonCols + 1);
 
 			for (let r = 0; r < this.buttonRows; r++) {
 				for (let c = 0; c < this.buttonCols; c++) {
 					this.coords.push({
-						x: this.buttonPadding + rowsGap + rowsGap * r + this.rectSize * r,
-						y: this.buttonPadding + colsGap + colsGap * c + this.rectSize * c,
+						x:
+							this.buttonPadding +
+							rowsGap +
+							rowsGap * r +
+							this.rectSize * r,
+						y:
+							this.buttonPadding +
+							colsGap +
+							colsGap * c +
+							this.rectSize * c,
 					});
 				}
 			}
@@ -156,13 +169,15 @@
 				setTimeout(() => {
 					this.visible = false;
 
-					if (imageIndex !== undefined)
-						this.showImage(imageIndex);
+					if (imageIndex !== undefined) this.showImage(imageIndex);
 				}, this.delay);
 			},
 
 			thumbClass(imageIndex) {
-				return this.Images.current && this.Images.current.index === imageIndex? 'current' : '';
+				return this.Images.current &&
+					this.Images.current.index === imageIndex
+					? 'current'
+					: '';
 			},
 
 			showImage(imageIndex) {
@@ -185,11 +200,13 @@
 		font-size: 0;
 		text-align: center;
 
-		.fade-enter, .fade-leave-to {
+		.fade-enter,
+		.fade-leave-to {
 			opacity: 0;
 		}
 
-		.fade-enter-active, .fade-leave-active {
+		.fade-enter-active,
+		.fade-leave-active {
 			transition: opacity 0.3s ease-in;
 		}
 
@@ -233,7 +250,7 @@
 			transition: all 0.3s ease;
 
 			&:hover {
-				box-shadow: 0px 0px 3px 2px rgba(255,255,255,0.6);
+				box-shadow: 0px 0px 3px 2px rgba(255, 255, 255, 0.6);
 			}
 
 			&.current {

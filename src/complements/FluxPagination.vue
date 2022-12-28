@@ -16,19 +16,12 @@
 </template>
 
 <script>
-	import BaseComplement from '@/mixins/BaseComplement.js';
-
 	export default {
 		name: 'FluxPagination',
 
-		mixins: [
-			BaseComplement,
-		],
-
 		computed: {
 			display() {
-				if (!this.vf)
-					return false;
+				if (!this.vf) return false;
 
 				return true;
 			},
@@ -45,13 +38,18 @@
 			},
 
 			getClass(i) {
-				if (this.Transitions.current !== undefined && this.Transitions.from.index === i)
+				if (
+					this.Transitions.current !== undefined &&
+					this.Transitions.from.index === i
+				)
 					return 'active';
 
-				if (!this.Images.current)
-					return '';
+				if (!this.Images.current) return '';
 
-				if (this.Transitions.current === undefined && this.Images.current.index === i)
+				if (
+					this.Transitions.current === undefined &&
+					this.Images.current.index === i
+				)
 					return 'active';
 
 				return '';
@@ -60,8 +58,7 @@
 			show(index, event) {
 				this.vf.show(index);
 
-				if (event)
-					event.preventDefault();
+				if (event) event.preventDefault();
 			},
 		},
 	};

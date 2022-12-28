@@ -7,22 +7,14 @@
 </template>
 
 <script>
-	import BaseComplement from '@/mixins/BaseComplement.js';
-
 	export default {
 		name: 'FluxCaption',
 
-		mixins: [
-			BaseComplement,
-		],
-
 		computed: {
 			caption() {
-				if (!this.vf)
-					return '';
+				if (!this.vf) return '';
 
-				if (!this.vf.loaded)
-					return '';
+				if (!this.vf.loaded) return '';
 
 				return this.getCaption();
 			},
@@ -30,8 +22,7 @@
 			htmlClass() {
 				const css = ['flux-caption'];
 
-				if (!this.Transitions.current)
-					css.push('visible');
+				if (!this.Transitions.current) css.push('visible');
 
 				return css;
 			},

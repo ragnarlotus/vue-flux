@@ -2,9 +2,7 @@
 	<div class="preloader">
 		<slot name="spinner">
 			<div v-if="displaySpinner" class="spinner">
-				<div class="pct">
-					{{ Images.progress }}%
-				</div>
+				<div class="pct">{{ Images.progress }}%</div>
 				<div class="border" />
 			</div>
 		</slot>
@@ -12,14 +10,8 @@
 </template>
 
 <script>
-	import BaseComplement from '@/mixins/BaseComplement';
-
 	export default {
 		name: 'FluxPreloader',
-
-		mixins: [
-			BaseComplement,
-		],
 
 		props: {
 			spinner: {
@@ -42,34 +34,31 @@
 		},
 
 		watch: {
-			'vf.images': function() {
+			'vf.images': function () {
 				let { Images, Transitions } = this;
 
 				if (Images.last && !Transitions.current)
 					Images.current = Images.last;
 			},
 
-			'vf.Images.preloading': function(preloading) {
+			'vf.Images.preloading': function (preloading) {
 				let { Images } = this;
 
-				if (!Images.last || preloading)
-					return;
+				if (!Images.last || preloading) return;
 
-				if (Images.current === Images.last)
-					this.transitionStart()
-			}
+				if (Images.current === Images.last) this.transitionStart();
+			},
 		},
 
 		methods: {
 			transitionStart() {
 				let { Images, Transitions } = this;
 
-				if (Transitions.current)
-					Transitions.end(true);
+				if (Transitions.current) Transitions.end(true);
 
 				Transitions.run(undefined, Images.current, Images.imgs[0], 'next');
 			},
-		}
+		},
 	};
 </script>
 
@@ -119,8 +108,12 @@
 		}
 
 		@keyframes spin {
-			0% { transform: rotate(0deg); }
-			100% { transform: rotate(360deg); }
+			0% {
+				transform: rotate(0deg);
+			}
+			100% {
+				transform: rotate(360deg);
+			}
 		}
 	}
 </style>
