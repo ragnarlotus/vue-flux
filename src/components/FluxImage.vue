@@ -1,6 +1,6 @@
 <script setup>
 	import { ref, reactive, computed } from 'vue';
-	import useComponentMixin, { baseProps } from '@/models/mixins/component.js';
+	import useComponentMixin, { baseProps } from '@/mixins/component.js';
 
 	const $el = ref(null);
 

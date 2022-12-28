@@ -1,8 +1,6 @@
 <script setup>
 	import { ref, reactive } from 'vue';
-	import useComponentMixin, {
-		baseProps,
-	} from '@/models/mixins/component.js';
+	import useComponentMixin, { baseProps } from '@/mixins/component.js';
 
 	const $el = ref(null);
 
@@ -14,13 +12,11 @@
 		},
 	});
 
-	const {
-		style,
-		setCss,
-		transform,
-		show,
-		hide,
-	} = useComponentMixin($el, props, styles);
+	const { style, setCss, transform, show, hide } = useComponentMixin(
+		$el,
+		props,
+		styles
+	);
 
 	defineExpose({
 		setCss,

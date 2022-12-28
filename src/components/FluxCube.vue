@@ -1,9 +1,7 @@
 <script setup>
 	import { ref, reactive, computed } from 'vue';
 	import FluxImage from '@/components/FluxImage.vue';
-	import useComponentMixin, {
-		baseProps,
-	} from '@/models/mixins/component.js';
+	import useComponentMixin, { baseProps } from '@/mixins/component.js';
 
 	const $el = ref(null);
 
@@ -34,13 +32,11 @@
 		props: props.css,
 	});
 
-	const {
-		style,
-		setCss,
-		transform,
-		show,
-		hide,
-	} = useComponentMixin($el, props, styles);
+	const { style, setCss, transform, show, hide } = useComponentMixin(
+		$el,
+		props,
+		styles
+	);
 
 	const rotate = {
 		x: {
@@ -69,19 +65,21 @@
 		},
 	};
 
-	const sideNames = [ 'front', 'back', 'top', 'bottom', 'left', 'right' ];
+	const sideNames = ['front', 'back', 'top', 'bottom', 'left', 'right'];
 
-	const isSideDefined = side => props.rscs[side] || (props.color !== null && props.color[side] || (typeof props.color === 'string' && props.color.length));
+	const isSideDefined = (side) =>
+		props.rscs[side] ||
+		(props.color !== null && props.color[side]) ||
+		(typeof props.color === 'string' && props.color.length);
 
-	const definedSides = computed(() => sideNames.filter(side => isSideDefined(side)));
+	const definedSides = computed(() =>
+		sideNames.filter((side) => isSideDefined(side))
+	);
 
 	const translateZ = computed(() => {
 		const {
 			size: { width, height },
-			viewSize: {
-				width: viewWidth,
-				height: viewHeight,
-			},
+			viewSize: { width: viewWidth, height: viewHeight },
 			depth,
 		} = props;
 
@@ -89,9 +87,9 @@
 
 		return {
 			top: halfDepth,
-			bottom: viewHeight? viewHeight - halfDepth : height - halfDepth,
+			bottom: viewHeight ? viewHeight - halfDepth : height - halfDepth,
 			left: halfDepth,
-			right: viewWidth? viewWidth - halfDepth : width - halfDepth,
+			right: viewWidth ? viewWidth - halfDepth : width - halfDepth,
 			back: depth,
 		};
 	});
@@ -113,8 +111,14 @@
 			const side = {
 				ref: sideName,
 				rsc: props.rscs[sideName],
-				color: props.color !== null? props.color[sideName] || props.color : null,
-				offset: props.offset !== null? props.offset[sideName] || props.offset : null,
+				color:
+					props.color !== null
+						? props.color[sideName] || props.color
+						: null,
+				offset:
+					props.offset !== null
+						? props.offset[sideName] || props.offset
+						: null,
 				size: { ...props.size },
 				viewSize: { ...props.viewSize },
 				style: {
@@ -143,9 +147,9 @@
 
 	let $sides = [];
 
-	const getSide = side => $sides[side];
+	const getSide = (side) => $sides[side];
 
-	const turn = side => transform({ transform: getTransform(side) });
+	const turn = (side) => transform({ transform: getTransform(side) });
 
 	const turnTop = () => turn('top');
 
@@ -168,7 +172,7 @@
 		turnBack,
 		turnBottom,
 		turnLeft,
-		turnRight
+		turnRight,
 	});
 </script>
 

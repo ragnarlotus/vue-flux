@@ -1,10 +1,8 @@
 <script setup>
 	import { ref, reactive, computed } from 'vue';
-	import { round, ceil, diag } from '@/models/libs/math.js';
+	import { round, ceil, diag } from '@/libs/Maths.js';
 	import FluxImage from '@/components/FluxImage.vue';
-	import useComponentMixin, {
-		baseProps,
-	} from '@/models/mixins/component.js';
+	import useComponentMixin, { baseProps } from '@/mixins/component.js';
 
 	const $el = ref(null);
 
@@ -28,12 +26,7 @@
 		props: props.css,
 	});
 
-	const {
-		style,
-		setCss,
-		show,
-		hide,
-	} = useComponentMixin($el, props, styles);
+	const { style, setCss, show, hide } = useComponentMixin($el, props, styles);
 
 	const numCircles = computed(() => {
 		return round(props.circles);
@@ -72,10 +65,10 @@
 			tile.css = {
 				...props.tileCss,
 				position: 'absolute',
-				left: tile.offset.left +'px',
+				left: tile.offset.left + 'px',
 				top: tile.offset.top + 'px',
-				width: size +'px',
-				height: size +'px',
+				width: size + 'px',
+				height: size + 'px',
 				backgroundRepeat: 'repeat',
 				borderRadius: '50%',
 				zIndex: i,
@@ -89,7 +82,7 @@
 
 	let $tiles = [];
 
-	const transform = func => {
+	const transform = (func) => {
 		$tiles.forEach((tile, i) => func(tile, i));
 	};
 
@@ -105,7 +98,11 @@
 	<div ref="$el" :style="style">
 		<FluxImage
 			v-for="(tile, index) in tiles"
-			:ref="el => { if (el) $tiles[index] = el }"
+			:ref="
+				(el) => {
+					if (el) $tiles[index] = el;
+				}
+			"
 			:key="index"
 			:size="size"
 			:rsc="rsc"

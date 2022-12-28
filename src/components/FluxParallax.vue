@@ -2,7 +2,7 @@
 	// holder (window), component, background
 
 	import { ref, reactive, computed, unref, onMounted, onUnmounted } from 'vue';
-	import { ceil, aspectRatio } from '@/models/libs/math.js';
+	import { ceil, aspectRatio } from '@/libs/Maths.js';
 
 	const $el = ref(null);
 
@@ -22,7 +22,7 @@
 		},
 
 		offset: {
-			type: [ Number, String ],
+			type: [Number, String],
 			default: '100%',
 		},
 	});
@@ -38,10 +38,13 @@
 		final: computed(() => ({
 			...style.base,
 			...unref(style.defined),
-		}))
+		})),
 	};
 
-	const isIos = (/iPad|iPhone|iPod/.test(navigator.platform) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && !window.MSStream;
+	const isIos =
+		(/iPad|iPhone|iPod/.test(navigator.platform) ||
+			(navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
+		!window.MSStream;
 
 	const display = reactive({
 		width: null,
@@ -89,13 +92,13 @@
 		if (/^[0-9]+px$/.test(offset)) {
 			return {
 				px: offsetValue,
-				pct: offsetValue * 100 / background.height,
+				pct: (offsetValue * 100) / background.height,
 			};
 		}
 
 		if (/^[0-9]+%$/.test(offset)) {
 			return {
-				px: ceil(view.height * offsetValue / 100),
+				px: ceil((view.height * offsetValue) / 100),
 				pct: offsetValue,
 			};
 		}
@@ -104,7 +107,9 @@
 	});
 
 	const remainderHeight = computed(() => {
-		const effectHeight = isIos? display.height : view.height + offsetHeight.value.px;
+		const effectHeight = isIos
+			? display.height
+			: view.height + offsetHeight.value.px;
 
 		return background.height - effectHeight;
 	});
@@ -150,27 +155,28 @@
 		onScroll();
 	};
 
-	const moveBackgroundByPct = pct => {
+	const moveBackgroundByPct = (pct) => {
 		if (remainderHeight.value > 0)
-			pct = pct * offsetHeight.value.pct / 100 + 50 - offsetHeight.value.pct / 2;
+			pct =
+				(pct * offsetHeight.value.pct) / 100 +
+				50 -
+				offsetHeight.value.pct / 2;
 
-		style.defined.backgroundPositionY = pct.toFixed(2) +'%';
+		style.defined.backgroundPositionY = pct.toFixed(2) + '%';
 	};
 
 	const onScroll = () => {
 		if (rsc.status.value !== 'loaded' || (!isIos && props.type === 'fixed'))
 			return;
 
-		const scrollTop = holder.scrollY || holder.scrollTop || holder.pageYOffset || 0;
+		const scrollTop =
+			holder.scrollY || holder.scrollTop || holder.pageYOffset || 0;
 
-		if (holder !== window)
-			return handle.relative(scrollTop);
+		if (holder !== window) return handle.relative(scrollTop);
 
-		if (scrollTop + display.height < view.top)
-			return;
+		if (scrollTop + display.height < view.top) return;
 
-		if (scrollTop > view.top + view.height)
-			return;
+		if (scrollTop > view.top + view.height) return;
 
 		let positionY = scrollTop - view.top + display.height;
 
@@ -178,35 +184,31 @@
 	};
 
 	const handle = {
-		visible: positionY => {
+		visible: (positionY) => {
 			let pct = 0;
 
-			if (positionY < view.height)
-				pct = 0;
-
-			else if (positionY > display.height)
-				pct = 100;
-
+			if (positionY < view.height) pct = 0;
+			else if (positionY > display.height) pct = 100;
 			else
-				pct = (positionY - view.height) * 100 / (display.height - view.height);
+				pct =
+					((positionY - view.height) * 100) /
+					(display.height - view.height);
 
 			moveBackgroundByPct(pct);
 		},
 
-		relative: positionY => {
+		relative: (positionY) => {
 			let pct;
 
 			if (holder === window)
-				pct = positionY * 100 / (display.height + view.height);
-
-			else
-				pct = positionY * 100 / (display.height - holder.clientHeight);
+				pct = (positionY * 100) / (display.height + view.height);
+			else pct = (positionY * 100) / (display.height - holder.clientHeight);
 
 			moveBackgroundByPct(pct);
 		},
 
-		fixed: positionY => {
-			style.defined.backgroundPositionY = (positionY - display.height) +'px';
+		fixed: (positionY) => {
+			style.defined.backgroundPositionY = positionY - display.height + 'px';
 		},
 	};
 

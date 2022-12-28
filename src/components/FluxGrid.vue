@@ -1,7 +1,7 @@
 <script setup>
 	import { ref, reactive, computed } from 'vue';
-	import { floor, ceil } from '@/models/libs/math.js';
-	import useComponentMixin, { baseProps } from '@/models/mixins/component.js';
+	import { floor, ceil } from '@/libs/Maths.js';
+	import useComponentMixin, { baseProps } from '@/mixins/component.js';
 	import FluxImage from './FluxImage.vue';
 	import FluxCube from './FluxCube.vue';
 
