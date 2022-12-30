@@ -31,24 +31,22 @@
 		left: 0;
 		z-index: -1;
 
-		$spinner-size: 80px;
-
 		.spinner {
 			position: absolute;
 			top: 50%;
 			left: 50%;
-			margin-top: -($spinner-size / 2);
-			margin-left: -($spinner-size / 2);
-			width: $spinner-size;
-			height: $spinner-size;
+			margin-top: -40px;
+			margin-left: -40px;
+			width: 80px;
+			height: 80px;
 			z-index: 14;
 
 			.pct {
 				position: absolute;
 				right: 0;
 				left: 0;
-				height: $spinner-size;
-				line-height: $spinner-size;
+				height: 80px;
+				line-height: 80px;
 				text-align: center;
 				font-weight: bold;
 				z-index: 1;

@@ -1,6 +1,6 @@
 {
   "name": "vue-flux",
-  "version": "7.0.0",
+  "version": "7.0.0-alpha.0",
   "description": "Vue image slider",
   "author": "ragnar lotus",
   "repository": {
@@ -17,24 +17,24 @@
   "license": "MIT",
   "bugs": "https://github.com/ragnarlotus/vue-flux/issues",
   "homepage": "https://ragnarlotus.github.io/vue-flux-docs/",
-  "main": "dist/vue-flux.umd.js",
-  "module": "dist/vue-flux.es.js",
+  "main": "./dist/vue-flux.umd.js",
+  "module": "./dist/vue-flux.mjs",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore src",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore",
     "format": "prettier .  --write"
   },
   "exports": {
     ".": {
-      "import": "./dist/vue-flux.es.js",
+      "import": "./dist/vue-flux.mjs",
       "require": "./dist/vue-flux.umd.js"
     }
   },
-  "files": [
-    "dist"
-  ],
   "dependencies": {
     "vue": "^3.2.41"
   },
