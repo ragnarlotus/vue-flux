@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 	import { ref, reactive, computed } from 'vue';
 	import { floor, ceil } from '@/libs/Maths.js';
 	import useComponentMixin, { baseProps } from '@/mixins/component.js';

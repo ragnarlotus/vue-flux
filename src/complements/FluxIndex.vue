@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 	import { ref, computed, nextTick } from 'vue';
 	import FluxButton from '@/components/FluxButton.vue';
 

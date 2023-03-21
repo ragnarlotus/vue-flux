@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 	import { ref, reactive } from 'vue';
 	import { diag } from '@/libs/Maths.js';
 	import useTransitionMixin, { baseProps } from '@/mixins/transition.js';

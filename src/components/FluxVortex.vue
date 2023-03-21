@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 	import { ref, reactive, computed } from 'vue';
 	import { round, ceil, diag } from '@/libs/Maths.js';
 	import FluxImage from '@/components/FluxImage.vue';

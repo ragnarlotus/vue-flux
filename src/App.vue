@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 	import { ref, shallowReactive } from 'vue';
 
 	/* eslint-disable no-unused-vars */

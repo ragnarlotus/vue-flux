@@ -1,57 +1,52 @@
-<script setup>
+<script setup lang="ts">
 	import { onMounted, onUnmounted, ref, reactive, computed, watch } from 'vue';
-
-	// Controllers
-	import * as Controllers from '@/controllers';
-
-	// Components
-	import FluxTransition from '@/components/FluxTransition.vue';
+	import * as Controllers from '../controllers';
+	import * as Repositories from '../repositories';
+	import FluxTransition from './FluxTransition.vue';
+	import Resource from '../resources/Resource';
+	import { VueFluxConfig } from './types';
 
 	const $container = ref(null);
 	const $transition = ref(null);
 	const $displayComponent = ref(null);
 
-	const props = defineProps({
+	const props = defineProps<{
 		options: {
-			type: Object,
-			default: () => reactive({}),
-		},
+			allowFullscreen?: boolean;
+			allowToSkipTransition?: boolean;
+			aspectRatio?: string;
+			autohideTime?: number;
+			autoplay?: boolean;
+			bindKeys?: boolean;
+			delay?: number;
+			enableGestures?: boolean;
+			infinite?: boolean;
+			lazyLoad?: boolean;
+			lazyLoadAfter?: number;
+		};
+		rscs: Resource[];
+		transitions: Array<Object>[];
+	}>();
 
-		transitions: {
-			type: Array,
-			required: true,
-		},
-
-		rscs: {
-			type: Array,
-			required: true,
-		},
+	const config: VueFluxConfig = reactive({
+		allowFullscreen: false,
+		allowToSkipTransition: true,
+		aspectRatio: '16:9',
+		autohideTime: 2500,
+		autoplay: false,
+		bindKeys: false,
+		delay: 5000,
+		enableGestures: false,
+		infinite: true,
+		lazyLoad: true,
+		lazyLoadAfter: 5,
 	});
-
-	const config = reactive(
-		Object.assign(
-			{
-				allowFullscreen: false,
-				allowToSkipTransition: true,
-				aspectRatio: '16:9',
-				autohideTime: 2500,
-				autoplay: false,
-				bindKeys: false,
-				delay: 5000,
-				enableGestures: false,
-				infinite: true,
-				lazyLoad: true,
-				lazyLoadAfter: 5,
-			},
-			props.options
-		)
-	);
 
 	const timers = new Controllers.Timers();
 	const player = new Controllers.Player(config, timers);
-	const resources = new Controllers.Resources(config);
-	const transitions = new Controllers.Transitions(config, timers);
-	const display = new Controllers.Display(config, resources);
+	const resources = new Repositories.ResourceRepository(config);
+	const transitions = new Repositories.TransitionRepository(config, timers);
+	const display = new Controllers.Display(config, resources, $container);
 	const keys = new Controllers.Keys(config, player);
 	const mouse = new Controllers.Mouse(config, timers);
 	const touches = new Controllers.Touches(config, display, player, mouse);
@@ -77,15 +72,16 @@
 		() => updateFromProps('transitions')
 	);
 
-	const updateFromProps = (elements) => {
+	const updateFromProps = (elements: string) => {
 		const wasPlaying = config.autoplay;
 
 		player.stop(true);
 
-		({
-			rscs: () => resources.update(props.rscs),
-			transitions: () => transitions.update(props.transitions),
-		}[elements]());
+		if (elements === 'rscs') {
+			resources.update(props.rscs);
+		} else if (elements === 'transitions') {
+			transitions.update(props.transitions);
+		}
 
 		if (wasPlaying) {
 			config.autoplay = true;
@@ -94,8 +90,8 @@
 
 	onMounted(() => {
 		setup();
-		display.setup($container.value);
 
+		display.updateSize();
 		transitions.setup(player, resources);
 		resources.setup(player, display);
 		player.setup(transitions, resources, $displayComponent);
@@ -132,10 +128,13 @@
 	});
 
 	defineExpose({
-		show: (resourceIndex, transitionIndex) =>
-			player.show(resourceIndex, transitionIndex),
-		play: (index, delay) => player.play(index, delay),
-		stop: (cancelTransition) => player.stop(cancelTransition),
+		show: (
+			resourceIndex?: string | number,
+			transitionIndex?: string | number
+		) => player.show(resourceIndex, transitionIndex),
+		play: (index?: string | number, delay?: number) =>
+			player.play(index, delay),
+		stop: (cancelTransition?: boolean) => player.stop(cancelTransition),
 	});
 </script>
 
@@ -146,7 +145,7 @@
 		:style="style"
 		@mousemove="mouse.toggle(true)"
 		@mouseleave="mouse.toggle(false)"
-		@dblclick="display.toggleFullScreen()"
+		@dblclick="display.toggleFullScreen(config)"
 		@touchstart="touches.start($event)"
 		@touchend="touches.end($event)"
 	>
@@ -207,7 +206,7 @@
 				:resources="resources"
 				:current-resource="player.resource.current"
 				:current-transition="player.transition.current"
-				:show="(index) => player.show(index)"
+				:show="(index: string | undefined: string | undefined) => player.show(index)"
 			/>
 		</div>
 	</div>

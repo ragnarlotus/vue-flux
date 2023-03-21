@@ -1,6 +1,6 @@
-<script setup>
+<script setup lang="ts">
 	import { ref, reactive, computed } from 'vue';
-	import useComponentMixin, { baseProps } from '@/mixins/component.js';
+	import useComponentMixin, { baseProps } from '@/mixins/component';
 
 	const $el = ref(null);
 
@@ -22,11 +22,11 @@
 		image: computed(() => {
 			const { rsc } = props;
 
-			if (!rsc || rsc.isLoading() || !$el.value) {
+			if (!rsc || !rsc.isLoaded() || !$el.value) {
 				return {};
 			}
 
-			const bgStyle = rsc.getAdaptedProps(props.size);
+			const bgStyle = rsc.getAdaptedProps();
 
 			if (props.offset !== null) {
 				['top', 'left'].forEach(

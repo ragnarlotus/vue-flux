@@ -1,10 +1,22 @@
-import { computed, unref } from 'vue';
+import { computed, Ref, unref } from 'vue';
+import Resource from '../resources/Resource';
+import Size from '../shared/Size';
+import { Offset } from '../types';
+
+interface BaseProps {
+	color?: string | {};
+	rsc: Resource;
+	size: Size;
+	viewSize: Size;
+	offset?: Offset;
+	css?: object;
+}
 
 export const baseProps = {
 	color: {
 		type: [String, Object],
 		required: false,
-		default: null,
+		default: undefined,
 	},
 
 	rsc: Object,
@@ -19,13 +31,13 @@ export const baseProps = {
 	offset: {
 		type: [Number, Object],
 		required: false,
-		default: null,
+		default: undefined,
 	},
 
 	css: Object,
 };
 
-export default ($el, props, styles) => {
+export default ($el: Ref, props: BaseProps, styles: object) => {
 	styles.size = computed(() => {
 		const size = props.size;
 

@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 	// holder (window), component, background
 
 	import { ref, reactive, computed, unref, onMounted, onUnmounted } from 'vue';

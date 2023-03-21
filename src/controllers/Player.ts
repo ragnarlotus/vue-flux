@@ -1,30 +1,53 @@
-import { shallowReactive, nextTick } from 'vue';
+import { shallowReactive, nextTick, Ref } from 'vue';
+import { VueFluxConfig } from '../types';
+import Resource from '../resources/Resource';
+import ResourceRepository from '../repositories/ResourceRepository';
+import TransitionRepository from '../repositories/TransitionRepository';
+import Timers from './Timers';
 
-export default class Player {
-	transition = shallowReactive({
+class Player {
+	transition: {
+		current: Object | null;
+		last: Object | null;
+	} = shallowReactive({
 		current: null,
 		last: null,
 	});
 
-	resource = shallowReactive({
+	resource: {
+		current: Resource | null;
+		from: Resource | null;
+		to: Resource | null;
+	} = shallowReactive({
 		current: null,
 		from: null,
 		to: null,
 	});
 
-	constructor(config, timers) {
+	config: VueFluxConfig;
+	timers: Timers;
+	transitions: TransitionsRepository | undefined;
+	resources: ResourcesRepository | undefined;
+	$displayComponent: Ref<null> | undefined;
+
+	constructor(config: VueFluxConfig, timers: Timers) {
 		this.config = config;
 		this.timers = timers;
 	}
 
-	setup(transitions, resources, $displayComponent) {
+	setup(
+		transitions: TransitionsRepository,
+		resources: ResourcesRepository,
+		$displayComponent: Ref<null>
+	) {
 		this.transitions = transitions;
 		this.resources = resources;
 		this.$displayComponent = $displayComponent;
 	}
 
 	resetTransition() {
-		['current', 'last'].forEach((attr) => (this.transition[attr] = null));
+		this.transition.current = null;
+		this.transition.last = null;
 	}
 
 	initTransition() {
@@ -36,7 +59,9 @@ export default class Player {
 	}
 
 	resetResource() {
-		['current', 'from', 'to'].forEach((attr) => (this.resource[attr] = null));
+		this.resource.current = null;
+		this.resource.from = null;
+		this.resource.to = null;
 	}
 
 	initResource() {
@@ -61,15 +86,15 @@ export default class Player {
 		this.play();
 	}
 
-	getDirection(index) {
-		if (['prev', 'next'].includes(index)) {
+	getDirection(index: string | number) {
+		if (['prev', 'next'].includes(index.toString())) {
 			return index;
 		}
 
 		return this.resource.current.index < index ? 'next' : 'prev';
 	}
 
-	play(index = 'next', delay = 0) {
+	play(index: string | number = 'next', delay: number = 0) {
 		const { config, timers } = this;
 
 		config.autoplay = true;
@@ -93,7 +118,10 @@ export default class Player {
 		}
 	}
 
-	show(resourceIndex = 'next', transitionIndex = 'next') {
+	show(
+		resourceIndex: string | number = 'next',
+		transitionIndex: string | number = 'next'
+	) {
 		const { resources, config, transitions, $displayComponent } = this;
 
 		if (resources.list.length === 0 || $displayComponent.value === null) {
@@ -165,3 +193,5 @@ export default class Player {
 		});
 	}
 }
+
+export default Player;

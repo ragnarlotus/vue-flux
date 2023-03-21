@@ -1,7 +1,8 @@
-<script setup>
+<script setup lang="ts">
 	import { ref, reactive, computed } from 'vue';
 	import FluxImage from '@/components/FluxImage.vue';
 	import useComponentMixin, { baseProps } from '@/mixins/component.js';
+	import { Sides } from '../types';
 
 	const $el = ref(null);
 
@@ -65,15 +66,13 @@
 		},
 	};
 
-	const sideNames = ['front', 'back', 'top', 'bottom', 'left', 'right'];
-
-	const isSideDefined = (side) =>
+	const isSideDefined = (side: Sides) =>
 		props.rscs[side] ||
 		(props.color !== null && props.color[side]) ||
 		(typeof props.color === 'string' && props.color.length);
 
 	const definedSides = computed(() =>
-		sideNames.filter((side) => isSideDefined(side))
+		Object.values(Sides).filter((side) => isSideDefined(side))
 	);
 
 	const translateZ = computed(() => {

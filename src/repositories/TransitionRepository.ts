@@ -1,19 +1,15 @@
 import { toRaw } from 'vue';
+import Player from '../controllers/Player';
 
-export default class Transitions {
-	list = [];
+export default class TransitionsRepository {
+	list: Object[] = [];
+	player?: Player | null;
 
-	constructor(config, timers) {
-		this.config = config;
-		this.timers = timers;
-	}
-
-	setup(player, resources) {
+	setup(player: Player) {
 		this.player = player;
-		this.resources = resources;
 	}
 
-	update(transitions) {
+	update(transitions: Object[]) {
 		this.player.resetTransition();
 
 		this.list = toRaw(transitions);
