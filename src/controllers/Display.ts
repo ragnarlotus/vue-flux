@@ -1,28 +1,23 @@
-import { ref, computed, nextTick, Ref } from 'vue';
-import { VueFluxConfig } from '../types';
-import { ResourceRepository } from '../repositories';
+import { nextTick, Ref } from 'vue';
+import { Resources } from '../repositories';
 import Size from '../shared/Size';
 import Resource from '../resources/Resource';
+import { Config } from '../components/VueFlux/types';
 
 export default class Display {
-	config: VueFluxConfig;
-	resources: ResourceRepository;
-	node: Ref<HTMLElement>;
-	ready: Ref<boolean> = ref(false);
-	size: Size | null = null;
+	config: Config;
+	resources: Resources;
+	node: Ref<null | HTMLElement>;
+	size: Size = new Size();
 
 	constructor(
-		config: VueFluxConfig,
-		resources: ResourceRepository,
-		node: Ref<HTMLElement>
+		config: Config,
+		resources: Resources,
+		node: Ref<null | HTMLElement>
 	) {
 		this.config = config;
 		this.resources = resources;
 		this.node = node;
-
-		this.ready = computed(() => {
-			return this.size !== null;
-		});
 	}
 
 	addResizeListener() {
@@ -36,7 +31,7 @@ export default class Display {
 	}
 
 	async updateSize() {
-		this.size = null;
+		this.size.reset();
 
 		await nextTick();
 
@@ -53,13 +48,13 @@ export default class Display {
 			height = (width / parseFloat(arWidth)) * parseFloat(arHeight);
 		}
 
-		this.size = new Size({
+		this.size.update({
 			width,
 			height,
 		});
 
 		this.resources.list.forEach((rsc: Resource) =>
-			rsc.adaptToSize(this.size!)
+			rsc.adaptToSize(this.size)
 		);
 	}
 
@@ -70,7 +65,11 @@ export default class Display {
 	}
 
 	async enterFullScreen() {
-		if (!this.config.allowFullscreen || this.node.value === null) {
+		if (
+			!this.config.allowFullscreen ||
+			this.node === null ||
+			this.node.value === null
+		) {
 			return;
 		}
 

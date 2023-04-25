@@ -1,3 +1,9 @@
+import { Config } from '../components/VueFlux/types';
+import Display from './Display';
+import Mouse from './Mouse';
+import Player from './Player';
+import Timers from './Timers';
+
 const abs = Math.abs;
 
 export default class Touches {
@@ -16,15 +22,8 @@ export default class Touches {
 	// Distance in percentage to trigger slide
 	slideTrigger = 0.3;
 
-	constructor(config, display, player, mouse) {
-		this.config = config;
-		this.display = display;
-		this.player = player;
-		this.mouse = mouse;
-	}
-
-	start(event) {
-		if (!this.config.enableGestures) {
+	start(event: TouchEvent, config: Config) {
+		if (!config.enableGestures) {
 			return;
 		}
 
@@ -33,7 +32,14 @@ export default class Touches {
 		this.startY = event.touches[0].clientY;
 	}
 
-	end(event) {
+	end(
+		event: TouchEvent,
+		config: Config,
+		player: Player,
+		display: Display,
+		timers: Timers,
+		mouse: Mouse
+	) {
 		this.prevTouchTime = this.endTime;
 		this.endTime = Date.now();
 
@@ -41,36 +47,44 @@ export default class Touches {
 		const offsetY = event.changedTouches[0].clientY - this.startY;
 
 		if (this.tap(offsetX, offsetY)) {
-			this.mouse.toggle(true);
+			mouse.toggle(config, timers, true);
 			return;
 		}
 
-		if (!this.config.enableGestures) {
+		if (!config.enableGestures) {
 			return;
 		}
 
-		if (this.slideRight(offsetX)) {
-			this.player.start('prev');
-		} else if (this.slideLeft(offsetX)) {
-			this.player.start('next');
+		if (this.slideRight(offsetX, display)) {
+			player.show('prev');
+		} else if (this.slideLeft(offsetX, display)) {
+			player.show('next');
 		}
 	}
 
-	tap = (offsetX, offsetY) =>
+	tap = (offsetX: number, offsetY: number) =>
 		abs(offsetX) < this.tapThreshold && abs(offsetY) < this.tapThreshold;
 
 	doubleTap = () =>
 		this.endTime - this.prevTouchTime < this.doubleTapThreshold;
 
-	slideLeft = (offsetX) =>
-		offsetX < 0 && offsetX < -(this.display.size.width * this.slideTrigger);
+	slideLeft = (offsetX: number, display: Display) =>
+		display.size.isValid() &&
+		offsetX < 0 &&
+		offsetX < -(display.size!.width.value! * this.slideTrigger);
 
-	slideRight = (offsetX) =>
-		offsetX > 0 && offsetX > this.display.size.width * this.slideTrigger;
+	slideRight = (offsetX: number, display: Display) =>
+		display.size.isValid() &&
+		offsetX > 0 &&
+		offsetX > display.size.width.value! * this.slideTrigger;
 
-	slideUp = (offsetY) =>
-		offsetY < 0 && offsetY < -(this.display.size.height * this.slideTrigger);
+	slideUp = (offsetY: number, display: Display) =>
+		display.size.isValid() &&
+		offsetY < 0 &&
+		offsetY < -(display.size.height.value! * this.slideTrigger);
 
-	slideDown = (offsetY) =>
-		offsetY > 0 && offsetY > this.display.size.height * this.slideTrigger;
+	slideDown = (offsetY: number, display: Display) =>
+		display.size.isValid() &&
+		offsetY > 0 &&
+		offsetY > display.size.height.value! * this.slideTrigger;
 }

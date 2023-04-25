@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive } from 'vue';
-	import { ceil } from '@/libs/Maths.js';
-	import useTransitionMixin, { baseProps } from '@/mixins/transition.js';
+	import { ceil } from '@/shared/Maths';
+	import useTransitionMixin, { baseProps } from '@/mixins/transition';
 	import FluxCube from '@/components/FluxCube.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 

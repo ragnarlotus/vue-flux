@@ -1,2 +1,2 @@
-export { default as ResourceRepository } from './ResourceRepository';
-export { default as TransitionRepository } from './TransitionRepository';
+export { default as Resources } from './Resrouces/Resources';
+export { default as Transitions } from './Transitions/Transitions';

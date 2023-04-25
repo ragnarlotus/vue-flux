@@ -1,71 +1,67 @@
-import { aspectRatio } from '../libs/Maths.js';
-import FluxImage from '../components/FluxImage.vue';
+import FluxImage from '../components/FluxImage/FluxImage.vue';
 import Resource from './Resource';
-import { ResourceStatus } from '../types';
+import {
+	DisplayParamenter,
+	ResourceStatus,
+	TransitionParameter,
+} from '../types';
+import Size from '../shared/Size';
+import { ResizeType } from './types';
 
 export default class Img extends Resource {
 	constructor(
 		src: string,
 		caption: string | null = null,
-		resizeType: 'fill' | 'fit' = 'fill'
+		resizeType: ResizeType = 'fill'
 	) {
-		super(src, caption, resizeType);
-
-		this.errorMessage = `Image ${src} could not be loaded`;
-
-		this.display = {
+		const display: DisplayParamenter = {
 			component: FluxImage,
 			props: {},
 		};
 
-		this.transition = {
+		const transition: TransitionParameter = {
 			component: FluxImage,
 			props: {},
 		};
+
+		const errorMessage = `Image ${src} could not be loaded`;
+
+		super(src, caption, resizeType, display, transition, errorMessage);
 	}
 
 	load() {
-		if (this.isLoading()) {
-			return this.loader;
+		if (super.loader !== null) {
+			return super.loader;
 		}
 
-		this.loader = new Promise((resolve, reject) => {
-			if (this.isLoaded()) {
-				return resolve();
-			}
-
-			if (this.isError()) {
-				return reject(this.errorMessage);
-			}
-
-			this.status.value = ResourceStatus.loading;
+		super.loader = new Promise<void>((resolve, reject) => {
+			super.status.value = ResourceStatus.loading;
 
 			const img = new Image();
 
 			img.onload = () => this.onLoad(img, resolve);
 			img.onerror = () => this.onError(reject);
 
-			img.src = this.src;
+			img.src = super.src;
 		});
 
-		return this.loader;
+		return super.loader;
 	}
 
 	onLoad(img: HTMLImageElement, resolve: Function) {
-		this.realSize = {
+		super.realSize = new Size({
 			width: img.naturalWidth || img.width,
 			height: img.naturalHeight || img.height,
-		};
+		});
 
-		this.realAspectRatio = aspectRatio(this.realSize);
-		this.status.value = ResourceStatus.loaded;
+		super.status.value = ResourceStatus.loaded;
 
 		resolve();
 	}
 
 	onError(reject: Function) {
-		this.status.value = ResourceStatus.error;
+		super.status.value = ResourceStatus.error;
 
-		reject(this.errorMessage);
+		reject(super.errorMessage);
 	}
 }

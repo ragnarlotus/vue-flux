@@ -28,7 +28,7 @@
 		},
 	});
 
-	const visible = computed(
+	const visible = computed<boolean>(
 		() => props.displayReady.value === true && props.resources.list.length > 0
 	);
 

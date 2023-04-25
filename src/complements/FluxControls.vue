@@ -24,7 +24,7 @@
 		},
 	});
 
-	const visible = computed(() => {
+	const visible = computed<boolean>(() => {
 		if (props.currentResource === null) {
 			return false;
 		}

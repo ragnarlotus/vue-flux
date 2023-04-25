@@ -1,24 +1,22 @@
-export const baseProps = {
-	size: Object,
+import { Component, Ref } from 'vue';
+import Size from '../shared/Size';
+import Resource from '../resources/Resource';
 
-	from: {
-		type: [String, Object],
-		required: true,
-	},
-
-	to: [String, Object],
-
-	current: Object,
+export interface BaseProps {
+	size?: Size;
+	from: Resource;
+	to?: Resource;
+	current: any;
 
 	options: {
-		type: Object,
-		default: () => ({}),
-	},
+		type: Object;
+		default: () => {};
+	};
 
-	maskStyle: Object,
+	maskStyle: Object;
 
-	displayComponent: Object,
-};
+	displayComponent: Object;
+}
 
 export default (options, conf) => {
 	Object.assign(conf, { direction: 'next' }, options);

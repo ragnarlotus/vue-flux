@@ -1,166 +1,143 @@
-import { shallowReactive, nextTick, Ref } from 'vue';
-import { VueFluxConfig } from '../types';
-import Resource from '../resources/Resource';
-import ResourceRepository from '../repositories/ResourceRepository';
-import TransitionRepository from '../repositories/TransitionRepository';
-import Timers from './Timers';
+import { shallowReactive, nextTick, Ref, ref, Component } from 'vue';
+import { OrderParameter } from '../types';
+import { Resources, Transitions } from '../repositories';
+import { Timers, PlayerResource, PlayerTransition } from './';
+import { Config } from '../components/VueFlux/types';
+import { ResourceIndex } from '../repositories/Resrouces/types';
 
-class Player {
-	transition: {
-		current: Object | null;
-		last: Object | null;
-	} = shallowReactive({
-		current: null,
-		last: null,
-	});
+export default class Player {
+	resource: PlayerResource;
+	transition: PlayerTransition;
 
-	resource: {
-		current: Resource | null;
-		from: Resource | null;
-		to: Resource | null;
-	} = shallowReactive({
-		current: null,
-		from: null,
-		to: null,
-	});
-
-	config: VueFluxConfig;
+	config: Config;
 	timers: Timers;
-	transitions: TransitionsRepository | undefined;
-	resources: ResourcesRepository | undefined;
-	$displayComponent: Ref<null> | undefined;
+	transitions: Transitions | null = null;
+	resources: Resources | null = null;
+	$displayComponent: Ref<null | Component> = ref(null);
 
-	constructor(config: VueFluxConfig, timers: Timers) {
+	constructor(config: Config, timers: Timers) {
 		this.config = config;
 		this.timers = timers;
+
+		this.resource = shallowReactive(new PlayerResource());
+		this.transition = shallowReactive(new PlayerTransition());
 	}
 
 	setup(
-		transitions: TransitionsRepository,
-		resources: ResourcesRepository,
-		$displayComponent: Ref<null>
+		resources: Resources,
+		transitions: Transitions,
+		$displayComponent: Ref<null | Component>
 	) {
 		this.transitions = transitions;
 		this.resources = resources;
 		this.$displayComponent = $displayComponent;
 	}
 
-	resetTransition() {
-		this.transition.current = null;
-		this.transition.last = null;
-	}
-
-	initTransition() {
-		this.transition.last = this.transitions.getByIndex(
-			this.transitions.list.length - 1
-		);
-
-		this.checkPlay();
-	}
-
-	resetResource() {
-		this.resource.current = null;
-		this.resource.from = null;
-		this.resource.to = null;
-	}
-
-	initResource() {
-		this.resource.current = this.resources.getByIndex(0);
-
-		this.checkPlay();
-	}
-
-	checkPlay() {
-		if (!this.config.autoplay) {
-			return;
-		}
-
-		if (this.transition.last === null) {
-			return;
-		}
-
-		if (this.resource.current === null) {
-			return;
-		}
-
-		this.play();
-	}
-
-	getDirection(index: string | number) {
-		if (['prev', 'next'].includes(index.toString())) {
-			return index;
-		}
-
-		return this.resource.current.index < index ? 'next' : 'prev';
-	}
-
-	play(index: string | number = 'next', delay: number = 0) {
+	play(resourceIndex: number | OrderParameter = 'next', delay?: number) {
 		const { config, timers } = this;
 
 		config.autoplay = true;
 
-		if (this.transition.current === null) {
-			timers.set('transition', delay || config.delay, () => {
-				this.show(index);
-			});
+		if (this.transition.current !== null) {
+			return;
 		}
+
+		timers.set('transition', delay || config.delay, () => {
+			this.show(resourceIndex);
+		});
 	}
 
-	stop(cancelTransition = false) {
+	stop(cancelTransition: boolean = false) {
 		const { config, timers } = this;
 
 		config.autoplay = false;
 
 		timers.clear('transition');
 
-		if (this.transition.current !== null && cancelTransition) {
-			this.end();
+		if (this.transition.current !== null && cancelTransition === true) {
+			this.end(cancelTransition);
 		}
 	}
 
-	show(
-		resourceIndex: string | number = 'next',
-		transitionIndex: string | number = 'next'
-	) {
-		const { resources, config, transitions, $displayComponent } = this;
+	isReadyToShow() {
+		if (this.resource.current === null) {
+			throw new ReferenceError('Current resource not set');
+		}
 
-		if (resources.list.length === 0 || $displayComponent.value === null) {
+		if (this.resources === null) {
+			throw new ReferenceError('Resources list not set');
+		}
+
+		if (this.resources.list.length === 0) {
+			throw new RangeError('Resources list empty');
+		}
+
+		if (this.transition.last === null) {
+			throw new ReferenceError('Last transition not set');
+		}
+
+		if (this.transitions === null) {
+			throw new ReferenceError('Transitions list not set');
+		}
+
+		if (this.transitions.list.length === 0) {
+			throw new RangeError('Transitions list empty');
+		}
+
+		if (this.$displayComponent.value === null) {
+			throw new ReferenceError('Display component not set');
+		}
+
+		return true;
+	}
+
+	async show(
+		resourceIndex: number | OrderParameter = 'next',
+		transitionIndex: number | OrderParameter = 'next'
+	) {
+		if (!this.isReadyToShow()) {
 			return;
 		}
 
+		const { resource, resources, config, transitions } = this;
+
 		if (this.transition.current !== null) {
 			if (config.allowToSkipTransition) {
-				this.end();
+				await this.end(true);
 
-				nextTick(() => {
-					this.show(resourceIndex, transitionIndex);
-				});
+				this.show(resourceIndex, transitionIndex);
 			}
 
 			return;
 		}
 
-		const resourceTo = resources.getByIndex(
-			resourceIndex,
-			this.resource.current
-		);
+		const resourceTo: ResourceIndex =
+			typeof resourceIndex === 'number'
+				? resources!.getByIndex(resourceIndex)
+				: resources!.getByOrder(resourceIndex, resource.current!.index);
 
-		if (this.resource.current.index === resourceTo.index) {
+		if (resource.current!.index === resourceTo.index) {
 			return;
 		}
 
 		this.timers.clear('transition');
 
-		this.resource.from = this.resource.current;
+		this.resource.from = resource.current;
 		this.resource.to = resourceTo;
 
-		const transition = transitions.getByIndex(
-			transitionIndex,
-			this.transition.last
-		);
+		const transition =
+			typeof transitionIndex === 'number'
+				? transitions!.getByIndex(transitionIndex)
+				: transitions!.getByOrder(
+						transitionIndex,
+						this.transition.last!.index
+				  );
 
-		if (!transition.options.direction) {
-			transition.options.direction = this.getDirection(resourceIndex);
+		if (transition.options.direction === undefined) {
+			transition.options.direction =
+				this.resource.from!.index < this.resource.to.index
+					? 'next'
+					: 'prev';
 		}
 
 		this.transition.current = transition;
@@ -170,28 +147,30 @@ class Player {
 		this.resource.current = this.resource.to;
 	}
 
-	end() {
-		const { config, resources, timers } = this;
+	async end(cancel: boolean = false) {
+		const { config, resource, resources, timers, transition } = this;
 
-		this.transition.last = this.transition.current;
-		this.transition.current = null;
+		if (resource.current === null || resources === null) {
+			return;
+		}
 
-		nextTick(() => {
-			if (
-				!config.infinite &&
-				this.resource.current.index >= resources.list.length - 1
-			) {
-				this.stop();
-				return;
-			}
+		transition.last = transition.current;
+		transition.current = null;
 
-			if (config.autoplay) {
-				timers.set('transition', config.delay, () => {
-					this.show();
-				});
-			}
-		});
+		await nextTick();
+
+		if (
+			config.infinite === false &&
+			resource.current.index >= resources.list.length - 1
+		) {
+			this.stop();
+			return;
+		}
+
+		if (config.autoplay === true && cancel === false) {
+			timers.set('transition', config.delay, () => {
+				this.show();
+			});
+		}
 	}
 }
-
-export default Player;

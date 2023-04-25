@@ -1,73 +1,59 @@
-import { computed, Ref, unref } from 'vue';
+import { computed, CSSProperties, Ref, unref } from 'vue';
 import Resource from '../resources/Resource';
 import Size from '../shared/Size';
-import { Offset } from '../types';
+import { ComponentStyles, Offset } from '../types';
 
-interface BaseProps {
-	color?: string | {};
-	rsc: Resource;
+export interface BaseProps {
+	color?: string;
+	rsc?: Resource;
 	size: Size;
-	viewSize: Size;
+	viewSize?: Size;
 	offset?: Offset;
-	css?: object;
+	css?: CSSProperties;
 }
 
-export const baseProps = {
-	color: {
-		type: [String, Object],
-		required: false,
-		default: undefined,
-	},
+export default (
+	$el: Ref<null | HTMLElement>,
+	props: BaseProps,
+	css: ComponentStyles
+) => {
+	if (css.base === undefined) {
+		css.base = {} as CSSProperties;
+	}
 
-	rsc: Object,
+	const size = computed<CSSProperties>(() => {
+		const { size, viewSize } = props;
 
-	size: Object,
-
-	viewSize: {
-		type: Object,
-		default: () => ({}),
-	},
-
-	offset: {
-		type: [Number, Object],
-		required: false,
-		default: undefined,
-	},
-
-	css: Object,
-};
-
-export default ($el: Ref, props: BaseProps, styles: object) => {
-	styles.size = computed(() => {
-		const size = props.size;
-
-		if (!size || !size.width || !size.height) {
+		if (size.valid.value === false) {
 			return {};
 		}
 
-		const { width = size.width, height = size.height } = props.viewSize;
+		if (viewSize !== undefined && viewSize.valid.value === true) {
+			return viewSize.toPx();
+		}
 
-		return {
-			width: width + 'px',
-			height: height + 'px',
-		};
+		return size.toPx();
 	});
 
 	const style = computed(() => ({
-		...unref(styles.size),
-		...unref(styles.color),
-		...unref(styles.image),
-		...unref(props.css),
-		...unref(styles.base),
+		...unref(size),
+		...unref(css.color),
+		...unref(css.rsc),
+		...unref(css.inherited),
+		...unref(css.base),
 	}));
 
-	const setCss = (css) => {
-		Object.assign(styles.base, css);
+	const setCss = (s: CSSProperties) => {
+		Object.assign(css.base as CSSProperties, s);
 	};
 
-	const transform = (css) => {
+	const transform = (s: CSSProperties) => {
+		if ($el.value === null) {
+			return;
+		}
+
 		$el.value.clientHeight;
-		setCss(css);
+		setCss(s);
 	};
 
 	const show = () => {

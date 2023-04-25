@@ -10,7 +10,7 @@ export default class Timers {
 		this.timers[index] = setTimeout(cb, time);
 	}
 
-	clear(index?: string): void {
+	clear(index?: string) {
 		const keys = index !== undefined ? [index] : Object.keys(this.timers);
 
 		keys.forEach((key) => {

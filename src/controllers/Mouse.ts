@@ -1,39 +1,32 @@
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
+import Timers from './Timers';
+import { Config } from '../components/VueFlux/types';
 
 export default class Mouse {
-	isOver = ref(false);
+	isOver: Ref<boolean> = ref(false);
 
-	constructor(config, timers) {
-		this.config = config;
-		this.timers = timers;
-	}
+	setup(config: Config, timers: Timers) {
+		timers.clear('mouseOver');
 
-	setup() {
-		this.timers.clear('mouseOver');
-
-		if (this.config.autohideTime === 0) {
+		if (config.autohideTime === 0) {
 			this.isOver.value = true;
 		}
 	}
 
-	toggle(over) {
-		if (this.config.autohideTime === 0) {
-			return;
-		}
-
+	toggle(config: Config, timers: Timers, over: boolean) {
 		this.isOver.value = over;
 
-		this[over ? 'over' : 'out']();
+		this[over ? 'over' : 'out'](config, timers);
 	}
 
-	out() {
-		this.timers.clear('mouseOver');
+	out(config: Config, timers: Timers) {
+		timers.clear('mouseOver');
 	}
 
-	over() {
-		this.timers.set(
+	over(config: Config, timers: Timers) {
+		timers.set(
 			'mouseOver',
-			this.config.autohideTime,
+			config.autohideTime,
 			() => (this.isOver.value = false)
 		);
 	}

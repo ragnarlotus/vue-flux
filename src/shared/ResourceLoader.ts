@@ -1,34 +1,33 @@
-import { ref } from 'vue';
+import { Ref, ref } from 'vue';
 import { ceil } from './Maths';
 import Resource from '../resources/Resource';
 import Size from './Size';
 
 export default class ResourceLoader {
-	rscs = [];
+	rscs: Resource[] = [];
 	counter = {
 		success: 0,
 		error: 0,
 		total: 0,
 	};
-	toPreload = 0;
-	preloading = [];
-	lazyloading = [];
-	progress = ref(0);
+	toPreload: number;
+	preloading: Resource[] = [];
+	lazyloading: Resource[] = [];
+	progress: Ref<number> = ref(0);
 	displaySize: Size;
+	onPreloadFinished: Function;
+	onLazyloadFinished: Function;
 
 	constructor(
-		rscs: Array<Resource>,
+		rscs: Resource[],
 		toPreload: number,
 		displaySize: Size,
-		progress,
-		onPreloadFinished,
-		onLazyloadFinished
+		onPreloadFinished: Function,
+		onLazyloadFinished: Function
 	) {
 		this.rscs = rscs;
-		this.toPreload =
-			toPreload >= this.rscs.length ? this.rscs.length : toPreload;
+		this.toPreload = toPreload > rscs.length ? rscs.length : toPreload;
 		this.displaySize = displaySize;
-		this.progress = progress;
 		this.onPreloadFinished = onPreloadFinished;
 		this.onLazyloadFinished = onLazyloadFinished;
 
@@ -49,19 +48,22 @@ export default class ResourceLoader {
 	}
 
 	preloadEnd() {
-		if (
-			this.counter.success < this.toPreload &&
-			this.counter.total < this.toPreload
-		) {
+		const { counter, toPreload } = this;
+
+		if (counter.success < toPreload && counter.total < toPreload) {
 			this.preloadStart();
 			return;
 		}
 
-		this.onPreloadFinished(this.preloading.filter((rsc) => rsc.isLoaded()));
+		const preloadedSuccessfully = this.preloading.filter((rsc) =>
+			rsc.isLoaded()
+		);
+
+		this.onPreloadFinished(preloadedSuccessfully);
 
 		this.preloading.length = 0;
 
-		if (this.counter.total < this.rscs.length) {
+		if (counter.total < this.rscs.length) {
 			this.lazyLoadStart();
 		}
 	}
@@ -73,12 +75,16 @@ export default class ResourceLoader {
 	}
 
 	lazyLoadEnd() {
-		this.onLazyloadFinished(this.lazyloading.filter((rsc) => rsc.isLoaded()));
+		const lazyloadedSuccessfully = this.lazyloading.filter((rsc) =>
+			rsc.isLoaded()
+		);
+
+		this.onLazyloadFinished(lazyloadedSuccessfully);
 
 		this.lazyloading.length = 0;
 	}
 
-	load(rsc) {
+	load(rsc: Resource) {
 		rsc.load()
 			.then(() => {
 				this.loadSuccess(rsc);
@@ -101,13 +107,13 @@ export default class ResourceLoader {
 			});
 	}
 
-	loadSuccess(rsc) {
+	loadSuccess(rsc: Resource) {
 		this.counter.success++;
 
 		rsc.adaptToSize(this.displaySize);
 	}
 
-	loadError(error) {
+	loadError(error: string) {
 		this.counter.error++;
 
 		// eslint-disable-next-line

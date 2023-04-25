@@ -1,34 +1,26 @@
 <script setup lang="ts">
-	import { onMounted, onUnmounted, ref, reactive, computed, watch } from 'vue';
-	import * as Controllers from '../controllers';
-	import * as Repositories from '../repositories';
-	import FluxTransition from './FluxTransition.vue';
-	import Resource from '../resources/Resource';
-	import { VueFluxConfig } from './types';
+	import {
+		onMounted,
+		onUnmounted,
+		ref,
+		reactive,
+		computed,
+		watch,
+		Ref,
+		Component,
+	} from 'vue';
+	import * as Controllers from '../../controllers';
+	import * as Repositories from '../../repositories';
+	import FluxTransition from '../FluxTransition/FluxTransition.vue';
+	import { Props, Config } from './types';
 
-	const $container = ref(null);
-	const $transition = ref(null);
-	const $displayComponent = ref(null);
+	const $container: Ref<null | HTMLElement> = ref(null);
+	const $transition: Ref<null | Component> = ref(null);
+	const $displayComponent: Ref<null | Component> = ref(null);
 
-	const props = defineProps<{
-		options: {
-			allowFullscreen?: boolean;
-			allowToSkipTransition?: boolean;
-			aspectRatio?: string;
-			autohideTime?: number;
-			autoplay?: boolean;
-			bindKeys?: boolean;
-			delay?: number;
-			enableGestures?: boolean;
-			infinite?: boolean;
-			lazyLoad?: boolean;
-			lazyLoadAfter?: number;
-		};
-		rscs: Resource[];
-		transitions: Array<Object>[];
-	}>();
+	const props = defineProps(Props);
 
-	const config: VueFluxConfig = reactive({
+	const config: Config = reactive({
 		allowFullscreen: false,
 		allowToSkipTransition: true,
 		aspectRatio: '16:9',
@@ -44,16 +36,16 @@
 
 	const timers = new Controllers.Timers();
 	const player = new Controllers.Player(config, timers);
-	const resources = new Repositories.ResourceRepository(config);
-	const transitions = new Repositories.TransitionRepository(config, timers);
+	const resources = new Repositories.Resources(player);
+	const transitions = new Repositories.Transitions(player);
 	const display = new Controllers.Display(config, resources, $container);
 	const keys = new Controllers.Keys(config, player);
-	const mouse = new Controllers.Mouse(config, timers);
-	const touches = new Controllers.Touches(config, display, player, mouse);
+	const mouse = new Controllers.Mouse();
+	const touches = new Controllers.Touches();
 
 	const setup = () => {
 		Object.assign(config, props.options);
-		mouse.setup();
+		mouse.setup(config, timers);
 		keys.setup();
 	};
 
@@ -64,41 +56,61 @@
 
 	watch(
 		() => props.rscs,
-		() => updateFromProps('rscs')
+		async () => {
+			const wasPlaying = config.autoplay;
+
+			await player.stop(true);
+			player.resource.reset();
+
+			const numToPreload = config.lazyLoad
+				? config.lazyLoadAfter
+				: props.rscs.length;
+
+			await resources.update(props.rscs, numToPreload, display.size);
+
+			player.resource.init(resources);
+
+			if (wasPlaying === true) {
+				player.play();
+			}
+		}
 	);
 
 	watch(
 		() => props.transitions,
-		() => updateFromProps('transitions')
+		async () => {
+			const wasPlaying = config.autoplay;
+
+			await player.stop(true);
+			player.transition.reset();
+
+			transitions.update(props.transitions);
+
+			player.transition.init(transitions);
+
+			if (wasPlaying === true) {
+				player.play();
+			}
+		}
 	);
 
-	const updateFromProps = (elements: string) => {
-		const wasPlaying = config.autoplay;
-
-		player.stop(true);
-
-		if (elements === 'rscs') {
-			resources.update(props.rscs);
-		} else if (elements === 'transitions') {
-			transitions.update(props.transitions);
-		}
-
-		if (wasPlaying) {
-			config.autoplay = true;
-		}
-	};
-
-	onMounted(() => {
+	onMounted(async () => {
 		setup();
 
-		display.updateSize();
-		transitions.setup(player, resources);
-		resources.setup(player, display);
-		player.setup(transitions, resources, $displayComponent);
-
+		await display.updateSize();
 		display.addResizeListener();
+
+		player.setup(resources, transitions, $displayComponent);
+
 		transitions.update(props.transitions);
-		resources.update(props.rscs);
+		player.transition.init(transitions);
+
+		await resources.update(props.rscs, config.lazyLoadAfter, display.size);
+		player.resource.init(resources);
+
+		if (config.autoplay === true) {
+			player.play();
+		}
 	});
 
 	onUnmounted(() => {
@@ -108,7 +120,7 @@
 	});
 
 	const style = computed(() => {
-		if (display.ready.value === false) {
+		if (display.size.valid.value === false) {
 			return {};
 		}
 
@@ -119,22 +131,13 @@
 			};
 		}
 
-		const { width, height } = display.size;
-
-		return {
-			width: width + 'px',
-			height: height + 'px',
-		};
+		return display.size.toPx();
 	});
 
 	defineExpose({
-		show: (
-			resourceIndex?: string | number,
-			transitionIndex?: string | number
-		) => player.show(resourceIndex, transitionIndex),
-		play: (index?: string | number, delay?: number) =>
-			player.play(index, delay),
-		stop: (cancelTransition?: boolean) => player.stop(cancelTransition),
+		show: player.show,
+		play: player.play,
+		stop: player.stop,
 	});
 </script>
 
@@ -143,14 +146,19 @@
 		ref="$container"
 		class="vue-flux"
 		:style="style"
-		@mousemove="mouse.toggle(true)"
-		@mouseleave="mouse.toggle(false)"
-		@dblclick="display.toggleFullScreen(config)"
-		@touchstart="touches.start($event)"
-		@touchend="touches.end($event)"
+		@mousemove="mouse.toggle(config, timers, true)"
+		@mouseleave="mouse.toggle(config, timers, false)"
+		@dblclick="display.toggleFullScreen()"
+		@touchstart="touches.start($event, config)"
+		@touchend="touches.end($event, config, player, display, timers, mouse)"
 	>
 		<FluxTransition
-			v-if="player.transition.current !== null"
+			v-if="
+				player.transition.current !== null &&
+				display.size.valid.value === true &&
+				player.resource.from !== null &&
+				player.resource.to !== null
+			"
 			ref="$transition"
 			:transition="player.transition.current.component"
 			:size="display.size"
@@ -171,7 +179,7 @@
 			v-bind="player.resource.current.rsc.display.props"
 		/>
 
-		<div v-if="display.ready" class="complements">
+		<div v-if="display.size.valid.value === true" class="complements">
 			<slot name="preloader" :resources="resources" />
 
 			<slot
@@ -202,11 +210,11 @@
 
 			<slot
 				name="pagination"
-				:display-ready="display.ready"
+				:display-ready="display.size.valid.value === true"
 				:resources="resources"
 				:current-resource="player.resource.current"
 				:current-transition="player.transition.current"
-				:show="(index: string | undefined: string | undefined) => player.show(index)"
+				:show="(index: number) => player.show(index)"
 			/>
 		</div>
 	</div>

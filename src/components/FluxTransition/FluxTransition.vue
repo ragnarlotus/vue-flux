@@ -6,36 +6,22 @@
 		onMounted,
 		onUnmounted,
 		nextTick,
+		Component,
 	} from 'vue';
+	import Size from '../../shared/Size';
+	import Resource from '../../resources/Resource';
 
 	const $el = ref(null);
 	const $transition = ref(null);
 
-	const props = defineProps({
-		size: {
-			type: Object,
-			required: true,
-		},
-
-		transition: {
-			type: Object,
-			required: true,
-		},
-
-		from: {
-			type: Object,
-			required: true,
-		},
-
-		to: {
-			type: Object,
-			required: true,
-		},
-
-		displayComponent: Object,
-
-		options: Object,
-	});
+	const props = defineProps<{
+		size: Size;
+		transition: Object;
+		from: Resource;
+		to: Resource;
+		displayComponent: null | Component;
+		options: Object;
+	}>();
 
 	const emit = defineEmits(['start', 'end']);
 
@@ -70,7 +56,7 @@
 
 		await nextTick();
 
-		$transition.value.onPlay();
+		$transition.value!.onPlay();
 
 		setTimeout(() => {
 			emit('end', {
@@ -84,7 +70,7 @@
 
 	onUnmounted(() => {
 		if (props.displayComponent) {
-			props.displayComponent.show();
+			props.displayComponent.value.show();
 		}
 	});
 </script>

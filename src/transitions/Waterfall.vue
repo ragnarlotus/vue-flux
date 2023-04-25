@@ -1,12 +1,20 @@
 <script setup lang="ts">
-	import { ref, reactive } from 'vue';
-	import useTransitionMixin, { baseProps } from '@/mixins/transition.js';
-	import FluxGrid from '@/components/FluxGrid.vue';
+	import { ref, reactive, Ref } from 'vue';
+	import useTransitionMixin, { BaseProps } from '../mixins/transition.js';
+	import { FluxGrid } from '../components';
 
-	const $grid = ref(null);
-	const props = defineProps(baseProps);
+	interface ConfType {
+		rows: number;
+		cols: number;
+		tileDuration: number;
+		tileDelay: number;
+		easing: string;
+	}
 
-	const conf = reactive({
+	const $grid: Ref<null | typeof FluxGrid> = ref(null);
+	const props = defineProps<BaseProps>();
+
+	const conf = reactive<ConfType>({
 		rows: 1,
 		cols: 10,
 		tileDuration: 600,
@@ -19,12 +27,16 @@
 	const totalDuration = conf.tileDelay * conf.cols + conf.tileDuration;
 
 	const getDelay = {
-		prev: (i) => (conf.cols - i - 1) * conf.tileDelay,
-		next: (i) => i * conf.tileDelay,
+		prev: (i: number) => (conf.cols - i - 1) * conf.tileDelay,
+		next: (i: number) => i * conf.tileDelay,
 	};
 
 	const onPlay = () => {
-		$grid.value.transform((tile, i) => {
+		if ($grid.value === null) {
+			return;
+		}
+
+		$grid.value.transform((tile: props.to.transition, i) => {
 			tile.transform({
 				transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay[
 					conf.direction

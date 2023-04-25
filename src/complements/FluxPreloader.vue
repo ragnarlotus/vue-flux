@@ -8,7 +8,9 @@
 		},
 	});
 
-	const visible = computed(() => props.resources.loadProgress.value < 100);
+	const visible = computed<boolean>(
+		() => props.resources.loadProgress.value < 100
+	);
 </script>
 
 <template>

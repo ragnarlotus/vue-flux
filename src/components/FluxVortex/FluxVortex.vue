@@ -1,8 +1,8 @@
 <script setup lang="ts">
 	import { ref, reactive, computed } from 'vue';
-	import { round, ceil, diag } from '@/libs/Maths.js';
+	import { round, ceil, diag } from '@/shared/Maths';
 	import FluxImage from '@/components/FluxImage.vue';
-	import useComponentMixin, { baseProps } from '@/mixins/component.js';
+	import useComponentMixin, { baseProps } from '@/mixins/component';
 
 	const $el = ref(null);
 

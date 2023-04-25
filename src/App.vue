@@ -53,7 +53,7 @@
 				:rscs="rscs"
 				:options="options"
 			>
-				<template #preloader="preloaderProps">
+				<!-- <template #preloader="preloaderProps">
 					<Complements.FluxPreloader v-bind="preloaderProps" />
 				</template>
 
@@ -71,7 +71,7 @@
 
 				<template #index="indexProps">
 					<Complements.FluxIndex v-bind="indexProps" />
-				</template>
+				</template> -->
 			</FluxComponents.VueFlux>
 		</div>
 

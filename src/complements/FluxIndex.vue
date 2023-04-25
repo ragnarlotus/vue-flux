@@ -26,12 +26,12 @@
 		},
 	});
 
-	const visible = computed(() => props.resources.list.length > 0);
+	const visible = computed<boolean>(() => props.resources.list.length > 0);
 
 	const button = {
 		rectSize: 12,
 		rectangles: [],
-		visible: computed(() => props.mouseOver.value),
+		visible: computed<boolean>(() => props.mouseOver.value),
 
 		setup: () => {
 			const rows = 3;
@@ -61,7 +61,7 @@
 		animationTime: 500,
 		visible: ref(false),
 
-		class: computed(() => {
+		class: computed<string[]>(() => {
 			const htmlClass = [];
 
 			if (list.visible.value) {
@@ -102,7 +102,7 @@
 	const listClass = list.class;
 
 	const thumbs = {
-		size: computed(() => {
+		size: computed<Size>(() => {
 			let { width, height } = props.displaySize;
 
 			width = width / 4.2;

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive } from 'vue';
-	import { diag } from '@/libs/Maths.js';
-	import useTransitionMixin, { baseProps } from '@/mixins/transition.js';
+	import { diag } from '@/shared/Maths';
+	import useTransitionMixin, { baseProps } from '@/mixins/transition';
 	import FluxWrapper from '@/components/FluxWrapper.vue';
 	import FluxImage from '@/components/FluxImage.vue';
 

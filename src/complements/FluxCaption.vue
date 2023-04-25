@@ -13,7 +13,7 @@
 		},
 	});
 
-	const caption = computed(() => {
+	const caption = computed<string>(() => {
 		if (
 			props.currentResource === null ||
 			props.currentResource.rsc.caption === null
@@ -24,7 +24,7 @@
 		return props.currentResource.rsc.caption;
 	});
 
-	const htmlClass = computed(() => {
+	const htmlClass = computed<string[]>(() => {
 		const css = ['flux-caption'];
 
 		if (

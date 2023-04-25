@@ -1,5 +1,11 @@
+import { Config } from '../components/VueFlux/types';
+import Player from './Player';
+
 export default class Keys {
-	constructor(config, player) {
+	config: Config;
+	player: Player;
+
+	constructor(config: Config, player: Player) {
 		this.config = config;
 		this.player = player;
 	}
@@ -22,7 +28,7 @@ export default class Keys {
 		window.removeEventListener('keydown', () => this.keydown);
 	}
 
-	keydown(event) {
+	keydown(event: KeyboardEvent) {
 		if (['ArrowLeft', 'Left'].includes(event.key)) {
 			this.player.show('prev');
 			return;

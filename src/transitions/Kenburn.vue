@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive } from 'vue';
-	import { floor } from '@/libs/Maths.js';
-	import useTransitionMixin, { baseProps } from '@/mixins/transition.js';
+	import { floor } from '@/shared/Maths';
+	import useTransitionMixin, { baseProps } from '@/mixins/transition';
 	import FluxImage from '@/components/FluxImage.vue';
 
 	const $image = ref(null);

@@ -2,7 +2,7 @@
 	// holder (window), component, background
 
 	import { ref, reactive, computed, unref, onMounted, onUnmounted } from 'vue';
-	import { ceil, aspectRatio } from '@/libs/Maths.js';
+	import { ceil, aspectRatio } from '@/shared/Maths';
 
 	const $el = ref(null);
 

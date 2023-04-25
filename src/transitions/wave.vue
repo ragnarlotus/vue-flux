@@ -1,10 +1,10 @@
 <script setup lang="ts">
 	import { ref, reactive } from 'vue';
-	import useTransitionMixin, { baseProps } from '@/mixins/transition.js';
-	import FluxGrid from '@/components/FluxGrid.vue';
+	import useTransitionMixin, { BaseProps } from '../mixins/transition.js';
+	import FluxGrid from '../components/FluxGrid/FluxGrid.vue';
 
 	const $grid = ref(null);
-	const props = defineProps(baseProps);
+	const props = defineProps<BaseProps>();
 
 	const conf = reactive({
 		rows: 1,

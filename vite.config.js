@@ -7,7 +7,7 @@ export default defineConfig({
 	build: {
 		copyPublicDir: false,
 		lib: {
-			entry: resolve(__dirname, 'src/lib.js'),
+			entry: resolve(__dirname, 'src/lib.ts'),
 			name: 'VueFlux',
 			fileName: 'vue-flux',
 		},
