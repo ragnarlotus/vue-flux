@@ -1,3 +1,5 @@
+import { Component } from 'vue';
+
 /* eslint-disable no-unused-vars */
 export type ResizeType = 'fill' | 'fit';
 
@@ -9,11 +11,11 @@ export enum ResourceStatus {
 }
 
 export interface DisplayParamenter {
-	component: Object;
+	component: Component;
 	props: {};
 }
 
 export interface TransitionParameter {
-	component: Object;
+	component: Component;
 	props: {};
 }

@@ -2,8 +2,6 @@
 	import { ref, computed, nextTick } from 'vue';
 	import FluxButton from '@/components/FluxButton.vue';
 
-	const $list = ref(null);
-
 	const props = defineProps({
 		mouseOver: {
 			type: Object,
@@ -25,6 +23,8 @@
 			required: true,
 		},
 	});
+
+	const $list = ref(null);
 
 	const visible = computed<boolean>(() => props.resources.list.length > 0);
 

@@ -14,4 +14,9 @@ export interface Offset {
 	left: number;
 }
 
-export type OrderParameter = 'prev' | 'next';
+export enum Directions {
+	prev = 'prev',
+	next = 'next',
+}
+
+export type Direction = Directions.prev | Directions.next;

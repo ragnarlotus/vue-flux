@@ -1,10 +1,10 @@
 import { Component } from 'vue';
-import { OrderParameter } from '../../types';
+import { Direction } from '../../types';
 
 export interface TransitionIndex {
 	index: number;
 	component: Component;
 	options: {
-		direction?: OrderParameter;
+		direction?: Direction;
 	};
 }

@@ -8,10 +8,8 @@
 	import { ComponentStyles } from '../../types';
 	import { SidesResources } from '../FluxCube/types';
 
-	const $el = ref(null);
-
 	interface Props extends BaseProps {
-		rscs: SidesResources;
+		rscs?: SidesResources;
 		rows?: number;
 		cols?: number;
 		depth?: number;
@@ -23,6 +21,8 @@
 		cols: 1,
 		depth: 0,
 	});
+
+	const $el = ref(null);
 
 	const componentStyles = reactive<ComponentStyles>({
 		base: {

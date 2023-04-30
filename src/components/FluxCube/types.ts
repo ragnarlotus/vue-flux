@@ -3,9 +3,9 @@ import { CSSProperties } from 'vue';
 import Resource from '../../resources/Resource';
 import Size from '../../shared/Size';
 import { Offset } from '../../types';
-import { BaseProps } from '../../mixins/component';
+import { ComponentProps } from '../../mixins/component';
 
-export interface Props extends BaseProps {
+export interface Props extends ComponentProps {
 	rscs: SidesResources;
 	colors?: SidesColors;
 	offsets?: SidesOffsets;
@@ -18,6 +18,19 @@ export type Side = 'front' | 'back' | 'top' | 'bottom' | 'left' | 'right';
 export enum Sides {
 	front = 'front',
 	back = 'back',
+	left = 'left',
+	right = 'right',
+	top = 'top',
+	bottom = 'bottom',
+}
+
+export type Turn = Side & ('backl' | 'backr');
+
+export enum Turns {
+	front = 'front',
+	back = 'back',
+	backr = 'backr',
+	backl = 'backl',
 	left = 'left',
 	right = 'right',
 	top = 'top',

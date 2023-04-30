@@ -3,7 +3,7 @@ import ResourceLoader from '../../shared/ResourceLoader';
 import Resource from '../../resources/Resource';
 import Player from '../../controllers/Player';
 import Size from '../../shared/Size';
-import { OrderParameter } from '../../types';
+import { Direction, Directions } from '../../types';
 import { ResourceIndex } from './types';
 
 export default class Resources {
@@ -32,7 +32,7 @@ export default class Resources {
 	}
 
 	getLast() {
-		return this.getByOrder('prev', 0);
+		return this.getByOrder(Directions.prev, 0);
 	}
 
 	getByIndex(index: number) {
@@ -46,7 +46,7 @@ export default class Resources {
 		} as ResourceIndex;
 	}
 
-	getByOrder(order: OrderParameter, currentIndex: number) {
+	getByOrder(order: Direction, currentIndex: number) {
 		return {
 			prev: () => this.getPrev(currentIndex),
 			next: () => this.getNext(currentIndex),

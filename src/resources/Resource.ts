@@ -69,7 +69,7 @@ export default abstract class Resource {
 		this.adaptedPosition.update(position.toRaw());
 	}
 
-	adaptedPropsAreValid: Ref<boolean> = computed<boolean>(
+	adaptedPropsAreValid = computed<boolean>(
 		() =>
 			![
 				this.adaptedSize.valid.value,

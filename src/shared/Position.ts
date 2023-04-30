@@ -3,7 +3,7 @@ import { computed, ref, Ref } from 'vue';
 export default class Position {
 	top: Ref<null | number> = ref(null);
 	left: Ref<null | number> = ref(null);
-	valid: Ref<boolean> = computed<boolean>(
+	valid = computed<boolean>(
 		() => ![this.top.value, this.left.value].includes(null)
 	);
 
@@ -51,8 +51,8 @@ export default class Position {
 		}
 
 		return {
-			width: this.top.value + 'px',
-			height: this.left.value + 'px',
+			width: this.top.value!.toString() + 'px',
+			height: this.left.value!.toString() + 'px',
 		};
 	}
 }

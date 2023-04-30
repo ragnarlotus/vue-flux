@@ -14,11 +14,11 @@
 	import FluxTransition from '../FluxTransition/FluxTransition.vue';
 	import { Props, Config } from './types';
 
+	const props = defineProps(Props);
+
 	const $container: Ref<null | HTMLElement> = ref(null);
 	const $transition: Ref<null | Component> = ref(null);
 	const $displayComponent: Ref<null | Component> = ref(null);
-
-	const props = defineProps(Props);
 
 	const config: Config = reactive({
 		allowFullscreen: false,

@@ -4,8 +4,6 @@
 	import FluxImage from '@/components/FluxImage.vue';
 	import useComponentMixin, { baseProps } from '@/mixins/component';
 
-	const $el = ref(null);
-
 	const props = defineProps({
 		...baseProps,
 
@@ -16,6 +14,8 @@
 
 		tileCss: Object,
 	});
+
+	const $el = ref(null);
 
 	const styles = reactive({
 		base: {

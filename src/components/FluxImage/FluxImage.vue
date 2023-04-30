@@ -4,9 +4,9 @@
 	import { ComponentStyles } from '../../types';
 	import { Props } from './types';
 
-	const $el = ref(null);
-
 	const props = defineProps(Props);
+
+	const $el = ref(null);
 
 	const componentStyles: ComponentStyles = reactive({
 		base: {

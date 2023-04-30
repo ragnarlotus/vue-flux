@@ -3,7 +3,7 @@ import Resource from '../resources/Resource';
 import Size from '../shared/Size';
 import { ComponentStyles, Offset } from '../types';
 
-export interface BaseProps {
+export interface ComponentProps {
 	color?: string;
 	rsc?: Resource;
 	size: Size;
@@ -14,7 +14,7 @@ export interface BaseProps {
 
 export default (
 	$el: Ref<null | HTMLElement>,
-	props: BaseProps,
+	props: ComponentProps,
 	css: ComponentStyles
 ) => {
 	if (css.base === undefined) {

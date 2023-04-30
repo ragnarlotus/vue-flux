@@ -1,6 +1,6 @@
 import { Component, shallowReactive, toRaw } from 'vue';
 import Player from '../../controllers/Player';
-import { OrderParameter } from '../../types';
+import { Directions, Direction } from '../../types';
 import { TransitionIndex } from './types';
 import { TransitionWithOptions } from '../../components/VueFlux/types';
 
@@ -29,7 +29,7 @@ export default class Transitions {
 	}
 
 	getLast() {
-		return this.getByOrder('prev', 0);
+		return this.getByOrder(Directions.prev, 0);
 	}
 
 	getByIndex(index: number) {
@@ -39,11 +39,11 @@ export default class Transitions {
 		} as TransitionIndex;
 	}
 
-	getByOrder(order: OrderParameter, lastIndex: number) {
+	getByOrder(direction: Direction, lastIndex: number) {
 		return {
 			prev: () => this.getPrev(lastIndex),
 			next: () => this.getNext(lastIndex),
-		}[order]();
+		}[direction]();
 	}
 
 	update(transitions: Object[]) {

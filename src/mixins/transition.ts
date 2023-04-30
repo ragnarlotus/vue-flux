@@ -1,23 +1,25 @@
-import { Component, Ref } from 'vue';
 import Size from '../shared/Size';
 import Resource from '../resources/Resource';
+import { CSSProperties } from 'vue';
+import { Direction, Directions } from '../types';
 
-export interface BaseProps {
-	size?: Size;
+export interface TransitionProps {
+	size: Size;
 	from: Resource;
 	to?: Resource;
 	current: any;
-
-	options: {
-		type: Object;
-		default: () => {};
-	};
-
-	maskStyle: Object;
-
-	displayComponent: Object;
+	options?: any;
+	maskStyle: CSSProperties;
+	displayComponent: any;
+	direction: Direction;
 }
 
-export default (options, conf) => {
-	Object.assign(conf, { direction: 'next' }, options);
+export interface TransitionConf {
+	totalDuration?: number;
+	easing: string;
+	direction?: Direction;
+}
+
+export default (conf: TransitionConf, options?: any) => {
+	Object.assign(conf, { direction: Directions.next }, options);
 };

@@ -2,9 +2,9 @@
 	import { ref, reactive } from 'vue';
 	import useComponentMixin, { baseProps } from '@/mixins/component.js';
 
-	const $el = ref(null);
-
 	const props = defineProps(baseProps);
+
+	const $el = ref(null);
 
 	const styles = reactive({
 		base: {

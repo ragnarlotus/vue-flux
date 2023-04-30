@@ -4,8 +4,6 @@
 	import { ref, reactive, computed, unref, onMounted, onUnmounted } from 'vue';
 	import { ceil, aspectRatio } from '@/shared/Maths';
 
-	const $el = ref(null);
-
 	const props = defineProps({
 		rsc: {
 			type: Object,
@@ -26,6 +24,8 @@
 			default: '100%',
 		},
 	});
+
+	const $el = ref(null);
 
 	const { holder, rsc } = props;
 

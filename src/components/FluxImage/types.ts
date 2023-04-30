@@ -1,5 +1,5 @@
-import { BaseProps } from '../../mixins/component';
+import { ComponentProps } from '../../mixins/component';
 
-export interface Props extends BaseProps {
+export interface Props extends ComponentProps {
 	color?: string;
 }

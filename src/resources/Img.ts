@@ -1,12 +1,12 @@
 import FluxImage from '../components/FluxImage/FluxImage.vue';
 import Resource from './Resource';
+import Size from '../shared/Size';
 import {
 	DisplayParamenter,
+	ResizeType,
 	ResourceStatus,
 	TransitionParameter,
-} from '../types';
-import Size from '../shared/Size';
-import { ResizeType } from './types';
+} from './types';
 
 export default class Img extends Resource {
 	constructor(

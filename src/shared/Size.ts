@@ -4,7 +4,7 @@ import { aspectRatio } from './Maths';
 export default class Size {
 	width: Ref<null | number> = ref(null);
 	height: Ref<null | number> = ref(null);
-	valid: Ref<boolean> = computed<boolean>(
+	valid = computed<boolean>(
 		() => ![this.width.value, this.height.value].includes(null)
 	);
 
@@ -60,8 +60,8 @@ export default class Size {
 		}
 
 		return {
-			width: this.width.value + 'px',
-			height: this.height.value + 'px',
+			width: this.width.value!.toString() + 'px',
+			height: this.height.value!.toString() + 'px',
 		};
 	}
 }

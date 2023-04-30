@@ -1,5 +1,5 @@
 import { shallowReactive, nextTick, Ref, ref, Component } from 'vue';
-import { OrderParameter } from '../types';
+import { Directions, Direction } from '../types';
 import { Resources, Transitions } from '../repositories';
 import { Timers, PlayerResource, PlayerTransition } from './';
 import { Config } from '../components/VueFlux/types';
@@ -33,7 +33,7 @@ export default class Player {
 		this.$displayComponent = $displayComponent;
 	}
 
-	play(resourceIndex: number | OrderParameter = 'next', delay?: number) {
+	play(resourceIndex: number | Direction = Directions.next, delay?: number) {
 		const { config, timers } = this;
 
 		config.autoplay = true;
@@ -92,8 +92,8 @@ export default class Player {
 	}
 
 	async show(
-		resourceIndex: number | OrderParameter = 'next',
-		transitionIndex: number | OrderParameter = 'next'
+		resourceIndex: number | Direction = Directions.next,
+		transitionIndex: number | Direction = Directions.next
 	) {
 		if (!this.isReadyToShow()) {
 			return;
@@ -136,8 +136,8 @@ export default class Player {
 		if (transition.options.direction === undefined) {
 			transition.options.direction =
 				this.resource.from!.index < this.resource.to.index
-					? 'next'
-					: 'prev';
+					? Directions.next
+					: Directions.prev;
 		}
 
 		this.transition.current = transition;

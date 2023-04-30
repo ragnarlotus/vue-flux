@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive, computed } from 'vue';
 	import FluxImage from '../FluxImage/FluxImage.vue';
-	import useComponentMixin, { BaseProps } from '../../mixins/component';
+	import useComponentMixin, { ComponentProps } from '../../mixins/component';
 	import {
 		Side,
 		SideProps,
@@ -9,12 +9,12 @@
 		SidesColors,
 		SidesOffsets,
 		SidesResources,
+		Turn,
+		Turns,
 	} from './types';
 	import Size from '../../shared/Size';
 
-	const $el = ref(null);
-
-	interface Props extends BaseProps {
+	interface Props extends ComponentProps {
 		rscs: SidesResources;
 		colors?: SidesColors;
 		offsets?: SidesOffsets;
@@ -27,6 +27,8 @@
 		sidesCss: {},
 		viewSize: new Size({ width: 0, height: 0 }),
 	});
+
+	const $el = ref(null);
 
 	const componentStyles = reactive({
 		base: {
@@ -55,6 +57,8 @@
 		y: {
 			front: '0',
 			back: '180',
+			backr: '180',
+			backl: '-180',
 			left: '-90',
 			right: '90',
 			top: '0',
@@ -103,10 +107,10 @@
 
 		const { width, height } = props.size.toRaw();
 
-		const { viewWidth, viewHeight } =
+		const { width: viewWidth, height: viewHeight } =
 			props.viewSize !== undefined
 				? props.viewSize.toRaw()
-				: { viewWidth: 0, viewHeight: 0 };
+				: { width: 0, height: 0 };
 
 		const halfDepth = depth / 2;
 
@@ -120,12 +124,12 @@
 		};
 	});
 
-	function getTransform(side: Side) {
-		const rx = rotate.x[side];
-		const ry = rotate.y[side];
-		const tx = translate.x[side];
-		const ty = translate.y[side];
-		const tz = translateZ.value[side];
+	function getTransform(turn: Turn) {
+		const rx = rotate.x[turn];
+		const ry = rotate.y[turn];
+		const tx = translate.x[turn];
+		const ty = translate.y[turn];
+		const tz = translateZ.value[turn];
 
 		return `rotateX(${rx}deg) rotateY(${ry}deg) translate3d(${tx}%, ${ty}%, ${tz}px)`;
 	}
@@ -177,15 +181,15 @@
 		return sides;
 	});
 
-	const turn = (side: Side) => transform({ transform: getTransform(side) });
+	const turn = (turn: any) => transform({ transform: getTransform(turn) });
 
-	const turnTop = () => turn('top');
+	const turnTop = () => turn(Turns.top);
 
-	const turnBottom = () => turn('bottom');
+	const turnBottom = () => turn(Turns.bottom);
 
-	const turnLeft = () => turn('left');
+	const turnLeft = () => turn(Turns.left);
 
-	const turnRight = () => turn('right');
+	const turnRight = () => turn(Turns.right);
 
 	defineExpose({
 		setStyle,

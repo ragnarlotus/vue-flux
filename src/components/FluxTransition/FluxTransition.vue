@@ -6,22 +6,27 @@
 		onMounted,
 		onUnmounted,
 		nextTick,
-		Component,
+		Ref,
 	} from 'vue';
 	import Size from '../../shared/Size';
 	import Resource from '../../resources/Resource';
 
-	const $el = ref(null);
-	const $transition = ref(null);
+	const props = withDefaults(
+		defineProps<{
+			size: Size;
+			transition: Object;
+			from: Resource;
+			to: Resource;
+			displayComponent: Ref<null | any>;
+			options: any;
+		}>(),
+		{
+			options: {},
+		}
+	);
 
-	const props = defineProps<{
-		size: Size;
-		transition: Object;
-		from: Resource;
-		to: Resource;
-		displayComponent: null | Component;
-		options: Object;
-	}>();
+	const $el: Ref<null | HTMLDivElement> = ref(null);
+	const $transition: Ref<null | any> = ref(null);
 
 	const emit = defineEmits(['start', 'end']);
 
@@ -44,7 +49,7 @@
 	});
 
 	const getDuration = () =>
-		!$transition.value ? 1 : $transition.value.totalDuration;
+		$transition.value !== null ? $transition.value.totalDuration : 1;
 
 	onMounted(async () => {
 		emit('start', {
@@ -69,7 +74,7 @@
 	});
 
 	onUnmounted(() => {
-		if (props.displayComponent) {
+		if (props.displayComponent.value !== null) {
 			props.displayComponent.value.show();
 		}
 	});

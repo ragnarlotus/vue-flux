@@ -1,4 +1,5 @@
 import { Config } from '../components/VueFlux/types';
+import { Directions } from '../types';
 import Player from './Player';
 
 export default class Keys {
@@ -30,12 +31,12 @@ export default class Keys {
 
 	keydown(event: KeyboardEvent) {
 		if (['ArrowLeft', 'Left'].includes(event.key)) {
-			this.player.show('prev');
+			this.player.show(Directions.prev);
 			return;
 		}
 
 		if (['ArrowRight', 'Right'].includes(event.key)) {
-			this.player.show('next');
+			this.player.show(Directions.next);
 			return;
 		}
 	}

@@ -1,10 +1,10 @@
 import { CSSProperties } from 'vue';
 import Size from '../../shared/Size';
 import { Offset } from '../../types';
-import { BaseProps } from '../../mixins/component';
+import { ComponentProps } from '../../mixins/component';
 import { SidesResources } from '../FluxCube/types';
 
-export interface Props extends BaseProps {
+export interface Props extends ComponentProps {
 	rscs: SidesResources;
 	rows?: number;
 	cols?: number;

@@ -1,4 +1,5 @@
 import { Config } from '../components/VueFlux/types';
+import { Directions } from '../types';
 import Display from './Display';
 import Mouse from './Mouse';
 import Player from './Player';
@@ -56,9 +57,9 @@ export default class Touches {
 		}
 
 		if (this.slideRight(offsetX, display)) {
-			player.show('prev');
+			player.show(Directions.prev);
 		} else if (this.slideLeft(offsetX, display)) {
-			player.show('next');
+			player.show(Directions.next);
 		}
 	}
 
