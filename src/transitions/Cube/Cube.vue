@@ -1,8 +1,6 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import useTransitionMixin, {
-		TransitionProps,
-	} from '../../mixins/transition';
+	import useTransition, { TransitionProps } from '../transition';
 	import { FluxCube } from '../../components';
 	import { Conf } from './types';
 
@@ -15,7 +13,7 @@
 		easing: 'ease-out',
 	});
 
-	useTransitionMixin(conf, props.options);
+	useTransition(conf, props.options);
 
 	Object.assign(props.maskStyle, {
 		perspective: '1600px',

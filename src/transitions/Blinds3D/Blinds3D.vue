@@ -1,8 +1,6 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import useTransitionMixin, {
-		TransitionProps,
-	} from '../../mixins/transition';
+	import useTransition, { TransitionProps } from '../transition';
 	import { FluxGrid } from '../../components';
 	import { Conf } from './types';
 
@@ -18,7 +16,7 @@
 		tileDelay: 150,
 	});
 
-	useTransitionMixin(conf, props.options);
+	useTransition(conf, props.options);
 
 	const gridCss: CSSProperties = {
 		perspective: '800px',

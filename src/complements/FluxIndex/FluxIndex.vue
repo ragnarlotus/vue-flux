@@ -3,8 +3,8 @@
 	import Size from '../../shared/Size';
 	import { Player } from '../../controllers';
 	import { Resources } from '../../repositories';
-	import FluxIndexButton from './FluxIndexButton.vue';
-	import FluxIndexList from './FluxIndexList.vue';
+	import Button from './Button/Button.vue';
+	import List from './List/List.vue';
 
 	export interface Props {
 		mouseOver: Ref<boolean>;
@@ -15,19 +15,16 @@
 
 	const props = defineProps<Props>();
 
-	const $fluxIndexList: Ref<null | typeof FluxIndexList> = ref(null);
+	const $fluxIndexList: Ref<null | typeof List> = ref(null);
 
 	const visible = computed<boolean>(() => props.resources.list.length > 0);
 </script>
 
 <template>
 	<div v-if="visible" class="flux-index">
-		<FluxIndexButton
-			:mouse-over="mouseOver"
-			@click="$fluxIndexList?.show()"
-		/>
+		<Button :mouse-over="mouseOver" @click="$fluxIndexList?.show()" />
 
-		<FluxIndexList
+		<List
 			:display-size="displaySize"
 			:resources="resources"
 			:player="player"

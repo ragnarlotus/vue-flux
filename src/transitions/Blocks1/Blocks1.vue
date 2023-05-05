@@ -1,8 +1,6 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
-	import useTransitionMixin, {
-		TransitionProps,
-	} from '../../mixins/transition';
+	import useTransition, { TransitionProps } from '../transition';
 	import { FluxGrid } from '../../components';
 	import { Conf } from './types';
 	import { floor } from '../../shared/Maths';
@@ -19,7 +17,7 @@
 		tileDelay: 1000,
 	});
 
-	useTransitionMixin(conf, props.options);
+	useTransition(conf, props.options);
 
 	if (!props.options.rows) {
 		const divider = props.size.width.value! / conf.cols;

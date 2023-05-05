@@ -1,10 +1,10 @@
 <script setup lang="ts">
 	import { Ref, computed, nextTick, ref } from 'vue';
-	import { Player } from '../../controllers';
-	import { Resources } from '../../repositories';
-	import FluxIndexListThumb from './FluxIndexListThumb.vue';
-	import Size from '../../shared/Size';
-	import useThumbs from './thumbs';
+	import { Player } from '../../../controllers';
+	import { Resources } from '../../../repositories';
+	import Thumb from '../Thumb/Thumb.vue';
+	import Size from '../../../shared/Size';
+	import useThumbs from '../Thumb/thumbs';
 
 	export interface Props {
 		displaySize: Size;
@@ -72,7 +72,7 @@
 <template>
 	<nav :class="listClass" @click="hide(null)">
 		<ul ref="$list">
-			<FluxIndexListThumb
+			<Thumb
 				v-for="(rsc, index) in resources.list"
 				:key="index"
 				:rsc="rsc"

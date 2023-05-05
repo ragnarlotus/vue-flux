@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { computed } from 'vue';
-	import { Resources } from '../repositories';
+	import { Resources } from '../../repositories';
 
 	export interface Props {
 		resources: Resources;
@@ -9,7 +9,7 @@
 	const props = defineProps<Props>();
 
 	const visible = computed<boolean>(
-		() => props.resources.loader?.progress?.value < 100
+		() => props.resources.loader?.progress?.value! < 100
 	);
 </script>
 

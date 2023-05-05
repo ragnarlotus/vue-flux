@@ -1,6 +1,6 @@
 import { computed } from 'vue';
-import { Player } from '../../controllers';
-import Size from '../../shared/Size';
+import { Player } from '../../../controllers';
+import Size from '../../../shared/Size';
 
 export default function useThumbs(displaySize: Size, player: Player) {
 	const size = computed<Size>(() => {

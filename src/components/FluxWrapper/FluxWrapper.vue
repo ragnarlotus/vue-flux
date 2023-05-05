@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
-	import useComponentMixin, { ComponentProps } from '../../mixins/component';
+	import useComponent, { ComponentProps } from '../component';
 
 	const props = defineProps<ComponentProps>();
 
@@ -12,7 +12,7 @@
 		},
 	});
 
-	const { style, setCss, transform, show, hide } = useComponentMixin(
+	const { style, setCss, transform, show, hide } = useComponent(
 		$el,
 		props,
 		styles

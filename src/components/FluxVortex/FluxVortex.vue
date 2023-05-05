@@ -2,8 +2,7 @@
 	import { ref, reactive, computed, CSSProperties } from 'vue';
 	import { round, ceil, diag } from '../../shared/Maths';
 	import { FluxImage } from '../';
-	import useComponentMixin, { ComponentProps } from '../../mixins/component';
-	import { ComponentStyles } from '../../types';
+	import useComponent, { ComponentProps } from '../component';
 
 	export interface Props extends ComponentProps {
 		circles?: number;
@@ -23,7 +22,7 @@
 		} as CSSProperties,
 	});
 
-	const { style, setCss, show, hide } = useComponentMixin($el, props, styles);
+	const { style, setCss, show, hide } = useComponent($el, props, styles);
 
 	const numCircles = computed(() => round(props.circles));
 

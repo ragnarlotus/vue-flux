@@ -1,9 +1,7 @@
 <script setup lang="ts">
 	import { ref, Ref, reactive, CSSProperties } from 'vue';
 	import { diag } from '../../shared/Maths';
-	import useTransitionMixin, {
-		TransitionProps,
-	} from '../../mixins/transition';
+	import useTransition, { TransitionProps } from '../transition';
 	import { FluxWrapper } from '../../components';
 	import { Conf } from './types';
 	import Size from '../../shared/Size';
@@ -20,7 +18,7 @@
 		backgroundColor: '#111',
 	});
 
-	useTransitionMixin(conf, props.options);
+	useTransition(conf, props.options);
 
 	const fromCss: CSSProperties = {
 		alignSelf: 'center',

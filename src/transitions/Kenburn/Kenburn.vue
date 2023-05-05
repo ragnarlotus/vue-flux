@@ -1,9 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import { floor } from '../../shared/Maths';
-	import useTransitionMixin, {
-		TransitionProps,
-	} from '../../mixins/transition';
+	import useTransition, { TransitionProps } from '../transition';
 	import { Conf } from './types';
 
 	const props = defineProps<TransitionProps>();
@@ -15,7 +13,7 @@
 		easing: 'linear',
 	});
 
-	useTransitionMixin(conf, props.options);
+	useTransition(conf, props.options);
 
 	const transforms = [
 		{

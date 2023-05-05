@@ -12,11 +12,11 @@ export interface ComponentProps {
 	css?: CSSProperties;
 }
 
-export default (
+export default function useComponent(
 	$el: Ref<null | HTMLElement>,
 	props: ComponentProps,
 	css: ComponentStyles
-) => {
+) {
 	if (css.base === undefined) {
 		css.base = {} as CSSProperties;
 	}
@@ -75,4 +75,4 @@ export default (
 		show,
 		hide,
 	};
-};
+}

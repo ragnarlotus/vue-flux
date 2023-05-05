@@ -1,8 +1,6 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import useTransitionMixin, {
-		TransitionProps,
-	} from '../../mixins/transition';
+	import useTransition, { TransitionProps } from '../transition';
 	import { Conf } from './types';
 
 	const props = defineProps<TransitionProps>();
@@ -14,7 +12,7 @@
 		easing: 'ease-in',
 	});
 
-	useTransitionMixin(conf, props.options);
+	useTransition(conf, props.options);
 
 	const fromCss: CSSProperties = {
 		zIndex: 1,

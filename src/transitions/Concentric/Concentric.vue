@@ -1,8 +1,6 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
-	import useTransitionMixin, {
-		TransitionProps,
-	} from '../../mixins/transition';
+	import useTransition, { TransitionProps } from '../transition';
 	import { FluxVortex } from '../../components';
 	import { Conf } from './types';
 
@@ -17,7 +15,7 @@
 		tileDelay: 150,
 	});
 
-	useTransitionMixin(conf, props.options);
+	useTransition(conf, props.options);
 
 	const totalDuration = conf.tileDelay * conf.circles + conf.tileDuration;
 

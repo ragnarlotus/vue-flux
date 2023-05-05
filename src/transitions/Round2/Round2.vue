@@ -1,9 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import { floor } from '../../shared/Maths';
-	import useTransitionMixin, {
-		TransitionProps,
-	} from '../../mixins/transition';
+	import useTransition, { TransitionProps } from '../transition';
 	import { FluxGrid } from '../../components';
 	import { Conf } from './types';
 	import { Directions } from '../../types';
@@ -21,7 +19,7 @@
 		rotateX: -540,
 	});
 
-	useTransitionMixin(conf, props.options);
+	useTransition(conf, props.options);
 
 	// eslint-disable-next-line vue/no-mutating-props
 	props.maskStyle.overflow = 'visible';

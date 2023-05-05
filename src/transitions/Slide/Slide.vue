@@ -1,8 +1,6 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import useTransitionMixin, {
-		TransitionProps,
-	} from '../../mixins/transition';
+	import useTransition, { TransitionProps } from '../transition';
 	import { FluxWrapper } from '../../components';
 	import { Conf } from './types';
 	import { ComponentProps } from '../../mixins/component';
@@ -20,7 +18,7 @@
 		easing: 'ease-in-out',
 	});
 
-	useTransitionMixin(conf, props.options);
+	useTransition(conf, props.options);
 
 	const transition = `transform ${conf.totalDuration}ms ${conf.easing}`;
 

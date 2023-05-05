@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { computed } from 'vue';
-	import { ResourceIndex } from '../repositories/Resrouces/types';
-	import { TransitionIndex } from '../repositories/Transitions/types';
+	import { ResourceIndex } from '../../repositories/Resrouces/types';
+	import { TransitionIndex } from '../../repositories/Transitions/types';
 
 	export interface Props {
 		currentResource: null | ResourceIndex;

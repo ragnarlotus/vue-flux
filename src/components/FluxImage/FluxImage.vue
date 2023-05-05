@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { ref, reactive, computed, CSSProperties } from 'vue';
-	import useComponentMixin from '../../mixins/component';
+	import useComponent from '../component';
 	import { Props } from './types';
 
 	const props = defineProps<Props>();
@@ -45,7 +45,7 @@
 		}),
 	});
 
-	const { style, setCss, transform, show, hide } = useComponentMixin(
+	const { style, setCss, transform, show, hide } = useComponent(
 		$el,
 		props,
 		componentStyles

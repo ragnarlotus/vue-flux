@@ -1,8 +1,6 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import useTransitionMixin, {
-		TransitionProps,
-	} from '../../mixins/transition';
+	import useTransition, { TransitionProps } from '../transition';
 	import { FluxGrid } from '../../components';
 	import { Conf } from './types';
 	import { Directions } from '../../types';
@@ -20,7 +18,7 @@
 		sideColor: '#333',
 	});
 
-	useTransitionMixin(conf, props.options);
+	useTransition(conf, props.options);
 
 	// eslint-disable-next-line vue/no-mutating-props
 	props.maskStyle.overflow = 'visible';

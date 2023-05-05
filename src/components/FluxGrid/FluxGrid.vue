@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive, computed, CSSProperties } from 'vue';
 	import { floor, ceil } from '../../shared/Maths';
-	import useComponentMixin, { ComponentProps } from '../../mixins/component';
+	import useComponent, { ComponentProps } from '../component';
 	import { FluxImage, FluxCube } from '../';
 	import Size from '../../shared/Size';
 	import { ComponentStyles } from '../../types';
@@ -29,7 +29,7 @@
 		},
 	});
 
-	const { style, setCss, show, hide } = useComponentMixin(
+	const { style, setCss, show, hide } = useComponent(
 		$el,
 		props,
 		componentStyles

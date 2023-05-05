@@ -1,4 +1,4 @@
-import { TransitionConf } from '../../mixins/transition';
+import { TransitionConf } from '../transition';
 
 export interface Conf extends TransitionConf {
 	rows: number;

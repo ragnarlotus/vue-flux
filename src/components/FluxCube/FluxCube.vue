@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive, computed } from 'vue';
 	import { FluxImage } from '../';
-	import useComponentMixin, { ComponentProps } from '../../mixins/component';
+	import useComponent, { ComponentProps } from '../component';
 	import {
 		Side,
 		SideProps,
@@ -39,7 +39,7 @@
 		inherited: props.css,
 	});
 
-	const { style, setCss, transform, show, hide } = useComponentMixin(
+	const { style, setCss, transform, show, hide } = useComponent(
 		$el,
 		props,
 		componentStyles

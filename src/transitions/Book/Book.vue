@@ -1,9 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import { ceil } from '../../shared/Maths';
-	import useTransitionMixin, {
-		TransitionProps,
-	} from '../../mixins/transition';
+	import useTransition, { TransitionProps } from '../transition';
 	import { FluxCube } from '../../components';
 	import { Conf } from './types';
 	import Size from '../../shared/Size';
@@ -19,7 +17,7 @@
 		easing: 'ease-out',
 	});
 
-	useTransitionMixin(conf, props.options);
+	useTransition(conf, props.options);
 
 	const viewSize: Size = new Size({
 		width: ceil(props.size.width.value! / 2),

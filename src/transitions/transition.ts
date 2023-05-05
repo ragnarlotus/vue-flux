@@ -20,6 +20,6 @@ export interface TransitionConf {
 	direction?: Direction;
 }
 
-export default (conf: TransitionConf, options?: any) => {
+export default function useTransition(conf: TransitionConf, options?: any) {
 	Object.assign(conf, { direction: Directions.next }, options);
-};
+}
