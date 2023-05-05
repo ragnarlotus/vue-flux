@@ -11,7 +11,7 @@ import {
 export default class Img extends Resource {
 	constructor(
 		src: string,
-		caption: string | null = null,
+		caption: string = '',
 		resizeType: ResizeType = 'fill'
 	) {
 		const display: DisplayParamenter = {

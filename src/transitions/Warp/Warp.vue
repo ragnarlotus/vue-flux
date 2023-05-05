@@ -11,7 +11,7 @@
 
 	const $vortex: Ref<null | typeof FluxVortex> = ref(null);
 
-	const conf = reactive<Conf>({
+	const conf: Conf = reactive({
 		circles: 7,
 		tileDuration: 800,
 		easing: 'linear',

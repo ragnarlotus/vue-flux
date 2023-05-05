@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { ref, reactive, computed } from 'vue';
-	import FluxImage from '../FluxImage/FluxImage.vue';
+	import { FluxImage } from '../';
 	import useComponentMixin, { ComponentProps } from '../../mixins/component';
 	import {
 		Side,
@@ -13,6 +13,7 @@
 		Turns,
 	} from './types';
 	import Size from '../../shared/Size';
+	import { ComponentStyles } from '../../types';
 
 	interface Props extends ComponentProps {
 		rscs: SidesResources;
@@ -20,6 +21,7 @@
 		offsets?: SidesOffsets;
 		depth: number;
 		sidesCss: any;
+		viewSize: Size;
 	}
 
 	const props = withDefaults(defineProps<Props>(), {
@@ -30,15 +32,14 @@
 
 	const $el = ref(null);
 
-	const componentStyles = reactive({
+	const componentStyles: ComponentStyles = reactive({
 		base: {
 			transformStyle: 'preserve-3d',
 		},
-		color: props.color,
 		inherited: props.css,
 	});
 
-	const { style, setStyle, transform, show, hide } = useComponentMixin(
+	const { style, setCss, transform, show, hide } = useComponentMixin(
 		$el,
 		props,
 		componentStyles
@@ -48,6 +49,8 @@
 		x: {
 			front: '0',
 			back: '0',
+			backr: '0',
+			backl: '0',
 			left: '0',
 			right: '0',
 			top: '90',
@@ -70,6 +73,8 @@
 		x: {
 			front: '0',
 			back: '0',
+			backr: '0',
+			backl: '0',
 			left: '-50',
 			right: '50',
 			top: '0',
@@ -79,6 +84,8 @@
 		y: {
 			front: '0',
 			back: '0',
+			backr: '0',
+			backl: '0',
 			left: '0',
 			right: '0',
 			top: '-50',
@@ -117,6 +124,8 @@
 		return {
 			front: '0',
 			back: depth,
+			backr: depth,
+			backl: depth,
 			left: halfDepth,
 			right: viewWidth ? viewWidth - halfDepth : width - halfDepth,
 			top: halfDepth,
@@ -135,14 +144,14 @@
 	}
 
 	const sides = computed(() => {
-		const sides = {};
+		const sides: any = {};
 
 		definedSides.value.forEach((sideName: Side) => {
 			const side: SideProps = {
 				ref: sideName,
 				rsc: props.rscs[sideName],
 				size: props.size,
-				viewSize: props.viewSize,
+				viewSize: new Size(props.viewSize!.toRaw()),
 				css: {
 					...props.sidesCss[sideName],
 					position: 'absolute',
@@ -166,12 +175,12 @@
 			}
 
 			if (['left', 'right'].includes(sideName)) {
-				side.viewSize.width.value = props.depth;
+				side.viewSize!.width.value = props.depth;
 				side.size.width.value = props.depth;
 			}
 
 			if (['top', 'bottom'].includes(sideName)) {
-				side.viewSize.height.value = props.depth;
+				side.viewSize!.height.value = props.depth;
 				side.size.height.value = props.depth;
 			}
 
@@ -192,7 +201,7 @@
 	const turnRight = () => turn(Turns.right);
 
 	defineExpose({
-		setStyle,
+		setCss,
 		transform,
 		show,
 		hide,

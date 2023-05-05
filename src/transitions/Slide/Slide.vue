@@ -15,7 +15,7 @@
 	const $left: Ref<null | any> = ref(null);
 	const $right: Ref<null | any> = ref(null);
 
-	const conf = reactive<Conf>({
+	const conf: Conf = reactive({
 		totalDuration: 1400,
 		easing: 'ease-in-out',
 	});

@@ -1,14 +1,13 @@
 <script setup lang="ts">
 	import { ref, reactive, computed, CSSProperties } from 'vue';
 	import useComponentMixin from '../../mixins/component';
-	import { ComponentStyles } from '../../types';
 	import { Props } from './types';
 
-	const props = defineProps(Props);
+	const props = defineProps<Props>();
 
 	const $el = ref(null);
 
-	const componentStyles: ComponentStyles = reactive({
+	const componentStyles: any = reactive({
 		base: {
 			overflow: 'hidden',
 		},

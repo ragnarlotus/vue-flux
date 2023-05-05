@@ -12,7 +12,7 @@
 	const $grid: Ref<null | typeof FluxGrid> = ref(null);
 	const $background: Ref<null | any> = ref(null);
 
-	const conf = reactive<Conf>({
+	const conf: Conf = reactive({
 		rows: 8,
 		cols: 8,
 		tileDuration: 800,

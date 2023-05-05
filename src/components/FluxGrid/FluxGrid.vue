@@ -1,19 +1,18 @@
 <script setup lang="ts">
 	import { ref, reactive, computed, CSSProperties } from 'vue';
 	import { floor, ceil } from '../../shared/Maths';
-	import useComponentMixin, { BaseProps } from '../../mixins/component';
-	import FluxImage from '../FluxImage/FluxImage.vue';
-	import FluxCube from '../FluxCube/FluxCube.vue';
+	import useComponentMixin, { ComponentProps } from '../../mixins/component';
+	import { FluxImage, FluxCube } from '../';
 	import Size from '../../shared/Size';
 	import { ComponentStyles } from '../../types';
 	import { SidesResources } from '../FluxCube/types';
 
-	interface Props extends BaseProps {
+	interface Props extends ComponentProps {
 		rscs?: SidesResources;
 		rows?: number;
 		cols?: number;
 		depth?: number;
-		tileStyle?: CSSProperties;
+		tileCss?: CSSProperties;
 	}
 
 	const props = withDefaults(defineProps<Props>(), {
@@ -24,7 +23,7 @@
 
 	const $el = ref(null);
 
-	const componentStyles = reactive<ComponentStyles>({
+	const componentStyles: ComponentStyles = reactive({
 		base: {
 			position: 'relative',
 		},
@@ -49,8 +48,8 @@
 	const tileSize = computed<Size>(
 		() =>
 			new Size({
-				width: floor(props.size.width / numCols.value),
-				height: floor(props.size.height / numRows.value),
+				width: floor(props.size.width.value! / numCols.value),
+				height: floor(props.size.height.value! / numRows.value),
 			})
 	);
 
@@ -65,20 +64,22 @@
 			const tile = {
 				row: getRowNumber(i),
 				col: getColNumber(i),
-			};
+			} as any;
 
-			let { width, height } = tileSize.value;
+			let { width, height } = tileSize.value.toRaw();
 
 			tile.offset = {
 				top: tile.row * height,
 				left: tile.col * width,
 			};
 
-			if (tile.row + 1 === numRows.value)
-				height = props.size.height - tile.row * height;
+			if (tile.row + 1 === numRows.value) {
+				height = props.size.height.value! - tile.row * height;
+			}
 
-			if (tile.col + 1 === numCols.value)
-				width = props.size.width - tile.col * width;
+			if (tile.col + 1 === numCols.value) {
+				width = props.size.width.value! - tile.col * width;
+			}
 
 			tile.viewSize = {
 				width,
@@ -102,9 +103,7 @@
 	const $tiles = ref([]);
 
 	const transform = (cb: Function) => {
-		$tiles.value.forEach(
-			(tile: props.to.transition.component, index: number) => cb(tile, index)
-		);
+		$tiles.value.forEach((tile: any, index: number) => cb(tile, index));
 	};
 
 	defineExpose({

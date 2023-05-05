@@ -10,7 +10,7 @@
 
 	const $from: Ref<null | any> = ref(null);
 
-	const conf = reactive<Conf>({
+	const conf: Conf = reactive({
 		totalDuration: 1500,
 		easing: 'linear',
 	});

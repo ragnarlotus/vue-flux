@@ -24,7 +24,15 @@ export enum Sides {
 	bottom = 'bottom',
 }
 
-export type Turn = Side & ('backl' | 'backr');
+export type Turn =
+	| 'front'
+	| 'back'
+	| 'top'
+	| 'bottom'
+	| 'left'
+	| 'right'
+	| 'backl'
+	| 'backr';
 
 export enum Turns {
 	front = 'front',

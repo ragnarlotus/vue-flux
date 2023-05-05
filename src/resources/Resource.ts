@@ -19,14 +19,14 @@ export default abstract class Resource {
 	realSize: Size = new Size();
 	adaptedSize: Size = new Size();
 	adaptedPosition: Position = new Position();
-	caption: string | null;
+	caption: string = '';
 	resizeType: ResizeType;
 	display: DisplayParamenter;
 	transition: TransitionParameter;
 
 	constructor(
 		src: string,
-		caption: string | null = null,
+		caption: string,
 		resizeType: ResizeType = 'fill',
 		display: DisplayParamenter,
 		transition: TransitionParameter,

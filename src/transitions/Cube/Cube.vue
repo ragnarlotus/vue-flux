@@ -10,7 +10,7 @@
 
 	const $cube: Ref<null | typeof FluxCube> = ref(null);
 
-	const conf = reactive<Conf>({
+	const conf: Conf = reactive({
 		totalDuration: 1400,
 		easing: 'ease-out',
 	});

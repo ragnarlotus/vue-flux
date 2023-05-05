@@ -12,7 +12,7 @@
 	const $wrapper: Ref<null | typeof FluxWrapper> = ref(null);
 	const $from: Ref<null | any> = ref(null);
 
-	const conf = reactive<Conf>({
+	const conf: Conf = reactive({
 		totalDuration: 1400,
 		easing: 'ease-in-out',
 	});

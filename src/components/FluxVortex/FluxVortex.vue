@@ -1,52 +1,43 @@
 <script setup lang="ts">
-	import { ref, reactive, computed } from 'vue';
-	import { round, ceil, diag } from '@/shared/Maths';
-	import FluxImage from '@/components/FluxImage.vue';
-	import useComponentMixin, { baseProps } from '@/mixins/component';
+	import { ref, reactive, computed, CSSProperties } from 'vue';
+	import { round, ceil, diag } from '../../shared/Maths';
+	import { FluxImage } from '../';
+	import useComponentMixin, { ComponentProps } from '../../mixins/component';
+	import { ComponentStyles } from '../../types';
 
-	const props = defineProps({
-		...baseProps,
+	export interface Props extends ComponentProps {
+		circles?: number;
+		tileCss?: CSSProperties;
+	}
 
-		circles: {
-			type: Number,
-			default: 1,
-		},
-
-		tileCss: Object,
+	const props = withDefaults(defineProps<Props>(), {
+		circles: 1,
 	});
 
 	const $el = ref(null);
 
-	const styles = reactive({
+	const styles: any = reactive({
 		base: {
 			position: 'relative',
 			overflow: 'hidden',
-		},
-		color: props.color,
-		props: props.css,
+		} as CSSProperties,
 	});
 
 	const { style, setCss, show, hide } = useComponentMixin($el, props, styles);
 
-	const numCircles = computed(() => {
-		return round(props.circles);
-	});
+	const numCircles = computed(() => round(props.circles));
 
-	const diagonal = computed(() => {
-		return diag(props.size);
-	});
+	const diagonal = computed(() => diag(props.size));
 
-	const radius = computed(() => {
-		return ceil(diagonal.value / 2 / numCircles.value);
-	});
+	const radius = computed(() => ceil(diagonal.value / 2 / numCircles.value));
 
-	const topGap = computed(() => {
-		return ceil(props.size.height / 2 - radius.value * numCircles.value);
-	});
+	const topGap = computed(() =>
+		ceil(props.size.height.value! / 2 - radius.value * numCircles.value)
+	);
 
-	const leftGap = computed(() => {
-		return ceil(props.size.width / 2 - radius.value * numCircles.value);
-	});
+	const leftGap = computed(() =>
+		ceil(props.size.width.value! / 2 - radius.value * numCircles.value)
+	);
 
 	const tiles = computed(() => {
 		const tiles = [];
@@ -55,7 +46,7 @@
 			const size = (numCircles.value - i) * radius.value * 2;
 			const gap = radius.value * i;
 
-			const tile = {
+			const tile: any = {
 				offset: {
 					top: topGap.value + gap,
 					left: leftGap.value + gap,
@@ -82,8 +73,8 @@
 
 	let $tiles = [];
 
-	const transform = (func) => {
-		$tiles.forEach((tile, i) => func(tile, i));
+	const transform = (func: Function) => {
+		$tiles.forEach((tile: any, index: number) => func(tile, index));
 	};
 
 	defineExpose({

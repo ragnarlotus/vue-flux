@@ -13,7 +13,7 @@
 	const $wrapper: Ref<null | typeof FluxWrapper> = ref(null);
 	const $from: Ref<null | any> = ref(null);
 
-	const conf = reactive<Conf>({
+	const conf: Conf = reactive({
 		circles: 2,
 		totalDuration: 900,
 		easing: 'cubic-bezier(0.385, 0, 0.795, 0.560)',

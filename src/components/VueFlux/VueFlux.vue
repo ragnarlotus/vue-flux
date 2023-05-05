@@ -11,10 +11,9 @@
 	} from 'vue';
 	import * as Controllers from '../../controllers';
 	import * as Repositories from '../../repositories';
-	import FluxTransition from '../FluxTransition/FluxTransition.vue';
 	import { Props, Config } from './types';
 
-	const props = defineProps(Props);
+	const props = defineProps<Props>();
 
 	const $container: Ref<null | HTMLElement> = ref(null);
 	const $transition: Ref<null | Component> = ref(null);
