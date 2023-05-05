@@ -1,43 +1,30 @@
 <script setup lang="ts">
 	import { computed } from 'vue';
+	import { Resources } from '../repositories';
+	import { ResourceIndex } from '../repositories/Resrouces/types';
+	import { TransitionIndex } from '../repositories/Transitions/types';
+	import Resource from '../resources/Resource';
 
-	const props = defineProps({
-		displayReady: {
-			type: Object,
-			required: true,
-		},
+	export interface Props {
+		displayReady: boolean;
+		resources: Resources;
+		currentResource: ResourceIndex;
+		currentTransition: TransitionIndex;
+		show: Function;
+	}
 
-		resources: {
-			type: Object,
-			required: true,
-		},
-
-		currentResource: {
-			type: Object,
-			required: false,
-		},
-
-		currentTransition: {
-			type: Object,
-			required: false,
-		},
-
-		show: {
-			type: Function,
-			required: true,
-		},
-	});
+	const props = defineProps<Props>();
 
 	const visible = computed<boolean>(
-		() => props.displayReady.value === true && props.resources.list.length > 0
+		() => props.displayReady === true && props.resources.list.length > 0
 	);
 
-	const getTitle = (rsc) => {
+	const getTitle = (rsc: Resource) => {
 		return rsc.caption;
 	};
 
-	const getClass = (index) => {
-		const htmlClass = ['pagination-item'];
+	const getCssClass = (index: number) => {
+		const classes = ['pagination-item'];
 
 		let active = props.currentResource.index === index;
 
@@ -45,11 +32,11 @@
 			active = false;
 		}
 
-		if (active) {
-			htmlClass.push('active');
+		if (active === true) {
+			classes.push('active');
 		}
 
-		return htmlClass;
+		return classes;
 	};
 </script>
 
@@ -59,7 +46,7 @@
 			<li v-for="(rsc, index) in resources.list" :key="index">
 				<span
 					:title="getTitle(rsc)"
-					:class="getClass(index)"
+					:class="getCssClass(index)"
 					@click="show(index)"
 				/>
 			</li>

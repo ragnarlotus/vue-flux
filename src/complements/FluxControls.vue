@@ -1,35 +1,26 @@
 <script setup lang="ts">
-	import { computed } from 'vue';
-	import FluxButton from '@/components/FluxButton.vue';
+	import { Ref, computed } from 'vue';
+	import { FluxButton } from '../components';
+	import { Config } from '../components/VueFlux/types';
+	import { ResourceIndex } from '../repositories/Resrouces/types';
+	import { Player } from '../controllers';
+	import { Directions } from '../types';
 
-	const props = defineProps({
-		config: {
-			type: Object,
-			required: true,
-		},
+	export interface Props {
+		config: Config;
+		currentResource: null | ResourceIndex;
+		mouseOver: Ref<boolean>;
+		player: Player;
+	}
 
-		currentResource: {
-			type: [Object, null],
-			required: true,
-		},
-
-		mouseOver: {
-			type: Object,
-			required: true,
-		},
-
-		player: {
-			type: Object,
-			required: true,
-		},
-	});
+	const props = defineProps<Props>();
 
 	const visible = computed<boolean>(() => {
 		if (props.currentResource === null) {
 			return false;
 		}
 
-		if (!props.mouseOver.value) {
+		if (props.mouseOver.value === false) {
 			return false;
 		}
 
@@ -40,14 +31,17 @@
 <template>
 	<transition name="fade">
 		<div v-if="visible" class="flux-controls">
-			<FluxButton class="prev top left" @click="player.show('prev')">
+			<FluxButton
+				class="prev top left"
+				@click="player.show(Directions.prev)"
+			>
 				<polyline points="64,18 22,50 64,82" />
 			</FluxButton>
 
 			<FluxButton
 				v-if="!config.autoplay"
 				class="play"
-				@click="player.play('next', 1)"
+				@click="player.play(Directions.next, 1)"
 			>
 				<polygon points="32,12 82,50 32,88" />
 			</FluxButton>
@@ -61,7 +55,10 @@
 				<line x1="68" y1="22" x2="68" y2="78" />
 			</FluxButton>
 
-			<FluxButton class="next top right" @click="player.show('next')">
+			<FluxButton
+				class="next top right"
+				@click="player.show(Directions.next)"
+			>
 				<polyline points="36,18 78,50 36,82" />
 			</FluxButton>
 		</div>

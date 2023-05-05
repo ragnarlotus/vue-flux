@@ -1,17 +1,14 @@
 <script setup lang="ts">
 	import { computed } from 'vue';
+	import { ResourceIndex } from '../repositories/Resrouces/types';
+	import { TransitionIndex } from '../repositories/Transitions/types';
 
-	const props = defineProps({
-		currentResource: {
-			type: [Object, null],
-			required: false,
-		},
+	export interface Props {
+		currentResource: null | ResourceIndex;
+		currentTransition: null | TransitionIndex;
+	}
 
-		currentTransition: {
-			type: [Object, null],
-			required: false,
-		},
-	});
+	const props = defineProps<Props>();
 
 	const caption = computed<string>(() => {
 		if (
@@ -24,23 +21,23 @@
 		return props.currentResource.rsc.caption;
 	});
 
-	const htmlClass = computed<string[]>(() => {
-		const css = ['flux-caption'];
+	const cssClasses = computed<string[]>(() => {
+		const classes = ['flux-caption'];
 
 		if (
 			props.currentTransition === null &&
 			props.currentResource !== null &&
 			props.currentResource.rsc.caption !== null
 		) {
-			css.push('visible');
+			classes.push('visible');
 		}
 
-		return css;
+		return classes;
 	});
 </script>
 
 <template>
-	<div :class="htmlClass">
+	<div :class="cssClasses">
 		{{ caption }}
 	</div>
 </template>
