@@ -1,10 +1,11 @@
 <script setup lang="ts">
-	import { ref, reactive, computed, CSSProperties } from 'vue';
+	import { ref, reactive, computed, CSSProperties, Ref } from 'vue';
 	import { round, ceil, diag } from '../../shared/Maths';
-	import { FluxImage } from '../';
 	import useComponent, { ComponentProps } from '../component';
+	import { Resource } from '../../resources';
 
 	export interface Props extends ComponentProps {
+		rsc: Resource;
 		circles?: number;
 		tileCss?: CSSProperties;
 	}
@@ -70,10 +71,10 @@
 		return tiles;
 	});
 
-	let $tiles = [];
+	const $tiles: Ref<any[]> = ref([]);
 
 	const transform = (func: Function) => {
-		$tiles.forEach((tile: any, index: number) => func(tile, index));
+		$tiles.value.forEach((tile: any, index: number) => func(tile, index));
 	};
 
 	defineExpose({
@@ -86,10 +87,11 @@
 
 <template>
 	<div ref="$el" :style="style">
-		<FluxImage
+		<component
+			:is="rsc.transition.component"
 			v-for="(tile, index) in tiles"
 			:ref="
-				(el) => {
+				(el: any) => {
 					if (el) $tiles[index] = el;
 				}
 			"

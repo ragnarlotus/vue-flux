@@ -8,22 +8,21 @@
 		nextTick,
 		Ref,
 	} from 'vue';
-	import Size from '../../shared/Size';
+	import { Size } from '../../shared';
 	import Resource from '../../resources/Resource';
 
-	const props = withDefaults(
-		defineProps<{
-			size: Size;
-			transition: Object;
-			from: Resource;
-			to: Resource;
-			displayComponent: Ref<null | any>;
-			options: any;
-		}>(),
-		{
-			options: {},
-		}
-	);
+	export interface Props {
+		size: Size;
+		transition: Object;
+		from: Resource;
+		to: Resource;
+		displayComponent: Ref<null | any>;
+		options: any;
+	}
+
+	const props = withDefaults(defineProps<Props>(), {
+		options: () => ({}),
+	});
 
 	const $el: Ref<null | HTMLDivElement> = ref(null);
 	const $transition: Ref<null | any> = ref(null);

@@ -1,5 +1,5 @@
 import { Component } from 'vue';
-import Resource from '../../resources/Resource';
+import { Resource } from '../../resources';
 
 export interface Options {
 	allowFullscreen?: boolean;

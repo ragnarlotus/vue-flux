@@ -4,7 +4,7 @@
 	import { FluxWrapper } from '../../components';
 	import { Conf } from './types';
 	import { ComponentProps } from '../../mixins/component';
-	import Size from '../../shared/Size';
+	import { Size } from '../../shared';
 	import { Directions } from '../../types';
 
 	const props = defineProps<TransitionProps>();

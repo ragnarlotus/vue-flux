@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { ref, computed, Ref } from 'vue';
-	import Size from '../../shared/Size';
+	import { Size } from '../../shared';
 	import { Player } from '../../controllers';
 	import { Resources } from '../../repositories';
 	import Button from './Button/Button.vue';

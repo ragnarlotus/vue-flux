@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { CSSProperties } from 'vue';
 import Resource from '../../resources/Resource';
-import Size from '../../shared/Size';
+import { Size } from '../../shared';
 import { Offset } from '../../types';
-import { ComponentProps } from '../../mixins/component';
+import { ComponentProps } from '../component';
 
 export interface Props extends ComponentProps {
 	rscs: SidesResources;

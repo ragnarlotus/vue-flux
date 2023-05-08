@@ -1,9 +1,9 @@
 <script setup lang="ts">
-	import { ref, reactive, computed, CSSProperties } from 'vue';
+	import { ref, reactive, computed, CSSProperties, Ref } from 'vue';
 	import { floor, ceil } from '../../shared/Maths';
 	import useComponent, { ComponentProps } from '../component';
 	import { FluxImage, FluxCube } from '../';
-	import Size from '../../shared/Size';
+	import { Size } from '../../shared';
 	import { ComponentStyles } from '../../types';
 	import { SidesResources } from '../FluxCube/types';
 
@@ -100,7 +100,7 @@
 		return tiles;
 	});
 
-	const $tiles = ref([]);
+	const $tiles: Ref<any[]> = ref([]);
 
 	const transform = (cb: Function) => {
 		$tiles.value.forEach((tile: any, index: number) => cb(tile, index));
@@ -121,7 +121,7 @@
 		<component
 			:is="component"
 			v-for="(tile, index) in tiles"
-			:ref="(el) => $tiles.push(el)"
+			:ref="(el: any) => $tiles.push(el)"
 			:key="index"
 			:size="size"
 			v-bind="tile"

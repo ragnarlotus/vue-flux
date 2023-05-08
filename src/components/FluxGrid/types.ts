@@ -1,7 +1,7 @@
 import { CSSProperties } from 'vue';
-import Size from '../../shared/Size';
+import { Size } from '../../shared';
 import { Offset } from '../../types';
-import { ComponentProps } from '../../mixins/component';
+import { ComponentProps } from '../component';
 import { SidesResources } from '../FluxCube/types';
 
 export interface Props extends ComponentProps {

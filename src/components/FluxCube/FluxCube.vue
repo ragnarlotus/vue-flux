@@ -12,7 +12,7 @@
 		Turn,
 		Turns,
 	} from './types';
-	import Size from '../../shared/Size';
+	import { Size } from '../../shared';
 	import { ComponentStyles } from '../../types';
 
 	interface Props extends ComponentProps {
@@ -21,13 +21,12 @@
 		offsets?: SidesOffsets;
 		depth: number;
 		sidesCss: any;
-		viewSize: Size;
 	}
 
 	const props = withDefaults(defineProps<Props>(), {
 		depth: 0,
-		sidesCss: {},
-		viewSize: new Size({ width: 0, height: 0 }),
+		sidesCss: () => ({}),
+		viewSize: () => new Size({ width: 0, height: 0 }),
 	});
 
 	const $el = ref(null);

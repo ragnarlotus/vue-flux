@@ -4,7 +4,7 @@
 	import useTransition, { TransitionProps } from '../transition';
 	import { FluxCube } from '../../components';
 	import { Conf } from './types';
-	import Size from '../../shared/Size';
+	import { Size } from '../../shared';
 	import { Offset } from '../../types';
 
 	const props = defineProps<TransitionProps>();

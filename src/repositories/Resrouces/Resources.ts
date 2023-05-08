@@ -2,7 +2,7 @@ import { shallowReactive, toRaw } from 'vue';
 import ResourceLoader from '../../shared/ResourceLoader';
 import Resource from '../../resources/Resource';
 import Player from '../../controllers/Player';
-import Size from '../../shared/Size';
+import { Size } from '../../shared';
 import { Direction, Directions } from '../../types';
 import { ResourceIndex } from './types';
 
