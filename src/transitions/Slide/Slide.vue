@@ -7,7 +7,9 @@
 	import { Size } from '../../shared';
 	import { Directions } from '../../types';
 
-	const props = defineProps<TransitionProps>();
+	export interface Props extends TransitionProps {}
+
+	const props = defineProps<Props>();
 
 	const $wrapper: Ref<null | typeof FluxWrapper> = ref(null);
 	const $left: Ref<null | any> = ref(null);

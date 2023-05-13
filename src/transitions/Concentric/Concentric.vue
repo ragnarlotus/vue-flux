@@ -4,7 +4,9 @@
 	import { FluxVortex } from '../../components';
 	import { Conf } from './types';
 
-	const props = defineProps<TransitionProps>();
+	export interface Props extends TransitionProps {}
+
+	const props = defineProps<Props>();
 
 	const $vortex: Ref<null | typeof FluxVortex> = ref(null);
 

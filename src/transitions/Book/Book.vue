@@ -7,7 +7,9 @@
 	import { Size } from '../../shared';
 	import { Offset } from '../../types';
 
-	const props = defineProps<TransitionProps>();
+	export interface Props extends TransitionProps {}
+
+	const props = defineProps<Props>();
 
 	const $from: Ref<null | any> = ref(null);
 	const $cube: Ref<null | typeof FluxCube> = ref(null);

@@ -3,7 +3,9 @@
 	import useTransition, { TransitionProps } from '../transition';
 	import { Conf } from './types';
 
-	const props = defineProps<TransitionProps>();
+	export interface Props extends TransitionProps {}
+
+	const props = defineProps<Props>();
 
 	const $from: Ref<null | any> = ref(null);
 

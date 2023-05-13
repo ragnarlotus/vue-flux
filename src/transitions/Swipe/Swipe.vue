@@ -5,7 +5,9 @@
 	import { Conf } from './types';
 	import { Directions } from '../../types';
 
-	const props = defineProps<TransitionProps>();
+	export interface Props extends TransitionProps {}
+
+	const props = defineProps<Props>();
 
 	const $wrapper: Ref<null | typeof FluxWrapper> = ref(null);
 	const $from: Ref<null | any> = ref(null);

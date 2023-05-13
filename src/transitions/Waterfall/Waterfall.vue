@@ -5,6 +5,8 @@
 	import { Conf } from './types';
 	import { Directions } from '../../types';
 
+	export interface Props extends TransitionProps {}
+
 	const props = defineProps<TransitionProps>();
 
 	const $grid: Ref<null | typeof FluxGrid> = ref(null);

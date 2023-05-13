@@ -7,7 +7,9 @@
 	import { Directions } from '../../types';
 	import { Turns } from '../../components/FluxCube/types';
 
-	const props = defineProps<TransitionProps>();
+	export interface Props extends TransitionProps {}
+
+	const props = defineProps<Props>();
 
 	const $grid: Ref<null | typeof FluxGrid> = ref(null);
 
