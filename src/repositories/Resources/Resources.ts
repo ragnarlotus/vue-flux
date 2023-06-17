@@ -37,7 +37,7 @@ export default class Resources {
 
 	getByIndex(index: number) {
 		if (this.list[index] === undefined) {
-			throw new ReferenceError(`Resource ${index} not found`);
+			throw new ReferenceError(`Resource index ${index} not found`);
 		}
 
 		return {
@@ -58,17 +58,23 @@ export default class Resources {
 
 		const resources = [...toRaw(rscs)];
 
-		this.loader = new ResourceLoader(
-			resources,
-			numToPreload,
-			displaySize,
-			(loaded: Resource[]) => this.preloadFinished(loaded),
-			(loaded: Resource[]) => this.lazyloadFinished(loaded)
-		);
+		const updatePromise = new Promise<void>((resolve) => {
+			this.loader = new ResourceLoader(
+				resources,
+				numToPreload,
+				displaySize,
+				(loaded: Resource[]) => this.preloadFinished(loaded, resolve),
+				(loaded: Resource[]) => this.lazyloadFinished(loaded)
+			);
+		});
+
+		return updatePromise;
 	}
 
-	preloadFinished(loaded: Resource[]) {
+	preloadFinished(loaded: Resource[], resolve: Function) {
 		loaded.forEach((rsc: Resource) => this.list.push(rsc));
+
+		resolve();
 	}
 
 	lazyloadFinished(loaded: Resource[]) {

@@ -3,6 +3,7 @@
 	import useTransition, { TransitionProps } from '../transition';
 	import { FluxGrid } from '../../components';
 	import { Conf } from './types';
+	import { Sides } from '../../components/FluxCube/types';
 
 	export interface Props extends TransitionProps {}
 
@@ -19,6 +20,10 @@
 	});
 
 	useTransition(conf, props.options);
+
+	const rscs = {
+		[Sides.front]: props.from,
+	};
 
 	const totalDuration = conf.tileDelay * conf.cols + conf.tileDuration;
 
@@ -57,6 +62,6 @@
 		:rows="conf.rows"
 		:cols="conf.cols"
 		:size="size"
-		:rsc="from"
+		:rscs="rscs"
 	/>
 </template>

@@ -3,7 +3,8 @@ import { Directions, Direction } from '../types';
 import { Resources, Transitions } from '../repositories';
 import { Timers, PlayerResource, PlayerTransition } from './';
 import { Config } from '../components/VueFlux/types';
-import { ResourceIndex } from '../repositories/Resrouces/types';
+import { ResourceIndex } from '../repositories/Resources/types';
+import { TransitionIndex } from '../repositories/Transitions/types';
 
 export default class Player {
 	resource: PlayerResource;
@@ -125,7 +126,7 @@ export default class Player {
 		this.resource.from = resource.current;
 		this.resource.to = resourceTo;
 
-		const transition =
+		const transition: TransitionIndex =
 			typeof transitionIndex === 'number'
 				? transitions!.getByIndex(transitionIndex)
 				: transitions!.getByOrder(

@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { CSSProperties } from 'vue';
 import Resource from '../../resources/Resource';
-import { Size } from '../../shared';
-import { Offset } from '../../types';
+import { Position, Size } from '../../shared';
 import { ComponentProps } from '../component';
 
 export interface Props extends ComponentProps {
@@ -64,12 +63,12 @@ export interface SidesResources {
 }
 
 export interface SidesOffsets {
-	[Sides.front]?: Offset;
-	[Sides.back]?: Offset;
-	[Sides.left]?: Offset;
-	[Sides.right]?: Offset;
-	[Sides.top]?: Offset;
-	[Sides.bottom]?: Offset;
+	[Sides.front]?: Position;
+	[Sides.back]?: Position;
+	[Sides.left]?: Position;
+	[Sides.right]?: Position;
+	[Sides.top]?: Position;
+	[Sides.bottom]?: Position;
 }
 
 export interface SideProps {
@@ -78,6 +77,6 @@ export interface SideProps {
 	size: Size;
 	viewSize?: Size;
 	color?: string;
-	offset?: Offset;
+	offset?: Position;
 	css: CSSProperties;
 }

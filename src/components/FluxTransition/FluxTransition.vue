@@ -73,8 +73,8 @@
 	});
 
 	onUnmounted(() => {
-		if (props.displayComponent.value !== null) {
-			props.displayComponent.value.show();
+		if (props.displayComponent !== null) {
+			props.displayComponent.show();
 		}
 	});
 </script>

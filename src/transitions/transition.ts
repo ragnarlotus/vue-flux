@@ -7,11 +7,9 @@ export interface TransitionProps {
 	size: Size;
 	from: Resource;
 	to?: Resource;
-	current: any;
 	options?: any;
 	maskStyle: CSSProperties;
 	displayComponent: any;
-	direction: Direction;
 }
 
 export interface TransitionConf {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { computed } from 'vue';
 	import { Resources } from '../../repositories';
-	import { ResourceIndex } from '../../repositories/Resrouces/types';
+	import { ResourceIndex } from '../../repositories/Resources/types';
 	import { TransitionIndex } from '../../repositories/Transitions/types';
 	import { Resource } from '../../resources';
 

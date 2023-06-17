@@ -59,13 +59,13 @@
 
 				<template #caption="captionProps">
 					<Complements.FluxCaption v-bind="captionProps" />
-				</template>
+				</template> -->
 
 				<template #controls="controlsProps">
 					<Complements.FluxControls v-bind="controlsProps" />
 				</template>
 
-				<template #pagination="paginationProps">
+				<!-- <template #pagination="paginationProps">
 					<Complements.FluxPagination v-bind="paginationProps" />
 				</template>
 

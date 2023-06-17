@@ -85,6 +85,7 @@ export default class ResourceLoader {
 	}
 
 	load(rsc: Resource) {
+		//console.log(rsc.load());
 		rsc.load()
 			.then(() => {
 				this.loadSuccess(rsc);

@@ -51,8 +51,8 @@ export default class Position {
 		}
 
 		return {
-			width: this.top.value!.toString() + 'px',
-			height: this.left.value!.toString() + 'px',
+			top: this.top.value!.toString() + 'px',
+			left: this.left.value!.toString() + 'px',
 		};
 	}
 }

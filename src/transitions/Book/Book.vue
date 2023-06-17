@@ -4,8 +4,8 @@
 	import useTransition, { TransitionProps } from '../transition';
 	import { FluxCube } from '../../components';
 	import { Conf } from './types';
-	import { Size } from '../../shared';
-	import { Offset } from '../../types';
+	import { Position, Size } from '../../shared';
+	import { SidesOffsets } from '../../components/FluxCube/types';
 
 	export interface Props extends TransitionProps {}
 
@@ -33,10 +33,10 @@
 	};
 
 	const from = {
-		offset: {
+		offset: new Position({
 			top: 0,
 			left: 0,
-		} as Offset,
+		}),
 		css: {
 			position: 'absolute',
 			top: 0,
@@ -50,15 +50,15 @@
 			back: props.to,
 		},
 		offsets: {
-			front: {
+			front: new Position({
 				top: 0,
 				left: 0,
-			} as Offset,
-			back: {
+			}),
+			back: new Position({
 				top: 0,
 				left: 0,
-			} as Offset,
-		},
+			}),
+		} as SidesOffsets,
 		css: {
 			position: 'absolute',
 			top: 0,
@@ -74,10 +74,10 @@
 
 	const setup = {
 		prev: () => {
-			from.offset.left = halfWidth;
+			from.offset.left.value = halfWidth;
 			from.css.left = halfWidthPx;
 
-			cube.offsets.back.left = halfWidth;
+			cube.offsets.back!.left.value = halfWidth;
 
 			cube.css = {
 				...cube.css,
@@ -86,7 +86,7 @@
 		},
 
 		next: () => {
-			cube.offsets.front.left = halfWidth;
+			cube.offsets.front!.left.value = halfWidth;
 
 			cube.css = {
 				...cube.css,

@@ -3,7 +3,7 @@
 	import { floor, ceil } from '../../shared/Maths';
 	import useComponent, { ComponentProps } from '../component';
 	import { FluxImage, FluxCube } from '../';
-	import { Size } from '../../shared';
+	import { Position, Size } from '../../shared';
 	import { ComponentStyles } from '../../types';
 	import { SidesResources } from '../FluxCube/types';
 
@@ -36,7 +36,7 @@
 	);
 
 	const component = computed(() =>
-		props.rscs !== null ? FluxCube : FluxImage
+		props.rscs !== undefined ? FluxCube : FluxImage
 	);
 
 	const numRows = computed<number>(() => ceil(props.rows));
@@ -68,10 +68,10 @@
 
 			let { width, height } = tileSize.value.toRaw();
 
-			tile.offset = {
+			tile.offset = new Position({
 				top: tile.row * height,
 				left: tile.col * width,
-			};
+			});
 
 			if (tile.row + 1 === numRows.value) {
 				height = props.size.height.value! - tile.row * height;
@@ -81,16 +81,15 @@
 				width = props.size.width.value! - tile.col * width;
 			}
 
-			tile.viewSize = {
+			tile.viewSize = new Size({
 				width,
 				height,
-			};
+			});
 
 			tile.css = {
 				...props.tileCss,
 				position: 'absolute',
-				left: tile.offset.left + 'px',
-				top: tile.offset.top + 'px',
+				...tile.offset.toPx(),
 				zIndex: i + 1 < numTiles.value / 2 ? i + 1 : numTiles.value - i,
 			};
 
@@ -123,7 +122,7 @@
 			v-for="(tile, index) in tiles"
 			:ref="(el: any) => $tiles.push(el)"
 			:key="index"
-			:size="size"
+			:size="props.size"
 			v-bind="tile"
 			:color="color"
 			:rsc="rsc"

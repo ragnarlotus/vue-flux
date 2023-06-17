@@ -2,7 +2,6 @@ import { computed, ref, Ref } from 'vue';
 import Size from '../shared/Size';
 import ResizeCalculator from '../shared/ResizeCalculator';
 import Position from '../shared/Position';
-import { Offset } from '../types';
 import {
 	DisplayParamenter,
 	ResizeType,
@@ -77,7 +76,7 @@ export default abstract class Resource {
 			].includes(false)
 	);
 
-	getAdaptedProps(offset?: Offset) {
+	getAdaptedProps(offset?: Position) {
 		const { adaptedSize, adaptedPosition } = this;
 
 		const adaptedProps = {
@@ -86,8 +85,8 @@ export default abstract class Resource {
 		};
 
 		if (offset !== undefined) {
-			adaptedProps.top -= offset.top || 0;
-			adaptedProps.left -= offset.left || 0;
+			adaptedProps.top -= offset.top.value || 0;
+			adaptedProps.left -= offset.left.value || 0;
 		}
 
 		return adaptedProps;

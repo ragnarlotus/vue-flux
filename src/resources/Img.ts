@@ -30,38 +30,38 @@ export default class Img extends Resource {
 	}
 
 	load() {
-		if (super.loader !== null) {
-			return super.loader;
+		if (this.loader !== null) {
+			return this.loader;
 		}
 
-		super.loader = new Promise<void>((resolve, reject) => {
-			super.status.value = ResourceStatus.loading;
+		this.loader = new Promise<void>((resolve, reject) => {
+			this.status.value = ResourceStatus.loading;
 
 			const img = new Image();
 
 			img.onload = () => this.onLoad(img, resolve);
 			img.onerror = () => this.onError(reject);
 
-			img.src = super.src;
+			img.src = this.src;
 		});
 
-		return super.loader;
+		return this.loader;
 	}
 
 	onLoad(img: HTMLImageElement, resolve: Function) {
-		super.realSize = new Size({
+		this.realSize = new Size({
 			width: img.naturalWidth || img.width,
 			height: img.naturalHeight || img.height,
 		});
 
-		super.status.value = ResourceStatus.loaded;
+		this.status.value = ResourceStatus.loaded;
 
 		resolve();
 	}
 
 	onError(reject: Function) {
-		super.status.value = ResourceStatus.error;
+		this.status.value = ResourceStatus.error;
 
-		reject(super.errorMessage);
+		reject(this.errorMessage);
 	}
 }

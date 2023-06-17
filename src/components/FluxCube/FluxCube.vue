@@ -16,16 +16,17 @@
 	import { ComponentStyles } from '../../types';
 
 	interface Props extends ComponentProps {
-		rscs: SidesResources;
 		colors?: SidesColors;
+		rscs?: SidesResources;
 		offsets?: SidesOffsets;
 		depth: number;
-		sidesCss: any;
 	}
 
 	const props = withDefaults(defineProps<Props>(), {
+		rscs: () => ({}),
+		colors: () => ({}),
+		offsets: () => ({}),
 		depth: 0,
-		sidesCss: () => ({}),
 		viewSize: () => new Size({ width: 0, height: 0 }),
 	});
 
@@ -97,7 +98,7 @@
 	);
 
 	function isSideDefined(side: Side) {
-		if (props.rscs[side] !== undefined) {
+		if (props.rscs !== undefined && props.rscs[side] !== undefined) {
 			return true;
 		}
 
@@ -148,30 +149,17 @@
 		definedSides.value.forEach((sideName: Side) => {
 			const side: SideProps = {
 				ref: sideName,
-				rsc: props.rscs[sideName],
-				size: props.size,
+				color: props.colors[sideName] || props.color,
+				rsc: props.rscs[sideName] || props.rsc,
+				size: new Size(props.size.toRaw()),
 				viewSize: new Size(props.viewSize!.toRaw()),
+				offset: props.offsets[sideName] || props.offset,
 				css: {
-					...props.sidesCss[sideName],
 					position: 'absolute',
 					transform: getTransform(sideName),
 					backfaceVisibility: 'hidden',
 				},
 			};
-
-			if (
-				props.colors !== undefined &&
-				props.colors[sideName] !== undefined
-			) {
-				side.color = props.colors[sideName];
-			}
-
-			if (
-				props.offsets !== undefined &&
-				props.offsets[sideName] !== undefined
-			) {
-				side.offset = props.offsets[sideName];
-			}
 
 			if (['left', 'right'].includes(sideName)) {
 				side.viewSize!.width.value = props.depth;

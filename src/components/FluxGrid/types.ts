@@ -1,6 +1,5 @@
 import { CSSProperties } from 'vue';
-import { Size } from '../../shared';
-import { Offset } from '../../types';
+import { Position, Size } from '../../shared';
 import { ComponentProps } from '../component';
 import { SidesResources } from '../FluxCube/types';
 
@@ -15,7 +14,7 @@ export interface Props extends ComponentProps {
 export interface Tile {
 	row: number;
 	col: number;
-	offset: Offset;
+	offset: Position;
 	viewSize: Size;
 	css: CSSProperties;
 }

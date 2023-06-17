@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { Ref, computed } from 'vue';
 	import { Config } from '../../components/VueFlux/types';
-	import { ResourceIndex } from '../../repositories/Resrouces/types';
+	import { ResourceIndex } from '../../repositories/Resources/types';
 	import { Player } from '../../controllers';
 	import { Directions } from '../../types';
 	import * as Buttons from './buttons';

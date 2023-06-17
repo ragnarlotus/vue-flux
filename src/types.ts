@@ -9,11 +9,6 @@ export interface ComponentStyles {
 	size?: CSSProperties;
 }
 
-export interface Offset {
-	top: number;
-	left: number;
-}
-
 export enum Directions {
 	prev = 'prev',
 	next = 'next',
