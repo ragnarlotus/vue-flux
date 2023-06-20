@@ -9,7 +9,7 @@
 
 	const props = defineProps<Props>();
 
-	const $grid: Ref<null | typeof FluxGrid> = ref(null);
+	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
 	const conf: Conf = reactive({
 		rows: 8,
@@ -21,7 +21,7 @@
 
 	useTransition(conf, props.options);
 
-	if (!props.options.rows) {
+	if (!props.options?.rows) {
 		const divider = props.size.width.value! / conf.cols;
 		conf.rows = floor(props.size.height.value! / divider);
 	}

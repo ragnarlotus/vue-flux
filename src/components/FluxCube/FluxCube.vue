@@ -9,7 +9,6 @@
 		SidesColors,
 		SidesOffsets,
 		SidesResources,
-		Turn,
 		Turns,
 	} from './types';
 	import { Size } from '../../shared';
@@ -19,7 +18,7 @@
 		colors?: SidesColors;
 		rscs?: SidesResources;
 		offsets?: SidesOffsets;
-		depth: number;
+		depth?: number;
 	}
 
 	const props = withDefaults(defineProps<Props>(), {
@@ -27,22 +26,21 @@
 		colors: () => ({}),
 		offsets: () => ({}),
 		depth: 0,
-		viewSize: () => new Size({ width: 0, height: 0 }),
+		viewSize: () => new Size(),
 	});
 
 	const $el = ref(null);
 
-	const componentStyles: ComponentStyles = reactive({
+	const styles: ComponentStyles = reactive({
 		base: {
 			transformStyle: 'preserve-3d',
 		},
-		inherited: props.css,
 	});
 
 	const { style, setCss, transform, show, hide } = useComponent(
 		$el,
 		props,
-		componentStyles
+		styles
 	);
 
 	const rotate = {
@@ -133,7 +131,7 @@
 		};
 	});
 
-	function getTransform(turn: Turn) {
+	function getTransform(turn: Side | Turns) {
 		const rx = rotate.x[turn];
 		const ry = rotate.y[turn];
 		const tx = translate.x[turn];
@@ -177,7 +175,7 @@
 		return sides;
 	});
 
-	const turn = (turn: any) => transform({ transform: getTransform(turn) });
+	const turn = (turn: Turns) => transform({ transform: getTransform(turn) });
 
 	const turnTop = () => turn(Turns.top);
 

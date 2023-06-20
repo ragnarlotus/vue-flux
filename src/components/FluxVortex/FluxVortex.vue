@@ -3,6 +3,7 @@
 	import { round, ceil, diag } from '../../shared/Maths';
 	import useComponent, { ComponentProps } from '../component';
 	import { Resource } from '../../resources';
+	import { Position } from '../../shared';
 
 	export interface Props extends ComponentProps {
 		rsc: Resource;
@@ -47,17 +48,16 @@
 			const gap = radius.value * i;
 
 			const tile: any = {
-				offset: {
+				offset: new Position({
 					top: topGap.value + gap,
 					left: leftGap.value + gap,
-				},
+				}),
 			};
 
 			tile.css = {
 				...props.tileCss,
 				position: 'absolute',
-				left: tile.offset.left + 'px',
-				top: tile.offset.top + 'px',
+				...tile.offset.toPx(),
 				width: size + 'px',
 				height: size + 'px',
 				backgroundRepeat: 'repeat',

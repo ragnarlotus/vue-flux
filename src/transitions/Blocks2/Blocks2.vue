@@ -9,7 +9,7 @@
 
 	const props = defineProps<Props>();
 
-	const $grid: Ref<null | typeof FluxGrid> = ref(null);
+	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 	const $background: Ref<null | any> = ref(null);
 
 	const conf: Conf = reactive({
@@ -25,7 +25,7 @@
 	const totalDuration =
 		conf.tileDelay * (conf.rows + conf.cols) + conf.tileDuration;
 
-	if (!props.options.rows) {
+	if (!props.options?.rows) {
 		const divider = props.size.width.value! / conf.cols;
 		conf.rows = Math.floor(props.size.height.value! / divider);
 	}
@@ -102,7 +102,7 @@
 	};
 
 	const onPlay = () => {
-		if ([$grid.value, $background.value].includes(null)) {
+		if ($grid.value === null) {
 			return;
 		}
 

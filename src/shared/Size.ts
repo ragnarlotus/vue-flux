@@ -44,9 +44,9 @@ export default class Size {
 	}
 
 	toRaw() {
-		if (!this.isValid()) {
+		/* 		if (!this.isValid()) {
 			throw new RangeError(`Invalid size`);
-		}
+		} */
 
 		return {
 			width: this.width.value as number,

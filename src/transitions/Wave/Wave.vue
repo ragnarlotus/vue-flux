@@ -9,7 +9,7 @@
 
 	const props = defineProps<TransitionProps>();
 
-	const $grid: Ref<null | typeof FluxGrid> = ref(null);
+	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
 	const conf: Conf = reactive({
 		rows: 1,
@@ -30,7 +30,7 @@
 		top: props.to,
 	};
 
-	const color = {
+	const colors = {
 		left: conf.sideColor,
 		right: conf.sideColor,
 	};
@@ -83,7 +83,7 @@
 		:cols="conf.cols"
 		:size="size"
 		:rscs="rscs"
-		:color="color"
+		:colors="colors"
 		:depth="size.height.value!"
 		:css="gridCss"
 	/>

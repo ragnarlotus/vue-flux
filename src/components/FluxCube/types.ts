@@ -9,7 +9,6 @@ export interface Props extends ComponentProps {
 	colors?: SidesColors;
 	offsets?: SidesOffsets;
 	depth: number;
-	sidesCss: any;
 }
 
 export type Side = 'front' | 'back' | 'top' | 'bottom' | 'left' | 'right';
@@ -22,16 +21,6 @@ export enum Sides {
 	top = 'top',
 	bottom = 'bottom',
 }
-
-export type Turn =
-	| 'front'
-	| 'back'
-	| 'top'
-	| 'bottom'
-	| 'left'
-	| 'right'
-	| 'backl'
-	| 'backr';
 
 export enum Turns {
 	front = 'front',
@@ -69,6 +58,15 @@ export interface SidesOffsets {
 	[Sides.right]?: Position;
 	[Sides.top]?: Position;
 	[Sides.bottom]?: Position;
+}
+
+export interface SidesProps {
+	[Sides.front]?: SideProps;
+	[Sides.back]?: SideProps;
+	[Sides.left]?: SideProps;
+	[Sides.right]?: SideProps;
+	[Sides.top]?: SideProps;
+	[Sides.bottom]?: SideProps;
 }
 
 export interface SideProps {

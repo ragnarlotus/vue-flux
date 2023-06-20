@@ -3,7 +3,7 @@
 	import useTransition, { TransitionProps } from '../transition';
 	import { FluxWrapper } from '../../components';
 	import { Conf } from './types';
-	import { ComponentProps } from '../../mixins/component';
+	import { ComponentProps } from '../../components/component';
 	import { Size } from '../../shared';
 	import { Directions } from '../../types';
 
@@ -11,7 +11,7 @@
 
 	const props = defineProps<Props>();
 
-	const $wrapper: Ref<null | typeof FluxWrapper> = ref(null);
+	const $wrapper: Ref<null | InstanceType<typeof FluxWrapper>> = ref(null);
 	const $left: Ref<null | any> = ref(null);
 	const $right: Ref<null | any> = ref(null);
 

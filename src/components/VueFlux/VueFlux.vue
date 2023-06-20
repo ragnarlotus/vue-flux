@@ -7,17 +7,19 @@
 		computed,
 		watch,
 		Ref,
+		ComponentPublicInstance,
 	} from 'vue';
 	import * as Controllers from '../../controllers';
 	import * as Repositories from '../../repositories';
-	import { FluxTransition } from '..';
+	import { FluxTransition } from '../';
 	import { Props, Config } from './types';
 
 	const props = defineProps<Props>();
 
-	const $container: Ref<null | HTMLElement> = ref(null);
-	const $transition: Ref<null | any> = ref(null);
-	const $displayComponent: Ref<null | any> = ref(null);
+	const $container: Ref<null | HTMLDivElement> = ref(null);
+	const $transition: Ref<null | InstanceType<typeof FluxTransition>> =
+		ref(null);
+	const $displayComponent: Ref<null | ComponentPublicInstance> = ref(null);
 
 	const config: Config = reactive({
 		allowFullscreen: false,
@@ -153,10 +155,12 @@
 	>
 		<FluxTransition
 			v-if="
+				/* eslint-disable vue/html-indent */
 				player.transition.current !== null &&
 				display.size.valid.value === true &&
 				player.resource.from !== null &&
 				player.resource.to !== null
+				/* eslint-enable */
 			"
 			ref="$transition"
 			:transition="player.transition.current.component"

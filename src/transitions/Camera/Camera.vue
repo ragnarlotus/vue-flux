@@ -10,7 +10,7 @@
 
 	const props = defineProps<Props>();
 
-	const $wrapper: Ref<null | typeof FluxWrapper> = ref(null);
+	const $wrapper: Ref<null | InstanceType<typeof FluxWrapper>> = ref(null);
 	const $from: Ref<null | any> = ref(null);
 
 	const conf: Conf = reactive({

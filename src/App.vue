@@ -25,8 +25,8 @@
 
 	const $vueFlux = ref(null);
 
-	const transitions = shallowReactive(Object.values(Transitions));
-	//const transitions = shallowReactive([Transitions.Camera]);
+	//const transitions = shallowReactive(Object.values(Transitions));
+	const transitions = shallowReactive([Transitions.Explode]);
 	const rscs = shallowReactive(images);
 	const options = shallowReactive({
 		allowFullscreen: true,

@@ -40,7 +40,7 @@ export default function useComponent(
 		...unref(size),
 		...unref(css.color),
 		...unref(css.rsc),
-		...unref(css.inherited),
+		...unref(props.css),
 		...unref(css.base),
 	}));
 

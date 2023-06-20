@@ -1,10 +1,10 @@
 import { shallowReactive, nextTick, Ref, ref, Component } from 'vue';
-import { Directions, Direction } from '../types';
-import { Resources, Transitions } from '../repositories';
-import { Timers, PlayerResource, PlayerTransition } from './';
-import { Config } from '../components/VueFlux/types';
-import { ResourceIndex } from '../repositories/Resources/types';
-import { TransitionIndex } from '../repositories/Transitions/types';
+import { Directions, Direction } from '../../types';
+import { Resources, Transitions } from '../../repositories';
+import { Timers, PlayerResource, PlayerTransition } from '../';
+import { Config } from '../../components/VueFlux/types';
+import { ResourceIndex } from '../../repositories/Resources/types';
+import { TransitionIndex } from '../../repositories/Transitions/types';
 
 export default class Player {
 	resource: PlayerResource;
@@ -135,10 +135,14 @@ export default class Player {
 				  );
 
 		if (transition.options.direction === undefined) {
-			transition.options.direction =
-				this.resource.from!.index < this.resource.to.index
-					? Directions.next
-					: Directions.prev;
+			if (typeof resourceIndex !== 'number') {
+				transition.options.direction = resourceIndex;
+			} else {
+				transition.options.direction =
+					this.resource.from!.index < this.resource.to.index
+						? Directions.next
+						: Directions.prev;
+			}
 		}
 
 		this.transition.current = transition;

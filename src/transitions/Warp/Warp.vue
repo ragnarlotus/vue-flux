@@ -9,7 +9,7 @@
 
 	const props = defineProps<Props>();
 
-	const $vortex: Ref<null | typeof FluxVortex> = ref(null);
+	const $vortex: Ref<null | InstanceType<typeof FluxVortex>> = ref(null);
 
 	const conf: Conf = reactive({
 		circles: 7,

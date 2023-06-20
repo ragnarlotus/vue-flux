@@ -3,12 +3,13 @@
 	import useTransition, { TransitionProps } from '../transition';
 	import { FluxCube } from '../../components';
 	import { Conf } from './types';
+	import { Turns } from '../../components/FluxCube/types';
 
 	export interface Props extends TransitionProps {}
 
 	const props = defineProps<Props>();
 
-	const $cube: Ref<null | typeof FluxCube> = ref(null);
+	const $cube: Ref<null | InstanceType<typeof FluxCube>> = ref(null);
 
 	const conf: Conf = reactive({
 		totalDuration: 1400,
@@ -42,8 +43,8 @@
 		}
 
 		const sides = {
-			next: 'left',
-			prev: 'right',
+			next: Turns.left,
+			prev: Turns.right,
 		};
 
 		$cube.value.turn(sides[conf.direction!]);

@@ -12,7 +12,7 @@
 	const props = defineProps<Props>();
 
 	const $from: Ref<null | any> = ref(null);
-	const $cube: Ref<null | typeof FluxCube> = ref(null);
+	const $cube: Ref<null | InstanceType<typeof FluxCube>> = ref(null);
 
 	const conf: Conf = reactive({
 		totalDuration: 1200,
@@ -32,17 +32,15 @@
 		height: '100%',
 	};
 
-	const from = {
-		offset: new Position({
-			top: 0,
-			left: 0,
-		}),
-		css: {
-			position: 'absolute',
-			top: 0,
-			left: 0,
-		} as CSSProperties,
-	};
+	const fromOffset = new Position({
+		top: 0,
+		left: 0,
+	});
+	const fromCss = {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+	} as CSSProperties;
 
 	const cube = {
 		rscs: {
@@ -74,8 +72,8 @@
 
 	const setup = {
 		prev: () => {
-			from.offset.left.value = halfWidth;
-			from.css.left = halfWidthPx;
+			fromOffset.left.value = halfWidth;
+			fromCss.left = halfWidthPx;
 
 			cube.offsets.back!.left.value = halfWidth;
 
@@ -128,8 +126,8 @@
 			:rsc="from"
 			:size="size"
 			:view-size="viewSize"
-			:offset="from.offset"
-			:css="from.css"
+			:offset="fromOffset"
+			:css="fromCss"
 		/>
 
 		<FluxCube

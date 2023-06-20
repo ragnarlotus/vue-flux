@@ -16,8 +16,8 @@
 		transition: Object;
 		from: Resource;
 		to: Resource;
-		displayComponent: Ref<null | any>;
-		options: any;
+		displayComponent: null | any;
+		options?: Object;
 	}
 
 	const props = withDefaults(defineProps<Props>(), {
@@ -38,12 +38,12 @@
 	});
 
 	const style = computed(() => {
-		const { width, height } = props.size;
+		const { width, height } = props.size.toPx();
 
 		return {
 			...styles.base,
-			width: width + 'px',
-			height: height + 'px',
+			width,
+			height,
 		};
 	});
 
@@ -60,7 +60,7 @@
 
 		await nextTick();
 
-		$transition.value!.onPlay();
+		$transition.value.onPlay();
 
 		setTimeout(() => {
 			emit('end', {

@@ -11,7 +11,7 @@
 
 	const props = defineProps<Props>();
 
-	const $grid: Ref<null | typeof FluxGrid> = ref(null);
+	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
 	const conf: Conf = reactive({
 		rows: null,

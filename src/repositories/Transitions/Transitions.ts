@@ -1,8 +1,9 @@
 import { Component, shallowReactive, toRaw } from 'vue';
-import Player from '../../controllers/Player';
+import Player from '../../controllers/Player/Player';
 import { Directions, Direction } from '../../types';
 import { TransitionIndex } from './types';
 import { TransitionWithOptions } from '../../components/VueFlux/types';
+import { TransitionConf } from '../../transitions/transition';
 
 export default class Transitions {
 	player: Player;
@@ -35,7 +36,8 @@ export default class Transitions {
 	getByIndex(index: number) {
 		return {
 			index: index,
-			...this.list[index],
+			component: this.list[index].component,
+			options: JSON.parse(JSON.stringify(this.list[index].options)),
 		} as TransitionIndex;
 	}
 
@@ -54,7 +56,7 @@ export default class Transitions {
 			let options = {};
 
 			if ('component' in transition) {
-				component = transition.component as Component;
+				component = transition.component as Component<TransitionConf>;
 
 				if ('options' in transition) {
 					options = transition.options as object;

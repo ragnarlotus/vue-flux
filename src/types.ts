@@ -5,7 +5,6 @@ export interface ComponentStyles {
 	base?: CSSProperties;
 	color?: Ref<CSSProperties>;
 	rsc?: Ref<CSSProperties>;
-	inherited?: CSSProperties;
 	size?: CSSProperties;
 }
 

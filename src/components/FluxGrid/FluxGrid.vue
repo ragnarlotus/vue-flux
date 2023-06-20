@@ -5,9 +5,10 @@
 	import { FluxImage, FluxCube } from '../';
 	import { Position, Size } from '../../shared';
 	import { ComponentStyles } from '../../types';
-	import { SidesResources } from '../FluxCube/types';
+	import { SidesColors, SidesResources } from '../FluxCube/types';
 
 	interface Props extends ComponentProps {
+		colors?: SidesColors;
 		rscs?: SidesResources;
 		rows?: number;
 		cols?: number;
@@ -125,6 +126,7 @@
 			:size="props.size"
 			v-bind="tile"
 			:color="color"
+			:colors="colors"
 			:rsc="rsc"
 			:rscs="rscs"
 			:depth="depth"
