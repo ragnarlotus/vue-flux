@@ -23,17 +23,18 @@ export default function useComponent(
 	}
 
 	const size = computed<CSSProperties>(() => {
-		const { size, viewSize } = props;
+		const { size, viewSize = new Size() } = props;
 
-		if (size.valid.value === false) {
+		const { width = size.width.value, height = size.height.value } =
+			viewSize.toRaw();
+
+		const finalSize = new Size({ width, height });
+
+		if (!finalSize.isValid()) {
 			return {};
 		}
 
-		if (viewSize !== undefined && viewSize.valid.value === true) {
-			return viewSize.toPx();
-		}
-
-		return size.toPx();
+		return finalSize.toPx();
 	});
 
 	const style = computed(() => ({
