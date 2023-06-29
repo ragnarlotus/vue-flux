@@ -2,7 +2,7 @@ import { Config } from '../components/VueFlux/types';
 import { Directions } from '../types';
 import Display from './Display';
 import Mouse from './Mouse';
-import Player from './Player';
+import Player from './Player/Player';
 import Timers from './Timers';
 
 const abs = Math.abs;

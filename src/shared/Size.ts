@@ -1,24 +1,20 @@
-import { computed, ref, Ref } from 'vue';
+import { ref, Ref } from 'vue';
 import { aspectRatio } from './Maths';
 
 export default class Size {
 	width: Ref<null | number> = ref(null);
 	height: Ref<null | number> = ref(null);
-	valid = computed<boolean>(
-		() => ![this.width.value, this.height.value].includes(null)
-	);
 
 	constructor(
 		{
 			width = null,
 			height = null,
 		}: {
-			width: null | number;
-			height: null | number;
+			width?: null | number;
+			height?: null | number;
 		} = { width: null, height: null }
 	) {
-		this.width.value = width;
-		this.height.value = height;
+		this.update({ width, height });
 	}
 
 	reset() {
@@ -27,12 +23,18 @@ export default class Size {
 	}
 
 	isValid() {
-		return this.valid.value;
+		return ![this.width.value, this.height.value].includes(null);
 	}
 
-	update({ width, height }: { width: number; height: number }) {
-		this.width.value = width;
-		this.height.value = height;
+	update({
+		width,
+		height,
+	}: {
+		width?: null | number;
+		height?: null | number;
+	}) {
+		this.width.value = width ?? null;
+		this.height.value = height ?? null;
 	}
 
 	getAspectRatio() {
@@ -40,18 +42,40 @@ export default class Size {
 			throw new RangeError(`Could not get aspect ratio due to invalid size`);
 		}
 
-		return aspectRatio(this);
+		return aspectRatio(this.toRaw() as { width: number; height: number });
+	}
+
+	clone() {
+		return new Size(this.toRaw());
+	}
+
+	equals(otherSize: Size) {
+		if (this.width.value !== otherSize.width.value) {
+			return false;
+		}
+
+		if (this.height.value !== otherSize.height.value) {
+			return false;
+		}
+
+		return true;
 	}
 
 	toRaw() {
-		/* 		if (!this.isValid()) {
-			throw new RangeError(`Invalid size`);
-		} */
+		const rawSize: {
+			width?: number;
+			height?: number;
+		} = {};
 
-		return {
-			width: this.width.value as number,
-			height: this.height.value as number,
-		};
+		if (this.width.value !== null) {
+			rawSize.width = this.width.value;
+		}
+
+		if (this.height.value !== null) {
+			rawSize.height = this.height.value;
+		}
+
+		return rawSize;
 	}
 
 	toPx() {

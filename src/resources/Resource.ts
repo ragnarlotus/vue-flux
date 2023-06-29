@@ -1,9 +1,10 @@
-import { computed, ref, Ref } from 'vue';
+import { ref, Ref } from 'vue';
 import Size from '../shared/Size';
 import ResizeCalculator from '../shared/ResizeCalculator';
 import Position from '../shared/Position';
 import {
 	DisplayParamenter,
+	ResizedProps,
 	ResizeType,
 	ResourceStatus,
 	TransitionParameter,
@@ -16,8 +17,8 @@ export default abstract class Resource {
 	status: Ref<ResourceStatus> = ref(ResourceStatus.notLoaded);
 
 	realSize: Size = new Size();
-	adaptedSize: Size = new Size();
-	adaptedPosition: Position = new Position();
+	cachedSize: Size = new Size();
+	cachedPosition: Position = new Position();
 	caption: string = '';
 	resizeType: ResizeType;
 	display: DisplayParamenter;
@@ -53,42 +54,47 @@ export default abstract class Resource {
 	// eslint-disable-next-line no-unused-vars
 	abstract onError(reject: Function): void;
 
-	adaptToSize(displaySize: Size) {
-		if (
-			displaySize.isValid() === false ||
-			this.realSize.isValid() === false
-		) {
+	cacheToSize(displaySize: Size) {
+		if ([displaySize.isValid(), this.realSize.isValid()].includes(false)) {
 			return;
 		}
 
 		const resCalc = new ResizeCalculator(this.realSize);
 		const { size, position } = resCalc.resizeTo(displaySize);
 
-		this.adaptedSize.update(size.toRaw());
-		this.adaptedPosition.update(position.toRaw());
+		this.cachedSize.update(size.toRaw());
+		this.cachedPosition.update(position.toRaw());
 	}
 
-	adaptedPropsAreValid = computed<boolean>(
-		() =>
-			![
-				this.adaptedSize.valid.value,
-				this.adaptedPosition.valid.value,
-			].includes(false)
-	);
-
-	getAdaptedProps(offset?: Position) {
-		const { adaptedSize, adaptedPosition } = this;
-
-		const adaptedProps = {
-			...adaptedSize.toRaw(),
-			...adaptedPosition.toRaw(),
+	getResizeProps(size: Size, offset?: Position) {
+		const resizedProps: ResizedProps = {
+			width: 0,
+			height: 0,
+			top: 0,
+			left: 0,
 		};
 
-		if (offset !== undefined) {
-			adaptedProps.top -= offset.top.value || 0;
-			adaptedProps.left -= offset.left.value || 0;
+		if (size.equals(this.cachedSize)) {
+			Object.assign(resizedProps, {
+				...this.cachedSize.toRaw(),
+				...this.cachedPosition.toRaw(),
+			});
+		} else {
+			const resCalc = new ResizeCalculator(this.realSize);
+			const { size: resizedSize, position: resizedPosition } =
+				resCalc.resizeTo(size);
+
+			Object.assign(resizedProps, {
+				...resizedSize.toRaw(),
+				...resizedPosition.toRaw(),
+			});
 		}
 
-		return adaptedProps;
+		if (offset !== undefined) {
+			resizedProps.top -= offset.top.value || 0;
+			resizedProps.left -= offset.left.value || 0;
+		}
+
+		return resizedProps;
 	}
 }

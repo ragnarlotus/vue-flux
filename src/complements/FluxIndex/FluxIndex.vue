@@ -15,7 +15,7 @@
 
 	const props = defineProps<Props>();
 
-	const $fluxIndexList: Ref<null | typeof List> = ref(null);
+	const $fluxIndexList: Ref<null | InstanceType<typeof List>> = ref(null);
 
 	const visible = computed<boolean>(() => props.resources.list.length > 0);
 </script>
@@ -25,6 +25,7 @@
 		<Button :mouse-over="mouseOver" @click="$fluxIndexList?.show()" />
 
 		<List
+			ref="$fluxIndexList"
 			:display-size="displaySize"
 			:resources="resources"
 			:player="player"

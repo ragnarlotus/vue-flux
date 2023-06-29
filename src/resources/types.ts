@@ -3,6 +3,13 @@ import { Component } from 'vue';
 /* eslint-disable no-unused-vars */
 export type ResizeType = 'fill' | 'fit';
 
+export interface ResizedProps {
+	width: number;
+	height: number;
+	top: number;
+	left: number;
+}
+
 export enum ResourceStatus {
 	notLoaded = 'notLoaded',
 	loading = 'loading',

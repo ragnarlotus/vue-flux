@@ -4,6 +4,7 @@
 	import { FluxGrid } from '../../components';
 	import { Conf } from './types';
 	import { Directions } from '../../types';
+	import { Turns } from '../../components/FluxCube/types';
 
 	export interface Props extends TransitionProps {}
 
@@ -66,7 +67,7 @@
 				transition,
 			});
 
-			tile.turnBottom();
+			tile.turn(Turns.bottom);
 		});
 	};
 

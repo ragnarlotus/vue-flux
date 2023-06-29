@@ -1,5 +1,6 @@
 <script setup lang="ts">
 	import { Ref, computed } from 'vue';
+	import { FluxButton } from '../../../components';
 
 	interface Props {
 		mouseOver: Ref<boolean>;

@@ -8,8 +8,8 @@
 	export interface Props {
 		displayReady: boolean;
 		resources: Resources;
-		currentResource: ResourceIndex;
-		currentTransition: TransitionIndex;
+		currentResource: null | ResourceIndex;
+		currentTransition: null | TransitionIndex;
 		show: Function;
 	}
 
@@ -26,7 +26,7 @@
 	const getCssClass = (index: number) => {
 		const classes = ['pagination-item'];
 
-		let active = props.currentResource.index === index;
+		let active = props.currentResource?.index === index;
 
 		if (props.currentTransition !== null) {
 			active = false;

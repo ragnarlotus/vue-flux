@@ -121,7 +121,7 @@
 	});
 
 	const style = computed(() => {
-		if (display.size.valid.value === false) {
+		if (!display.size.isValid()) {
 			return {};
 		}
 
@@ -157,7 +157,7 @@
 			v-if="
 				/* eslint-disable vue/html-indent */
 				player.transition.current !== null &&
-				display.size.valid.value === true &&
+				display.size.isValid() &&
 				player.resource.from !== null &&
 				player.resource.to !== null
 				/* eslint-enable */
@@ -182,7 +182,7 @@
 			v-bind="player.resource.current.rsc.display.props"
 		/>
 
-		<div v-if="display.size.valid.value === true" class="complements">
+		<div v-if="display.size.isValid()" class="complements">
 			<slot name="preloader" :resources="resources" />
 
 			<slot
@@ -213,7 +213,7 @@
 
 			<slot
 				name="pagination"
-				:display-ready="display.size.valid.value === true"
+				:display-ready="display.size.isValid()"
 				:resources="resources"
 				:current-resource="player.resource.current"
 				:current-transition="player.transition.current"

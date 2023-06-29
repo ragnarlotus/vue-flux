@@ -54,7 +54,7 @@ export default class Display {
 		});
 
 		this.resources.list.forEach((rsc: Resource) =>
-			rsc.adaptToSize(this.size)
+			rsc.cacheToSize(this.size)
 		);
 	}
 

@@ -16,7 +16,7 @@
 		<component
 			:is="rsc.transition.component"
 			:rsc="rsc"
-			:size="size"
+			:size="size.value"
 			:title="rsc.caption"
 		/>
 	</li>

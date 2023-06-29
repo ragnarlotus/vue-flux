@@ -27,7 +27,9 @@
 		flex: 'none',
 	};
 
-	const diagSize = diag(props.size);
+	const diagSize = diag(
+		props.size.toRaw() as { width: number; height: number }
+	);
 
 	const wrapperSize: Size = new Size({ width: diagSize, height: diagSize });
 

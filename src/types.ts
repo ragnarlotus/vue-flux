@@ -3,8 +3,8 @@ import { CSSProperties, Ref } from 'vue';
 
 export interface ComponentStyles {
 	base?: CSSProperties;
-	color?: Ref<CSSProperties>;
-	rsc?: Ref<CSSProperties>;
+	color?: CSSProperties;
+	rsc?: CSSProperties;
 	size?: CSSProperties;
 }
 

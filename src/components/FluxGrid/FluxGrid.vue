@@ -2,7 +2,7 @@
 	import { ref, reactive, computed, CSSProperties, Ref } from 'vue';
 	import { floor, ceil } from '../../shared/Maths';
 	import useComponent, { ComponentProps } from '../component';
-	import { FluxImage, FluxCube } from '../';
+	import { FluxCube } from '../';
 	import { Position, Size } from '../../shared';
 	import { ComponentStyles } from '../../types';
 	import { SidesColors, SidesResources } from '../FluxCube/types';
@@ -37,7 +37,7 @@
 	);
 
 	const component = computed(() =>
-		props.rscs !== undefined ? FluxCube : FluxImage
+		props.rscs !== undefined ? FluxCube : props.rsc?.transition.component
 	);
 
 	const numRows = computed<number>(() => ceil(props.rows));
@@ -62,24 +62,30 @@
 		const tiles = [];
 
 		for (let i = 0; i < numTiles.value; i++) {
-			const tile = {
-				row: getRowNumber(i),
-				col: getColNumber(i),
-			} as any;
+			const row = getRowNumber(i);
+			const col = getColNumber(i);
 
 			let { width, height } = tileSize.value.toRaw();
 
-			tile.offset = new Position({
-				top: tile.row * height,
-				left: tile.col * width,
-			});
+			const tile: any = {
+				color: props.color,
+				colors: props.colors,
+				rsc: props.rsc,
+				rscs: props.rscs,
+				size: props.size,
+				offset: new Position({
+					top: row * height!,
+					left: col * width!,
+				}),
+				depth: props.depth,
+			};
 
-			if (tile.row + 1 === numRows.value) {
-				height = props.size.height.value! - tile.row * height;
+			if (row + 1 === numRows.value) {
+				height = props.size.height.value! - row * height!;
 			}
 
-			if (tile.col + 1 === numCols.value) {
-				width = props.size.width.value! - tile.col * width;
+			if (col + 1 === numCols.value) {
+				width = props.size.width.value! - col * width!;
 			}
 
 			tile.viewSize = new Size({
@@ -123,12 +129,7 @@
 			v-for="(tile, index) in tiles"
 			:ref="(el: any) => $tiles.push(el)"
 			:key="index"
-			:size="props.size"
 			v-bind="tile"
-			:color="color"
-			:colors="colors"
-			:rsc="rsc"
-			:rscs="rscs"
 			:depth="depth"
 		/>
 	</div>

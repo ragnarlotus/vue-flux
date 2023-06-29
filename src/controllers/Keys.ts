@@ -1,6 +1,6 @@
 import { Config } from '../components/VueFlux/types';
 import { Directions } from '../types';
-import Player from './Player';
+import Player from './Player/Player';
 
 export default class Keys {
 	config: Config;

@@ -1,23 +1,19 @@
-import { computed, ref, Ref } from 'vue';
+import { ref, Ref } from 'vue';
 
 export default class Position {
 	top: Ref<null | number> = ref(null);
 	left: Ref<null | number> = ref(null);
-	valid = computed<boolean>(
-		() => ![this.top.value, this.left.value].includes(null)
-	);
 
 	constructor(
 		{
 			top = null,
 			left = null,
-		}: { top: null | number; left: null | number } = {
+		}: { top?: null | number; left?: null | number } = {
 			top: null,
 			left: null,
 		}
 	) {
-		this.top.value = top;
-		this.left.value = left;
+		this.update({ top, left });
 	}
 
 	reset() {
@@ -26,23 +22,29 @@ export default class Position {
 	}
 
 	isValid() {
-		return this.valid.value;
+		return ![this.top.value, this.left.value].includes(null);
 	}
 
-	update({ top, left }: { top: number; left: number }) {
-		this.top.value = top;
-		this.left.value = left;
+	update({ top, left }: { top?: null | number; left?: null | number }) {
+		this.top.value = top ?? null;
+		this.left.value = left ?? null;
 	}
 
 	toRaw() {
-		if (!this.isValid()) {
-			throw new RangeError(`Invalid position`);
+		const rawPosition: {
+			top?: number;
+			left?: number;
+		} = {};
+
+		if (this.top.value !== null) {
+			rawPosition.top = this.top.value;
 		}
 
-		return {
-			top: this.top.value as number,
-			left: this.left.value as number,
-		};
+		if (this.left.value !== null) {
+			rawPosition.left = this.left.value;
+		}
+
+		return rawPosition;
 	}
 
 	toPx() {

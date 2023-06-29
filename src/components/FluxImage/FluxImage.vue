@@ -2,18 +2,22 @@
 	import { ref, reactive, computed, CSSProperties } from 'vue';
 	import useComponent from '../component';
 	import { Props } from './types';
+	import { Size } from '../../shared';
+	import { ComponentStyles } from '../../types';
 
-	const props = defineProps<Props>();
+	const props = withDefaults(defineProps<Props>(), {
+		viewSize: () => new Size(),
+	});
 
 	const $el = ref(null);
 
-	const componentStyles: any = reactive({
+	const componentStyles: ComponentStyles = reactive({
 		base: {
 			overflow: 'hidden',
 		},
 
 		color: computed<CSSProperties>(() => {
-			const colorStyle = {} as CSSProperties;
+			const colorStyle: CSSProperties = {};
 
 			if (props.color !== undefined) {
 				colorStyle.backgroundColor = props.color;
@@ -23,18 +27,13 @@
 		}),
 
 		rsc: computed<CSSProperties>(() => {
-			const { rsc, offset } = props;
+			const { rsc, size, offset } = props;
 
-			if (
-				!rsc ||
-				!rsc.isLoaded() ||
-				!rsc.adaptedPropsAreValid.value ||
-				!$el.value
-			) {
+			if (!rsc || !rsc.isLoaded() || !size.isValid() || !$el.value) {
 				return {};
 			}
 
-			const imageStyle = rsc.getAdaptedProps(offset);
+			const imageStyle = rsc.getResizeProps(size, offset);
 
 			return {
 				backgroundImage: `url(${rsc.src})`,
