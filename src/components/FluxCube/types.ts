@@ -5,13 +5,11 @@ import { Position, Size } from '../../shared';
 import { ComponentProps } from '../component';
 
 export interface Props extends ComponentProps {
-	rscs: SidesResources;
 	colors?: SidesColors;
+	rscs?: SidesResources;
 	offsets?: SidesOffsets;
-	depth: number;
+	depth?: number;
 }
-
-export type Side = 'front' | 'back' | 'top' | 'bottom' | 'left' | 'right';
 
 export enum Sides {
 	front = 'front',
@@ -21,6 +19,14 @@ export enum Sides {
 	top = 'top',
 	bottom = 'bottom',
 }
+
+export type Side =
+	| Sides.front
+	| Sides.back
+	| Sides.left
+	| Sides.right
+	| Sides.top
+	| Sides.bottom;
 
 export enum Turns {
 	front = 'front',
@@ -32,6 +38,16 @@ export enum Turns {
 	top = 'top',
 	bottom = 'bottom',
 }
+
+export type Turn =
+	| Turns.front
+	| Turns.back
+	| Turns.backr
+	| Turns.backl
+	| Turns.left
+	| Turns.right
+	| Turns.top
+	| Turns.bottom;
 
 export interface SidesColors {
 	[Sides.front]?: string;
@@ -60,6 +76,17 @@ export interface SidesOffsets {
 	[Sides.bottom]?: Position;
 }
 
+export interface SideProps {
+	name: string;
+	component: any;
+	rsc?: Resource;
+	size: Size;
+	viewSize: Size;
+	color?: string;
+	offset?: Position;
+	style: CSSProperties;
+}
+
 export interface SidesProps {
 	[Sides.front]?: SideProps;
 	[Sides.back]?: SideProps;
@@ -67,14 +94,4 @@ export interface SidesProps {
 	[Sides.right]?: SideProps;
 	[Sides.top]?: SideProps;
 	[Sides.bottom]?: SideProps;
-}
-
-export interface SideProps {
-	ref: string;
-	rsc?: Resource;
-	size: Size;
-	viewSize?: Size;
-	color?: string;
-	offset?: Position;
-	css: CSSProperties;
 }
