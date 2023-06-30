@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive, computed } from 'vue';
 	import useComponent from '../component';
-	import { Props, Side, Sides, Turn } from './types';
+	import { Props, Turn } from './types';
 	import { Size } from '../../shared';
 	import { ComponentStyles } from '../../types';
 	import SideTransformCreator from './SideTransformCreator';
@@ -29,22 +29,6 @@
 		componentStyles
 	);
 
-	const definedSides = computed<Side[]>(() =>
-		Object.values(Sides).filter((side) => isSideDefined(side))
-	);
-
-	function isSideDefined(side: Side) {
-		if (props.rscs[side] !== undefined) {
-			return true;
-		}
-
-		if (props.colors[side] !== undefined) {
-			return true;
-		}
-
-		return false;
-	}
-
 	const sideTransformCreator = new SideTransformCreator(
 		props.depth,
 		props.size,
@@ -52,14 +36,12 @@
 	);
 
 	const sides = computed(() => {
-		const cubeCreator = new CubeCreator(
-			definedSides.value,
+		return CubeCreator.getSidesProps(
+			sideTransformCreator,
 			props.colors,
 			props.rscs,
 			props.offsets
 		);
-
-		return cubeCreator.getSidesProps(sideTransformCreator);
 	});
 
 	const turn = (turn: Turn) =>

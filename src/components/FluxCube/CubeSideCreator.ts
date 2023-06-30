@@ -5,14 +5,9 @@ import SideTransformCreator from './SideTransformCreator';
 import { FluxImage } from '..';
 
 export default class CubeSideCreator {
-	side: Side;
-
-	constructor(side: Side) {
-		this.side = side;
-	}
-
-	getProps(
+	static getProps(
 		sideTransformCreator: SideTransformCreator,
+		side: Side,
 		color?: string,
 		rsc?: Resource,
 		offset?: Position
@@ -20,7 +15,7 @@ export default class CubeSideCreator {
 		const { depth, size, viewSize } = sideTransformCreator;
 
 		const props: SideProps = {
-			name: this.side,
+			name: side,
 			component: rsc ? rsc.transition.component : FluxImage,
 			color: color,
 			rsc: rsc,
@@ -29,17 +24,17 @@ export default class CubeSideCreator {
 			offset: offset,
 			style: {
 				position: 'absolute',
-				transform: sideTransformCreator.getSideCss(this.side),
+				transform: sideTransformCreator.getSideCss(side),
 				backfaceVisibility: 'hidden',
 			},
 		};
 
-		if (['left', 'right'].includes(this.side)) {
+		if (['left', 'right'].includes(side)) {
 			props.viewSize.width.value = depth;
 			props.size.width.value = depth;
 		}
 
-		if (['top', 'bottom'].includes(this.side)) {
+		if (['top', 'bottom'].includes(side)) {
 			props.viewSize.height.value = depth;
 			props.size.height.value = depth;
 		}

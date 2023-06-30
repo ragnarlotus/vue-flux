@@ -4,39 +4,46 @@ import {
 	SidesResources,
 	SidesOffsets,
 	SidesProps,
+	Sides,
 } from './types';
 import CubeSideCreator from './CubeSideCreator';
 import SideTransformCreator from './SideTransformCreator';
 
-export default class CubeCreator {
-	sides: Side[];
-	colors: SidesColors;
-	rscs: SidesResources;
-	offsets: SidesOffsets;
+function isSideDefined(side: Side, colors: SidesColors, rscs: SidesResources) {
+	if (colors[side] !== undefined) {
+		return true;
+	}
 
-	constructor(
-		sides: Side[],
+	if (rscs[side] !== undefined) {
+		return true;
+	}
+
+	return false;
+}
+
+function getDefinedSides(colors: SidesColors, rscs: SidesResources) {
+	return Object.values(Sides).filter((side) =>
+		isSideDefined(side, colors, rscs)
+	);
+}
+
+export default class CubeCreator {
+	static getSidesProps(
+		sideTransformCreator: SideTransformCreator,
 		colors: SidesColors,
 		rscs: SidesResources,
 		offsets: SidesOffsets
 	) {
-		this.sides = sides;
-		this.colors = colors;
-		this.rscs = rscs;
-		this.offsets = offsets;
-	}
-
-	getSidesProps(sideTransformCreator: SideTransformCreator) {
+		const sides = getDefinedSides(colors, rscs);
 		const props: SidesProps = {};
 
-		this.sides.forEach((sideName: Side) => {
-			const cubeSideCreator = new CubeSideCreator(sideName);
-
-			props[sideName] = cubeSideCreator.getProps(
+		sides.forEach((side: Side) => {
+			props[side] = CubeSideCreator.getProps(
 				sideTransformCreator,
-				this.colors[sideName],
-				this.rscs[sideName],
-				this.offsets[sideName]
+				side,
+				colors[side],
+				rscs[side],
+				offsets[side]
 			);
 		});
 
