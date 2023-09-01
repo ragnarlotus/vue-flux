@@ -1,11 +1,11 @@
 <script setup lang="ts">
 	import { ref, reactive, computed, CSSProperties, Ref } from 'vue';
-	import { floor, ceil } from '../../shared/Maths';
+	import { ceil } from '../../shared/Maths';
 	import useComponent, { ComponentProps } from '../component';
 	import { FluxCube } from '../';
-	import { Position, Size } from '../../shared';
 	import { ComponentStyles } from '../../types';
 	import { SidesColors, SidesResources } from '../FluxCube/types';
+	import GridCreator, { getRowNumber, getColNumber } from './GridCreator';
 
 	interface Props extends ComponentProps {
 		colors?: SidesColors;
@@ -44,66 +44,18 @@
 
 	const numCols = computed<number>(() => ceil(props.cols));
 
-	const numTiles = computed<number>(() => numRows.value * numCols.value);
-
-	const tileSize = computed<Size>(
-		() =>
-			new Size({
-				width: floor(props.size.width.value! / numCols.value),
-				height: floor(props.size.height.value! / numRows.value),
-			})
-	);
-
-	const getRowNumber = (row: number) => floor(row / numCols.value);
-
-	const getColNumber = (col: number) => col % numCols.value;
-
 	const tiles = computed(() => {
-		const tiles = [];
-
-		for (let i = 0; i < numTiles.value; i++) {
-			const row = getRowNumber(i);
-			const col = getColNumber(i);
-
-			let { width, height } = tileSize.value.toRaw();
-
-			const tile: any = {
-				color: props.color,
-				colors: props.colors,
-				rsc: props.rsc,
-				rscs: props.rscs,
-				size: props.size,
-				offset: new Position({
-					top: row * height!,
-					left: col * width!,
-				}),
-				depth: props.depth,
-			};
-
-			if (row + 1 === numRows.value) {
-				height = props.size.height.value! - row * height!;
-			}
-
-			if (col + 1 === numCols.value) {
-				width = props.size.width.value! - col * width!;
-			}
-
-			tile.viewSize = new Size({
-				width,
-				height,
-			});
-
-			tile.css = {
-				...props.tileCss,
-				position: 'absolute',
-				...tile.offset.toPx(),
-				zIndex: i + 1 < numTiles.value / 2 ? i + 1 : numTiles.value - i,
-			};
-
-			tiles.push(tile);
-		}
-
-		return tiles;
+		return GridCreator.getTilesProps({
+			numRows: numRows.value,
+			numCols: numCols.value,
+			size: props.size,
+			depth: props.depth,
+			color: props.color,
+			colors: props.colors,
+			rsc: props.rsc,
+			rscs: props.rscs,
+			tileCss: props.tileCss,
+		});
 	});
 
 	const $tiles: Ref<any[]> = ref([]);
@@ -130,7 +82,6 @@
 			:ref="(el: any) => $tiles.push(el)"
 			:key="index"
 			v-bind="tile"
-			:depth="depth"
 		/>
 	</div>
 </template>

@@ -40,7 +40,7 @@ export default class ResizeCalculator {
 	}
 
 	private getAdaptedPosition(newSize: Size, adaptedSize: Size) {
-		if (this.realSize.getAspectRatio() <= adaptedSize.getAspectRatio()) {
+		if (this.realSize.getAspectRatio() <= newSize.getAspectRatio()) {
 			return new Position({
 				top: (newSize.height.value! - adaptedSize.height.value!) / 2,
 				left: 0,

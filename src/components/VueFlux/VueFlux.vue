@@ -39,7 +39,7 @@
 	const player = new Controllers.Player(config, timers);
 	const resources = new Repositories.Resources(player);
 	const transitions = new Repositories.Transitions(player);
-	const display = new Controllers.Display(config, resources, $container);
+	const display = new Controllers.Display($container, config, resources);
 	const keys = new Controllers.Keys(config, player);
 	const mouse = new Controllers.Mouse();
 	const touches = new Controllers.Touches();

@@ -1,23 +1,25 @@
-import { nextTick, Ref } from 'vue';
-import { Resources } from '../repositories';
+import { Component, nextTick, Ref } from 'vue';
 import Size from '../shared/Size';
-import Resource from '../resources/Resource';
 import { Config } from '../components/VueFlux/types';
 
 export default class Display {
-	config: Config;
-	resources: Resources;
-	node: Ref<null | HTMLElement>;
+	node: Ref<null | HTMLElement | Component>;
+	config: Config | null;
 	size: Size = new Size();
 
 	constructor(
-		config: Config,
-		resources: Resources,
-		node: Ref<null | HTMLElement>
+		node: Ref<null | HTMLElement | Component>,
+		config: Config | null = null
 	) {
-		this.config = config;
-		this.resources = resources;
 		this.node = node;
+		this.config = config;
+	}
+
+	static async getSize(node: Ref<null | HTMLElement | Component>) {
+		const display = new Display(node);
+		await display.updateSize();
+
+		return display.size;
 	}
 
 	addResizeListener() {
@@ -30,6 +32,16 @@ export default class Display {
 		window.removeEventListener('resize', this.updateSize);
 	}
 
+	getAspectRatio() {
+		if (this.config !== null) {
+			const [width, height] = this.config.aspectRatio.split(':');
+
+			return [parseFloat(width), parseFloat(height)];
+		}
+
+		return [16, 9];
+	}
+
 	async updateSize() {
 		this.size.reset();
 
@@ -39,23 +51,20 @@ export default class Display {
 			return;
 		}
 
-		const computedStyle = getComputedStyle(this.node.value);
+		const computedStyle = getComputedStyle(this.node.value as HTMLElement);
+
 		let width = parseFloat(computedStyle.width);
 		let height = parseFloat(computedStyle.height);
 
 		if (['0px', 'auto', null].includes(computedStyle.height)) {
-			const [arWidth, arHeight] = this.config.aspectRatio.split(':');
-			height = (width / parseFloat(arWidth)) * parseFloat(arHeight);
+			const [arWidth, arHeight] = this.getAspectRatio();
+			height = (width / arWidth) * arHeight;
 		}
 
 		this.size.update({
 			width,
 			height,
 		});
-
-		this.resources.list.forEach((rsc: Resource) =>
-			rsc.cacheToSize(this.size)
-		);
 	}
 
 	inFullScreen = () => !!document.fullscreenElement;
@@ -65,15 +74,11 @@ export default class Display {
 	}
 
 	async enterFullScreen() {
-		if (
-			!this.config.allowFullscreen ||
-			this.node === null ||
-			this.node.value === null
-		) {
+		if (this.node?.value === null || !this.config?.allowFullscreen) {
 			return;
 		}
 
-		this.node.value.requestFullscreen();
+		(this.node.value as HTMLElement).requestFullscreen();
 	}
 
 	async exitFullScreen() {

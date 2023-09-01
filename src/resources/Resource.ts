@@ -1,4 +1,4 @@
-import { ref, Ref } from 'vue';
+import { computed, ref, Ref } from 'vue';
 import Size from '../shared/Size';
 import ResizeCalculator from '../shared/ResizeCalculator';
 import Position from '../shared/Position';
@@ -17,8 +17,7 @@ export default abstract class Resource {
 	status: Ref<ResourceStatus> = ref(ResourceStatus.notLoaded);
 
 	realSize: Size = new Size();
-	cachedSize: Size = new Size();
-	cachedPosition: Position = new Position();
+	displaySize: Size = new Size();
 	caption: string = '';
 	resizeType: ResizeType;
 	display: DisplayParamenter;
@@ -54,17 +53,25 @@ export default abstract class Resource {
 	// eslint-disable-next-line no-unused-vars
 	abstract onError(reject: Function): void;
 
-	cacheToSize(displaySize: Size) {
-		if ([displaySize.isValid(), this.realSize.isValid()].includes(false)) {
-			return;
+	setDisplaySize(size: Size) {
+		this.displaySize = size;
+	}
+
+	fillDisplayProps = computed(() => {
+		if (
+			[this.displaySize.isValid(), this.realSize.isValid()].includes(false)
+		) {
+			return {};
 		}
 
 		const resCalc = new ResizeCalculator(this.realSize);
-		const { size, position } = resCalc.resizeTo(displaySize);
+		const { size, position } = resCalc.resizeTo(this.displaySize);
 
-		this.cachedSize.update(size.toRaw());
-		this.cachedPosition.update(position.toRaw());
-	}
+		return {
+			...size.toRaw(),
+			...position.toRaw(),
+		};
+	});
 
 	getResizeProps(size: Size, offset?: Position) {
 		const resizedProps: ResizedProps = {
@@ -74,11 +81,8 @@ export default abstract class Resource {
 			left: 0,
 		};
 
-		if (size.equals(this.cachedSize)) {
-			Object.assign(resizedProps, {
-				...this.cachedSize.toRaw(),
-				...this.cachedPosition.toRaw(),
-			});
+		if (size.equals(this.displaySize)) {
+			Object.assign(resizedProps, this.fillDisplayProps.value);
 		} else {
 			const resCalc = new ResizeCalculator(this.realSize);
 			const { size: resizedSize, position: resizedPosition } =

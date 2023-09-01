@@ -4,6 +4,7 @@
 	import useComponent, { ComponentProps } from '../component';
 	import { Resource } from '../../resources';
 	import { Position } from '../../shared';
+	import { ComponentStyles } from '../../types';
 
 	export interface Props extends ComponentProps {
 		rsc: Resource;
@@ -17,14 +18,18 @@
 
 	const $el = ref(null);
 
-	const styles: any = reactive({
+	const componentStyles: ComponentStyles = reactive({
 		base: {
 			position: 'relative',
 			overflow: 'hidden',
-		} as CSSProperties,
+		},
 	});
 
-	const { style, setCss, show, hide } = useComponent($el, props, styles);
+	const { style, setCss, show, hide } = useComponent(
+		$el,
+		props,
+		componentStyles
+	);
 
 	const numCircles = computed(() => round(props.circles));
 

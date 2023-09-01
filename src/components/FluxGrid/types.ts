@@ -1,22 +1,16 @@
 import { CSSProperties } from 'vue';
 import { Position, Size } from '../../shared';
-import { ComponentProps } from '../component';
-import { SidesResources } from '../FluxCube/types';
+import { Resource } from '../../resources';
+import { SidesColors, SidesResources } from '../FluxCube/types';
 
-export interface Props extends ComponentProps {
-	rscs: SidesResources;
-	rows?: number;
-	cols?: number;
-	depth?: number;
-	tileStyle?: CSSProperties;
-}
-
-export interface Tile {
-	row: number;
-	col: number;
+export interface TileProps {
+	color?: string;
+	colors?: SidesColors;
+	rsc?: Resource;
+	rscs?: SidesResources;
+	size: Size;
+	viewSize?: Size;
 	offset: Position;
-	viewSize: Size;
-	css: CSSProperties;
+	depth: number;
+	css?: CSSProperties;
 }
-
-export type Grid = Tile[];
