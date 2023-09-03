@@ -18,6 +18,7 @@
 	import { Display } from './controllers';
 	import Size from './shared/Size';
 	import { ResourceStatus } from './resources/types';
+	import { Turns } from './components/FluxCube/types';
 
 	const images = [];
 	for (let i = 1; i < 20; i++) {
@@ -27,11 +28,13 @@
 	}
 
 	const $wrapper = ref(null);
-	const $vueFlux: Ref<null | InstanceType<typeof FluxComponents.VueFlux>> =
+	const $fluxImage: Ref<null | InstanceType<typeof FluxComponents.FluxImage>> =
+		ref(null);
+	const $fluxCube: Ref<null | InstanceType<typeof FluxComponents.FluxCube>> =
 		ref(null);
 	const $fluxGrid: Ref<null | InstanceType<typeof FluxComponents.FluxGrid>> =
 		ref(null);
-	const $fluxImage: Ref<null | InstanceType<typeof FluxComponents.FluxImage>> =
+	const $vueFlux: Ref<null | InstanceType<typeof FluxComponents.VueFlux>> =
 		ref(null);
 
 	//const transitions = shallowReactive(Object.values(Transitions));
@@ -47,10 +50,13 @@
 
 	const display = new Display($wrapper);
 	display.addResizeListener();
-	rscs[0].load();
 
 	onMounted(async () => {
 		await display.updateSize();
+
+		setTimeout(() => {
+			$fluxCube.value?.turn(Turns.right);
+		}, 1000);
 	});
 </script>
 
@@ -64,11 +70,27 @@
 		/>
 
 		<div ref="$wrapper" class="relative mx-auto">
-			<FluxComponents.FluxImage
+			<!-- 			<FluxComponents.FluxImage
 				ref="$fluxImage"
 				:rsc="rscs[0]"
 				:size="display.size"
-			/>
+			/> -->
+
+			<div style="perspective: 1600px; perspective-origin: center center">
+				<FluxComponents.FluxCube
+					ref="$fluxCube"
+					:rscs="{
+						front: rscs[0],
+						left: rscs[1],
+						right: rscs[2],
+						top: rscs[3],
+						bottom: rscs[4],
+						back: rscs[5],
+					}"
+					:depth="320"
+					:size="display.size"
+				/>
+			</div>
 
 			<!-- <FluxComponents.FluxGrid
 				v-if="size !== null"
