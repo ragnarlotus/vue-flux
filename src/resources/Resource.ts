@@ -53,25 +53,37 @@ export default abstract class Resource {
 	// eslint-disable-next-line no-unused-vars
 	abstract onError(reject: Function): void;
 
-	setDisplaySize(size: Size) {
-		this.displaySize = size;
-	}
-
-	fillDisplayProps = computed(() => {
-		if (
-			[this.displaySize.isValid(), this.realSize.isValid()].includes(false)
-		) {
+	getFillProps(displaySize: Size) {
+		if ([displaySize.isValid(), this.realSize.isValid()].includes(false)) {
 			return {};
 		}
 
 		const resCalc = new ResizeCalculator(this.realSize);
-		const { size, position } = resCalc.resizeTo(this.displaySize);
+		const { size, position } = resCalc.resizeTo(displaySize);
 
 		return {
 			...size.toRaw(),
 			...position.toRaw(),
 		};
-	});
+	}
+
+	fillProps = computed(() => this.getFillProps(this.displaySize));
+
+	getFitProps(displaySize: Size) {
+		if ([displaySize.isValid(), this.realSize.isValid()].includes(false)) {
+			return {};
+		}
+
+		const resCalc = new ResizeCalculator(this.realSize);
+		const { size, position } = resCalc.resizeTo(displaySize);
+
+		return {
+			...size.toRaw(),
+			...position.toRaw(),
+		};
+	}
+
+	fitProps = computed(() => this.getFitProps(this.displaySize));
 
 	getResizeProps(size: Size, offset?: Position) {
 		const resizedProps: ResizedProps = {
@@ -82,16 +94,14 @@ export default abstract class Resource {
 		};
 
 		if (size.equals(this.displaySize)) {
-			Object.assign(resizedProps, this.fillDisplayProps.value);
+			Object.assign(resizedProps, this[`${this.resizeType}Props`].value);
 		} else {
-			const resCalc = new ResizeCalculator(this.realSize);
-			const { size: resizedSize, position: resizedPosition } =
-				resCalc.resizeTo(size);
+			const getProps = {
+				fill: (size: Size) => this.getFillProps(size),
+				fit: (size: Size) => this.getFitProps(size),
+			};
 
-			Object.assign(resizedProps, {
-				...resizedSize.toRaw(),
-				...resizedPosition.toRaw(),
-			});
+			Object.assign(resizedProps, getProps[this.resizeType](size));
 		}
 
 		if (offset !== undefined) {
