@@ -4,6 +4,7 @@
 	import { Props } from './types';
 	import { Size } from '../../shared';
 	import { ComponentStyles } from '../../types';
+	import { ResourceStatus } from '../../resources/types';
 
 	const props = withDefaults(defineProps<Props>(), {
 		viewSize: () => new Size(),
@@ -29,16 +30,25 @@
 		rsc: computed<CSSProperties>(() => {
 			const { rsc, size, offset } = props;
 
-			if (!rsc || !rsc.isLoaded() || !size.isValid() || !$el.value) {
+			if (!rsc) {
 				return {};
 			}
 
-			const imageStyle = rsc.getResizeProps(size, offset);
+			if (rsc.status.value === ResourceStatus.notLoaded) {
+				rsc.load();
+				return {};
+			}
+
+			if (!rsc.isLoaded() || !size.isValid() || !$el.value) {
+				return {};
+			}
+
+			const { width, height, top, left } = rsc.getResizeProps(size, offset);
 
 			return {
 				backgroundImage: `url(${rsc.src})`,
-				backgroundSize: `${imageStyle.width}px ${imageStyle.height}px`,
-				backgroundPosition: `${imageStyle.left}px ${imageStyle.top}px`,
+				backgroundSize: `${width}px ${height}px`,
+				backgroundPosition: `${left}px ${top}px`,
 				backgroundRepeat: 'no-repeat',
 			};
 		}),
