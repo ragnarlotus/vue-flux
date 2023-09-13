@@ -116,10 +116,8 @@
 					<Complements.FluxCaption v-bind="captionProps" />
 				</template> -->
 
-			<!-- <template #controls="controlsProps">
-				<Complements.FluxControls v-bind="controlsProps" />
-			</template>
- -->
+			<!-- <template #controls /> -->
+
 			<!-- <template #pagination="paginationProps">
 					<Complements.FluxPagination v-bind="paginationProps" />
 				</template> -->

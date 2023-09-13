@@ -193,13 +193,13 @@
 
 			<div class="remainder upper" />
 
-			<slot
-				name="controls"
-				:current-resource="player.resource.current"
-				:mouse-over="mouse.isOver"
-				:player="player"
-				:config="config"
-			/>
+			<slot name="controls"
+				><FluxControls
+					:current-resource="player.resource.current"
+					:mouse-over="mouse.isOver"
+					:player="player"
+					:config="config"
+			/></slot>
 
 			<div class="remainder lower" />
 
