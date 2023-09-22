@@ -57,13 +57,22 @@ export default class SideTransformCreator {
 		this.viewSize = viewSize;
 	}
 
-	public getSideCss(turn: Side | Turn) {
+	public getRotate(turn: Side | Turn) {
 		const rx = rotate.x[turn] ?? '0';
 		const ry = rotate.y[turn] ?? '0';
-		const tx = translate.x[turn] ?? '0';
-		const ty = translate.y[turn] ?? '0';
-		const tz = this.translateZ.value[turn].toString();
 
-		return `rotateX(${rx}deg) rotateY(${ry}deg) translate3d(${tx}%, ${ty}%, ${tz}px)`;
+		return `rotateX(${rx}deg) rotateY(${ry}deg)`;
+	}
+
+	public getTranslate(side: Side | Turn) {
+		const tx = translate.x[side] ?? '0';
+		const ty = translate.y[side] ?? '0';
+		const tz = this.translateZ.value[side].toString();
+
+		return `translate3d(${tx}%, ${ty}%, ${tz}px)`;
+	}
+
+	public getSideCss(side: Side | Turn) {
+		return `${this.getRotate(side)} ${this.getTranslate(side)}`;
 	}
 }

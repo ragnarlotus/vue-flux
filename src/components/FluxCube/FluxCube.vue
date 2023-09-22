@@ -20,6 +20,7 @@
 	const componentStyles: ComponentStyles = reactive({
 		base: {
 			transformStyle: 'preserve-3d',
+			transformOrigin: `center center -${props.depth / 2}px`,
 		},
 	});
 
@@ -35,17 +36,17 @@
 		props.viewSize
 	);
 
-	const sides = computed(() => {
-		return CubeCreator.getSidesProps(
+	const sides = computed(() =>
+		CubeCreator.getSidesProps(
 			sideTransformCreator,
 			props.colors,
 			props.rscs,
 			props.offsets
-		);
-	});
+		)
+	);
 
 	const turn = (turn: Turn) =>
-		transform({ transform: sideTransformCreator.getSideCss(turn) });
+		transform({ transform: sideTransformCreator.getRotate(turn) });
 
 	defineExpose({
 		setCss,
