@@ -3,60 +3,59 @@ import { Resource } from '../../resources';
 import { Size, Position } from '../../shared';
 import { SidesColors, SidesResources } from '../FluxCube/types';
 import { TileProps } from './types';
+import { floor } from '../../shared/Maths';
+
+export function getRowNumber(tileNumber: number, numCols: number) {
+	return floor(tileNumber / numCols);
+}
+
+export function getColNumber(tileNumber: number, numCols: number) {
+	return tileNumber % numCols;
+}
 
 export default class GridTileCreator {
-	static getProps({
-		tile,
-		numTiles,
-		row,
-		numRows,
-		col,
-		numCols,
-		gridSize,
-		size,
-		depth,
-		color,
-		colors,
-		rsc,
-		rscs,
-		css,
-	}: {
-		tile: number;
-		numTiles: number;
-		row: number;
-		numRows: number;
-		col: number;
-		numCols: number;
-		gridSize: Size;
-		size: Size;
-		depth: number;
-		color?: string;
-		colors?: SidesColors;
-		rsc?: Resource;
-		rscs?: SidesResources;
-		css?: CSSProperties;
-	}) {
-		let { width, height } = size.toRaw();
+	static getProps(
+		grid: {
+			numRows: number;
+			numCols: number;
+			numTiles: number;
+			size: Size;
+			depth: number;
+			color?: string;
+			colors?: SidesColors;
+			rsc?: Resource;
+			rscs?: SidesResources;
+		},
+		tile: {
+			number: number;
+			size: Size;
+			css?: CSSProperties;
+		}
+	) {
+		let { width, height } = tile.size.toRaw();
+
+		const row = getRowNumber(tile.number, grid.numCols);
+		const col = getColNumber(tile.number, grid.numCols);
 
 		const props: TileProps = {
-			color: color,
-			colors: colors,
-			rsc: rsc,
-			rscs: rscs,
-			size: size,
+			color: grid.color,
+			colors: grid.colors,
+			rsc: grid.rsc,
+			rscs: grid.rscs,
+			size: grid.size,
+			depth: grid.depth,
 			offset: new Position({
 				top: row * height!,
 				left: col * width!,
 			}),
-			depth: depth,
 		};
 
-		if (row + 1 === numRows) {
-			height = gridSize.height.value! - row * height!;
+		if (row + 1 === grid.numRows) {
+			height = grid.size.height.value! - row * height!;
 		}
 
-		if (col + 1 === numCols) {
-			width = gridSize.width.value! - col * width!;
+		if (col + 1 === grid.numCols) {
+			width = grid.size.width.value! - col * width!;
 		}
 
 		props.viewSize = new Size({
@@ -65,10 +64,13 @@ export default class GridTileCreator {
 		});
 
 		props.css = {
-			...css,
+			...tile.css,
 			position: 'absolute',
 			...props.offset.toPx(),
-			zIndex: tile + 1 < numTiles / 2 ? tile + 1 : numTiles - tile,
+			zIndex:
+				tile.number + 1 < grid.numTiles / 2
+					? tile.number + 1
+					: grid.numTiles - tile.number,
 		};
 
 		return props;

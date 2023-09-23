@@ -1,20 +1,11 @@
 <script setup lang="ts">
-	import { ref, reactive, computed, CSSProperties, Ref } from 'vue';
-	import { ceil } from '../../shared/Maths';
-	import useComponent, { ComponentProps } from '../component';
+	import { ref, reactive, computed, Ref } from 'vue';
+	import useComponent from '../component';
+	import { GridProps as Props } from './types';
 	import { FluxCube } from '../';
 	import { ComponentStyles } from '../../types';
-	import { SidesColors, SidesResources } from '../FluxCube/types';
-	import GridCreator, { getRowNumber, getColNumber } from './GridCreator';
-
-	interface Props extends ComponentProps {
-		colors?: SidesColors;
-		rscs?: SidesResources;
-		rows?: number;
-		cols?: number;
-		depth?: number;
-		tileCss?: CSSProperties;
-	}
+	import GridCreator from './GridCreator';
+	import { getRowNumber, getColNumber } from './GridTileCreator';
 
 	const props = withDefaults(defineProps<Props>(), {
 		rows: 1,
@@ -40,23 +31,7 @@
 		props.rscs !== undefined ? FluxCube : props.rsc?.transition.component
 	);
 
-	const numRows = computed<number>(() => ceil(props.rows));
-
-	const numCols = computed<number>(() => ceil(props.cols));
-
-	const tiles = computed(() => {
-		return GridCreator.getTilesProps({
-			numRows: numRows.value,
-			numCols: numCols.value,
-			size: props.size,
-			depth: props.depth,
-			color: props.color,
-			colors: props.colors,
-			rsc: props.rsc,
-			rscs: props.rscs,
-			tileCss: props.tileCss,
-		});
-	});
+	const tiles = computed(() => GridCreator.getTilesProps(props));
 
 	const $tiles: Ref<any[]> = ref([]);
 
