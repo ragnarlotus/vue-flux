@@ -13,6 +13,7 @@
 	import * as Repositories from '../../repositories';
 	import { FluxTransition } from '../';
 	import { Props, Config } from './types';
+	import FluxControls from '../../complements/FluxControls/FluxControls.vue';
 
 	const props = defineProps<Props>();
 
@@ -39,7 +40,7 @@
 	const player = new Controllers.Player(config, timers);
 	const resources = new Repositories.Resources(player);
 	const transitions = new Repositories.Transitions(player);
-	const display = new Controllers.Display($container, config, resources);
+	const display = new Controllers.Display($container, config);
 	const keys = new Controllers.Keys(config, player);
 	const mouse = new Controllers.Mouse();
 	const touches = new Controllers.Touches();

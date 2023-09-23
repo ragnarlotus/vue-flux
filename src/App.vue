@@ -38,7 +38,7 @@
 		ref(null);
 
 	//const transitions = shallowReactive(Object.values(Transitions));
-	const transitions = shallowReactive([Transitions.Waterfall]);
+	const transitions = shallowReactive([Transitions.Book]);
 	const rscs = shallowReactive(images);
 	const options = shallowReactive({
 		allowFullscreen: true,
@@ -54,9 +54,10 @@
 	onMounted(async () => {
 		await display.updateSize();
 
-		setTimeout(() => {
-			$fluxCube.value?.turn(Turns.right);
+		/* 		setTimeout(() => {
+			$fluxCube.value?.turn(Turns.top);
 		}, 1000);
+ */
 	});
 </script>
 
@@ -70,14 +71,15 @@
 		/>
 
 		<div ref="$wrapper" class="relative mx-auto">
-			<!-- 			<FluxComponents.FluxImage
+			<!-- <FluxComponents.FluxImage
 				ref="$fluxImage"
 				:rsc="rscs[0]"
 				:size="display.size"
 			/> -->
 
-			<div style="perspective: 1600px; perspective-origin: center center">
+			<!-- <div style="perspective: 1600px">
 				<FluxComponents.FluxCube
+					v-if="display.size.isValid()"
 					ref="$fluxCube"
 					:rscs="{
 						front: rscs[0],
@@ -87,28 +89,28 @@
 						bottom: rscs[4],
 						back: rscs[5],
 					}"
-					:depth="320"
+					:depth="768"
 					:size="display.size"
+					style="transition: all 4000ms ease-out 0s"
 				/>
-			</div>
+			</div> -->
 
-			<!-- <FluxComponents.FluxGrid
-				v-if="size !== null"
+			<!-- 			<FluxComponents.FluxGrid
+				v-if="display.size.isValid()"
 				ref="$fluxGrid"
 				:rsc="rscs[0]"
-				:size="size"
+				:size="display.size"
 				:rows="10"
 				:cols="5"
 			/> -->
 
-			<!-- <FluxComponents.VueFlux
+			<FluxComponents.VueFlux
 				ref="$vueFlux"
 				:transitions="transitions"
 				:rscs="rscs"
 				:options="options"
-			> -->
-
-			<!-- <template #preloader="preloaderProps">
+			>
+				<!-- <template #preloader="preloaderProps">
 					<Complements.FluxPreloader v-bind="preloaderProps" />
 				</template>
 
@@ -116,16 +118,16 @@
 					<Complements.FluxCaption v-bind="captionProps" />
 				</template> -->
 
-			<!-- <template #controls /> -->
+				<!-- <template #controls /> -->
 
-			<!-- <template #pagination="paginationProps">
+				<!-- <template #pagination="paginationProps">
 					<Complements.FluxPagination v-bind="paginationProps" />
 				</template> -->
 
-			<!-- <template #index="indexProps">
+				<!-- <template #index="indexProps">
 					<Complements.FluxIndex v-bind="indexProps" />
 				</template> -->
-			<!-- </FluxComponents.VueFlux> -->
+			</FluxComponents.VueFlux>
 		</div>
 
 		<VcParagraph
