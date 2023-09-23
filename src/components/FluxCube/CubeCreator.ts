@@ -8,6 +8,7 @@ import {
 } from './types';
 import CubeSideCreator from './CubeSideCreator';
 import SideTransformCreator from './SideTransformCreator';
+import { Position } from '../../shared';
 
 function isSideDefined(side: Side, colors: SidesColors, rscs: SidesResources) {
 	if (colors[side] !== undefined) {
@@ -32,7 +33,8 @@ export default class CubeCreator {
 		sideTransformCreator: SideTransformCreator,
 		colors: SidesColors,
 		rscs: SidesResources,
-		offsets: SidesOffsets
+		offsets: SidesOffsets,
+		offset?: Position
 	) {
 		const sides = getDefinedSides(colors, rscs);
 		const props: SidesProps = {};
@@ -43,7 +45,7 @@ export default class CubeCreator {
 				side,
 				colors[side],
 				rscs[side],
-				offsets[side]
+				offsets[side] !== undefined ? offsets[side] : offset
 			);
 		});
 
