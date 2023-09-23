@@ -9,6 +9,7 @@ export interface Props extends ComponentProps {
 	rscs?: SidesResources;
 	offsets?: SidesOffsets;
 	depth?: number;
+	origin?: string;
 }
 
 export enum Sides {

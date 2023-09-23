@@ -20,7 +20,10 @@
 	const componentStyles: ComponentStyles = reactive({
 		base: {
 			transformStyle: 'preserve-3d',
-			transformOrigin: `center center -${props.depth / 2}px`,
+			transformOrigin:
+				props.origin !== undefined
+					? props.origin
+					: `center center -${props.depth / 2}px`,
 		},
 	});
 
@@ -41,7 +44,8 @@
 			sideTransformCreator,
 			props.colors,
 			props.rscs,
-			props.offsets
+			props.offsets,
+			props.offset
 		)
 	);
 
