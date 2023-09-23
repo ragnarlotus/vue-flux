@@ -36,8 +36,8 @@
 	const totalDuration = (conf.cols / 2 + conf.rows / 2) * (conf.tileDelay * 2);
 
 	const getDelay = (index: number) => {
-		const row = $grid.value!.getRowNumber(index);
-		const col = $grid.value!.getColNumber(index);
+		const row = $grid.value!.getRowNumber(index, conf.cols);
+		const col = $grid.value!.getColNumber(index, conf.cols);
 
 		const rowDelay = Math.abs(conf.rows / 2 - 0.5 - row);
 		const colDelay = Math.abs(conf.cols / 2 - 0.5 - col);

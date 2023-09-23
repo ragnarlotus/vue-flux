@@ -14,8 +14,8 @@
 	const conf: Conf = reactive({
 		rows: 1,
 		cols: 10,
-		tileDuration: 600000,
-		tileDelay: 90000,
+		tileDuration: 600,
+		tileDelay: 90,
 		easing: 'cubic-bezier(0.55, 0.055, 0.675, 0.19)',
 	});
 

@@ -45,8 +45,8 @@
 	const totalDuration = conf.tileDelay * multiplier * 2;
 
 	const getDelay = (index: number) => {
-		const row = $grid.value!.getRowNumber(index);
-		const col = $grid.value!.getColNumber(index);
+		const row = $grid.value!.getRowNumber(index, conf.cols);
+		const col = $grid.value!.getColNumber(index, conf.cols);
 		let delay = col + row;
 
 		if (conf.direction === Directions.prev) {

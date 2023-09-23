@@ -57,6 +57,7 @@
 				left: 0,
 			}),
 		} as SidesOffsets,
+		origin: undefined as any,
 		css: {
 			position: 'absolute',
 			top: 0,
@@ -76,20 +77,18 @@
 			fromCss.left = halfWidthPx;
 
 			cube.offsets.back!.left.value = halfWidth;
-
+			cube.origin = 'right center';
 			cube.css = {
 				...cube.css,
-				transformOrigin: 'right center',
 			};
 		},
 
 		next: () => {
 			cube.offsets.front!.left.value = halfWidth;
-
+			cube.origin = 'left center';
 			cube.css = {
 				...cube.css,
 				left: halfWidthPx,
-				transformOrigin: 'left center',
 			};
 		},
 	};
@@ -136,6 +135,7 @@
 			:size="size"
 			:view-size="viewSize"
 			:offsets="cube.offsets"
+			:origin="cube.origin"
 			:css="cube.css"
 		/>
 	</div>
