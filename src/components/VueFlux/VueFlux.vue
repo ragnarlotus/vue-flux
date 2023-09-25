@@ -13,7 +13,6 @@
 	import * as Repositories from '../../repositories';
 	import { FluxTransition } from '../';
 	import { Props, Config } from './types';
-	import FluxControls from '../../complements/FluxControls/FluxControls.vue';
 
 	const props = defineProps<Props>();
 
@@ -184,7 +183,7 @@
 		/>
 
 		<div v-if="display.size.isValid()" class="complements">
-			<slot name="preloader" :resources="resources" />
+			<slot name="preloader" :loader="resources.loader" />
 
 			<slot
 				name="caption"
@@ -194,13 +193,13 @@
 
 			<div class="remainder upper" />
 
-			<slot name="controls"
-				><FluxControls
-					:current-resource="player.resource.current"
-					:mouse-over="mouse.isOver"
-					:player="player"
-					:config="config"
-			/></slot>
+			<slot
+				name="controls"
+				:current-resource="player.resource.current"
+				:mouse-over="mouse.isOver"
+				:player="player"
+				:config="config"
+			/>
 
 			<div class="remainder lower" />
 

@@ -1,4 +1,4 @@
-import { shallowReactive, toRaw } from 'vue';
+import { Ref, ref, shallowReactive, toRaw } from 'vue';
 import ResourceLoader from '../../shared/ResourceLoader';
 import Resource from '../../resources/Resource';
 import Player from '../../controllers/Player/Player';
@@ -9,7 +9,7 @@ import { ResourceIndex } from './types';
 export default class Resources {
 	player: Player;
 	list: Resource[] = shallowReactive([]);
-	loader?: ResourceLoader;
+	loader: Ref<ResourceLoader | null> = ref(null);
 
 	constructor(player: Player) {
 		this.player = player;
@@ -59,7 +59,7 @@ export default class Resources {
 		const resources = [...toRaw(rscs)];
 
 		const updatePromise = new Promise<void>((resolve) => {
-			this.loader = new ResourceLoader(
+			this.loader.value = new ResourceLoader(
 				resources,
 				numToPreload,
 				displaySize,

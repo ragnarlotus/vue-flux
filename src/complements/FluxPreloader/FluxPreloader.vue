@@ -1,23 +1,19 @@
 <script setup lang="ts">
-	import { computed } from 'vue';
-	import { Resources } from '../../repositories';
+	import { Ref } from 'vue';
+	import { ResourceLoader } from '../../shared';
 
 	export interface Props {
-		resources: Resources;
+		loader: Ref<null | ResourceLoader>;
 	}
 
-	const props = defineProps<Props>();
-
-	const visible = computed<boolean>(
-		() => props.resources.loader?.progress?.value! < 100
-	);
+	defineProps<Props>();
 </script>
 
 <template>
 	<div class="preloader">
 		<slot name="spinner">
-			<div v-if="visible" class="spinner">
-				<div class="pct">{{ resources.loader?.progress }}%</div>
+			<div v-if="loader.value?.preloading.length" class="spinner">
+				<div class="pct">{{ loader.value?.progress }}%</div>
 				<div class="border" />
 			</div>
 		</slot>

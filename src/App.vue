@@ -37,8 +37,8 @@
 	const $vueFlux: Ref<null | InstanceType<typeof FluxComponents.VueFlux>> =
 		ref(null);
 
-	//const transitions = shallowReactive(Object.values(Transitions));
-	const transitions = shallowReactive([Transitions.Book]);
+	const transitions = shallowReactive(Object.values(Transitions));
+	//const transitions = shallowReactive([Transitions.Book]);
 	const rscs = shallowReactive(images);
 	const options = shallowReactive({
 		allowFullscreen: true,
@@ -47,18 +47,18 @@
 		infinite: false,
 		lazyLoadAfter: 10,
 	});
-
+	/*
 	const display = new Display($wrapper);
 	display.addResizeListener();
 
 	onMounted(async () => {
 		await display.updateSize();
 
-		/* 		setTimeout(() => {
+				setTimeout(() => {
 			$fluxCube.value?.turn(Turns.top);
 		}, 1000);
- */
-	});
+
+	});*/
 </script>
 
 <template>
@@ -110,23 +110,25 @@
 				:rscs="rscs"
 				:options="options"
 			>
-				<!-- <template #preloader="preloaderProps">
+				<template #preloader="preloaderProps">
 					<Complements.FluxPreloader v-bind="preloaderProps" />
 				</template>
 
 				<template #caption="captionProps">
 					<Complements.FluxCaption v-bind="captionProps" />
-				</template> -->
+				</template>
 
-				<!-- <template #controls /> -->
+				<template #controls="controlsProps">
+					<Complements.FluxControls v-bind="controlsProps" />
+				</template>
 
-				<!-- <template #pagination="paginationProps">
+				<template #pagination="paginationProps">
 					<Complements.FluxPagination v-bind="paginationProps" />
-				</template> -->
+				</template>
 
-				<!-- <template #index="indexProps">
+				<template #index="indexProps">
 					<Complements.FluxIndex v-bind="indexProps" />
-				</template> -->
+				</template>
 			</FluxComponents.VueFlux>
 		</div>
 
