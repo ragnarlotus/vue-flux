@@ -1,17 +1,10 @@
 import { Component, shallowReactive, toRaw } from 'vue';
-import Player from '../../controllers/Player/Player';
 import { Directions, Direction } from '../../types';
 import { TransitionIndex } from './types';
 import { TransitionWithOptions } from '../../components/VueFlux/types';
-import { TransitionConf } from '../../transitions/transition';
 
 export default class Transitions {
-	player: Player;
 	list: TransitionWithOptions[] = shallowReactive([]);
-
-	constructor(player: Player) {
-		this.player = player;
-	}
 
 	private getPrev(lastIndex: number) {
 		return this.getByIndex(
@@ -35,7 +28,7 @@ export default class Transitions {
 
 	getByIndex(index: number) {
 		return {
-			index: index,
+			index,
 			component: this.list[index].component,
 			options: JSON.parse(JSON.stringify(this.list[index].options)),
 		} as TransitionIndex;
@@ -56,7 +49,7 @@ export default class Transitions {
 			let options = {};
 
 			if ('component' in transition) {
-				component = transition.component as Component<TransitionConf>;
+				component = transition.component as Component;
 
 				if ('options' in transition) {
 					options = transition.options as object;

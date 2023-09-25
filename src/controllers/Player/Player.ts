@@ -35,7 +35,7 @@ export default class Player {
 	}
 
 	play(resourceIndex: number | Direction = Directions.next, delay?: number) {
-		const { config, timers } = this;
+		const { config, timers, resource } = this;
 
 		config.autoplay = true;
 
@@ -43,9 +43,15 @@ export default class Player {
 			return;
 		}
 
-		timers.set('transition', delay || config.delay, () => {
-			this.show(resourceIndex);
-		});
+		const rsc = this.resources?.find(resourceIndex, resource.current?.index);
+
+		timers.set(
+			'transition',
+			delay || rsc?.options.delay || config.delay,
+			() => {
+				this.show(resourceIndex);
+			}
+		);
 	}
 
 	stop(cancelTransition: boolean = false) {
@@ -112,10 +118,10 @@ export default class Player {
 			return;
 		}
 
-		const resourceTo: ResourceIndex =
-			typeof resourceIndex === 'number'
-				? resources!.getByIndex(resourceIndex)
-				: resources!.getByOrder(resourceIndex, resource.current!.index);
+		const resourceTo: ResourceIndex = resources!.find(
+			resourceIndex,
+			resource.current!.index
+		);
 
 		if (resource.current!.index === resourceTo.index) {
 			return;
@@ -173,9 +179,13 @@ export default class Player {
 		}
 
 		if (config.autoplay === true && cancel === false) {
-			timers.set('transition', config.delay, () => {
-				this.show();
-			});
+			timers.set(
+				'transition',
+				resource.current.options.delay || config.delay,
+				() => {
+					this.show();
+				}
+			);
 		}
 	}
 }

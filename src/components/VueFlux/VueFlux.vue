@@ -37,8 +37,8 @@
 
 	const timers = new Controllers.Timers();
 	const player = new Controllers.Player(config, timers);
-	const resources = new Repositories.Resources(player);
-	const transitions = new Repositories.Transitions(player);
+	const resources = new Repositories.Resources();
+	const transitions = new Repositories.Transitions();
 	const display = new Controllers.Display($container, config);
 	const keys = new Controllers.Keys(config, player);
 	const mouse = new Controllers.Mouse();

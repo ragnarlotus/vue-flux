@@ -1,19 +1,14 @@
 import { Ref, ref, shallowReactive, toRaw } from 'vue';
 import ResourceLoader from '../../shared/ResourceLoader';
 import Resource from '../../resources/Resource';
-import Player from '../../controllers/Player/Player';
 import { Size } from '../../shared';
 import { Direction, Directions } from '../../types';
 import { ResourceIndex } from './types';
+import { ResourceWithOptions } from '../../components/VueFlux/types';
 
 export default class Resources {
-	player: Player;
-	list: Resource[] = shallowReactive([]);
+	list: ResourceWithOptions[] = shallowReactive([]);
 	loader: Ref<ResourceLoader | null> = ref(null);
-
-	constructor(player: Player) {
-		this.player = player;
-	}
 
 	private getPrev(currentIndex: number) {
 		return this.getByIndex(
@@ -42,7 +37,8 @@ export default class Resources {
 
 		return {
 			index,
-			rsc: this.list[index],
+			rsc: this.list[index].resource,
+			options: JSON.parse(JSON.stringify(this.list[index].options)),
 		} as ResourceIndex;
 	}
 
@@ -53,31 +49,61 @@ export default class Resources {
 		}[order]();
 	}
 
-	update(rscs: Resource[], numToPreload: number, displaySize: Size) {
+	find(by: number | Direction, currentIndex?: number) {
+		if (typeof by === 'number') {
+			return this.getByIndex(by);
+		}
+
+		if (currentIndex === undefined) {
+			throw new ReferenceError('Missing currentIndex paramater');
+		}
+
+		return this.getByOrder(by, currentIndex);
+	}
+
+	update(
+		rscs: (Resource | ResourceWithOptions)[],
+		numToPreload: number,
+		displaySize: Size
+	) {
 		this.list.splice(0);
 
-		const resources = [...toRaw(rscs)];
+		const resources = toRaw(rscs).map((rsc) => {
+			let resource = rsc;
+			let options = {};
+
+			if ('resource' in rsc) {
+				resource = rsc.resource;
+
+				if ('options' in rsc) {
+					options = rsc.options;
+				}
+			}
+
+			return { resource, options } as ResourceWithOptions;
+		});
 
 		const updatePromise = new Promise<void>((resolve) => {
 			this.loader.value = new ResourceLoader(
 				resources,
 				numToPreload,
 				displaySize,
-				(loaded: Resource[]) => this.preloadFinished(loaded, resolve),
-				(loaded: Resource[]) => this.lazyloadFinished(loaded)
+				(loaded: ResourceWithOptions[]) =>
+					this.preloadFinished(loaded, resolve),
+				(loaded: ResourceWithOptions[]) => this.lazyloadFinished(loaded)
 			);
 		});
 
 		return updatePromise;
 	}
 
-	preloadFinished(loaded: Resource[], resolve: Function) {
-		loaded.forEach((rsc: Resource) => this.list.push(rsc));
+	preloadFinished(loaded: ResourceWithOptions[], resolve: Function) {
+		loaded.forEach((rsc: ResourceWithOptions) => this.list.push(rsc));
 
 		resolve();
 	}
 
-	lazyloadFinished(loaded: Resource[]) {
-		loaded.forEach((rsc: Resource) => this.list.push(rsc));
+	lazyloadFinished(loaded: ResourceWithOptions[]) {
+		loaded.forEach((rsc: ResourceWithOptions) => this.list.push(rsc));
 	}
 }

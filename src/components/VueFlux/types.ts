@@ -15,6 +15,11 @@ export interface Options {
 	lazyLoadAfter?: number;
 }
 
+export interface ResourceWithOptions {
+	resource: Resource;
+	options: object;
+}
+
 export interface TransitionWithOptions {
 	component: Component;
 	options: object;
@@ -22,7 +27,7 @@ export interface TransitionWithOptions {
 
 export interface Props {
 	options?: Options;
-	rscs: Resource[];
+	rscs: (Resource | ResourceWithOptions)[];
 	transitions: (Component | TransitionWithOptions)[];
 }
 

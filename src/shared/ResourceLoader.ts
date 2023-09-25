@@ -1,25 +1,25 @@
 import { Ref, ref } from 'vue';
 import { ceil } from './Maths';
-import Resource from '../resources/Resource';
 import Size from './Size';
+import { ResourceWithOptions } from '../components/VueFlux/types';
 
 export default class ResourceLoader {
-	rscs: Resource[] = [];
+	rscs: ResourceWithOptions[] = [];
 	counter = {
 		success: 0,
 		error: 0,
 		total: 0,
 	};
 	toPreload: number;
-	preloading: Resource[] = [];
-	lazyloading: Resource[] = [];
+	preloading: ResourceWithOptions[] = [];
+	lazyloading: ResourceWithOptions[] = [];
 	progress: Ref<number> = ref(0);
 	displaySize: Size;
 	onPreloadFinished: Function;
 	onLazyloadFinished: Function;
 
 	constructor(
-		rscs: Resource[],
+		rscs: ResourceWithOptions[],
 		toPreload: number,
 		displaySize: Size,
 		onPreloadFinished: Function,
@@ -56,7 +56,7 @@ export default class ResourceLoader {
 		}
 
 		const preloadedSuccessfully = this.preloading.filter((rsc) =>
-			rsc.isLoaded()
+			rsc.resource.isLoaded()
 		);
 
 		this.onPreloadFinished(preloadedSuccessfully);
@@ -76,7 +76,7 @@ export default class ResourceLoader {
 
 	lazyLoadEnd() {
 		const lazyloadedSuccessfully = this.lazyloading.filter((rsc) =>
-			rsc.isLoaded()
+			rsc.resource.isLoaded()
 		);
 
 		this.onLazyloadFinished(lazyloadedSuccessfully);
@@ -84,9 +84,9 @@ export default class ResourceLoader {
 		this.lazyloading.length = 0;
 	}
 
-	load(rsc: Resource) {
-		//console.log(rsc.load());
-		rsc.load()
+	load(rsc: ResourceWithOptions) {
+		rsc.resource
+			.load()
 			.then(() => {
 				this.loadSuccess(rsc);
 			})
@@ -108,10 +108,10 @@ export default class ResourceLoader {
 			});
 	}
 
-	loadSuccess(rsc: Resource) {
+	loadSuccess(rsc: ResourceWithOptions) {
 		this.counter.success++;
 
-		rsc.displaySize.update(this.displaySize.toRaw());
+		rsc.resource.displaySize.update(this.displaySize.toRaw());
 	}
 
 	loadError(error: string) {

@@ -75,7 +75,7 @@
 			<Thumb
 				v-for="(rsc, index) in resources.list"
 				:key="index"
-				:rsc="rsc"
+				:rsc="rsc.resource"
 				:size="thumbs.size"
 				:class="thumbs.getClass(index)"
 				@click="hide(index)"

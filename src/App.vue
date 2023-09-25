@@ -19,11 +19,17 @@
 	import Size from './shared/Size';
 	import { ResourceStatus } from './resources/types';
 	import { Turns } from './components/FluxCube/types';
+	import { ResourceWithOptions } from './components/VueFlux/types';
 
 	const images = [];
 	for (let i = 1; i < 20; i++) {
 		const fileName = i.toString().padStart(2, '0');
-		const image = new Img(`/images/${fileName}.jpg`, 'img ' + i);
+		const image = {
+			resource: new Img(`/images/${fileName}.jpg`, 'img ' + i),
+			options: {
+				//delay: i * 1000,
+			},
+		} as ResourceWithOptions;
 		images.push(image);
 	}
 
@@ -42,9 +48,9 @@
 	const rscs = shallowReactive(images);
 	const options = shallowReactive({
 		allowFullscreen: true,
-		autoplay: false,
+		autoplay: true,
 		bindKeys: true,
-		infinite: false,
+		infinite: true,
 		lazyLoadAfter: 10,
 	});
 	/*
