@@ -1,72 +1,81 @@
 <script setup lang="ts">
 	// holder (window), component, background
 
-	import { ref, reactive, computed, unref, onMounted, onUnmounted } from 'vue';
-	import { ceil, aspectRatio } from '@/shared/Maths';
+	import {
+		ref,
+		reactive,
+		computed,
+		unref,
+		onMounted,
+		onUnmounted,
+		Ref,
+		CSSProperties,
+	} from 'vue';
+	import { ceil, aspectRatio } from '../../shared/Maths';
+	import { Resource } from '../../resources';
 
-	const props = defineProps({
-		rsc: {
-			type: Object,
-			required: true,
-		},
+	declare const window: Window & {
+		MSStream: any;
+	};
 
-		/* eslint-disable vue/require-prop-types */
-		holder: {
-			default: window,
-		},
+	export interface Props {
+		rsc: Resource;
+		holder?: any;
+		type?: 'visible' | 'relative' | 'fixed';
+		offset?: string;
+	}
 
-		type: {
-			default: 'relative',
-		},
-
-		offset: {
-			type: [Number, String],
-			default: '100%',
-		},
+	const props = withDefaults(defineProps<Props>(), {
+		holder: () => window,
+		type: 'relative',
+		offset: '100%',
 	});
 
-	const $el = ref(null);
+	const $el: Ref<null | HTMLDivElement> = ref(null);
 
 	const { holder, rsc } = props;
 
-	const style = {
+	const style: any = {
 		base: {
 			position: 'relative',
 			background: `url("${rsc.src}") no-repeat`,
-		},
-		defined: reactive({}),
-		final: computed(() => ({
+		} as CSSProperties,
+
+		defined: reactive<CSSProperties>({}),
+
+		final: computed<CSSProperties>(() => ({
 			...style.base,
 			...unref(style.defined),
 		})),
 	};
 
 	const isIos =
-		(/iPad|iPhone|iPod/.test(navigator.platform) ||
-			(navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
+		(/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+			(navigator.userAgent === 'MacIntel' &&
+				navigator.maxTouchPoints > 1)) &&
 		!window.MSStream;
 
-	const display = reactive({
-		width: null,
-		height: null,
+	const display: any = reactive({
+		width: 0,
+		height: 0,
 		aspectRatio: computed(() => aspectRatio(display)),
 	});
 
-	const view = reactive({
-		top: null,
-		width: null,
-		height: null,
+	const view: any = reactive({
+		top: 0,
+		width: 0,
+		height: 0,
 		aspectRatio: computed(() => aspectRatio(view)),
 	});
 
 	const background = reactive({
-		top: null,
-		left: null,
-		width: null,
-		height: null,
+		top: 0,
+		left: 0,
+		width: 0,
+		height: 0,
 	});
 
-	const fixedParentStyle = {
+	const fixedParentStyle: CSSProperties = {
 		position: 'absolute',
 		top: 0,
 		left: 0,
@@ -75,7 +84,7 @@
 		clip: 'rect(auto auto auto auto)',
 	};
 
-	const fixedChildStyle = computed(() => ({
+	const fixedChildStyle = computed<CSSProperties>(() => ({
 		position: 'absolute',
 		top: 0,
 		bottom: 0,
@@ -103,7 +112,10 @@
 			};
 		}
 
-		return 0;
+		return {
+			px: 0,
+			pct: 0,
+		};
 	});
 
 	const remainderHeight = computed(() => {
@@ -139,15 +151,15 @@
 		display.width = holder.scrollWidth || holder.innerWidth;
 		display.height = holder.scrollHeight || holder.innerHeight;
 
-		view.width = $el.value.clientWidth;
-		view.height = $el.value.clientHeight;
-		view.top = $el.value.offsetTop;
+		view.width = $el.value!.clientWidth;
+		view.height = $el.value!.clientHeight;
+		view.top = $el.value!.getBoundingClientRect().top + window.scrollY;
 
-		Object.assign(rsc.adaptToSize, display);
-		const coverSize = rsc.adaptedStyle;
+		rsc.displaySize.update(display);
+		const fillProps = rsc.fillProps.value;
 
-		background.width = coverSize.width;
-		background.height = coverSize.height;
+		background.width = fillProps.width!;
+		background.height = fillProps.height!;
 
 		style.defined.backgroundSize = `${background.width}px ${background.height}px`;
 		style.defined.backgroundPosition = `center 0`;
@@ -155,7 +167,7 @@
 		onScroll();
 	};
 
-	const moveBackgroundByPct = (pct) => {
+	const moveBackgroundByPct = (pct: number) => {
 		if (remainderHeight.value > 0)
 			pct =
 				(pct * offsetHeight.value.pct) / 100 +
@@ -166,17 +178,23 @@
 	};
 
 	const onScroll = () => {
-		if (rsc.status.value !== 'loaded' || (!isIos && props.type === 'fixed'))
+		if (!rsc.isLoaded() || (!isIos && props.type === 'fixed')) {
 			return;
+		}
 
-		const scrollTop =
-			holder.scrollY || holder.scrollTop || holder.pageYOffset || 0;
+		const scrollTop = holder.scrollY || holder.scrollTop || 0;
 
-		if (holder !== window) return handle.relative(scrollTop);
+		if (holder !== window) {
+			return handle.relative(scrollTop);
+		}
 
-		if (scrollTop + display.height < view.top) return;
+		if (scrollTop + display.height < view.top) {
+			return;
+		}
 
-		if (scrollTop > view.top + view.height) return;
+		if (scrollTop > view.top + view.height) {
+			return;
+		}
 
 		let positionY = scrollTop - view.top + display.height;
 
@@ -184,30 +202,35 @@
 	};
 
 	const handle = {
-		visible: (positionY) => {
+		visible: (positionY: number) => {
 			let pct = 0;
 
-			if (positionY < view.height) pct = 0;
-			else if (positionY > display.height) pct = 100;
-			else
+			if (positionY < view.height) {
+				pct = 0;
+			} else if (positionY > display.height) {
+				pct = 100;
+			} else {
 				pct =
 					((positionY - view.height) * 100) /
 					(display.height - view.height);
+			}
 
 			moveBackgroundByPct(pct);
 		},
 
-		relative: (positionY) => {
+		relative: (positionY: number) => {
 			let pct;
 
-			if (holder === window)
+			if (holder === window) {
 				pct = (positionY * 100) / (display.height + view.height);
-			else pct = (positionY * 100) / (display.height - holder.clientHeight);
+			} else {
+				pct = (positionY * 100) / (display.height - holder.clientHeight);
+			}
 
 			moveBackgroundByPct(pct);
 		},
 
-		fixed: (positionY) => {
+		fixed: (positionY: number) => {
 			style.defined.backgroundPositionY = positionY - display.height + 'px';
 		},
 	};
