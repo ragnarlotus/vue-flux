@@ -6,7 +6,7 @@ export default function useThumbs(displaySize: Size, player: Player) {
 	const size = computed<Size>(() => {
 		let { width, height } = displaySize.toRaw();
 
-		width = width / 4.2;
+		width = width! / 4.2;
 		height = (width * 90) / 160;
 
 		if (width > 160) {

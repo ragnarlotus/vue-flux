@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { CSSProperties, Ref } from 'vue';
+import { CSSProperties } from 'vue';
 
 export interface ComponentStyles {
 	base?: CSSProperties;

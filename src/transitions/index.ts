@@ -18,3 +18,26 @@ export { default as Blinds3D } from './Blinds3D/Blinds3D.vue';
 export { default as Round1 } from './Round1/Round1.vue';
 export { default as Round2 } from './Round2/Round2.vue';
 export { default as Explode } from './Explode/Explode.vue';
+
+export type { TransitionProps, TransitionConf } from './transition';
+
+export type { Conf as Blinds2DConf } from './Blinds2D/types';
+export type { Conf as Blinds3DConf } from './Blinds3D/types';
+export type { Conf as Blocks1Conf } from './Blocks1/types';
+export type { Conf as Blocks2Conf } from './Blocks2/types';
+export type { Conf as BookConf } from './Book/types';
+export type { Conf as CameraConf } from './Camera/types';
+export type { Conf as ConcentricConf } from './Concentric/types';
+export type { Conf as CubeConf } from './Cube/types';
+export type { Conf as ExplodeConf } from './Explode/types';
+export type { Conf as FadeConf } from './Fade/types';
+export type { Conf as FallConf } from './Fall/types';
+export type { Conf as KenburnConf } from './Kenburn/types';
+export type { Conf as Round1Conf } from './Round1/types';
+export type { Conf as Round2Conf } from './Round2/types';
+export type { Conf as SlideConf } from './Slide/types';
+export type { Conf as SwipeConf } from './Swipe/types';
+export type { Conf as WarpConf } from './Warp/types';
+export type { Conf as WaterfallConf } from './Waterfall/types';
+export type { Conf as WaveConf } from './Wave/types';
+export type { Conf as ZipConf } from './Zip/types';

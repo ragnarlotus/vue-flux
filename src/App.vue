@@ -70,7 +70,7 @@
 <template>
 	<main class="container mx-auto mb-4">
 		<VcParagraph
-			v-for="i of 2"
+			v-for="i of 12"
 			:key="'a' + i"
 			mode="fill"
 			style="margin: 24px 0"
@@ -110,7 +110,7 @@
 				:cols="5"
 			/> -->
 
-			<FluxComponents.VueFlux
+			<!-- 			<FluxComponents.VueFlux
 				ref="$vueFlux"
 				:transitions="transitions"
 				:rscs="rscs"
@@ -135,11 +135,19 @@
 				<template #index="indexProps">
 					<Complements.FluxIndex v-bind="indexProps" />
 				</template>
-			</FluxComponents.VueFlux>
+			</FluxComponents.VueFlux> -->
+
+			<div>
+				<FluxComponents.FluxParallax
+					type="fixed"
+					:rsc="rscs[0].resource"
+					style="height: 200px"
+				/>
+			</div>
 		</div>
 
 		<VcParagraph
-			v-for="i of 2"
+			v-for="i of 12"
 			:key="'b' + i"
 			mode="fill"
 			style="margin: 24px 0"

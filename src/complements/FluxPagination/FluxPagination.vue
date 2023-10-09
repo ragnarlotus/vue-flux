@@ -3,7 +3,7 @@
 	import { Resources } from '../../repositories';
 	import { ResourceIndex } from '../../repositories/Resources/types';
 	import { TransitionIndex } from '../../repositories/Transitions/types';
-	import { Resource } from '../../resources';
+	import { ResourceWithOptions } from '../../components';
 
 	export interface Props {
 		displayReady: boolean;
@@ -19,8 +19,8 @@
 		() => props.displayReady === true && props.resources.list.length > 0
 	);
 
-	const getTitle = (rsc: Resource) => {
-		return rsc.caption;
+	const getTitle = (rsc: ResourceWithOptions) => {
+		return rsc.resource.caption;
 	};
 
 	const getCssClass = (index: number) => {
@@ -92,7 +92,9 @@
 			border: 2px solid #fff;
 			border-radius: 50%;
 			background-color: rgba(0, 0, 0, 0.7);
-			transition: background-color 0.2s ease-in, border 0.2s ease-in;
+			transition:
+				background-color 0.2s ease-in,
+				border 0.2s ease-in;
 
 			&:hover {
 				border-color: black;
