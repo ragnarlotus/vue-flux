@@ -10,10 +10,10 @@
 
 This is an image slider developed with [Vuejs](https://vuejs.org/) 2 which comes with 20 cool transitions out of the box.
 
-![npm](https://img.shields.io/npm/v/vue-flux/latest.svg?style=flat-square)
+![npm](https://img.shields.io/npm/v/vue-flux/stable.svg?style=flat-square)
 ![npm](https://img.shields.io/npm/dt/vue-flux.svg?style=flat-square)
-![npm bundle size (minified)](https://img.shields.io/bundlephobia/min/vue-flux/latest.svg?style=flat-square)
-![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/vue-flux/latest.svg?style=flat-square)
+![npm bundle size (minified)](https://img.shields.io/bundlephobia/min/vue-flux/stable.svg?style=flat-square)
+![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/vue-flux/stable.svg?style=flat-square)
 ![GitHub issues](https://img.shields.io/github/issues-raw/deulos/vue-flux.svg?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)
 
