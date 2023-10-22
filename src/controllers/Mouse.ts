@@ -14,6 +14,10 @@ export default class Mouse {
 	}
 
 	toggle(config: Config, timers: Timers, over: boolean) {
+		if (config.autohideTime === 0) {
+			return;
+		}
+
 		this.isOver.value = over;
 
 		this[over ? 'over' : 'out'](config, timers);
