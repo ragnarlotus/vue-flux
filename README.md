@@ -34,7 +34,7 @@ This is an image slider developed with [Vuejs](https://vuejs.org/) 2 which comes
 Install and save the package.
 
 ``` bash
-npm install --save vue-flux
+npm install --save vue-flux@stable
 ```
 
 Add the component to the template. This one has all the complements, so you can remove the ones you don't want.
