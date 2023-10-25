@@ -13,6 +13,7 @@
 	import * as Repositories from '../../repositories';
 	import { FluxTransition } from '../';
 	import { Props, Config } from './types';
+	import { Directions } from '../../types';
 
 	const props = defineProps<Props>();
 
@@ -136,9 +137,16 @@
 	});
 
 	defineExpose({
-		show: player.show,
-		play: player.play,
-		stop: player.stop,
+		show: (
+			resourceIndex: number | Directions | undefined,
+			transitionIndex: number | Directions | undefined
+		) => player.show(resourceIndex, transitionIndex),
+		play: (
+			resourceIndex: number | Directions | undefined,
+			delay: number | undefined
+		) => player.play(resourceIndex, delay),
+		stop: (cancelTransition: boolean | undefined) =>
+			player.stop(cancelTransition),
 	});
 </script>
 

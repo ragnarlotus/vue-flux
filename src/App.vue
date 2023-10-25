@@ -110,7 +110,7 @@
 				:cols="5"
 			/> -->
 
-			<!-- 			<FluxComponents.VueFlux
+			<FluxComponents.VueFlux
 				ref="$vueFlux"
 				:transitions="transitions"
 				:rscs="rscs"
@@ -135,15 +135,22 @@
 				<template #index="indexProps">
 					<Complements.FluxIndex v-bind="indexProps" />
 				</template>
-			</FluxComponents.VueFlux> -->
+			</FluxComponents.VueFlux>
 
-			<div>
+			<!-- 			<div>
 				<FluxComponents.FluxParallax
 					type="fixed"
 					:rsc="rscs[0].resource"
 					style="height: 200px"
 				/>
 			</div>
+ -->
+
+			<p style="color: white">
+				<button type="button" @click="$vueFlux.show()">Next</button>
+				<button type="button" @click="$vueFlux.play()">Play</button>
+				<button type="button" @click="$vueFlux.stop()">Stop</button>
+			</p>
 		</div>
 
 		<VcParagraph
