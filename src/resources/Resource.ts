@@ -3,12 +3,12 @@ import Size from '../shared/Size';
 import ResizeCalculator from '../shared/ResizeCalculator';
 import Position from '../shared/Position';
 import {
-	DisplayParamenter,
+	DisplayParameter,
 	ResizedProps,
 	ResizeType,
-	ResourceStatus,
 	TransitionParameter,
 } from './types';
+import { ResourceStatus } from './';
 
 export default abstract class Resource {
 	src: string;
@@ -20,14 +20,14 @@ export default abstract class Resource {
 	displaySize: Size = new Size();
 	caption: string = '';
 	resizeType: ResizeType;
-	display: DisplayParamenter;
+	display: DisplayParameter;
 	transition: TransitionParameter;
 
 	constructor(
 		src: string,
 		caption: string,
 		resizeType: ResizeType = 'fill',
-		display: DisplayParamenter,
+		display: DisplayParameter,
 		transition: TransitionParameter,
 		errorMessage: string
 	) {

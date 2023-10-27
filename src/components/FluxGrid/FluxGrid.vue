@@ -1,13 +1,12 @@
 <script setup lang="ts">
 	import { ref, reactive, computed, Ref } from 'vue';
-	import useComponent from '../component';
-	import { GridProps as Props } from './types';
+	import useComponent from '../useComponent';
+	import { FluxGridProps } from './types';
 	import { FluxCube } from '../';
-	import { ComponentStyles } from '../../types';
-	import GridCreator from './GridCreator';
-	import { getRowNumber, getColNumber } from './GridTileCreator';
+	import { ComponentStyles } from '../types';
+	import { GridFactory, getRowNumber, getColNumber } from './factories';
 
-	const props = withDefaults(defineProps<Props>(), {
+	const props = withDefaults(defineProps<FluxGridProps>(), {
 		rows: 1,
 		cols: 1,
 		depth: 0,
@@ -31,7 +30,7 @@
 		props.rscs !== undefined ? FluxCube : props.rsc?.transition.component
 	);
 
-	const tiles = computed(() => GridCreator.getTilesProps(props));
+	const tiles = computed(() => GridFactory.getTilesProps(props));
 
 	const $tiles: Ref<any[]> = ref([]);
 

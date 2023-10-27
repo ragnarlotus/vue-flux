@@ -17,9 +17,8 @@
 	import Img from './resources/Img.js';
 	import { Display } from './controllers';
 	import Size from './shared/Size';
-	import { ResourceStatus } from './resources/types';
-	import { Turns } from './components/FluxCube/types';
-	import { ResourceWithOptions } from './components/VueFlux/types';
+	import { Turns } from './components/FluxCube';
+	import { ResourceStatus, ResourceWithOptions } from './resources';
 
 	const images = [];
 	for (let i = 1; i < 20; i++) {
@@ -146,10 +145,28 @@
 			</div>
  -->
 
-			<p style="color: white">
-				<button type="button" @click="$vueFlux.show()">Next</button>
-				<button type="button" @click="$vueFlux.play()">Play</button>
-				<button type="button" @click="$vueFlux.stop()">Stop</button>
+			<p style="margin-top: 32px; color: white">
+				<button
+					type="button"
+					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+					@click="$vueFlux.show()"
+				>
+					Next
+				</button>
+				<button
+					type="button"
+					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+					@click="$vueFlux.play()"
+				>
+					Play
+				</button>
+				<button
+					type="button"
+					class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+					@click="$vueFlux.stop()"
+				>
+					Stop
+				</button>
 			</p>
 		</div>
 

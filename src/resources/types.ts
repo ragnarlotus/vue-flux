@@ -1,4 +1,5 @@
 import { Component } from 'vue';
+import { Resource } from '.';
 
 /* eslint-disable no-unused-vars */
 export type ResizeType = 'fill' | 'fit';
@@ -10,14 +11,7 @@ export interface ResizedProps {
 	left: number;
 }
 
-export enum ResourceStatus {
-	notLoaded = 'notLoaded',
-	loading = 'loading',
-	loaded = 'loaded',
-	error = 'error',
-}
-
-export interface DisplayParamenter {
+export interface DisplayParameter {
 	component: Component;
 	props: {};
 }
@@ -25,4 +19,12 @@ export interface DisplayParamenter {
 export interface TransitionParameter {
 	component: Component;
 	props: {};
+}
+
+export interface ResourceWithOptions {
+	resource: Resource;
+	options: {
+		delay?: number;
+		stop?: boolean;
+	};
 }

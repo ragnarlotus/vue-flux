@@ -1,18 +1,16 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import useTransition, { TransitionProps } from '../transition';
+	import useTransition from '../useTransition';
 	import { FluxGrid } from '../../components';
-	import { Conf } from './types';
-	import { Directions } from '../../types';
-	import { Turns } from '../../components/FluxCube/types';
+	import { WaveProps, WaveConf } from './types';
+	import { Directions } from '../../controllers/Player';
+	import { Turns } from '../../components/FluxCube';
 
-	export interface Props extends TransitionProps {}
-
-	const props = defineProps<TransitionProps>();
+	const props = defineProps<WaveProps>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
-	const conf: Conf = reactive({
+	const conf: WaveConf = reactive({
 		rows: 1,
 		cols: 8,
 		tileDuration: 900,

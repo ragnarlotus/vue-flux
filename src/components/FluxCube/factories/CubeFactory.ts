@@ -4,11 +4,11 @@ import {
 	SidesResources,
 	SidesOffsets,
 	SidesProps,
-	Sides,
-} from './types';
-import CubeSideCreator from './CubeSideCreator';
-import SideTransformCreator from './SideTransformCreator';
-import { Position } from '../../shared';
+} from '../types';
+import CubeSideFactory from './CubeSideFactory';
+import SideTransformFactory from './SideTransformFactory';
+import { Position } from '../../../shared';
+import Sides from '../Sides';
 
 function isSideDefined(side: Side, colors: SidesColors, rscs: SidesResources) {
 	if (colors[side] !== undefined) {
@@ -28,9 +28,9 @@ function getDefinedSides(colors: SidesColors, rscs: SidesResources) {
 	);
 }
 
-export default class CubeCreator {
+export default class CubeFactory {
 	static getSidesProps(
-		sideTransformCreator: SideTransformCreator,
+		sideTransformFactory: SideTransformFactory,
 		colors: SidesColors,
 		rscs: SidesResources,
 		offsets: SidesOffsets,
@@ -40,8 +40,8 @@ export default class CubeCreator {
 		const props: SidesProps = {};
 
 		sides.forEach((side: Side) => {
-			props[side] = CubeSideCreator.getProps(
-				sideTransformCreator,
+			props[side] = CubeSideFactory.getProps(
+				sideTransformFactory,
 				side,
 				colors[side],
 				rscs[side],

@@ -1,10 +1,12 @@
 import { shallowReactive, nextTick, Ref, ref, Component } from 'vue';
-import { Directions, Direction } from '../../types';
+import { Direction } from './types';
+import Directions from './Directions';
 import { Resources, Transitions } from '../../repositories';
-import { Timers, PlayerResource, PlayerTransition } from '../';
+import { PlayerResource, PlayerTransition } from './';
 import { Config } from '../../components/VueFlux/types';
 import { ResourceIndex } from '../../repositories/Resources/types';
 import { TransitionIndex } from '../../repositories/Transitions/types';
+import Timers from '../Timers';
 
 export default class Player {
 	resource: PlayerResource;

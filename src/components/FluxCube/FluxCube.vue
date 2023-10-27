@@ -1,13 +1,13 @@
 <script setup lang="ts">
 	import { ref, reactive, computed } from 'vue';
-	import useComponent from '../component';
-	import { Props, Turn } from './types';
+	import useComponent from '../useComponent';
+	import { FluxCubeProps, Turn } from './types';
 	import { Size } from '../../shared';
-	import { ComponentStyles } from '../../types';
-	import SideTransformCreator from './SideTransformCreator';
-	import CubeCreator from './CubeCreator';
+	import { ComponentStyles } from '../types';
+	import SideTransformFactory from './factories/SideTransformFactory';
+	import CubeFactory from './factories/CubeFactory';
 
-	const props = withDefaults(defineProps<Props>(), {
+	const props = withDefaults(defineProps<FluxCubeProps>(), {
 		rscs: () => ({}),
 		colors: () => ({}),
 		offsets: () => ({}),
@@ -33,15 +33,15 @@
 		componentStyles
 	);
 
-	const sideTransformCreator = new SideTransformCreator(
+	const sideTransformFactory = new SideTransformFactory(
 		props.depth,
 		props.size,
 		props.viewSize
 	);
 
 	const sides = computed(() =>
-		CubeCreator.getSidesProps(
-			sideTransformCreator,
+		CubeFactory.getSidesProps(
+			sideTransformFactory,
 			props.colors,
 			props.rscs,
 			props.offsets,
@@ -50,7 +50,7 @@
 	);
 
 	const turn = (turn: Turn) =>
-		transform({ transform: sideTransformCreator.getRotate(turn) });
+		transform({ transform: sideTransformFactory.getRotate(turn) });
 
 	defineExpose({
 		setCss,

@@ -1,21 +1,19 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import useTransition, { TransitionProps } from '../transition';
+	import useTransition from '../useTransition';
 	import { FluxWrapper } from '../../components';
-	import { Conf } from './types';
-	import { ComponentProps } from '../../components/component';
+	import { SlideProps, SlideConf } from './types';
+	import { ComponentProps } from '../../components';
 	import { Size } from '../../shared';
-	import { Directions } from '../../types';
+	import { Directions } from '../../controllers/Player';
 
-	export interface Props extends TransitionProps {}
-
-	const props = defineProps<Props>();
+	const props = defineProps<SlideProps>();
 
 	const $wrapper: Ref<null | InstanceType<typeof FluxWrapper>> = ref(null);
 	const $left: Ref<null | any> = ref(null);
 	const $right: Ref<null | any> = ref(null);
 
-	const conf: Conf = reactive({
+	const conf: SlideConf = reactive({
 		totalDuration: 1400,
 		easing: 'ease-in-out',
 	});

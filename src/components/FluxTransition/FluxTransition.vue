@@ -8,19 +8,9 @@
 		nextTick,
 		Ref,
 	} from 'vue';
-	import { Size } from '../../shared';
-	import Resource from '../../resources/Resource';
+	import { FluxTransitionProps } from './types';
 
-	export interface Props {
-		size: Size;
-		transition: Object;
-		from: Resource;
-		to: Resource;
-		displayComponent: null | any;
-		options?: Object;
-	}
-
-	const props = withDefaults(defineProps<Props>(), {
+	const props = withDefaults(defineProps<FluxTransitionProps>(), {
 		options: () => ({}),
 	});
 

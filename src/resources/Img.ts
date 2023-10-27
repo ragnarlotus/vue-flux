@@ -1,12 +1,8 @@
 import FluxImage from '../components/FluxImage/FluxImage.vue';
 import Resource from './Resource';
 import Size from '../shared/Size';
-import {
-	DisplayParamenter,
-	ResizeType,
-	ResourceStatus,
-	TransitionParameter,
-} from './types';
+import { DisplayParameter, ResizeType, TransitionParameter } from './types';
+import ResourceStatus from './ResourceStatus';
 
 export default class Img extends Resource {
 	constructor(
@@ -14,7 +10,7 @@ export default class Img extends Resource {
 		caption: string = '',
 		resizeType: ResizeType = 'fill'
 	) {
-		const display: DisplayParamenter = {
+		const display: DisplayParameter = {
 			component: FluxImage,
 			props: {},
 		};

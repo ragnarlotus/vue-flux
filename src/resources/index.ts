@@ -1,10 +1,5 @@
 export { default as Resource } from './Resource';
 export { default as Img } from './Img';
+export { default as ResourceStatus } from './ResourceStatus';
 
-export type {
-	ResizeType,
-	ResizedProps,
-	ResourceStatus,
-	DisplayParamenter,
-	TransitionParameter,
-} from './types';
+export type * from './types';

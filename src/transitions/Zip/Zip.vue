@@ -1,17 +1,15 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
-	import useTransition, { TransitionProps } from '../transition';
+	import useTransition from '../useTransition';
 	import { FluxGrid } from '../../components';
-	import { Conf } from './types';
-	import { Directions } from '../../types';
+	import { ZipProps, ZipConf } from './types';
+	import { Directions } from '../../controllers/Player';
 
-	export interface Props extends TransitionProps {}
-
-	const props = defineProps<TransitionProps>();
+	const props = defineProps<ZipProps>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
-	const conf: Conf = reactive({
+	const conf: ZipConf = reactive({
 		rows: 1,
 		cols: 10,
 		tileDuration: 600,

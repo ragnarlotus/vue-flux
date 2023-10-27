@@ -1,16 +1,14 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import useTransition, { TransitionProps } from '../transition';
+	import useTransition from '../useTransition';
 	import { FluxGrid } from '../../components';
-	import { Conf } from './types';
+	import { Blinds3DProps, Blinds3DConf } from './types';
 
-	export interface Props extends TransitionProps {}
-
-	const props = defineProps<Props>();
+	const props = defineProps<Blinds3DProps>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
-	const conf: Conf = reactive({
+	const conf: Blinds3DConf = reactive({
 		rows: 1,
 		cols: 6,
 		tileDuration: 800,

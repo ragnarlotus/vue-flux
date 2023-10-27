@@ -1,18 +1,18 @@
-import { Position } from '../../shared';
-import { Resource } from '../../resources';
-import { Side, SideProps } from './types';
-import SideTransformCreator from './SideTransformCreator';
-import { FluxImage } from '..';
+import { Position } from '../../../shared';
+import { Resource } from '../../../resources';
+import { Side, SideProps } from '../types';
+import SideTransformFactory from './SideTransformFactory';
+import { FluxImage } from '../../';
 
-export default class CubeSideCreator {
+export default class CubeSideFactory {
 	static getProps(
-		sideTransformCreator: SideTransformCreator,
+		sideTransformFactory: SideTransformFactory,
 		side: Side,
 		color?: string,
 		rsc?: Resource,
 		offset?: Position
 	) {
-		const { depth, size, viewSize } = sideTransformCreator;
+		const { depth, size, viewSize } = sideTransformFactory;
 
 		const props: SideProps = {
 			name: side,
@@ -24,7 +24,7 @@ export default class CubeSideCreator {
 			offset: offset,
 			style: {
 				position: 'absolute',
-				transform: sideTransformCreator.getSideCss(side),
+				transform: sideTransformFactory.getSideCss(side),
 				backfaceVisibility: 'hidden',
 			},
 		};

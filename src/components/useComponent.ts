@@ -1,17 +1,6 @@
 import { computed, CSSProperties, Ref, unref } from 'vue';
-import Resource from '../resources/Resource';
 import Size from '../shared/Size';
-import { ComponentStyles } from '../types';
-import { Position } from '../shared';
-
-export interface ComponentProps {
-	color?: string;
-	rsc?: Resource;
-	size: Size;
-	viewSize?: Size;
-	offset?: Position;
-	css?: CSSProperties;
-}
+import { ComponentProps, ComponentStyles } from './types';
 
 export default function useComponent(
 	$el: Ref<null | HTMLElement>,

@@ -1,7 +1,7 @@
 import { Component, shallowReactive, toRaw } from 'vue';
-import { Directions, Direction } from '../../types';
+import { Directions, Direction } from '../../controllers/Player';
 import { TransitionIndex } from './types';
-import { TransitionWithOptions } from '../../components/VueFlux/types';
+import { TransitionWithOptions } from '../../transitions/types';
 
 export default class Transitions {
 	list: TransitionWithOptions[] = shallowReactive([]);

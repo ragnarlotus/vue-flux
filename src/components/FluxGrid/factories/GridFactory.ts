@@ -1,10 +1,10 @@
-import { Size } from '../../shared';
-import { ceil, floor } from '../../shared/Maths';
-import GridTileCreator from './GridTileCreator';
-import { GridProps, TileProps } from './types';
+import { Size } from '../../../shared';
+import { ceil, floor } from '../../../shared/Maths';
+import GridTileFactory from './GridTileFactory';
+import { FluxGridProps, FluxGridTileProps } from '../types';
 
-export default class GridCreator {
-	static getTilesProps(props: GridProps) {
+export default class GridFactory {
+	static getTilesProps(props: FluxGridProps) {
 		const { rows, cols, size, color, colors, rsc, rscs, depth } = props;
 
 		const numRows = ceil(rows!);
@@ -31,11 +31,11 @@ export default class GridCreator {
 			css: props.tileCss,
 		};
 
-		const tilesProps: TileProps[] = [];
+		const tilesProps: FluxGridTileProps[] = [];
 
 		for (let tileNumber = 0; tileNumber < grid.numTiles; tileNumber++) {
 			tile.number = tileNumber;
-			tilesProps.push(GridTileCreator.getProps(grid, tile));
+			tilesProps.push(GridTileFactory.getProps(grid, tile));
 		}
 
 		return tilesProps;

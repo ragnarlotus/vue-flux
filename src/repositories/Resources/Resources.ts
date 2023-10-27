@@ -2,9 +2,9 @@ import { Ref, ref, shallowReactive, toRaw } from 'vue';
 import ResourceLoader from '../../shared/ResourceLoader';
 import Resource from '../../resources/Resource';
 import { Size } from '../../shared';
-import { Direction, Directions } from '../../types';
+import { Direction, Directions } from '../../controllers/Player';
 import { ResourceIndex } from './types';
-import { ResourceWithOptions } from '../../components/VueFlux/types';
+import { ResourceWithOptions } from '../../resources';
 
 export default class Resources {
 	list: ResourceWithOptions[] = shallowReactive([]);
@@ -55,7 +55,7 @@ export default class Resources {
 		}
 
 		if (currentIndex === undefined) {
-			throw new ReferenceError('Missing currentIndex paramater');
+			throw new ReferenceError('Missing currentIndex parameter');
 		}
 
 		return this.getByOrder(by, currentIndex);

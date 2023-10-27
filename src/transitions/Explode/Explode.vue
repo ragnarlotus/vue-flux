@@ -1,17 +1,15 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import { floor } from '../../shared/Maths';
-	import useTransition, { TransitionProps } from '../transition';
+	import useTransition from '../useTransition';
 	import { FluxGrid } from '../../components';
-	import { Conf } from './types';
+	import { ExplodeProps, ExplodeConf } from './types';
 
-	export interface Props extends TransitionProps {}
-
-	const props = defineProps<Props>();
+	const props = defineProps<ExplodeProps>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
-	const conf: Conf = reactive({
+	const conf: ExplodeConf = reactive({
 		rows: 9,
 		cols: 9,
 		tileDuration: 300,

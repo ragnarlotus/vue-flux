@@ -1,12 +1,12 @@
 <script setup lang="ts">
 	import { ref, reactive, computed, CSSProperties } from 'vue';
-	import useComponent from '../component';
-	import { Props } from './types';
+	import useComponent from '../useComponent';
+	import { FluxImageProps } from './types';
 	import { Size } from '../../shared';
-	import { ComponentStyles } from '../../types';
-	import { ResourceStatus } from '../../resources/types';
+	import { ComponentStyles } from '../types';
+	import { ResourceStatus } from '../../resources';
 
-	const props = withDefaults(defineProps<Props>(), {
+	const props = withDefaults(defineProps<FluxImageProps>(), {
 		viewSize: () => new Size(),
 	});
 

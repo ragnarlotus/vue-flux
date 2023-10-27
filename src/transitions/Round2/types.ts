@@ -1,6 +1,8 @@
-import { TransitionConf } from '../transition';
+import { TransitionConf, TransitionProps } from '../types';
 
-export interface Conf extends TransitionConf {
+export interface Round2Props extends TransitionProps {}
+
+export interface Round2Conf extends TransitionConf {
 	rows: number | null;
 	cols: number;
 	tileDuration: number;

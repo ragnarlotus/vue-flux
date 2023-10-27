@@ -1,15 +1,13 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import useTransition, { TransitionProps } from '../transition';
-	import { Conf } from './types';
+	import useTransition from '../useTransition';
+	import { FallProps, FallConf } from './types';
 
-	export interface Props extends TransitionProps {}
-
-	const props = defineProps<Props>();
+	const props = defineProps<FallProps>();
 
 	const $from: Ref<null | any> = ref(null);
 
-	const conf: Conf = reactive({
+	const conf: FallConf = reactive({
 		totalDuration: 1600,
 		easing: 'ease-in',
 	});

@@ -1,5 +1,7 @@
 import { Component } from 'vue';
 import { Resource } from '../../resources';
+import { ResourceWithOptions } from '../../resources';
+import { TransitionWithOptions } from '../../transitions';
 
 export interface Options {
 	allowFullscreen?: boolean;
@@ -13,16 +15,6 @@ export interface Options {
 	infinite?: boolean;
 	lazyLoad?: boolean;
 	lazyLoadAfter?: number;
-}
-
-export interface ResourceWithOptions {
-	resource: Resource;
-	options: object;
-}
-
-export interface TransitionWithOptions {
-	component: Component;
-	options: object;
 }
 
 export interface Props {

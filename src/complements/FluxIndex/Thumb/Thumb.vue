@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { Ref } from 'vue';
 	import { Resource } from '../../../resources';
-	import Size from '../../../shared/Size';
+	import { Size } from '../../../shared';
 
 	export interface Props {
 		rsc: Resource;

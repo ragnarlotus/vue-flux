@@ -7,20 +7,19 @@
 		computed,
 		watch,
 		Ref,
-		ComponentPublicInstance,
 	} from 'vue';
 	import * as Controllers from '../../controllers';
 	import * as Repositories from '../../repositories';
 	import { FluxTransition } from '../';
 	import { Props, Config } from './types';
-	import { Directions } from '../../types';
+	import type { Component } from 'vue';
 
 	const props = defineProps<Props>();
 
 	const $container: Ref<null | HTMLDivElement> = ref(null);
 	const $transition: Ref<null | InstanceType<typeof FluxTransition>> =
 		ref(null);
-	const $displayComponent: Ref<null | ComponentPublicInstance> = ref(null);
+	const $displayComponent: Ref<null | Component> = ref(null);
 
 	const config: Config = reactive({
 		allowFullscreen: false,
@@ -137,16 +136,9 @@
 	});
 
 	defineExpose({
-		show: (
-			resourceIndex: number | Directions | undefined,
-			transitionIndex: number | Directions | undefined
-		) => player.show(resourceIndex, transitionIndex),
-		play: (
-			resourceIndex: number | Directions | undefined,
-			delay: number | undefined
-		) => player.play(resourceIndex, delay),
-		stop: (cancelTransition: boolean | undefined) =>
-			player.stop(cancelTransition),
+		show: player.show.bind(player),
+		play: player.play.bind(player),
+		stop: player.stop.bind(player),
 	});
 </script>
 

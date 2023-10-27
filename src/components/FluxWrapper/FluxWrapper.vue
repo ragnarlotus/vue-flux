@@ -1,9 +1,10 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
-	import useComponent, { ComponentProps } from '../component';
-	import { ComponentStyles } from '../../types';
+	import useComponent from '../useComponent';
+	import { ComponentStyles } from '../types';
+	import { FluxWrapperProps } from './types';
 
-	const props = defineProps<ComponentProps>();
+	const props = defineProps<FluxWrapperProps>();
 
 	const $el: Ref<null | HTMLDivElement> = ref(null);
 

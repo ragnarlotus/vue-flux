@@ -12,20 +12,13 @@
 		CSSProperties,
 	} from 'vue';
 	import { ceil, aspectRatio } from '../../shared/Maths';
-	import { Resource } from '../../resources';
+	import { FluxParallaxProps } from './types';
 
 	declare const window: Window & {
 		MSStream: any;
 	};
 
-	export interface Props {
-		rsc: Resource;
-		holder?: any;
-		type?: 'visible' | 'relative' | 'fixed';
-		offset?: string;
-	}
-
-	const props = withDefaults(defineProps<Props>(), {
+	const props = withDefaults(defineProps<FluxParallaxProps>(), {
 		holder: () => window,
 		type: 'relative',
 		offset: '100%',

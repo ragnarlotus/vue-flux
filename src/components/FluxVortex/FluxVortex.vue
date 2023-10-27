@@ -1,18 +1,12 @@
 <script setup lang="ts">
-	import { ref, reactive, computed, CSSProperties, Ref } from 'vue';
+	import { ref, reactive, computed, Ref } from 'vue';
 	import { round, ceil, diag } from '../../shared/Maths';
-	import useComponent, { ComponentProps } from '../component';
-	import { Resource } from '../../resources';
+	import useComponent from '../useComponent';
 	import { Position } from '../../shared';
-	import { ComponentStyles } from '../../types';
+	import { ComponentStyles } from '../types';
+	import { FluxVortexProps } from './types';
 
-	export interface Props extends ComponentProps {
-		rsc: Resource;
-		circles?: number;
-		tileCss?: CSSProperties;
-	}
-
-	const props = withDefaults(defineProps<Props>(), {
+	const props = withDefaults(defineProps<FluxVortexProps>(), {
 		circles: 1,
 	});
 

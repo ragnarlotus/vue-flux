@@ -1,18 +1,16 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import { floor } from '../../shared/Maths';
-	import useTransition, { TransitionProps } from '../transition';
+	import useTransition from '../useTransition';
 	import { FluxGrid } from '../../components';
-	import { Conf } from './types';
-	import { Directions } from '../../types';
+	import { Round2Props, Round2Conf } from './types';
+	import { Directions } from '../../controllers/Player';
 
-	export interface Props extends TransitionProps {}
-
-	const props = defineProps<Props>();
+	const props = defineProps<Round2Props>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
-	const conf: Conf = reactive({
+	const conf: Round2Conf = reactive({
 		rows: null,
 		cols: 9,
 		tileDuration: 800,

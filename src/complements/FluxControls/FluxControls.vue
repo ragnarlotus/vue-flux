@@ -3,7 +3,7 @@
 	import { Config } from '../../components/VueFlux/types';
 	import { ResourceIndex } from '../../repositories/Resources/types';
 	import { Player } from '../../controllers';
-	import { Directions } from '../../types';
+	import { Directions } from '../../controllers/Player';
 	import * as Buttons from './buttons';
 
 	export interface Props {

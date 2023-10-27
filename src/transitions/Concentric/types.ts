@@ -1,6 +1,8 @@
-import { TransitionConf } from '../transition';
+import { TransitionConf, TransitionProps } from '../types';
 
-export interface Conf extends TransitionConf {
+export interface ConcentricProps extends TransitionProps {}
+
+export interface ConcentricConf extends TransitionConf {
 	circles: number;
 	tileDuration: number;
 	tileDelay: number;

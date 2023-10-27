@@ -1,5 +1,5 @@
 import { Config } from '../components/VueFlux/types';
-import { Directions } from '../types';
+import { Directions } from '../controllers/Player';
 import Display from './Display';
 import Mouse from './Mouse';
 import Player from './Player/Player';

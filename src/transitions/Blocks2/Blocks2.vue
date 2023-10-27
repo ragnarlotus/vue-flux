@@ -1,18 +1,16 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
-	import useTransition, { TransitionProps } from '../transition';
+	import useTransition from '../useTransition';
 	import { FluxGrid } from '../../components';
-	import { Conf } from './types';
-	import { Directions } from '../../types';
+	import { Blocks2Props, Blocks2Conf } from './types';
+	import { Directions } from '../../controllers/Player';
 
-	export interface Props extends TransitionProps {}
-
-	const props = defineProps<Props>();
+	const props = defineProps<Blocks2Props>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 	const $background: Ref<null | any> = ref(null);
 
-	const conf: Conf = reactive({
+	const conf: Blocks2Conf = reactive({
 		rows: 8,
 		cols: 8,
 		tileDuration: 800,

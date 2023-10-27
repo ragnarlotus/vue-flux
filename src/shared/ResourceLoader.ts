@@ -1,7 +1,7 @@
 import { Ref, ref } from 'vue';
 import { ceil } from './Maths';
 import Size from './Size';
-import { ResourceWithOptions } from '../components/VueFlux/types';
+import { ResourceWithOptions } from '../resources';
 
 export default class ResourceLoader {
 	rscs: ResourceWithOptions[] = [];

@@ -1,6 +1,6 @@
 import { Ref, computed } from 'vue';
-import { Size } from '../../shared';
-import { Side, Turn } from './types';
+import { Size } from '../../../shared';
+import { Side, Turn } from '../types';
 
 const rotate: any = {
 	x: {
@@ -29,7 +29,7 @@ const translate: any = {
 	},
 };
 
-export default class SideTransformCreator {
+export default class SideTransformFactory {
 	depth: number;
 	size: Size;
 	viewSize: Size;

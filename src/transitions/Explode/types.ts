@@ -1,6 +1,8 @@
-import { TransitionConf } from '../transition';
+import { TransitionConf, TransitionProps } from '../types';
 
-export interface Conf extends TransitionConf {
+export interface ExplodeProps extends TransitionProps {}
+
+export interface ExplodeConf extends TransitionConf {
 	rows: number;
 	cols: number;
 	tileDuration: number;

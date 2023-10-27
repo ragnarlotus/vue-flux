@@ -1,16 +1,14 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
-	import useTransition, { TransitionProps } from '../transition';
+	import useTransition from '../useTransition';
 	import { FluxVortex } from '../../components';
-	import { Conf } from './types';
+	import { ConcentricProps, ConcentricConf } from './types';
 
-	export interface Props extends TransitionProps {}
-
-	const props = defineProps<Props>();
+	const props = defineProps<ConcentricProps>();
 
 	const $vortex: Ref<null | InstanceType<typeof FluxVortex>> = ref(null);
 
-	const conf: Conf = reactive({
+	const conf: ConcentricConf = reactive({
 		circles: 7,
 		tileDuration: 800,
 		easing: 'linear',

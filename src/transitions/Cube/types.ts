@@ -1,3 +1,5 @@
-import { TransitionConf } from '../transition';
+import { TransitionConf, TransitionProps } from '../types';
 
-export interface Conf extends TransitionConf {}
+export interface CubeProps extends TransitionProps {}
+
+export interface CubeConf extends TransitionConf {}

@@ -3,7 +3,7 @@
 	import { Resources } from '../../repositories';
 	import { ResourceIndex } from '../../repositories/Resources/types';
 	import { TransitionIndex } from '../../repositories/Transitions/types';
-	import { ResourceWithOptions } from '../../components';
+	import { ResourceWithOptions } from '../../resources';
 
 	export interface Props {
 		displayReady: boolean;

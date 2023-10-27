@@ -1,17 +1,15 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import useTransition, { TransitionProps } from '../transition';
+	import useTransition from '../useTransition';
 	import { FluxCube } from '../../components';
-	import { Conf } from './types';
-	import { Turns } from '../../components/FluxCube/types';
+	import { CubeProps, CubeConf } from './types';
+	import { Turns } from '../../components/FluxCube';
 
-	export interface Props extends TransitionProps {}
-
-	const props = defineProps<Props>();
+	const props = defineProps<CubeProps>();
 
 	const $cube: Ref<null | InstanceType<typeof FluxCube>> = ref(null);
 
-	const conf: Conf = reactive({
+	const conf: CubeConf = reactive({
 		totalDuration: 1400,
 		easing: 'ease-out',
 	});

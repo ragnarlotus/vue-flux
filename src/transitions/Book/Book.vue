@@ -1,20 +1,18 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import { ceil } from '../../shared/Maths';
-	import useTransition, { TransitionProps } from '../transition';
+	import useTransition from '../useTransition';
 	import { FluxCube } from '../../components';
-	import { Conf } from './types';
+	import { BookProps, BookConf } from './types';
 	import { Position, Size } from '../../shared';
 	import { SidesOffsets } from '../../components/FluxCube/types';
 
-	export interface Props extends TransitionProps {}
-
-	const props = defineProps<Props>();
+	const props = defineProps<BookProps>();
 
 	const $from: Ref<null | any> = ref(null);
 	const $cube: Ref<null | InstanceType<typeof FluxCube>> = ref(null);
 
-	const conf: Conf = reactive({
+	const conf: BookConf = reactive({
 		totalDuration: 1200,
 		easing: 'ease-out',
 	});

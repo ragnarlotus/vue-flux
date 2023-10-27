@@ -2,9 +2,9 @@ import { CSSProperties } from 'vue';
 import { Position, Size } from '../../shared';
 import { Resource } from '../../resources';
 import { SidesColors, SidesResources } from '../FluxCube/types';
-import { ComponentProps } from '../component';
+import { ComponentProps } from '../types';
 
-export interface GridProps extends ComponentProps {
+export interface FluxGridProps extends ComponentProps {
 	colors?: SidesColors;
 	rscs?: SidesResources;
 	rows?: number;
@@ -13,7 +13,7 @@ export interface GridProps extends ComponentProps {
 	tileCss?: CSSProperties;
 }
 
-export interface TileProps {
+export interface FluxGridTileProps {
 	color?: string;
 	colors?: SidesColors;
 	rsc?: Resource;

@@ -1,15 +1,13 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import useTransition, { TransitionProps } from '../transition';
-	import { Conf } from './types';
+	import useTransition from '../useTransition';
+	import { FadeProps, FadeConf } from './types';
 
-	export interface Props extends TransitionProps {}
-
-	const props = defineProps<Props>();
+	const props = defineProps<FadeProps>();
 
 	const $from: Ref<null | any> = ref(null);
 
-	const conf: Conf = reactive({
+	const conf: FadeConf = reactive({
 		totalDuration: 1200,
 		easing: 'ease-in',
 	});

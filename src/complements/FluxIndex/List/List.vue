@@ -4,7 +4,7 @@
 	import { Resources } from '../../../repositories';
 	import Thumb from '../Thumb/Thumb.vue';
 	import Size from '../../../shared/Size';
-	import useThumbs from '../Thumb/thumbs';
+	import useThumbs from '../Thumb/useThumbs';
 
 	export interface Props {
 		displaySize: Size;

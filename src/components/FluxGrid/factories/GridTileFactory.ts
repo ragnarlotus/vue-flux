@@ -1,9 +1,9 @@
 import { CSSProperties } from 'vue';
-import { Resource } from '../../resources';
-import { Size, Position } from '../../shared';
-import { SidesColors, SidesResources } from '../FluxCube/types';
-import { TileProps } from './types';
-import { floor } from '../../shared/Maths';
+import { Resource } from '../../../resources';
+import { Size, Position } from '../../../shared';
+import { SidesColors, SidesResources } from '../../FluxCube/types';
+import { FluxGridTileProps } from '../types';
+import { floor } from '../../../shared/Maths';
 
 export function getRowNumber(tileNumber: number, numCols: number) {
 	return floor(tileNumber / numCols);
@@ -13,7 +13,7 @@ export function getColNumber(tileNumber: number, numCols: number) {
 	return tileNumber % numCols;
 }
 
-export default class GridTileCreator {
+export default class GridTileFactory {
 	static getProps(
 		grid: {
 			numRows: number;
@@ -37,7 +37,7 @@ export default class GridTileCreator {
 		const row = getRowNumber(tile.number, grid.numCols);
 		const col = getColNumber(tile.number, grid.numCols);
 
-		const props: TileProps = {
+		const props: FluxGridTileProps = {
 			color: grid.color,
 			colors: grid.colors,
 			rsc: grid.rsc,

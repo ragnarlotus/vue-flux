@@ -2,23 +2,16 @@
 import { CSSProperties } from 'vue';
 import Resource from '../../resources/Resource';
 import { Position, Size } from '../../shared';
-import { ComponentProps } from '../component';
+import { ComponentProps } from '../types';
+import Sides from './Sides';
+import Turns from './Turns';
 
-export interface Props extends ComponentProps {
+export interface FluxCubeProps extends ComponentProps {
 	colors?: SidesColors;
 	rscs?: SidesResources;
 	offsets?: SidesOffsets;
 	depth?: number;
 	origin?: string;
-}
-
-export enum Sides {
-	front = 'front',
-	back = 'back',
-	left = 'left',
-	right = 'right',
-	top = 'top',
-	bottom = 'bottom',
 }
 
 export type Side =
@@ -28,17 +21,6 @@ export type Side =
 	| Sides.right
 	| Sides.top
 	| Sides.bottom;
-
-export enum Turns {
-	front = 'front',
-	back = 'back',
-	backr = 'backr',
-	backl = 'backl',
-	left = 'left',
-	right = 'right',
-	top = 'top',
-	bottom = 'bottom',
-}
 
 export type Turn =
 	| Turns.front
