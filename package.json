@@ -1,12 +1,12 @@
 {
 	"name": "vue-flux",
 	"type": "module",
-	"version": "7.0.0-alpha.7",
+	"version": "7.0.0-alpha.10",
 	"description": "Vue image slider",
 	"author": "ragnar lotus",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ragnarlotus/vue-flux"
+		"url": "git+https://github.com/ragnarlotus/vue-flux.git"
 	},
 	"keywords": [
 		"vue",
@@ -39,28 +39,28 @@
 		"./style.css": "./dist/style.css"
 	},
 	"dependencies": {
-		"vue": "^3.3.6"
+		"vue": "^3.3.7"
 	},
 	"devDependencies": {
-		"@typescript-eslint/parser": "^6.8.0",
+		"@typescript-eslint/parser": "^6.9.0",
 		"@vitejs/plugin-vue": "^4.4.0",
-		"@vue/compiler-sfc": "^3.3.6",
+		"@vue/compiler-sfc": "^3.3.7",
 		"@vue/test-utils": "^2.4.1",
 		"autoprefixer": "^10.4.16",
 		"eslint": "^8.52.0",
 		"eslint-config-prettier": "^9.0.0",
-		"eslint-plugin-jest": "^27.4.3",
-		"eslint-plugin-vue": "^9.17.0",
+		"eslint-plugin-jest": "^27.6.0",
+		"eslint-plugin-vue": "^9.18.1",
 		"jest": "^29.7.0",
 		"postcss": "^8.4.31",
 		"prettier": "^3.0.3",
-		"sass": "^1.69.4",
-		"tailwindcss": "^3.3.3",
+		"sass": "^1.69.5",
+		"tailwindcss": "^3.3.5",
 		"typescript": "^5.2.2",
 		"vite": "^4.5.0",
-		"vite-plugin-dts": "^3.6.0",
+		"vite-plugin-dts": "^3.6.2",
 		"vue-cosk": "^1.0.0",
-		"vue-tsc": "^1.8.19"
+		"vue-tsc": "^1.8.22"
 	},
 	"peerDependencies": {
 		"vue": "^3.0.0"
