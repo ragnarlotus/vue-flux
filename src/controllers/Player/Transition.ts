@@ -1,5 +1,4 @@
-import TransitionsRepository from '../../repositories/Transitions/Transitions';
-import { TransitionIndex } from '../../repositories/Transitions/types';
+import { Transitions, TransitionIndex } from '../../repositories';
 
 export default class PlayerTransition {
 	current: TransitionIndex | null = null;
@@ -10,7 +9,7 @@ export default class PlayerTransition {
 		this.last = null;
 	}
 
-	init(transitions: TransitionsRepository) {
+	init(transitions: Transitions) {
 		this.last = transitions.getLast();
 	}
 }

@@ -1,18 +1,21 @@
 import { Component, nextTick, Ref } from 'vue';
 import Size from '../shared/Size';
-import { Config } from '../components/VueFlux/types';
+import { VueFluxConfig } from '../components/VueFlux/types';
 
 export default class Display {
 	node: Ref<null | HTMLElement | Component>;
-	config: Config | null;
+	config: VueFluxConfig | null;
+	emit: null | Function = null;
 	size: Size = new Size();
 
 	constructor(
 		node: Ref<null | HTMLElement | Component>,
-		config: Config | null = null
+		config: VueFluxConfig | null = null,
+		emit: null | Function = null
 	) {
 		this.node = node;
 		this.config = config;
+		this.emit = emit;
 	}
 
 	static async getSize(node: Ref<null | HTMLElement | Component>) {
@@ -78,10 +81,18 @@ export default class Display {
 			return;
 		}
 
-		(this.node.value as HTMLElement).requestFullscreen();
+		await (this.node.value as HTMLElement).requestFullscreen();
+
+		if (this.emit !== null) {
+			this.emit('fullscreen-enter');
+		}
 	}
 
 	async exitFullScreen() {
-		document.exitFullscreen();
+		await document.exitFullscreen();
+
+		if (this.emit !== null) {
+			this.emit('fullscreen-exit');
+		}
 	}
 }

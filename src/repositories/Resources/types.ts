@@ -5,5 +5,6 @@ export interface ResourceIndex {
 	rsc: Resource;
 	options: {
 		delay?: number;
+		stop?: boolean;
 	};
 }

@@ -47,7 +47,7 @@
 	const rscs = shallowReactive(images);
 	const options = shallowReactive({
 		allowFullscreen: true,
-		autoplay: true,
+		autoplay: false,
 		bindKeys: true,
 		infinite: true,
 		lazyLoadAfter: 10,

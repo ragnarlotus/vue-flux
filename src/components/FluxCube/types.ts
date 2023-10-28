@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { CSSProperties } from 'vue';
-import Resource from '../../resources/Resource';
+import { Resource } from '../../resources';
 import { Position, Size } from '../../shared';
 import { ComponentProps } from '../types';
 import Sides from './Sides';

@@ -1,4 +1,4 @@
-import { Config } from '../components/VueFlux/types';
+import { VueFluxConfig } from '../components/VueFlux/types';
 import { Directions } from '../controllers/Player';
 import Display from './Display';
 import Mouse from './Mouse';
@@ -23,7 +23,7 @@ export default class Touches {
 	// Distance in percentage to trigger slide
 	slideTrigger = 0.3;
 
-	start(event: TouchEvent, config: Config) {
+	start(event: TouchEvent, config: VueFluxConfig) {
 		if (!config.enableGestures) {
 			return;
 		}
@@ -35,7 +35,7 @@ export default class Touches {
 
 	end(
 		event: TouchEvent,
-		config: Config,
+		config: VueFluxConfig,
 		player: Player,
 		display: Display,
 		timers: Timers,

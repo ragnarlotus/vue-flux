@@ -12,7 +12,7 @@
 <template>
 	<div class="preloader">
 		<slot name="spinner">
-			<div v-if="loader.value?.preloading.length" class="spinner">
+			<div v-if="loader.value?.preLoading.length" class="spinner">
 				<div class="pct">{{ loader.value?.progress }}%</div>
 				<div class="border" />
 			</div>

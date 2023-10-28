@@ -1,26 +1,29 @@
 import { shallowReactive, nextTick, Ref, ref, Component } from 'vue';
-import { Direction } from './types';
-import Directions from './Directions';
-import { Resources, Transitions } from '../../repositories';
-import { PlayerResource, PlayerTransition } from './';
-import { Config } from '../../components/VueFlux/types';
-import { ResourceIndex } from '../../repositories/Resources/types';
-import { TransitionIndex } from '../../repositories/Transitions/types';
+import {
+	Resources,
+	Transitions,
+	ResourceIndex,
+	TransitionIndex,
+} from '../../repositories';
+import { PlayerResource, PlayerTransition, Directions, Direction } from './';
+import { VueFluxConfig } from '../../components/VueFlux/types';
 import Timers from '../Timers';
 
 export default class Player {
 	resource: PlayerResource;
 	transition: PlayerTransition;
 
-	config: Config;
+	config: VueFluxConfig;
 	timers: Timers;
+	emit: Function;
 	transitions: Transitions | null = null;
 	resources: Resources | null = null;
 	$displayComponent: Ref<null | Component> = ref(null);
 
-	constructor(config: Config, timers: Timers) {
+	constructor(config: VueFluxConfig, timers: Timers, emit: Function) {
 		this.config = config;
 		this.timers = timers;
+		this.emit = emit;
 
 		this.resource = shallowReactive(new PlayerResource());
 		this.transition = shallowReactive(new PlayerTransition());
@@ -54,9 +57,11 @@ export default class Player {
 				this.show(resourceIndex);
 			}
 		);
+
+		this.emit('play', resourceIndex, delay);
 	}
 
-	stop(cancelTransition: boolean = false) {
+	async stop(cancelTransition: boolean = false) {
 		const { config, timers } = this;
 
 		config.autoplay = false;
@@ -64,8 +69,10 @@ export default class Player {
 		timers.clear('transition');
 
 		if (this.transition.current !== null && cancelTransition === true) {
-			this.end(cancelTransition);
+			await this.end(cancelTransition);
 		}
+
+		this.emit('stop');
 	}
 
 	isReadyToShow() {
@@ -154,10 +161,13 @@ export default class Player {
 		}
 
 		this.transition.current = transition;
+
+		this.emit('show', this.resource, this.transition);
 	}
 
 	start() {
 		this.resource.current = this.resource.to;
+		this.emit('transition-start', this.resource, this.transition);
 	}
 
 	async end(cancel: boolean = false) {
@@ -172,10 +182,22 @@ export default class Player {
 
 		await nextTick();
 
+		this.emit(
+			cancel ? 'transition-cancel' : 'transition-end',
+			this.resource,
+			this.transition
+		);
+
 		if (
 			config.infinite === false &&
-			resource.current.index >= resources.list.length - 1
+			resource.current.index >= resources.list.length - 1 &&
+			config.autoplay === true
 		) {
+			this.stop();
+			return;
+		}
+
+		if (resource.current.options.stop === true) {
 			this.stop();
 			return;
 		}

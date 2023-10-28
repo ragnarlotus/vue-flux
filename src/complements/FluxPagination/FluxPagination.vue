@@ -1,12 +1,13 @@
 <script setup lang="ts">
 	import { computed } from 'vue';
-	import { Resources } from '../../repositories';
-	import { ResourceIndex } from '../../repositories/Resources/types';
-	import { TransitionIndex } from '../../repositories/Transitions/types';
+	import {
+		Resources,
+		ResourceIndex,
+		TransitionIndex,
+	} from '../../repositories';
 	import { ResourceWithOptions } from '../../resources';
 
 	export interface Props {
-		displayReady: boolean;
 		resources: Resources;
 		currentResource: null | ResourceIndex;
 		currentTransition: null | TransitionIndex;
@@ -15,9 +16,7 @@
 
 	const props = defineProps<Props>();
 
-	const visible = computed<boolean>(
-		() => props.displayReady === true && props.resources.list.length > 0
-	);
+	const visible = computed<boolean>(() => props.resources.list.length > 0);
 
 	const getTitle = (rsc: ResourceWithOptions) => {
 		return rsc.resource.caption;

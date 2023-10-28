@@ -1,13 +1,12 @@
 <script setup lang="ts">
 	import { Ref, computed } from 'vue';
-	import { Config } from '../../components/VueFlux/types';
-	import { ResourceIndex } from '../../repositories/Resources/types';
-	import { Player } from '../../controllers';
-	import { Directions } from '../../controllers/Player';
+	import { VueFluxConfig } from '../../components/VueFlux/types';
+	import { ResourceIndex } from '../../repositories';
+	import { Player, Directions } from '../../controllers/Player';
 	import * as Buttons from './buttons';
 
 	export interface Props {
-		config: Config;
+		config: VueFluxConfig;
 		currentResource: null | ResourceIndex;
 		mouseOver: Ref<boolean>;
 		player: Player;

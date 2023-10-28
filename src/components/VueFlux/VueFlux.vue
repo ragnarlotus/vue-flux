@@ -11,17 +11,19 @@
 	import * as Controllers from '../../controllers';
 	import * as Repositories from '../../repositories';
 	import { FluxTransition } from '../';
-	import { Props, Config } from './types';
+	import { VueFluxProps, VueFluxEmits, VueFluxConfig } from './types';
 	import type { Component } from 'vue';
 
-	const props = defineProps<Props>();
+	const props = defineProps<VueFluxProps>();
+
+	const emit = defineEmits<VueFluxEmits>();
 
 	const $container: Ref<null | HTMLDivElement> = ref(null);
 	const $transition: Ref<null | InstanceType<typeof FluxTransition>> =
 		ref(null);
 	const $displayComponent: Ref<null | Component> = ref(null);
 
-	const config: Config = reactive({
+	const config: VueFluxConfig = reactive({
 		allowFullscreen: false,
 		allowToSkipTransition: true,
 		aspectRatio: '16:9',
@@ -36,10 +38,10 @@
 	});
 
 	const timers = new Controllers.Timers();
-	const player = new Controllers.Player(config, timers);
-	const resources = new Repositories.Resources();
+	const player = new Controllers.Player(config, timers, emit);
+	const resources = new Repositories.Resources(emit);
 	const transitions = new Repositories.Transitions();
-	const display = new Controllers.Display($container, config);
+	const display = new Controllers.Display($container, config, emit);
 	const keys = new Controllers.Keys(config, player);
 	const mouse = new Controllers.Mouse();
 	const touches = new Controllers.Touches();
@@ -52,7 +54,11 @@
 
 	watch(
 		() => props.options,
-		() => setup()
+		() => {
+			setup();
+
+			emit('options-updated');
+		}
 	);
 
 	watch(
@@ -60,7 +66,7 @@
 		async () => {
 			const wasPlaying = config.autoplay;
 
-			await player.stop(true);
+			player.stop(true);
 			player.resource.reset();
 
 			const numToPreload = config.lazyLoad
@@ -92,6 +98,8 @@
 			if (wasPlaying === true) {
 				player.play();
 			}
+
+			emit('transitions-updated');
 		}
 	);
 
@@ -112,12 +120,16 @@
 		if (config.autoplay === true) {
 			player.play();
 		}
+
+		emit('mounted');
 	});
 
 	onUnmounted(() => {
 		timers.clear();
 		display.removeResizeListener();
 		keys.removeKeyListener();
+
+		emit('unmounted');
 	});
 
 	const style = computed(() => {
@@ -140,6 +152,8 @@
 		play: player.play.bind(player),
 		stop: player.stop.bind(player),
 	});
+
+	emit('created');
 </script>
 
 <template>
@@ -213,7 +227,6 @@
 
 			<slot
 				name="pagination"
-				:display-ready="display.size.isValid()"
 				:resources="resources"
 				:current-resource="player.resource.current"
 				:current-transition="player.transition.current"

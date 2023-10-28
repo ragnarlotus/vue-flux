@@ -50,7 +50,9 @@
 
 		await nextTick();
 
-		$transition.value.onPlay();
+		if ($transition.value !== null) {
+			$transition.value.onPlay();
+		}
 
 		setTimeout(() => {
 			emit('end', {

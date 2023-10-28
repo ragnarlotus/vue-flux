@@ -1,14 +1,17 @@
 import { Ref, ref, shallowReactive, toRaw } from 'vue';
-import ResourceLoader from '../../shared/ResourceLoader';
-import Resource from '../../resources/Resource';
-import { Size } from '../../shared';
+import { Resource, ResourceWithOptions } from '../../resources';
+import { Size, ResourceLoader } from '../../shared';
 import { Direction, Directions } from '../../controllers/Player';
 import { ResourceIndex } from './types';
-import { ResourceWithOptions } from '../../resources';
 
 export default class Resources {
 	list: ResourceWithOptions[] = shallowReactive([]);
 	loader: Ref<ResourceLoader | null> = ref(null);
+	emit: Function;
+
+	constructor(emit: Function) {
+		this.emit = emit;
+	}
 
 	private getPrev(currentIndex: number) {
 		return this.getByIndex(
@@ -88,22 +91,35 @@ export default class Resources {
 				resources,
 				numToPreload,
 				displaySize,
-				(loaded: ResourceWithOptions[]) =>
-					this.preloadFinished(loaded, resolve),
-				(loaded: ResourceWithOptions[]) => this.lazyloadFinished(loaded)
+				() => this.preloadStart(),
+				(loaded: ResourceWithOptions[]) => this.preloadEnd(loaded, resolve),
+				() => this.lazyLoadStart(),
+				(loaded: ResourceWithOptions[]) => this.lazyLoadEnd(loaded)
 			);
 		});
 
 		return updatePromise;
 	}
 
-	preloadFinished(loaded: ResourceWithOptions[], resolve: Function) {
+	preloadStart() {
+		this.emit('resources-preload-start');
+	}
+
+	preloadEnd(loaded: ResourceWithOptions[], resolve: Function) {
 		loaded.forEach((rsc: ResourceWithOptions) => this.list.push(rsc));
+
+		this.emit('resources-preload-end');
 
 		resolve();
 	}
 
-	lazyloadFinished(loaded: ResourceWithOptions[]) {
+	lazyLoadStart() {
+		this.emit('resources-lazyload-start');
+	}
+
+	lazyLoadEnd(loaded: ResourceWithOptions[]) {
 		loaded.forEach((rsc: ResourceWithOptions) => this.list.push(rsc));
+
+		this.emit('resources-lazyload-end');
 	}
 }

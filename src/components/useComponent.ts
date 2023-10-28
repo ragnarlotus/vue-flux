@@ -1,5 +1,5 @@
 import { computed, CSSProperties, Ref, unref } from 'vue';
-import Size from '../shared/Size';
+import { Size } from '../shared';
 import { ComponentProps, ComponentStyles } from './types';
 
 export default function useComponent(

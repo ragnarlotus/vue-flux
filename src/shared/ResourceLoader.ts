@@ -11,30 +11,38 @@ export default class ResourceLoader {
 		total: 0,
 	};
 	toPreload: number;
-	preloading: ResourceWithOptions[] = [];
-	lazyloading: ResourceWithOptions[] = [];
+	preLoading: ResourceWithOptions[] = [];
+	lazyLoading: ResourceWithOptions[] = [];
 	progress: Ref<number> = ref(0);
 	displaySize: Size;
-	onPreloadFinished: Function;
-	onLazyloadFinished: Function;
+	onPreloadStart: Function;
+	onPreloadEnd: Function;
+	onLazyLoadStart: Function;
+	onLazyLoadEnd: Function;
 
 	constructor(
 		rscs: ResourceWithOptions[],
 		toPreload: number,
 		displaySize: Size,
-		onPreloadFinished: Function,
-		onLazyloadFinished: Function
+		onPreloadStart: Function,
+		onPreloadEnd: Function,
+		onLazyLoadStart: Function,
+		onLazyLoadEnd: Function
 	) {
 		this.rscs = rscs;
 		this.toPreload = toPreload > rscs.length ? rscs.length : toPreload;
 		this.displaySize = displaySize;
-		this.onPreloadFinished = onPreloadFinished;
-		this.onLazyloadFinished = onLazyloadFinished;
+		this.onPreloadStart = onPreloadStart;
+		this.onPreloadEnd = onPreloadEnd;
+		this.onLazyLoadStart = onLazyLoadStart;
+		this.onLazyLoadEnd = onLazyLoadEnd;
 
 		this.preloadStart();
 	}
 
 	preloadStart() {
+		this.onPreloadStart();
+
 		const { counter } = this;
 
 		const toLoad = this.rscs.slice(
@@ -42,7 +50,7 @@ export default class ResourceLoader {
 			counter.total + this.toPreload - counter.success
 		);
 
-		this.preloading = this.preloading.concat(toLoad);
+		this.preLoading = this.preLoading.concat(toLoad);
 
 		toLoad.forEach((rsc) => this.load(rsc));
 	}
@@ -55,13 +63,13 @@ export default class ResourceLoader {
 			return;
 		}
 
-		const preloadedSuccessfully = this.preloading.filter((rsc) =>
+		const preloadedSuccessfully = this.preLoading.filter((rsc) =>
 			rsc.resource.isLoaded()
 		);
 
-		this.onPreloadFinished(preloadedSuccessfully);
+		this.onPreloadEnd(preloadedSuccessfully);
 
-		this.preloading.length = 0;
+		this.preLoading.length = 0;
 
 		if (counter.total < this.rscs.length) {
 			this.lazyLoadStart();
@@ -69,19 +77,21 @@ export default class ResourceLoader {
 	}
 
 	lazyLoadStart() {
-		this.lazyloading = this.rscs.slice(this.counter.total);
+		this.onLazyLoadStart();
 
-		this.lazyloading.forEach((rsc) => this.load(rsc));
+		this.lazyLoading = this.rscs.slice(this.counter.total);
+
+		this.lazyLoading.forEach((rsc) => this.load(rsc));
 	}
 
 	lazyLoadEnd() {
-		const lazyloadedSuccessfully = this.lazyloading.filter((rsc) =>
+		const lazyLoadedSuccessfully = this.lazyLoading.filter((rsc) =>
 			rsc.resource.isLoaded()
 		);
 
-		this.onLazyloadFinished(lazyloadedSuccessfully);
+		this.onLazyLoadEnd(lazyLoadedSuccessfully);
 
-		this.lazyloading.length = 0;
+		this.lazyLoading.length = 0;
 	}
 
 	load(rsc: ResourceWithOptions) {
@@ -96,7 +106,7 @@ export default class ResourceLoader {
 			.finally(() => {
 				this.counter.total++;
 
-				if (this.preloading.length !== 0) {
+				if (this.preLoading.length !== 0) {
 					this.updateProgress();
 				}
 

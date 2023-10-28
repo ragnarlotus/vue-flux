@@ -1,12 +1,12 @@
-import { Config } from '../components/VueFlux/types';
+import { VueFluxConfig } from '../components/VueFlux/types';
 import { Directions } from '../controllers/Player';
 import Player from './Player/Player';
 
 export default class Keys {
-	config: Config;
+	config: VueFluxConfig;
 	player: Player;
 
-	constructor(config: Config, player: Player) {
+	constructor(config: VueFluxConfig, player: Player) {
 		this.config = config;
 		this.player = player;
 	}

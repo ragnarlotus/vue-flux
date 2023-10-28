@@ -1,7 +1,6 @@
 import { CSSProperties } from 'vue';
-import Resource from '../resources/Resource';
-import Size from '../shared/Size';
-import { Position } from '../shared';
+import { Resource } from '../resources';
+import { Size, Position } from '../shared';
 
 export interface ComponentProps {
 	color?: string;

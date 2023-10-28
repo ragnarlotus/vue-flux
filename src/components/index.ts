@@ -8,7 +8,7 @@ export { default as FluxVortex } from './FluxVortex/FluxVortex.vue';
 export { default as FluxWrapper } from './FluxWrapper/FluxWrapper.vue';
 export { default as VueFlux } from './VueFlux/VueFlux.vue';
 
-export type { Options } from './VueFlux/types';
+export type * from './VueFlux/types';
 export type * from './FluxCube/types';
 export type * from './FluxGrid/types';
 export type * from './FluxParallax/types';
