@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { onMounted, ref, Ref, shallowReactive } from 'vue';
+	import { onMounted, reactive, ref, Ref, shallowReactive } from 'vue';
 
 	/* eslint-disable no-unused-vars */
 	import { VcParagraph } from 'vue-cosk';
@@ -45,11 +45,12 @@
 	const transitions = shallowReactive(Object.values(Transitions));
 	//const transitions = shallowReactive([Transitions.Book]);
 	const rscs = shallowReactive(images);
-	const options = shallowReactive({
+	const options = reactive({
 		allowFullscreen: true,
 		autoplay: false,
 		bindKeys: true,
 		infinite: true,
+		delay: 5000,
 		lazyLoadAfter: 10,
 	});
 	/*
@@ -69,7 +70,7 @@
 <template>
 	<main class="container mx-auto mb-4">
 		<VcParagraph
-			v-for="i of 12"
+			v-for="i of 1"
 			:key="'a' + i"
 			mode="fill"
 			style="margin: 24px 0"
@@ -167,11 +168,20 @@
 				>
 					Stop
 				</button>
+
+				Delay
+				<input
+					v-model.number="options.delay"
+					type="text"
+					name="delay"
+					maxlength="5"
+				/>
+				ms
 			</p>
 		</div>
 
 		<VcParagraph
-			v-for="i of 12"
+			v-for="i of 2"
 			:key="'b' + i"
 			mode="fill"
 			style="margin: 24px 0"

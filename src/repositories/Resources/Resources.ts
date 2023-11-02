@@ -102,24 +102,24 @@ export default class Resources {
 	}
 
 	preloadStart() {
-		this.emit('resources-preload-start');
+		this.emit('resourcesPreloadStart');
 	}
 
 	preloadEnd(loaded: ResourceWithOptions[], resolve: Function) {
 		loaded.forEach((rsc: ResourceWithOptions) => this.list.push(rsc));
 
-		this.emit('resources-preload-end');
+		this.emit('resourcesPreloadEnd');
 
 		resolve();
 	}
 
 	lazyLoadStart() {
-		this.emit('resources-lazyload-start');
+		this.emit('resourcesLazyloadStart');
 	}
 
 	lazyLoadEnd(loaded: ResourceWithOptions[]) {
 		loaded.forEach((rsc: ResourceWithOptions) => this.list.push(rsc));
 
-		this.emit('resources-lazyload-end');
+		this.emit('resourcesLazyloadEnd');
 	}
 }

@@ -84,7 +84,7 @@ export default class Display {
 		await (this.node.value as HTMLElement).requestFullscreen();
 
 		if (this.emit !== null) {
-			this.emit('fullscreen-enter');
+			this.emit('fullscreenEnter');
 		}
 	}
 
@@ -92,7 +92,7 @@ export default class Display {
 		await document.exitFullscreen();
 
 		if (this.emit !== null) {
-			this.emit('fullscreen-exit');
+			this.emit('fullscreenExit');
 		}
 	}
 }

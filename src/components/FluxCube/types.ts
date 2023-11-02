@@ -14,23 +14,9 @@ export interface FluxCubeProps extends ComponentProps {
 	origin?: string;
 }
 
-export type Side =
-	| Sides.front
-	| Sides.back
-	| Sides.left
-	| Sides.right
-	| Sides.top
-	| Sides.bottom;
+export type Side = keyof typeof Sides;
 
-export type Turn =
-	| Turns.front
-	| Turns.back
-	| Turns.backr
-	| Turns.backl
-	| Turns.left
-	| Turns.right
-	| Turns.top
-	| Turns.bottom;
+export type Turn = keyof typeof Turns;
 
 export interface SidesColors {
 	[Sides.front]?: string;

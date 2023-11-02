@@ -8,11 +8,13 @@ import {
 import { PlayerResource, PlayerTransition, Directions, Direction } from './';
 import { VueFluxConfig } from '../../components/VueFlux/types';
 import Timers from '../Timers';
+import Statuses from './Statuses';
 
 export default class Player {
 	resource: PlayerResource;
 	transition: PlayerTransition;
 
+	status: Ref<keyof typeof Statuses> = ref(Statuses.stopped);
 	config: VueFluxConfig;
 	timers: Timers;
 	emit: Function;
@@ -42,7 +44,7 @@ export default class Player {
 	play(resourceIndex: number | Direction = Directions.next, delay?: number) {
 		const { config, timers, resource } = this;
 
-		config.autoplay = true;
+		this.status.value = Statuses.playing;
 
 		if (this.transition.current !== null) {
 			return;
@@ -62,9 +64,9 @@ export default class Player {
 	}
 
 	async stop(cancelTransition: boolean = false) {
-		const { config, timers } = this;
+		const { timers } = this;
 
-		config.autoplay = false;
+		this.status.value = Statuses.stopped;
 
 		timers.clear('transition');
 
@@ -167,7 +169,7 @@ export default class Player {
 
 	start() {
 		this.resource.current = this.resource.to;
-		this.emit('transition-start', this.resource, this.transition);
+		this.emit('transitionStart', this.resource, this.transition);
 	}
 
 	async end(cancel: boolean = false) {
@@ -183,7 +185,7 @@ export default class Player {
 		await nextTick();
 
 		this.emit(
-			cancel ? 'transition-cancel' : 'transition-end',
+			cancel ? 'transitionCancel' : 'transitionEnd',
 			this.resource,
 			this.transition
 		);
@@ -191,7 +193,7 @@ export default class Player {
 		if (
 			config.infinite === false &&
 			resource.current.index >= resources.list.length - 1 &&
-			config.autoplay === true
+			this.status.value === Statuses.playing
 		) {
 			this.stop();
 			return;
@@ -202,7 +204,7 @@ export default class Player {
 			return;
 		}
 
-		if (config.autoplay === true && cancel === false) {
+		if (this.status.value === Statuses.playing && cancel === false) {
 			timers.set(
 				'transition',
 				resource.current.options.delay || config.delay,

@@ -35,26 +35,26 @@ export interface VueFluxEmits {
 	(e: 'play', resourceIndex: number | Direction, delay?: number): void;
 	(e: 'stop'): void;
 	(e: 'show', resource: PlayerResource, transition: PlayerTransition): void;
-	(e: 'options-updated'): void;
-	(e: 'transitions-updated'): void;
-	(e: 'resources-preload-start'): void;
-	(e: 'resources-preload-end'): void;
-	(e: 'resources-lazyload-start'): void;
-	(e: 'resources-lazyload-end'): void;
-	(e: 'fullscreen-enter'): void;
-	(e: 'fullscreen-exit'): void;
+	(e: 'optionsUpdated'): void;
+	(e: 'transitionsUpdated'): void;
+	(e: 'resourcesPreloadStart'): void;
+	(e: 'resourcesPreloadEnd'): void;
+	(e: 'resourcesLazyloadStart'): void;
+	(e: 'resourcesLazyloadEnd'): void;
+	(e: 'fullscreenEnter'): void;
+	(e: 'fullscreenExit'): void;
 	(
-		e: 'transition-start',
+		e: 'transitionStart',
 		resource: PlayerResource,
 		transition: PlayerTransition
 	): void;
 	(
-		e: 'transition-cancel',
+		e: 'transitionCancel',
 		resource: PlayerResource,
 		transition: PlayerTransition
 	): void;
 	(
-		e: 'transition-end',
+		e: 'transitionEnd',
 		resource: PlayerResource,
 		transition: PlayerTransition
 	): void;

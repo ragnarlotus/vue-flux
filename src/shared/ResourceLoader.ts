@@ -128,7 +128,7 @@ export default class ResourceLoader {
 		this.counter.error++;
 
 		// eslint-disable-next-line
-		console.warn(error);
+		console.error(error);
 	}
 
 	updateProgress() {

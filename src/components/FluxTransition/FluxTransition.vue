@@ -50,7 +50,9 @@
 
 		await nextTick();
 
-		if ($transition.value !== null) {
+		if ($transition.value === null) {
+			console.error('Transition component available', props.transition);
+		} else {
 			$transition.value.onPlay();
 		}
 

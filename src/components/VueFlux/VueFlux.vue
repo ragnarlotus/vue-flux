@@ -13,6 +13,7 @@
 	import { FluxTransition } from '../';
 	import { VueFluxProps, VueFluxEmits, VueFluxConfig } from './types';
 	import type { Component } from 'vue';
+	import { default as PlayerStatuses } from '../../controllers/Player/Statuses';
 
 	const props = defineProps<VueFluxProps>();
 
@@ -57,16 +58,20 @@
 		() => {
 			setup();
 
-			emit('options-updated');
-		}
+			emit('optionsUpdated');
+		},
+		{ deep: true }
 	);
 
 	watch(
 		() => props.rscs,
 		async () => {
-			const wasPlaying = config.autoplay;
+			const wasPlaying = player.status.value === PlayerStatuses.playing;
 
-			player.stop(true);
+			if (wasPlaying) {
+				await player.stop(true);
+			}
+
 			player.resource.reset();
 
 			const numToPreload = config.lazyLoad
@@ -77,7 +82,7 @@
 
 			player.resource.init(resources);
 
-			if (wasPlaying === true) {
+			if (wasPlaying) {
 				player.play();
 			}
 		}
@@ -86,20 +91,23 @@
 	watch(
 		() => props.transitions,
 		async () => {
-			const wasPlaying = config.autoplay;
+			const wasPlaying = player.status.value === PlayerStatuses.playing;
 
-			await player.stop(true);
+			if (wasPlaying) {
+				await player.stop(true);
+			}
+
 			player.transition.reset();
 
 			transitions.update(props.transitions);
 
 			player.transition.init(transitions);
 
-			if (wasPlaying === true) {
+			if (wasPlaying) {
 				player.play();
 			}
 
-			emit('transitions-updated');
+			emit('transitionsUpdated');
 		}
 	);
 
@@ -212,7 +220,6 @@
 				:current-resource="player.resource.current"
 				:mouse-over="mouse.isOver"
 				:player="player"
-				:config="config"
 			/>
 
 			<div class="remainder lower" />
