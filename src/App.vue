@@ -19,16 +19,12 @@
 	import Size from './shared/Size';
 	import { Turns } from './components/FluxCube';
 	import { ResourceStatus, ResourceWithOptions } from './resources';
+	import { Position } from './shared';
 
 	const images = [];
 	for (let i = 1; i < 20; i++) {
 		const fileName = i.toString().padStart(2, '0');
-		const image = {
-			resource: new Img(`/images/${fileName}.jpg`, 'img ' + i),
-			options: {
-				//delay: i * 1000,
-			},
-		} as ResourceWithOptions;
+		const image = new Img(`/images/${fileName}.jpg`, 'img ' + i);
 		images.push(image);
 	}
 
@@ -53,18 +49,34 @@
 		delay: 5000,
 		lazyLoadAfter: 10,
 	});
-	/*
+
+	const size = new Size({
+		width: 640,
+		height: 360,
+	});
+
+	const viewSize = new Size({
+		width: 640,
+		height: 360,
+	});
+
+	const offset = new Position({
+		top: 0,
+		left: 0,
+	});
+
+	const depth: Ref<number> = ref(160);
+
 	const display = new Display($wrapper);
 	display.addResizeListener();
 
 	onMounted(async () => {
 		await display.updateSize();
 
-				setTimeout(() => {
+		setTimeout(() => {
 			$fluxCube.value?.turn(Turns.top);
 		}, 1000);
-
-	});*/
+	});
 </script>
 
 <template>
@@ -80,12 +92,11 @@
 			<!-- <FluxComponents.FluxImage
 				ref="$fluxImage"
 				:rsc="rscs[0]"
-				:size="display.size"
+				:size="size"
 			/> -->
 
-			<!-- <div style="perspective: 1600px">
+			<!-- 			<div style="perspective: 1600px">
 				<FluxComponents.FluxCube
-					v-if="display.size.isValid()"
 					ref="$fluxCube"
 					:rscs="{
 						front: rscs[0],
@@ -95,8 +106,8 @@
 						bottom: rscs[4],
 						back: rscs[5],
 					}"
-					:depth="768"
-					:size="display.size"
+					:depth="depth"
+					:size="size"
 					style="transition: all 4000ms ease-out 0s"
 				/>
 			</div> -->
@@ -169,14 +180,20 @@
 					Stop
 				</button>
 
-				Delay
-				<input
-					v-model.number="options.delay"
-					type="text"
-					name="delay"
-					maxlength="5"
-				/>
-				ms
+				<label>
+					<span>Depth</span>
+					<input v-model.number="depth" type="number" />
+				</label>
+
+				<label>
+					<span>Delay</span>
+					<input
+						v-model.number="options.delay"
+						type="number"
+						maxlength="5"
+					/>
+					ms
+				</label>
 			</p>
 		</div>
 
@@ -188,3 +205,10 @@
 		/>
 	</main>
 </template>
+
+<style lang="scss">
+	input[type='text'],
+	input[type='number'] {
+		background-color: #222;
+	}
+</style>

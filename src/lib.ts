@@ -5,8 +5,11 @@ export * from './transitions';
 
 export {
 	Directions,
+	Statuses,
 	PlayerResource,
 	PlayerTransition,
 } from './controllers/Player';
 
 export type * from './controllers/Player/types';
+
+export { Size, Position } from './shared';

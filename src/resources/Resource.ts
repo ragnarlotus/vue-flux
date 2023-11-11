@@ -93,6 +93,10 @@ export default abstract class Resource {
 			left: 0,
 		};
 
+		if (!this.displaySize.isValid()) {
+			this.displaySize.update(size.toRaw());
+		}
+
 		if (size.equals(this.displaySize)) {
 			Object.assign(resizedProps, this[`${this.resizeType}Props`].value);
 		} else {

@@ -33,15 +33,13 @@
 		componentStyles
 	);
 
-	const sideTransformFactory = new SideTransformFactory(
-		props.depth,
-		props.size,
-		props.viewSize
+	const sideTransformFactory = computed(
+		() => new SideTransformFactory(props.depth, props.size, props.viewSize)
 	);
 
 	const sides = computed(() =>
 		CubeFactory.getSidesProps(
-			sideTransformFactory,
+			sideTransformFactory.value,
 			props.colors,
 			props.rscs,
 			props.offsets,
@@ -50,7 +48,7 @@
 	);
 
 	const turn = (turn: Turn) =>
-		transform({ transform: sideTransformFactory.getRotate(turn) });
+		transform({ transform: sideTransformFactory.value.getRotate(turn) });
 
 	defineExpose({
 		setCss,

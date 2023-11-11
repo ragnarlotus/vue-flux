@@ -50,7 +50,6 @@
 				backgroundSize: `${width}px ${height}px`,
 				backgroundPosition: `${left}px ${top}px`,
 				backgroundRepeat: 'no-repeat',
-				//...offset?.toPx(),
 			};
 		}),
 	});
