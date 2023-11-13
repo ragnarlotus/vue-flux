@@ -17,13 +17,16 @@
 
 	const $el = ref(null);
 
+	const transformOrigin = computed(() =>
+		props.origin !== undefined
+			? props.origin
+			: `center center -${props.depth / 2}px`
+	);
+
 	const componentStyles: ComponentStyles = reactive({
 		base: {
 			transformStyle: 'preserve-3d',
-			transformOrigin:
-				props.origin !== undefined
-					? props.origin
-					: `center center -${props.depth / 2}px`,
+			transformOrigin: transformOrigin,
 		},
 	});
 

@@ -67,6 +67,8 @@
 
 	const depth: Ref<number> = ref(160);
 
+	const origin = ref('bottom right');
+
 	const display = new Display($wrapper);
 	display.addResizeListener();
 
@@ -74,7 +76,7 @@
 		await display.updateSize();
 
 		setTimeout(() => {
-			$fluxCube.value?.turn(Turns.top);
+			$fluxCube.value?.turn(Turns.left);
 		}, 1000);
 	});
 </script>
@@ -95,7 +97,7 @@
 				:size="size"
 			/> -->
 
-			<!-- 			<div style="perspective: 1600px">
+			<div style="perspective: 1600px">
 				<FluxComponents.FluxCube
 					ref="$fluxCube"
 					:rscs="{
@@ -108,9 +110,10 @@
 					}"
 					:depth="depth"
 					:size="size"
+					:origin="origin"
 					style="transition: all 4000ms ease-out 0s"
 				/>
-			</div> -->
+			</div>
 
 			<!-- 			<FluxComponents.FluxGrid
 				v-if="display.size.isValid()"
@@ -120,7 +123,7 @@
 				:rows="10"
 				:cols="5"
 			/> -->
-
+			<!-- 
 			<FluxComponents.VueFlux
 				ref="$vueFlux"
 				:transitions="transitions"
@@ -146,7 +149,7 @@
 				<template #index="indexProps">
 					<Complements.FluxIndex v-bind="indexProps" />
 				</template>
-			</FluxComponents.VueFlux>
+			</FluxComponents.VueFlux> -->
 
 			<!-- 			<div>
 				<FluxComponents.FluxParallax
@@ -183,6 +186,11 @@
 				<label>
 					<span>Depth</span>
 					<input v-model.number="depth" type="number" />
+				</label>
+
+				<label>
+					<span>Origin</span>
+					<input v-model="origin" type="text" />
 				</label>
 
 				<label>
