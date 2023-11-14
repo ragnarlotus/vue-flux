@@ -234,7 +234,7 @@
 </script>
 
 <template>
-	<div ref="$el" :style="style.final.value">
+	<div ref="$el" class="flux-parallax" :style="style.final.value">
 		<div v-if="props.type === 'fixed' && !isIos" :style="fixedParentStyle">
 			<div class="image" :style="fixedChildStyle" />
 		</div>
@@ -242,14 +242,3 @@
 		<slot />
 	</div>
 </template>
-
-<style lang="scss">
-	.flux-parallax img {
-		position: absolute;
-		visibility: hidden;
-	}
-
-	.flux-parallax :not(.image) {
-		z-index: 1;
-	}
-</style>
