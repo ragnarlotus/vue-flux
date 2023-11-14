@@ -63,7 +63,7 @@
 </script>
 
 <template>
-	<div ref="$el" :style="style">
+	<div ref="$el" class="flux-cube" :style="style">
 		<component
 			:is="side!.component"
 			v-for="side in sides"

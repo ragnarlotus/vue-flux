@@ -29,7 +29,7 @@
 </script>
 
 <template>
-	<div ref="$el" :style="style">
+	<div ref="$el" class="flux-wrapper" :style="style">
 		<slot />
 	</div>
 </template>

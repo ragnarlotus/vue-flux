@@ -49,7 +49,7 @@
 </script>
 
 <template>
-	<div ref="$el" :style="style">
+	<div ref="$el" class="flux-grid" :style="style">
 		<component
 			:is="component"
 			v-for="(tile, index) in tiles"

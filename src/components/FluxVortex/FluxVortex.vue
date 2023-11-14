@@ -87,7 +87,7 @@
 </script>
 
 <template>
-	<div ref="$el" :style="style">
+	<div ref="$el" class="flux-vortex" :style="style">
 		<component
 			:is="rsc.transition.component"
 			v-for="(tile, index) in tiles"

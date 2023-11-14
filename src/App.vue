@@ -71,20 +71,20 @@
 
 	const display = new Display($wrapper);
 	display.addResizeListener();
-
+	/*
 	onMounted(async () => {
 		await display.updateSize();
 
 		setTimeout(() => {
 			$fluxCube.value?.turn(Turns.left);
 		}, 1000);
-	});
+	});*/
 </script>
 
 <template>
 	<main class="container mx-auto mb-4">
 		<VcParagraph
-			v-for="i of 1"
+			v-for="i of 12"
 			:key="'a' + i"
 			mode="fill"
 			style="margin: 24px 0"
@@ -96,7 +96,7 @@
 				:rsc="rscs[0]"
 				:size="size"
 			/> -->
-
+			<!--
 			<div style="perspective: 1600px">
 				<FluxComponents.FluxCube
 					ref="$fluxCube"
@@ -114,7 +114,7 @@
 					style="transition: all 4000ms ease-out 0s"
 				/>
 			</div>
-
+      -->
 			<!-- 			<FluxComponents.FluxGrid
 				v-if="display.size.isValid()"
 				ref="$fluxGrid"
@@ -151,14 +151,13 @@
 				</template>
 			</FluxComponents.VueFlux> -->
 
-			<!-- 			<div>
+			<div>
 				<FluxComponents.FluxParallax
-					type="fixed"
-					:rsc="rscs[0].resource"
+					type="visible"
+					:rsc="rscs[0]"
 					style="height: 200px"
 				/>
 			</div>
- -->
 
 			<p style="margin-top: 32px; color: white">
 				<button
@@ -206,7 +205,7 @@
 		</div>
 
 		<VcParagraph
-			v-for="i of 2"
+			v-for="i of 12"
 			:key="'b' + i"
 			mode="fill"
 			style="margin: 24px 0"
