@@ -6,6 +6,6 @@ export interface FluxTransitionProps {
 	transition: Object;
 	from: Resource;
 	to: Resource;
-	displayComponent: null | any;
+	displayComponent?: null | any;
 	options?: Object;
 }

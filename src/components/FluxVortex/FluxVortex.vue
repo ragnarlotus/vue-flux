@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { ref, reactive, computed, Ref } from 'vue';
+	import { ref, reactive, computed, Ref, onBeforeUpdate } from 'vue';
 	import { round, ceil, diag } from '../../shared/Maths';
 	import useComponent from '../useComponent';
 	import { Position } from '../../shared';
@@ -73,6 +73,10 @@
 	});
 
 	const $tiles: Ref<any[]> = ref([]);
+
+	onBeforeUpdate(() => {
+		$tiles.value = [];
+	});
 
 	const transform = (func: Function) => {
 		$tiles.value.forEach((tile: any, index: number) => func(tile, index));

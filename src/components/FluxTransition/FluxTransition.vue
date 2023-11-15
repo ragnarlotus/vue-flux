@@ -17,7 +17,7 @@
 	const $el: Ref<null | HTMLDivElement> = ref(null);
 	const $transition: Ref<null | any> = ref(null);
 
-	const emit = defineEmits(['start', 'end']);
+	const emit = defineEmits(['ready', 'start', 'end']);
 
 	const styles = reactive({
 		base: {
@@ -37,15 +37,29 @@
 		};
 	});
 
-	const getDuration = () =>
-		$transition.value !== null ? $transition.value.totalDuration : 1;
+	const duration = ref(1);
 
 	onMounted(async () => {
+		if ($transition.value !== null) {
+			duration.value = $transition.value.totalDuration;
+		}
+
+		emit('ready', {
+			transition: props.transition,
+			from: props.from,
+			to: props.to,
+			options: props.options,
+			duration: duration.value,
+		});
+	});
+
+	async function start() {
 		emit('start', {
 			transition: props.transition,
 			from: props.from,
 			to: props.to,
 			options: props.options,
+			duration: duration.value,
 		});
 
 		await nextTick();
@@ -56,21 +70,26 @@
 			$transition.value.onPlay();
 		}
 
-		setTimeout(() => {
-			emit('end', {
-				transition: props.transition,
-				from: props.from,
-				to: props.to,
-				options: props.options,
-			});
-		}, getDuration());
-	});
+		setTimeout(() => end(), duration.value);
+	}
+
+	function end() {
+		emit('end', {
+			transition: props.transition,
+			from: props.from,
+			to: props.to,
+			options: props.options,
+			duration: duration.value,
+		});
+	}
 
 	onUnmounted(() => {
-		if (props.displayComponent !== null) {
+		if ([null, undefined].includes(props.displayComponent) === false) {
 			props.displayComponent.show();
 		}
 	});
+
+	defineExpose({ duration, start, end });
 </script>
 
 <template>

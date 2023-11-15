@@ -191,6 +191,7 @@
 			:to="player.resource.to.rsc"
 			:display-component="$displayComponent"
 			:options="player.transition.current.options"
+			@ready="$transition?.start()"
 			@start="player.start()"
 			@end="player.end()"
 		/>

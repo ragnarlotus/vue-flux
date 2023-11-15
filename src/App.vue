@@ -35,6 +35,9 @@
 		ref(null);
 	const $fluxGrid: Ref<null | InstanceType<typeof FluxComponents.FluxGrid>> =
 		ref(null);
+	const $fluxTransition: Ref<null | InstanceType<
+		typeof FluxComponents.FluxTransition
+	>> = ref(null);
 	const $vueFlux: Ref<null | InstanceType<typeof FluxComponents.VueFlux>> =
 		ref(null);
 
@@ -84,80 +87,106 @@
 <template>
 	<main class="container mx-auto mb-4">
 		<VcParagraph
-			v-for="i of 12"
+			v-for="i of 2"
 			:key="'a' + i"
 			mode="fill"
 			style="margin: 24px 0"
 		/>
 
+		<label>
+			<span>Width:</span> <input v-model="size.width.value" type="number" />
+		</label>
+
 		<div ref="$wrapper" class="relative mx-auto">
-			<!-- <FluxComponents.FluxImage
-				ref="$fluxImage"
-				:rsc="rscs[0]"
-				:size="size"
-			/> -->
-			<!--
-			<div style="perspective: 1600px">
-				<FluxComponents.FluxCube
-					ref="$fluxCube"
-					:rscs="{
-						front: rscs[0],
-						left: rscs[1],
-						right: rscs[2],
-						top: rscs[3],
-						bottom: rscs[4],
-						back: rscs[5],
-					}"
-					:depth="depth"
-					:size="size"
-					:origin="origin"
-					style="transition: all 4000ms ease-out 0s"
-				/>
-			</div>
-      -->
-			<!-- 			<FluxComponents.FluxGrid
-				v-if="display.size.isValid()"
-				ref="$fluxGrid"
-				:rsc="rscs[0]"
-				:size="display.size"
-				:rows="10"
-				:cols="5"
-			/> -->
-			<!-- 
-			<FluxComponents.VueFlux
-				ref="$vueFlux"
-				:transitions="transitions"
-				:rscs="rscs"
-				:options="options"
-			>
-				<template #preloader="preloaderProps">
-					<Complements.FluxPreloader v-bind="preloaderProps" />
-				</template>
-
-				<template #caption="captionProps">
-					<Complements.FluxCaption v-bind="captionProps" />
-				</template>
-
-				<template #controls="controlsProps">
-					<Complements.FluxControls v-bind="controlsProps" />
-				</template>
-
-				<template #pagination="paginationProps">
-					<Complements.FluxPagination v-bind="paginationProps" />
-				</template>
-
-				<template #index="indexProps">
-					<Complements.FluxIndex v-bind="indexProps" />
-				</template>
-			</FluxComponents.VueFlux> -->
-
-			<div>
-				<FluxComponents.FluxParallax
-					type="visible"
+			<!-- FluxImage
+				<FluxComponents.FluxImage
+					ref="$fluxImage"
 					:rsc="rscs[0]"
-					style="height: 200px"
+					:size="size"
 				/>
-			</div>
+			-->
+
+			<!-- FluxCube
+				<div style="perspective: 1600px">
+					<FluxComponents.FluxCube
+						ref="$fluxCube"
+						:rscs="{
+							front: rscs[0],
+							left: rscs[1],
+							right: rscs[2],
+							top: rscs[3],
+							bottom: rscs[4],
+							back: rscs[5],
+						}"
+						:depth="depth"
+						:size="size"
+						:origin="origin"
+						style="transition: all 4000ms ease-out 0s"
+					/>
+				</div>
+			-->
+
+			<!-- FluxGrid
+				<FluxComponents.FluxGrid
+					v-if="display.size.isValid()"
+					ref="$fluxGrid"
+					:rsc="rscs[0]"
+					:size="display.size"
+					:rows="10"
+					:cols="5"
+				/>
+			-->
+
+			<!-- FluxTransition -->
+			<FluxComponents.FluxTransition
+				ref="$fluxTransition"
+				:size="size"
+				:transition="transitions[0]"
+				:from="rscs[0]"
+				:to="rscs[1]"
+			/>
+
+			<button type="button" @click="$fluxTransition.start()">Start</button>
+			<!-- -->
+
+			<!-- VueFlux
+				<FluxComponents.VueFlux
+					ref="$vueFlux"
+					:transitions="transitions"
+					:rscs="rscs"
+					:options="options"
+				>
+					<template #preloader="preloaderProps">
+						<Complements.FluxPreloader v-bind="preloaderProps" />
+					</template>
+
+					<template #caption="captionProps">
+						<Complements.FluxCaption v-bind="captionProps" />
+					</template>
+
+					<template #controls="controlsProps">
+						<Complements.FluxControls v-bind="controlsProps" />
+					</template>
+
+					<template #pagination="paginationProps">
+						<Complements.FluxPagination v-bind="paginationProps" />
+					</template>
+
+					<template #index="indexProps">
+						<Complements.FluxIndex v-bind="indexProps" />
+					</template>
+				</FluxComponents.VueFlux>
+			 -->
+
+			<!-- FluxParallax
+				<div>
+					<FluxComponents.FluxParallax
+						type="visible"
+						:rsc="rscs[0]"
+						style="height: 200px"
+					/>
+				</div>
+			 -->
 
 			<p style="margin-top: 32px; color: white">
 				<button
@@ -205,17 +234,10 @@
 		</div>
 
 		<VcParagraph
-			v-for="i of 12"
+			v-for="i of 2"
 			:key="'b' + i"
 			mode="fill"
 			style="margin: 24px 0"
 		/>
 	</main>
 </template>
-
-<style lang="scss">
-	input[type='text'],
-	input[type='number'] {
-		background-color: #222;
-	}
-</style>

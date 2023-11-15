@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { ref, reactive, computed, Ref } from 'vue';
+	import { ref, reactive, computed, Ref, onBeforeUpdate } from 'vue';
 	import useComponent from '../useComponent';
 	import { FluxGridProps } from './types';
 	import { FluxCube } from '../';
@@ -33,6 +33,10 @@
 	const tiles = computed(() => GridFactory.getTilesProps(props));
 
 	const $tiles: Ref<any[]> = ref([]);
+
+	onBeforeUpdate(() => {
+		$tiles.value = [];
+	});
 
 	const transform = (cb: Function) => {
 		$tiles.value.forEach((tile: any, index: number) => cb(tile, index));
