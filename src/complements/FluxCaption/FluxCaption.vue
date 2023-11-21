@@ -26,7 +26,7 @@
 		if (
 			props.currentTransition === null &&
 			props.currentResource !== null &&
-			props.currentResource.rsc.caption !== null
+			props.currentResource.rsc.caption.length > 0
 		) {
 			classes.push('visible');
 		}
@@ -37,7 +37,7 @@
 
 <template>
 	<div :class="cssClasses">
-		{{ caption }}
+		<slot>{{ caption }}</slot>
 	</div>
 </template>
 

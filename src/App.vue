@@ -55,7 +55,7 @@
 
 	const size = new Size({
 		width: 640,
-		height: 360,
+		height: 120,
 	});
 
 	const viewSize = new Size({
@@ -72,6 +72,10 @@
 
 	const origin = ref('bottom right');
 
+	function getCaptionLink(caption?: string) {
+		return 'https://www.google.com/search?q=' + caption;
+	}
+
 	const display = new Display($wrapper);
 	display.addResizeListener();
 	/*
@@ -87,7 +91,7 @@
 <template>
 	<main class="container mx-auto mb-4">
 		<VcParagraph
-			v-for="i of 2"
+			v-for="i of 1"
 			:key="'a' + i"
 			mode="fill"
 			style="margin: 24px 0"
@@ -95,6 +99,8 @@
 
 		<label>
 			<span>Width:</span> <input v-model="size.width.value" type="number" />
+			<span>Height:</span>
+			<input v-model="size.height.value" type="number" />
 		</label>
 
 		<div ref="$wrapper" class="relative mx-auto">
@@ -137,7 +143,7 @@
 				/>
 			-->
 
-			<!-- FluxTransition -->
+			<!-- FluxTransition 
 			<FluxComponents.FluxTransition
 				ref="$fluxTransition"
 				:size="size"
@@ -147,47 +153,55 @@
 			/>
 
 			<button type="button" @click="$fluxTransition.start()">Start</button>
-			<!-- -->
-
-			<!-- VueFlux
-				<FluxComponents.VueFlux
-					ref="$vueFlux"
-					:transitions="transitions"
-					:rscs="rscs"
-					:options="options"
-				>
-					<template #preloader="preloaderProps">
-						<Complements.FluxPreloader v-bind="preloaderProps" />
-					</template>
-
-					<template #caption="captionProps">
-						<Complements.FluxCaption v-bind="captionProps" />
-					</template>
-
-					<template #controls="controlsProps">
-						<Complements.FluxControls v-bind="controlsProps" />
-					</template>
-
-					<template #pagination="paginationProps">
-						<Complements.FluxPagination v-bind="paginationProps" />
-					</template>
-
-					<template #index="indexProps">
-						<Complements.FluxIndex v-bind="indexProps" />
-					</template>
-				</FluxComponents.VueFlux>
 			 -->
+
+			<!-- VueFlux-->
+			<FluxComponents.VueFlux
+				ref="$vueFlux"
+				:transitions="transitions"
+				:rscs="rscs"
+				:options="options"
+			>
+				<template #preloader="preloaderProps">
+					<Complements.FluxPreloader v-bind="preloaderProps" />
+				</template>
+
+				<template #caption="captionProps">
+					<Complements.FluxCaption v-bind="captionProps" />
+				</template>
+
+				<template #controls="controlsProps">
+					<Complements.FluxControls v-bind="controlsProps" />
+				</template>
+
+				<template #pagination="paginationProps">
+					<Complements.FluxPagination v-bind="paginationProps" />
+				</template>
+
+				<template #index="indexProps">
+					<Complements.FluxIndex v-bind="indexProps" />
+				</template>
+			</FluxComponents.VueFlux>
+			<!---->
 
 			<!-- FluxParallax
-				<div>
-					<FluxComponents.FluxParallax
-						type="visible"
-						:rsc="rscs[0]"
-						style="height: 200px"
-					/>
-				</div>
-			 -->
-
+			<div>
+				<FluxComponents.FluxParallax
+					type="relative"
+					:rsc="rscs[0]"
+					:style="`height: ${size.height.value}px`"
+					offset="10%"
+				/>
+			</div>
+			-->
+			<!--
+			<p>
+				<Complements.FluxControls
+					v-if="$vueFlux"
+					:player="$vueFlux.getPlayer()"
+				/>
+			</p>
+			-->
 			<p style="margin-top: 32px; color: white">
 				<button
 					type="button"

@@ -159,6 +159,7 @@
 		show: player.show.bind(player),
 		play: player.play.bind(player),
 		stop: player.stop.bind(player),
+		getPlayer: () => player as Controllers.Player,
 	});
 
 	emit('created');
@@ -216,12 +217,7 @@
 
 			<div class="remainder upper" />
 
-			<slot
-				name="controls"
-				:current-resource="player.resource.current"
-				:mouse-over="mouse.isOver"
-				:player="player"
-			/>
+			<slot name="controls" :mouse-over="mouse.isOver" :player="player" />
 
 			<div class="remainder lower" />
 
