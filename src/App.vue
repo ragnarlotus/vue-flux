@@ -163,7 +163,13 @@
 				:options="options"
 			>
 				<template #preloader="preloaderProps">
-					<Complements.FluxPreloader v-bind="preloaderProps" />
+					<Complements.FluxPreloader v-bind="preloaderProps">
+						<template #default="loaderProps">
+							<div v-if="loaderProps.preloading" class="custom-spinner">
+								{{ loaderProps.pct }} %
+							</div>
+						</template>
+					</Complements.FluxPreloader>
 				</template>
 
 				<template #caption="captionProps">
@@ -174,22 +180,12 @@
 					<Complements.FluxControls v-bind="controlsProps" />
 				</template>
 
-				<template #pagination="paginationProps">
-					<Complements.FluxPagination v-bind="paginationProps">
-						<template #default="itemProps">
-							<div
-								:class="itemProps.cssClass"
-								:title="itemProps.title"
-								@click="itemProps.click()"
-							>
-								{{ itemProps.index + 1 }}
-							</div>
-						</template>
-					</Complements.FluxPagination>
-				</template>
-
 				<template #index="indexProps">
 					<Complements.FluxIndex v-bind="indexProps" />
+				</template>
+
+				<template #pagination="paginationProps">
+					<Complements.FluxPagination v-bind="paginationProps" />
 				</template>
 			</FluxComponents.VueFlux>
 			<!---->
@@ -267,16 +263,38 @@
 </template>
 
 <style lang="scss">
-	.vue-flux .flux-pagination li {
-		color: white;
-		background-color: rgba(0, 0, 0, 0.8);
-		padding: 0 8px 2px 8px;
-		width: auto;
-		height: auto;
-		border-radius: 6px;
+	@keyframes spinner {
+		to {
+			transform: rotate(360deg);
+		}
+	}
 
-		.active {
-			color: yellow;
+	.custom-spinner {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		text-align: center;
+		line-height: 50px;
+		margin-top: -25px;
+		margin-left: -25px;
+		width: 50px;
+		height: 50px;
+		z-index: 14;
+
+		&:before {
+			content: '';
+			box-sizing: border-box;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 50px;
+			height: 50px;
+			margin-top: -25px;
+			margin-left: -25px;
+			border-radius: 50%;
+			border: 1px solid #ccc;
+			border-top-color: #07d;
+			animation: spinner 0.6s linear infinite;
 		}
 	}
 </style>
