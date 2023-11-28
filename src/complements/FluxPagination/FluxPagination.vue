@@ -22,8 +22,8 @@
 		return rsc.resource.caption;
 	};
 
-	const getCssClass = (index: number) => {
-		const classes = ['pagination-item'];
+	const getCssClass = (index: number, itemCLass: string) => {
+		const classes = [itemCLass];
 
 		let active = props.currentResource?.index === index;
 
@@ -43,11 +43,19 @@
 	<nav v-if="visible" class="flux-pagination">
 		<ul>
 			<li v-for="(rsc, index) in resources.list" :key="index">
-				<span
+				<slot
+					:index="index"
+					:rsc="rsc"
 					:title="getTitle(rsc)"
-					:class="getCssClass(index)"
+					:css-class="getCssClass(index, 'custom-pagination-item')"
 					@click="show(index)"
-				/>
+				>
+					<span
+						:title="getTitle(rsc)"
+						:class="getCssClass(index, 'pagination-item')"
+						@click="show(index)"
+					/>
+				</slot>
 			</li>
 		</ul>
 	</nav>

@@ -175,7 +175,17 @@
 				</template>
 
 				<template #pagination="paginationProps">
-					<Complements.FluxPagination v-bind="paginationProps" />
+					<Complements.FluxPagination v-bind="paginationProps">
+						<template #default="itemProps">
+							<div
+								:class="itemProps.cssClass"
+								:title="itemProps.title"
+								@click="itemProps.click()"
+							>
+								{{ itemProps.index + 1 }}
+							</div>
+						</template>
+					</Complements.FluxPagination>
 				</template>
 
 				<template #index="indexProps">
@@ -255,3 +265,18 @@
 		/>
 	</main>
 </template>
+
+<style lang="scss">
+	.vue-flux .flux-pagination li {
+		color: white;
+		background-color: rgba(0, 0, 0, 0.8);
+		padding: 0 8px 2px 8px;
+		width: auto;
+		height: auto;
+		border-radius: 6px;
+
+		.active {
+			color: yellow;
+		}
+	}
+</style>
