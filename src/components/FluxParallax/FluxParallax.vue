@@ -149,7 +149,7 @@
 		view.top = $el.value!.getBoundingClientRect().top + window.scrollY;
 
 		rsc.displaySize.update(display);
-		const fillProps = rsc.fillProps.value;
+		const fillProps = rsc.resizeProps.value;
 
 		background.width = fillProps.width!;
 		background.height = fillProps.height!;
