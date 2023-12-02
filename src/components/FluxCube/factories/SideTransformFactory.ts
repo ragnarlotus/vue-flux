@@ -36,8 +36,8 @@ export default class SideTransformFactory {
 	translateZ: Ref<any> = computed(() => {
 		const halfDepth = this.depth / 2;
 
-		const { width, height } = this.size.toRaw();
-		const { width: viewWidth, height: viewHeight } = this.viewSize.toRaw();
+		const { width, height } = this.size.toValue();
+		const { width: viewWidth, height: viewHeight } = this.viewSize.toValue();
 
 		return {
 			front: 0,

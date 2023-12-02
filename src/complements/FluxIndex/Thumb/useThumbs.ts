@@ -4,7 +4,7 @@ import Size from '../../../shared/Size';
 
 export default function useThumbs(displaySize: Size, player: Player) {
 	const size = computed<Size>(() => {
-		let { width, height } = displaySize.toRaw();
+		let { width, height } = displaySize.toValue();
 
 		width = width! / 4.2;
 		height = (width * 90) / 160;

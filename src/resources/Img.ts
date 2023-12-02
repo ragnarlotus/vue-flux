@@ -2,13 +2,14 @@ import FluxImage from '../components/FluxImage/FluxImage.vue';
 import Resource from './Resource';
 import Size from '../shared/Size';
 import { DisplayParameter, ResizeType, TransitionParameter } from './types';
-import ResourceStatus from './ResourceStatus';
+import Statuses from './Statuses';
+import ResizeTypes from './ResizeTypes';
 
 export default class Img extends Resource {
 	constructor(
 		src: string,
 		caption: string = '',
-		resizeType: ResizeType = 'fill'
+		resizeType: ResizeType = ResizeTypes.fill
 	) {
 		const display: DisplayParameter = {
 			component: FluxImage,
@@ -31,7 +32,7 @@ export default class Img extends Resource {
 		}
 
 		this.loader = new Promise<void>((resolve, reject) => {
-			this.status.value = ResourceStatus.loading;
+			this.status.value = Statuses.loading;
 
 			const img = new Image();
 
@@ -50,13 +51,13 @@ export default class Img extends Resource {
 			height: img.naturalHeight || img.height,
 		});
 
-		this.status.value = ResourceStatus.loaded;
+		this.status.value = Statuses.loaded;
 
 		resolve();
 	}
 
 	onError(reject: Function) {
-		this.status.value = ResourceStatus.error;
+		this.status.value = Statuses.error;
 
 		reject(this.errorMessage);
 	}

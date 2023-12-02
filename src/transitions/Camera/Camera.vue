@@ -26,7 +26,7 @@
 	};
 
 	const diagSize = diag(
-		props.size.toRaw() as { width: number; height: number }
+		props.size.toValue() as { width: number; height: number }
 	);
 
 	const wrapperSize: Size = new Size({ width: diagSize, height: diagSize });

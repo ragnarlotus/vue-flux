@@ -28,7 +28,7 @@
 	const numCircles = computed(() => round(props.circles));
 
 	const diagonal = computed(() =>
-		diag(props.size.toRaw() as { width: number; height: number })
+		diag(props.size.toValue() as { width: number; height: number })
 	);
 
 	const radius = computed(() => ceil(diagonal.value / 2 / numCircles.value));

@@ -30,7 +30,7 @@ export default class Position {
 		this.left.value = left ?? null;
 	}
 
-	toRaw() {
+	toValue() {
 		const rawPosition: {
 			top?: number;
 			left?: number;

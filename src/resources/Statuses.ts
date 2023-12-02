@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
-export enum ResourceStatus {
+export enum Statuses {
 	notLoaded = 'notLoaded',
 	loading = 'loading',
 	loaded = 'loaded',
 	error = 'error',
 }
 
-export default ResourceStatus;
+export default Statuses;

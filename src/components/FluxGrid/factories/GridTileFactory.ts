@@ -32,7 +32,7 @@ export default class GridTileFactory {
 			css?: CSSProperties;
 		}
 	) {
-		let { width, height } = tile.size.toRaw();
+		let { width, height } = tile.size.toValue();
 
 		const row = getRowNumber(tile.number, grid.numCols);
 		const col = getColNumber(tile.number, grid.numCols);

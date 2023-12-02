@@ -121,7 +121,7 @@ export default class ResourceLoader {
 	loadSuccess(rsc: ResourceWithOptions) {
 		this.counter.success++;
 
-		rsc.resource.displaySize.update(this.displaySize.toRaw());
+		rsc.resource.displaySize.update(this.displaySize.toValue());
 	}
 
 	loadError(error: string) {

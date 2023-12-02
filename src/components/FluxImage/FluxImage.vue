@@ -4,7 +4,7 @@
 	import { FluxImageProps } from './types';
 	import { Size } from '../../shared';
 	import { ComponentStyles } from '../types';
-	import { ResourceStatus } from '../../resources';
+	import { Statuses } from '../../resources';
 
 	const props = withDefaults(defineProps<FluxImageProps>(), {
 		viewSize: () => new Size(),
@@ -34,7 +34,7 @@
 				return {};
 			}
 
-			if (rsc.status.value === ResourceStatus.notLoaded) {
+			if (rsc.status.value === Statuses.notLoaded) {
 				rsc.load();
 				return {};
 			}

@@ -1,8 +1,9 @@
 import { Component } from 'vue';
 import { Resource } from '.';
+import ResizeTypes from './ResizeTypes';
 
 /* eslint-disable no-unused-vars */
-export type ResizeType = 'fill' | 'fit';
+export type ResizeType = keyof typeof ResizeTypes;
 
 export interface ResizedProps {
 	width: number;

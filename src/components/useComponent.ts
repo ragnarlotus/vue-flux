@@ -15,7 +15,7 @@ export default function useComponent(
 		const { size, viewSize = new Size() } = props;
 
 		const { width = size.width.value, height = size.height.value } =
-			viewSize.toRaw();
+			viewSize.toValue();
 
 		const finalSize = new Size({ width, height });
 

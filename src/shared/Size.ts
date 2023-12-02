@@ -42,11 +42,11 @@ export default class Size {
 			throw new RangeError(`Could not get aspect ratio due to invalid size`);
 		}
 
-		return aspectRatio(this.toRaw() as { width: number; height: number });
+		return aspectRatio(this.toValue() as { width: number; height: number });
 	}
 
 	clone() {
-		return new Size(this.toRaw());
+		return new Size(this.toValue());
 	}
 
 	equals(otherSize: Size) {
@@ -61,7 +61,7 @@ export default class Size {
 		return true;
 	}
 
-	toRaw() {
+	toValue() {
 		const rawSize: {
 			width?: number;
 			height?: number;

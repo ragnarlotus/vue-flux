@@ -11,7 +11,7 @@
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
 	const conf: Round2Conf = reactive({
-		rows: null,
+		rows: 0,
 		cols: 9,
 		tileDuration: 800,
 		tileDelay: 100,
@@ -32,7 +32,7 @@
 		backfaceVisibility: 'hidden',
 	};
 
-	if (conf.rows === null) {
+	if (!props.options?.rows) {
 		const divider = props.size.width.value! / conf.cols;
 		conf.rows = floor(props.size.height.value! / divider);
 	}

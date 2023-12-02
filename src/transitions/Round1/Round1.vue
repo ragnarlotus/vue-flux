@@ -12,7 +12,7 @@
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
 	const conf: Round1Conf = reactive({
-		rows: null,
+		rows: 0,
 		cols: 8,
 		tileDuration: 800,
 		easing: 'ease-out',
@@ -33,7 +33,7 @@
 	// eslint-disable-next-line vue/no-mutating-props
 	props.maskStyle.overflow = 'visible';
 
-	if (conf.rows === null) {
+	if (!props.options?.rows) {
 		const divider = props.size.width.value! / conf.cols;
 		conf.rows = floor(props.size.height.value! / divider);
 	}
