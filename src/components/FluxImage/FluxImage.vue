@@ -24,6 +24,10 @@
 				colorStyle.backgroundColor = props.color;
 			}
 
+			if (props.rsc?.backgroundColor !== null) {
+				colorStyle.backgroundColor = props.rsc?.backgroundColor;
+			}
+
 			return colorStyle;
 		}),
 

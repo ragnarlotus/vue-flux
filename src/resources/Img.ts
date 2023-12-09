@@ -9,7 +9,8 @@ export default class Img extends Resource {
 	constructor(
 		src: string,
 		caption: string = '',
-		resizeType: ResizeType = ResizeTypes.fill
+		resizeType: ResizeType = ResizeTypes.fill,
+		backgroundColor: null | string = null
 	) {
 		const display: DisplayParameter = {
 			component: FluxImage,
@@ -23,7 +24,15 @@ export default class Img extends Resource {
 
 		const errorMessage = `Image ${src} could not be loaded`;
 
-		super(src, caption, resizeType, display, transition, errorMessage);
+		super(
+			src,
+			caption,
+			resizeType,
+			backgroundColor,
+			display,
+			transition,
+			errorMessage
+		);
 	}
 
 	load() {

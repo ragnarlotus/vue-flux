@@ -9,16 +9,20 @@
 	const $fluxImage: Ref<null | InstanceType<typeof FluxImage>> = ref(null);
 
 	const rscLandscapeFill = new Img(`/images/01.jpg`, 'img 01 fill');
+
 	const rscLandscapeFit = new Img(
 		`/images/01.jpg`,
 		'img 01 fit',
 		ResizeTypes.fit
 	);
+
 	const rscPortraitFill = new Img(`/images/00.jpg`, 'img 00 fill');
+
 	const rscPortraitFit = new Img(
 		`/images/00.jpg`,
 		'img 00 fit',
-		ResizeTypes.fit
+		ResizeTypes.fit,
+		'#111'
 	);
 
 	const sizeLandscape = new Size({

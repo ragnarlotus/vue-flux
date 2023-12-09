@@ -21,6 +21,7 @@ export default abstract class Resource {
 	displaySize: Size = new Size();
 	caption: string = '';
 	resizeType: ResizeType;
+	backgroundColor: null | string = null;
 	display: DisplayParameter;
 	transition: TransitionParameter;
 
@@ -28,6 +29,7 @@ export default abstract class Resource {
 		src: string,
 		caption: string,
 		resizeType: ResizeType = ResizeTypes.fill,
+		backgroundColor: null | string = null,
 		display: DisplayParameter,
 		transition: TransitionParameter,
 		errorMessage: string
@@ -35,6 +37,7 @@ export default abstract class Resource {
 		this.src = src;
 		this.caption = caption;
 		this.resizeType = resizeType;
+		this.backgroundColor = backgroundColor;
 		this.display = display;
 		this.transition = transition;
 		this.errorMessage = errorMessage;

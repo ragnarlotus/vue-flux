@@ -9,6 +9,7 @@
 	import PgFluxTransition from './playgrounds/PgFluxTransition.vue';
 	import PgVueFlux from './playgrounds/PgVueFlux.vue';
 	import PgFluxParallax from './playgrounds/PgFluxParallax.vue';
+	import PgFluxParallaxOp from './playgrounds/PgFluxParallaxOp.vue';
 
 	// Flux components
 	import * as FluxComponents from './components';
@@ -24,7 +25,8 @@
 			<!-- <PgFluxGrid /> -->
 			<!-- <PgFluxTransition /> -->
 			<!-- <PgVueFlux /> -->
-			<PgFluxParallax />
+			<!-- <PgFluxParallax /> -->
+			<PgFluxParallaxOp />
 		</div>
 	</main>
 </template>
