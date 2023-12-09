@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { defineComponent } from 'vue';
+	import { defineComponent, markRaw } from 'vue';
 	import { VcParagraph } from 'vue-cosk';
 	import Img from '../resources/Img';
 	import { FluxParallax } from '../components';
@@ -11,7 +11,7 @@
 		},
 		data() {
 			return {
-				rsc: new Img(`/images/01.jpg`, 'img 01'),
+				rsc: markRaw(new Img(`/images/01.jpg`, 'img 01')),
 			};
 		},
 	});
