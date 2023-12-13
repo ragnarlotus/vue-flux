@@ -2,7 +2,7 @@
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import { floor } from '../../shared/Maths';
 	import useTransition from '../useTransition';
-	import { FluxGrid } from '../../components';
+	import { FluxGrid, FluxCube } from '../../components';
 	import { Round1Props, Round1Conf } from './types';
 	import { Directions } from '../../controllers/Player';
 	import { Turns } from '../../components';
@@ -68,7 +68,7 @@
 			[Directions.next]: Turns.backr,
 		};
 
-		$grid.value.transform((tile: any, index: number) => {
+		$grid.value.transform((tile: typeof FluxCube, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay(index)}ms`;

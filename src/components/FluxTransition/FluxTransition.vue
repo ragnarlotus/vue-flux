@@ -89,7 +89,7 @@
 		}
 	});
 
-	defineExpose({ duration, start, end });
+	defineExpose({ duration, start });
 </script>
 
 <template>

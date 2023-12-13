@@ -70,7 +70,12 @@ export default abstract class Resource {
 		};
 	}
 
-	resizeProps = computed(() => this.calcResizeProps(this.displaySize));
+	resizeProps = computed<{
+		top?: number;
+		left?: number;
+		width?: number;
+		height?: number;
+	}>(() => this.calcResizeProps(this.displaySize));
 
 	getResizeProps(size: Size, offset?: Position) {
 		const resizedProps: ResizedProps = {

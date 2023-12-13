@@ -1,4 +1,5 @@
-import { shallowReactive, nextTick, Ref, ref, Component } from 'vue';
+import { shallowReactive, nextTick, Ref, ref } from 'vue';
+import type { Component } from 'vue';
 import {
 	Resources,
 	Transitions,

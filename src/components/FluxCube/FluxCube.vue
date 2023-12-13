@@ -43,10 +43,12 @@
 	const sides = computed(() =>
 		CubeFactory.getSidesProps(
 			sideTransformFactory.value,
+			props.color,
 			props.colors,
+			props.rsc,
 			props.rscs,
-			props.offsets,
-			props.offset
+			props.offset,
+			props.offsets
 		)
 	);
 

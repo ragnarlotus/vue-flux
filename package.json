@@ -1,8 +1,8 @@
 {
 	"name": "vue-flux",
 	"type": "module",
-	"version": "7.0.0-alpha.33",
-	"description": "Vue image slider",
+	"version": "7.0.0-beta.1",
+	"description": "Vue image and other resources slider",
 	"author": "ragnar lotus",
 	"repository": {
 		"type": "git",

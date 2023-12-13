@@ -1,4 +1,5 @@
-import { Component, nextTick, Ref } from 'vue';
+import { nextTick, Ref } from 'vue';
+import type { Component } from 'vue';
 import Size from '../shared/Size';
 import { VueFluxConfig } from '../components/VueFlux/types';
 

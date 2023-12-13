@@ -6,9 +6,7 @@
 	import { ComponentStyles } from '../types';
 	import { Statuses } from '../../resources';
 
-	const props = withDefaults(defineProps<FluxImageProps>(), {
-		viewSize: () => new Size(),
-	});
+	const props = defineProps<FluxImageProps>();
 
 	const $el = ref(null);
 
