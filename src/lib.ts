@@ -4,6 +4,7 @@ export * from './resources';
 export * from './transitions';
 
 export {
+	Player,
 	Directions,
 	Statuses,
 	PlayerResource,

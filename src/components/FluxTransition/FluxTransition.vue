@@ -40,6 +40,8 @@
 	const duration = ref(1);
 
 	onMounted(async () => {
+		await nextTick();
+
 		if ($transition.value !== null) {
 			duration.value = $transition.value.totalDuration;
 		}
@@ -84,12 +86,12 @@
 	}
 
 	onUnmounted(() => {
-		if ([null, undefined].includes(props.displayComponent) === false) {
+		if (props.displayComponent) {
 			props.displayComponent.show();
 		}
 	});
 
-	defineExpose({ duration, start });
+	defineExpose({ start });
 </script>
 
 <template>

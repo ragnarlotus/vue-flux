@@ -1,14 +1,18 @@
 <script setup lang="ts">
-	import { Ref, computed } from 'vue';
+	import { Ref, computed, unref } from 'vue';
 	import { FluxButton } from '../../../components';
 
 	interface Props {
-		mouseOver: Ref<boolean>;
+		mouseOver?: boolean | Ref<boolean>;
 	}
 
-	const props = defineProps<Props>();
+	const props = withDefaults(defineProps<Props>(), {
+		mouseOver: undefined,
+	});
 
-	const visible = computed<boolean>(() => props.mouseOver.value === true);
+	const visible = computed<boolean>(() =>
+		[true, undefined].includes(unref(props.mouseOver))
+	);
 </script>
 
 <template>

@@ -1,22 +1,24 @@
 <script setup lang="ts">
-	import { Ref, computed } from 'vue';
+	import { Ref, computed, unref } from 'vue';
 	import { Player, Directions } from '../../controllers/Player';
 	import * as Buttons from './buttons';
 	import { default as PlayerStatuses } from '../../controllers/Player/Statuses';
 
 	export interface Props {
-		mouseOver?: Ref<boolean>;
+		mouseOver?: boolean | Ref<boolean>;
 		player: Player;
 	}
 
-	const props = defineProps<Props>();
+	const props = withDefaults(defineProps<Props>(), {
+		mouseOver: undefined,
+	});
 
 	const visible = computed<boolean>(() => {
 		if (props.player.resource.current === null) {
 			return false;
 		}
 
-		if (props.mouseOver !== undefined && props.mouseOver.value === false) {
+		if (props.mouseOver !== undefined && unref(props.mouseOver) === false) {
 			return false;
 		}
 

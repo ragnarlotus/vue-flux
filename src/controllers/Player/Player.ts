@@ -19,8 +19,8 @@ export default class Player {
 	config: VueFluxConfig;
 	timers: Timers;
 	emit: Function;
-	transitions: Transitions | null = null;
-	resources: Resources | null = null;
+	resources: Resources;
+	transitions: Transitions;
 	$displayComponent: Ref<null | Component> = ref(null);
 
 	constructor(config: VueFluxConfig, timers: Timers, emit: Function) {
@@ -28,17 +28,13 @@ export default class Player {
 		this.timers = timers;
 		this.emit = emit;
 
+		this.resources = new Resources(emit);
+		this.transitions = new Transitions();
 		this.resource = shallowReactive(new PlayerResource());
 		this.transition = shallowReactive(new PlayerTransition());
 	}
 
-	setup(
-		resources: Resources,
-		transitions: Transitions,
-		$displayComponent: Ref<null | Component>
-	) {
-		this.transitions = transitions;
-		this.resources = resources;
+	setup($displayComponent: Ref<null | Component>) {
 		this.$displayComponent = $displayComponent;
 	}
 

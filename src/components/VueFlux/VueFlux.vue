@@ -40,8 +40,8 @@
 
 	const timers = new Controllers.Timers();
 	const player = new Controllers.Player(config, timers, emit);
-	const resources = new Repositories.Resources(emit);
-	const transitions = new Repositories.Transitions();
+	const resources = player.resources;
+	const transitions = player.transitions;
 	const display = new Controllers.Display($container, config, emit);
 	const keys = new Controllers.Keys(config, player);
 	const mouse = new Controllers.Mouse();
@@ -117,7 +117,7 @@
 		await display.updateSize();
 		display.addResizeListener();
 
-		player.setup(resources, transitions, $displayComponent);
+		player.setup($displayComponent);
 
 		transitions.update(props.transitions);
 		player.transition.init(transitions);
@@ -160,6 +160,7 @@
 		play: player.play.bind(player),
 		stop: player.stop.bind(player),
 		getPlayer: () => player as Controllers.Player,
+		size: display.size,
 	});
 
 	emit('created');
@@ -225,7 +226,6 @@
 				name="index"
 				:mouse-over="mouse.isOver"
 				:display-size="display.size"
-				:resources="resources"
 				:player="player"
 			/>
 

@@ -1,18 +1,19 @@
 <script setup lang="ts">
 	import { Ref, computed, nextTick, ref } from 'vue';
 	import { Player } from '../../../controllers';
-	import { Resources } from '../../../repositories';
 	import Thumb from '../Thumb/Thumb.vue';
 	import Size from '../../../shared/Size';
 	import useThumbs from '../Thumb/useThumbs';
 
 	export interface Props {
 		displaySize: Size;
-		resources: Resources;
 		player: Player;
+		mouseOver?: boolean | Ref<boolean>;
 	}
 
-	const props = defineProps<Props>();
+	const props = withDefaults(defineProps<Props>(), {
+		mouseOver: undefined,
+	});
 
 	const $list: Ref<null | HTMLUListElement> = ref(null);
 
@@ -52,8 +53,10 @@
 			return;
 		}
 
-		$list.value.clientHeight;
-		$list.value.style.marginTop = '100%';
+		if (props.mouseOver !== undefined) {
+			$list.value.clientHeight;
+			$list.value.style.marginTop = '100%';
+		}
 
 		setTimeout(() => {
 			visible.value = false;
@@ -73,7 +76,7 @@
 	<nav :class="listClass" @click="hide(null)">
 		<ul ref="$list">
 			<Thumb
-				v-for="(rsc, index) in resources.list"
+				v-for="(rsc, index) in player.resources!.list"
 				:key="index"
 				:rsc="rsc.resource"
 				:size="thumbs.size"
