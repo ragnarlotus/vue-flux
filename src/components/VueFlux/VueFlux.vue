@@ -210,11 +210,7 @@
 		<div v-if="display.size.isValid()" class="complements">
 			<slot name="preloader" :loader="resources.loader" />
 
-			<slot
-				name="caption"
-				:current-resource="player.resource.current"
-				:current-transition="player.transition.current"
-			/>
+			<slot name="caption" :player="player" />
 
 			<div class="remainder upper" />
 
@@ -229,13 +225,7 @@
 				:player="player"
 			/>
 
-			<slot
-				name="pagination"
-				:resources="resources"
-				:current-resource="player.resource.current"
-				:current-transition="player.transition.current"
-				:show="(index: number) => player.show(index)"
-			/>
+			<slot name="pagination" :player="player" />
 		</div>
 	</div>
 </template>

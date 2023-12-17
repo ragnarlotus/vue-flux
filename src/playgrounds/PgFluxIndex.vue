@@ -2,11 +2,10 @@
 	import { ref, shallowReactive, onMounted, Ref } from 'vue';
 	import { VcParagraph } from 'vue-cosk';
 	import { VueFlux } from '../components';
-	import { FluxIndex, FluxControls } from '../complements';
+	import { FluxIndex } from '../complements';
 	import { Img } from '../resources';
 	import { Book, Zip } from '../transitions';
 	import { Player } from '../controllers';
-	import { Size } from '../shared';
 
 	const $vueFlux = ref();
 
@@ -24,11 +23,6 @@
 	]);
 
 	const transitions = shallowReactive([Book, Zip]);
-
-	const displaySize = new Size({
-		width: 160,
-		height: 90,
-	});
 
 	const player: Ref<null | Player> = ref(null);
 

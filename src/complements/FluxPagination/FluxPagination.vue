@@ -1,22 +1,19 @@
 <script setup lang="ts">
 	import { computed } from 'vue';
-	import {
-		Resources,
-		ResourceIndex,
-		TransitionIndex,
-	} from '../../repositories';
 	import { ResourceWithOptions } from '../../resources';
+	import { Player } from '../../controllers';
 
 	export interface Props {
-		resources: Resources;
-		currentResource: null | ResourceIndex;
-		currentTransition: null | TransitionIndex;
-		show: Function;
+		player: Player;
 	}
 
 	const props = defineProps<Props>();
 
-	const visible = computed<boolean>(() => props.resources.list.length > 0);
+	const {
+		player: { resources, resource, transition },
+	} = props;
+
+	const visible = computed<boolean>(() => resources.list.length > 0);
 
 	const getTitle = (rsc: ResourceWithOptions) => {
 		return rsc.resource.caption;
@@ -25,9 +22,9 @@
 	const getCssClass = (index: number, itemCLass: string) => {
 		const classes = [itemCLass];
 
-		let active = props.currentResource?.index === index;
+		let active = resource.current?.index === index;
 
-		if (props.currentTransition !== null) {
+		if (transition.current !== null) {
 			active = false;
 		}
 
@@ -42,18 +39,17 @@
 <template>
 	<nav v-if="visible" class="flux-pagination">
 		<ul>
-			<li v-for="(rsc, index) in resources.list" :key="index">
+			<li v-for="(rsc, index) in player.resources.list" :key="index">
 				<slot
 					:index="index"
 					:rsc="rsc"
 					:title="getTitle(rsc)"
 					:css-class="getCssClass(index, 'custom-pagination-item')"
-					@click="show(index)"
 				>
 					<span
 						:title="getTitle(rsc)"
 						:class="getCssClass(index, 'pagination-item')"
-						@click="show(index)"
+						@click="player.show(index)"
 					/>
 				</slot>
 			</li>

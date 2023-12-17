@@ -13,9 +13,8 @@
 	import PgFluxCaption from './playgrounds/PgFluxCaption.vue';
 	import PgFluxControls from './playgrounds/PgFluxControls.vue';
 	import PgFluxIndex from './playgrounds/PgFluxIndex.vue';
-
-	// Flux components
-	import * as FluxComponents from './components';
+	import PgFluxPagination from './playgrounds/PgFluxPagination.vue';
+	import PgFluxPreloader from './playgrounds/PgFluxPreloader.vue';
 
 	const $wrapper: Ref<null | HTMLDivElement> = ref(null);
 </script>
@@ -32,44 +31,9 @@
 			<!-- <PgFluxParallaxOp /> -->
 			<!-- <PgFluxCaption /> -->
 			<!-- <PgFluxControls /> -->
-			<PgFluxIndex />
+			<!-- <PgFluxIndex /> -->
+			<!-- <PgFluxPagination /> -->
+			<PgFluxPreloader />
 		</div>
 	</main>
 </template>
-
-<style lang="scss">
-	@keyframes spinner {
-		to {
-			transform: rotate(360deg);
-		}
-	}
-
-	.custom-spinner {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		text-align: center;
-		line-height: 50px;
-		margin-top: -25px;
-		margin-left: -25px;
-		width: 50px;
-		height: 50px;
-		z-index: 14;
-
-		&:before {
-			content: '';
-			box-sizing: border-box;
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			width: 50px;
-			height: 50px;
-			margin-top: -25px;
-			margin-left: -25px;
-			border-radius: 50%;
-			border: 1px solid #ccc;
-			border-top-color: #07d;
-			animation: spinner 0.6s linear infinite;
-		}
-	}
-</style>

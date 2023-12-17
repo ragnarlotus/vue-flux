@@ -1,32 +1,30 @@
 <script setup lang="ts">
 	import { computed } from 'vue';
-	import { ResourceIndex, TransitionIndex } from '../../repositories';
+	import { Player } from '../../controllers';
 
 	export interface Props {
-		currentResource: null | ResourceIndex;
-		currentTransition: null | TransitionIndex;
+		player: Player;
 	}
 
 	const props = defineProps<Props>();
 
+	const { resource, transition } = props.player;
+
 	const caption = computed<string>(() => {
-		if (
-			props.currentResource === null ||
-			props.currentResource.rsc.caption === null
-		) {
+		if (resource.current === null || resource.current.rsc.caption === null) {
 			return '&nbsp;';
 		}
 
-		return props.currentResource.rsc.caption;
+		return resource.current.rsc.caption;
 	});
 
 	const cssClasses = computed<string[]>(() => {
 		const classes = ['flux-caption'];
 
 		if (
-			props.currentTransition === null &&
-			props.currentResource !== null &&
-			props.currentResource.rsc.caption.length > 0
+			transition.current === null &&
+			resource.current !== null &&
+			resource.current.rsc.caption.length > 0
 		) {
 			classes.push('visible');
 		}

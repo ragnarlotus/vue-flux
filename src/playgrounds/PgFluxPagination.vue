@@ -2,7 +2,7 @@
 	import { ref, shallowReactive, onMounted, Ref } from 'vue';
 	import { VcParagraph } from 'vue-cosk';
 	import { VueFlux } from '../components';
-	import { FluxCaption } from '../complements';
+	import { FluxPagination } from '../complements';
 	import { Img } from '../resources';
 	import { Book, Zip } from '../transitions';
 	import { Player } from '../controllers';
@@ -10,7 +10,7 @@
 	const $vueFlux = ref();
 
 	const options = shallowReactive({
-		autoplay: true,
+		autoplay: false,
 	});
 
 	const rscs = shallowReactive([
@@ -36,8 +36,8 @@
 		<VcParagraph mode="fill" style="margin: 24px 0" />
 
 		<VueFlux :options="options" :rscs="rscs" :transitions="transitions">
-			<template #caption="captionProps">
-				<FluxCaption v-bind="captionProps" />
+			<template #pagination="paginationProps">
+				<FluxPagination v-bind="paginationProps" />
 			</template>
 		</VueFlux>
 
@@ -50,7 +50,17 @@
 			:transitions="transitions"
 		/>
 
-		<FluxCaption v-if="player" :player="player" />
+		<FluxPagination v-if="player" :player="player">
+			<template v-slot="pageProps">
+				<span
+					:title="pageProps.title"
+					:class="pageProps.cssClass"
+					@click="player.show(pageProps.index)"
+				>
+					{{ pageProps.index }}
+				</span>
+			</template>
+		</FluxPagination>
 
 		<VcParagraph mode="fill" style="margin: 24px 0" />
 	</div>
