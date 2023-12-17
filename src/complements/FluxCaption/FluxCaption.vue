@@ -35,7 +35,7 @@
 
 <template>
 	<div :class="cssClasses">
-		<slot>{{ caption }}</slot>
+		<slot :caption="caption">{{ caption }}</slot>
 	</div>
 </template>
 
