@@ -19,6 +19,8 @@ export { default as Round1 } from './Round1/Round1.vue';
 export { default as Round2 } from './Round2/Round2.vue';
 export { default as Explode } from './Explode/Explode.vue';
 
+export { default as useTransition } from './useTransition';
+
 export type * from './types';
 export type * from './Blinds2D/types';
 export type * from './Blinds3D/types';
