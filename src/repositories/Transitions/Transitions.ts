@@ -45,7 +45,7 @@ export default class Transitions {
 	update(transitions: Object[]) {
 		this.list.splice(0);
 
-		toRaw(transitions).forEach((transition) => {
+		transitions.forEach((transition) => {
 			let component = transition;
 			let options = {};
 

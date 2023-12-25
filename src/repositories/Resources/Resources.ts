@@ -3,6 +3,7 @@ import { Resource, ResourceWithOptions } from '../../resources';
 import { Size, ResourceLoader } from '../../shared';
 import { Direction, Directions } from '../../controllers/Player';
 import { ResourceIndex } from './types';
+import ResourcesMapper from './ResourcesMapper';
 
 export default class Resources {
 	list: ResourceWithOptions[] = shallowReactive([]);
@@ -69,24 +70,15 @@ export default class Resources {
 		numToPreload: number,
 		displaySize: Size
 	) {
+		if (this.loader.value?.hasFinished() === false) {
+			this.loader.value?.cancel();
+		}
+
 		this.list.splice(0);
 
-		const resources = toRaw(rscs).map((rsc) => {
-			let resource = rsc;
-			let options = {};
+		const resources = ResourcesMapper.withOptions(rscs);
 
-			if ('resource' in rsc) {
-				resource = rsc.resource;
-
-				if ('options' in rsc) {
-					options = rsc.options;
-				}
-			}
-
-			return { resource, options } as ResourceWithOptions;
-		});
-
-		const updatePromise = new Promise<void>((resolve) => {
+		const updatePromise = new Promise<void>((resolve, reject) => {
 			this.loader.value = new ResourceLoader(
 				resources,
 				numToPreload,
@@ -94,7 +86,8 @@ export default class Resources {
 				() => this.preloadStart(),
 				(loaded: ResourceWithOptions[]) => this.preloadEnd(loaded, resolve),
 				() => this.lazyLoadStart(),
-				(loaded: ResourceWithOptions[]) => this.lazyLoadEnd(loaded)
+				(loaded: ResourceWithOptions[]) => this.lazyLoadEnd(loaded),
+				reject
 			);
 		});
 
@@ -106,7 +99,7 @@ export default class Resources {
 	}
 
 	preloadEnd(loaded: ResourceWithOptions[], resolve: Function) {
-		loaded.forEach((rsc: ResourceWithOptions) => this.list.push(rsc));
+		this.list.push(...loaded);
 
 		this.emit('resourcesPreloadEnd');
 
@@ -118,7 +111,7 @@ export default class Resources {
 	}
 
 	lazyLoadEnd(loaded: ResourceWithOptions[]) {
-		loaded.forEach((rsc: ResourceWithOptions) => this.list.push(rsc));
+		this.list.push(...loaded);
 
 		this.emit('resourcesLazyloadEnd');
 	}

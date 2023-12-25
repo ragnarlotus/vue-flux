@@ -26,14 +26,14 @@
 			<!-- <PgFluxCube /> -->
 			<!-- <PgFluxGrid /> -->
 			<!-- <PgFluxTransition /> -->
-			<!-- <PgVueFlux /> -->
+			<PgVueFlux />
 			<!-- <PgFluxParallax /> -->
 			<!-- <PgFluxParallaxOp /> -->
 			<!-- <PgFluxCaption /> -->
 			<!-- <PgFluxControls /> -->
 			<!-- <PgFluxIndex /> -->
 			<!-- <PgFluxPagination /> -->
-			<PgFluxPreloader />
+			<!-- <PgFluxPreloader /> -->
 		</div>
 	</main>
 </template>
