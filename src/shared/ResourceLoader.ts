@@ -19,6 +19,8 @@ export default class ResourceLoader {
 	onPreloadEnd: Function;
 	onLazyLoadStart: Function;
 	onLazyLoadEnd: Function;
+	isCancelled: boolean = false;
+	reject: Function;
 
 	constructor(
 		rscs: ResourceWithOptions[],
@@ -27,7 +29,8 @@ export default class ResourceLoader {
 		onPreloadStart: Function,
 		onPreloadEnd: Function,
 		onLazyLoadStart: Function,
-		onLazyLoadEnd: Function
+		onLazyLoadEnd: Function,
+		reject: Function
 	) {
 		this.rscs = rscs;
 		this.toPreload = toPreload > rscs.length ? rscs.length : toPreload;
@@ -36,6 +39,7 @@ export default class ResourceLoader {
 		this.onPreloadEnd = onPreloadEnd;
 		this.onLazyLoadStart = onLazyLoadStart;
 		this.onLazyLoadEnd = onLazyLoadEnd;
+		this.reject = reject;
 
 		this.preloadStart();
 	}
@@ -106,6 +110,10 @@ export default class ResourceLoader {
 			.finally(() => {
 				this.counter.total++;
 
+				if (this.isCancelled) {
+					return;
+				}
+
 				if (this.preLoading.length !== 0) {
 					this.updateProgress();
 				}
@@ -121,11 +129,19 @@ export default class ResourceLoader {
 	loadSuccess(rsc: ResourceWithOptions) {
 		this.counter.success++;
 
+		if (this.isCancelled) {
+			return;
+		}
+
 		rsc.resource.displaySize.update(this.displaySize.toValue());
 	}
 
 	loadError(error: string) {
 		this.counter.error++;
+
+		if (this.isCancelled) {
+			return;
+		}
 
 		// eslint-disable-next-line
 		console.error(error);
@@ -134,5 +150,14 @@ export default class ResourceLoader {
 	updateProgress() {
 		this.progress.value =
 			ceil((this.counter.success * 100) / this.toPreload) || 0;
+	}
+
+	hasFinished() {
+		return this.counter.total === this.rscs.length;
+	}
+
+	cancel() {
+		this.isCancelled = true;
+		this.reject('Resources loading cancelled', this.rscs);
 	}
 }
