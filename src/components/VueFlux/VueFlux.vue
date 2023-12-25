@@ -69,7 +69,7 @@
 		}
 
 		const propsUpdater: any = {
-			resources: async () => await updateResources(),
+			rscs: async () => await updateResources(),
 			transitions: () => updateTransitions(),
 		};
 
