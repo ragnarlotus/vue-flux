@@ -1,4 +1,4 @@
-import { shallowReactive, toRaw } from 'vue';
+import { shallowReactive } from 'vue';
 import type { Component } from 'vue';
 import { Directions, Direction } from '../../controllers/Player';
 import { TransitionIndex } from './types';

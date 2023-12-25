@@ -1,4 +1,4 @@
-import { Ref, ref, shallowReactive, toRaw } from 'vue';
+import { Ref, ref, shallowReactive } from 'vue';
 import { Resource, ResourceWithOptions } from '../../resources';
 import { Size, ResourceLoader } from '../../shared';
 import { Direction, Directions } from '../../controllers/Player';

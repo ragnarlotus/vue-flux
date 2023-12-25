@@ -51,7 +51,7 @@
 		/>
 
 		<FluxPagination v-if="player" :player="player">
-			<template v-slot="pageProps">
+			<template #default="pageProps">
 				<span
 					:title="pageProps.title"
 					:class="pageProps.cssClass"

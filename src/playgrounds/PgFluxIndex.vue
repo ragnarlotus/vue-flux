@@ -50,7 +50,7 @@
 			:transitions="transitions"
 		/>
 
-		<FluxIndex v-if="player" :displaySize="$vueFlux.size" :player="player" />
+		<FluxIndex v-if="player" :display-size="$vueFlux.size" :player="player" />
 
 		<VcParagraph mode="fill" style="margin: 24px 0" />
 	</div>

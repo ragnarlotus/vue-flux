@@ -8,7 +8,6 @@
 		watch,
 		Ref,
 		toRaw,
-		nextTick,
 	} from 'vue';
 	import * as Controllers from '../../controllers';
 	import { FluxTransition } from '../';
@@ -99,7 +98,7 @@
 	}
 
 	watch(
-		props.rscs,
+		() => props.rscs,
 		async () => {
 			await updateProp('rscs');
 		},

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { CSSProperties } from 'vue';
+import { CSSProperties, Component } from 'vue';
 import { Resource } from '../../resources';
 import { Position, Size } from '../../shared';
 import { ComponentProps } from '../types';
@@ -47,7 +47,7 @@ export interface SidesOffsets {
 
 export interface SideProps {
 	name: string;
-	component: any;
+	component: Component;
 	rsc?: Resource;
 	size: Size;
 	viewSize: Size;

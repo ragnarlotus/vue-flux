@@ -46,9 +46,9 @@
 		<VueFlux :options="options" :rscs="rscs" :transitions="transitions">
 			<template #preloader="preloaderProps">
 				<FluxPreloader v-bind="preloaderProps">
-					<template v-slot="preloaderProps">
-						<div v-if="preloaderProps.preloading" class="custom-spinner">
-							{{ preloaderProps.pct }} %
+					<template #default="props">
+						<div v-if="props.preloading" class="custom-spinner">
+							{{ props.pct }} %
 						</div>
 					</template>
 				</FluxPreloader>

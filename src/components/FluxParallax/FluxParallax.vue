@@ -189,7 +189,7 @@
 			return;
 		}
 
-		let positionY = scrollTop - view.top + display.height;
+		const positionY = scrollTop - view.top + display.height;
 
 		handle[props.type](positionY);
 	};
