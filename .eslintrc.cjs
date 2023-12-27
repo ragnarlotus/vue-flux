@@ -5,14 +5,16 @@ module.exports = {
 	},
 	parserOptions: {
 		ecmaVersion: 'latest',
+		sourceType: 'module',
 		parser: '@typescript-eslint/parser',
 	},
+	plugins: ['@typescript-eslint'],
 	extends: [
-		'plugin:vue/essential',
-		'plugin:vue/strongly-recommended',
-		'plugin:vue/recommended',
-		'plugin:jest/recommended',
+		'plugin:vue/vue3-essential',
+		'plugin:vue/vue3-strongly-recommended',
+		'plugin:vue/vue3-recommended',
 		'eslint:recommended',
+		'@vue/typescript/recommended',
 		'prettier',
 	],
 	rules: {

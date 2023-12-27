@@ -12,4 +12,9 @@ export default class PlayerTransition {
 	init(transitions: Transitions) {
 		this.last = transitions.getLast();
 	}
+
+	setCurrentFinished() {
+		this.last = this.current;
+		this.current = null;
+	}
 }

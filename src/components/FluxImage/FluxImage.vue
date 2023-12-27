@@ -2,7 +2,6 @@
 	import { ref, reactive, computed, CSSProperties } from 'vue';
 	import useComponent from '../useComponent';
 	import { FluxImageProps } from './types';
-	import { Size } from '../../shared';
 	import { ComponentStyles } from '../types';
 	import { Statuses } from '../../resources';
 

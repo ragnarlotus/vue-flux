@@ -131,14 +131,13 @@ export default class Player {
 			resource.current!.index
 		);
 
-		if (resource.current!.index === resourceTo.index) {
+		if (resource.currentSameAs(resourceTo)) {
 			return;
 		}
 
-		this.timers.clear('transition');
+		resource.prepareTo(resourceTo);
 
-		this.resource.from = resource.current;
-		this.resource.to = resourceTo;
+		this.timers.clear('transition');
 
 		const transition: TransitionIndex =
 			typeof transitionIndex === 'number'
@@ -146,14 +145,14 @@ export default class Player {
 				: transitions!.getByOrder(
 						transitionIndex,
 						this.transition.last!.index
-				  );
+					);
 
 		if (transition.options.direction === undefined) {
 			if (typeof resourceIndex !== 'number') {
 				transition.options.direction = resourceIndex;
 			} else {
 				transition.options.direction =
-					this.resource.from!.index < this.resource.to.index
+					this.resource.from!.index < this.resource.to!.index
 						? Directions.next
 						: Directions.prev;
 			}
@@ -176,8 +175,7 @@ export default class Player {
 			return;
 		}
 
-		transition.last = transition.current;
-		transition.current = null;
+		transition.setCurrentFinished();
 
 		await nextTick();
 
@@ -188,20 +186,17 @@ export default class Player {
 		);
 
 		if (
-			config.infinite === false &&
-			resource.current.index >= resources.list.length - 1 &&
-			this.status.value === Statuses.playing
+			this.shouldStopPlaying(
+				config.infinite,
+				resource.current,
+				resources.list.length - 1
+			)
 		) {
 			this.stop();
 			return;
 		}
 
-		if (resource.current.options.stop === true) {
-			this.stop();
-			return;
-		}
-
-		if (this.status.value === Statuses.playing && cancel === false) {
+		if (this.shouldPlayNext()) {
 			timers.set(
 				'transition',
 				resource.current.options.delay || config.delay,
@@ -210,5 +205,33 @@ export default class Player {
 				}
 			);
 		}
+	}
+
+	private shouldStopPlaying(
+		infinite: boolean,
+		currentResource: ResourceIndex,
+		totalResources: number
+	) {
+		if (
+			infinite === false &&
+			currentResource.index >= totalResources &&
+			this.status.value === Statuses.playing
+		) {
+			return true;
+		}
+
+		if (currentResource.options.stop === true) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private shouldPlayNext() {
+		if (this.status.value === Statuses.playing) {
+			return true;
+		}
+
+		return false;
 	}
 }

@@ -7,15 +7,17 @@
 		computed,
 		watch,
 		Ref,
+		toRaw,
 	} from 'vue';
 	import * as Controllers from '../../controllers';
-	import * as Repositories from '../../repositories';
 	import { FluxTransition } from '../';
 	import { VueFluxProps, VueFluxEmits, VueFluxConfig } from './types';
 	import type { Component } from 'vue';
 	import { default as PlayerStatuses } from '../../controllers/Player/Statuses';
 
-	const props = defineProps<VueFluxProps>();
+	const props = withDefaults(defineProps<VueFluxProps>(), {
+		options: () => ({}),
+	});
 
 	const emit = defineEmits<VueFluxEmits>();
 
@@ -53,62 +55,71 @@
 		keys.setup();
 	};
 
-	watch(
-		() => props.options,
-		() => {
-			setup();
+	watch(props.options, () => {
+		setup();
+		emit('optionsUpdated');
+	});
 
-			emit('optionsUpdated');
-		},
-		{ deep: true }
-	);
+	async function updateProp(propName: 'rscs' | 'transitions') {
+		const wasPlaying = player.status.value === PlayerStatuses.playing;
+
+		if (wasPlaying) {
+			await player.stop(true);
+		}
+
+		const propsUpdater: any = {
+			rscs: async () => await updateResources(),
+			transitions: () => updateTransitions(),
+		};
+
+		await propsUpdater[propName]();
+
+		if (wasPlaying) {
+			player.play();
+		}
+	}
+
+	async function updateResources() {
+		player.resource.reset();
+
+		const numToPreload = config.lazyLoad
+			? config.lazyLoadAfter
+			: props.rscs.length;
+
+		try {
+			await resources.update(toRaw(props.rscs), numToPreload, display.size);
+		} catch (e) {
+			console.error(e);
+		}
+
+		if (resources.list.length) {
+			player.resource.init(resources);
+		}
+	}
 
 	watch(
 		() => props.rscs,
 		async () => {
-			const wasPlaying = player.status.value === PlayerStatuses.playing;
-
-			if (wasPlaying) {
-				await player.stop(true);
-			}
-
-			player.resource.reset();
-
-			const numToPreload = config.lazyLoad
-				? config.lazyLoadAfter
-				: props.rscs.length;
-
-			await resources.update(props.rscs, numToPreload, display.size);
-
-			player.resource.init(resources);
-
-			if (wasPlaying) {
-				player.play();
-			}
-		}
+			await updateProp('rscs');
+		},
+		{ deep: false }
 	);
 
+	function updateTransitions() {
+		player.transition.reset();
+
+		transitions.update(toRaw(props.transitions));
+
+		player.transition.init(transitions);
+	}
+
 	watch(
-		() => props.transitions,
+		props.transitions,
 		async () => {
-			const wasPlaying = player.status.value === PlayerStatuses.playing;
-
-			if (wasPlaying) {
-				await player.stop(true);
-			}
-
-			player.transition.reset();
-
-			transitions.update(props.transitions);
-
-			player.transition.init(transitions);
-
-			if (wasPlaying) {
-				player.play();
-			}
-
+			await updateProp('transitions');
 			emit('transitionsUpdated');
-		}
+		},
+		{ deep: false }
 	);
 
 	onMounted(async () => {
@@ -119,11 +130,9 @@
 
 		player.setup($displayComponent);
 
-		transitions.update(props.transitions);
-		player.transition.init(transitions);
+		updateTransitions();
 
-		await resources.update(props.rscs, config.lazyLoadAfter, display.size);
-		player.resource.init(resources);
+		await updateResources();
 
 		if (config.autoplay === true) {
 			player.play();

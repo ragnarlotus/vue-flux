@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { reactive, ref, Ref, shallowReactive } from 'vue';
+	import { ref, Ref, shallowReactive } from 'vue';
 	import { VcParagraph } from 'vue-cosk';
 	import Img from '../resources/Img';
 	import * as Transitions from '../transitions';
@@ -10,7 +10,7 @@
 
 	const $vueFlux: Ref<null | InstanceType<typeof VueFlux>> = ref(null);
 
-	const options = reactive({
+	const options = shallowReactive({
 		allowFullscreen: true,
 		autoplay: false,
 		bindKeys: true,
@@ -20,19 +20,29 @@
 	});
 
 	const images = [];
-	for (let i = 1; i < 20; i++) {
+	for (let i = 1; i <= 20; i++) {
 		const fileName = i.toString().padStart(2, '0');
 		const image = new Img(
 			`/images/${fileName}.jpg`,
 			'img ' + i,
-			i % 2 === 0 ? ResizeTypes.fit : ResizeTypes.fill
+			ResizeTypes.fill //i % 2 === 0 ? ResizeTypes.fit : ResizeTypes.fill
 		);
 		images.push(image);
 	}
 
 	const rscs = shallowReactive(images);
 
-	const transitions = shallowReactive(Object.values(Transitions));
+	const transitionComponents = Object.values(Transitions);
+
+	const transitions = shallowReactive(transitionComponents.slice(0, 5));
+
+	const transitionCounter = ref(transitions.length);
+
+	function updateTransitions() {
+		/* params.transitions = transitionComponents.slice(5, 10); */
+		transitions.push(transitionComponents[transitionCounter.value]);
+		transitionCounter.value++;
+	}
 </script>
 
 <template>
@@ -70,6 +80,7 @@
 			<PgButton @click="$vueFlux.show()">Next</PgButton>
 			<PgButton @click="$vueFlux.play()">Play</PgButton>
 			<PgButton @click="$vueFlux.stop()">Stop</PgButton>
+			<PgButton @click="updateTransitions">Update transitions</PgButton>
 		</div>
 
 		<VcParagraph mode="fill" style="margin: 24px 0" />

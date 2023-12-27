@@ -57,7 +57,7 @@ export default class Display {
 
 		const computedStyle = getComputedStyle(this.node.value as HTMLElement);
 
-		let width = parseFloat(computedStyle.width);
+		const width = parseFloat(computedStyle.width);
 		let height = parseFloat(computedStyle.height);
 
 		if (['0px', 'auto', null].includes(computedStyle.height)) {

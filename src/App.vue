@@ -2,7 +2,7 @@
 	import { ref, Ref } from 'vue';
 
 	// Playgrounds
-	/* eslint-disable no-unused-vars */
+	/* eslint-disable no-unused-vars @typescript-eslint/no-unused-vars */
 	import PgFluxImage from './playgrounds/PgFluxImage.vue';
 	import PgFluxCube from './playgrounds/PgFluxCube.vue';
 	import PgFluxGrid from './playgrounds/PgFluxGrid.vue';
@@ -33,7 +33,7 @@
 			<!-- <PgFluxControls /> -->
 			<!-- <PgFluxIndex /> -->
 			<!-- <PgFluxPagination /> -->
-			<PgFluxPreloader />
+			<!-- <PgFluxPreloader /> -->
 		</div>
 	</main>
 </template>
