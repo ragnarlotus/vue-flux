@@ -21,7 +21,7 @@ export default class GridTileFactory {
 			numTiles: number;
 			size: Size;
 			depth: number;
-			color?: string;
+			color?: CSSProperties['color'];
 			colors?: SidesColors;
 			rsc?: Resource;
 			rscs?: SidesResources;

@@ -3,12 +3,13 @@ import { Resource } from '../../../resources';
 import { Side, SideProps } from '../types';
 import SideTransformFactory from './SideTransformFactory';
 import { FluxImage } from '../../';
+import { CSSProperties } from 'vue';
 
 export default class CubeSideFactory {
 	static getProps(
 		sideTransformFactory: SideTransformFactory,
 		side: Side,
-		color?: string,
+		color?: CSSProperties['color'],
 		rsc?: Resource,
 		offset?: Position
 	) {

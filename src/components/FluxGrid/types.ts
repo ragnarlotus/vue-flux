@@ -14,7 +14,7 @@ export interface FluxGridProps extends ComponentProps {
 }
 
 export interface FluxGridTileProps {
-	color?: string;
+	color?: CSSProperties['color'];
 	colors?: SidesColors;
 	rsc?: Resource;
 	rscs?: SidesResources;

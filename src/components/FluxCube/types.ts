@@ -51,7 +51,7 @@ export interface SideProps {
 	rsc?: Resource;
 	size: Size;
 	viewSize: Size;
-	color?: string;
+	color?: CSSProperties['color'];
 	offset?: Position;
 	style: CSSProperties;
 }

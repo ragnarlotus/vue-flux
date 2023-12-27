@@ -1,3 +1,4 @@
+import { CSSProperties } from 'vue';
 import { TransitionConf, TransitionProps } from '../types';
 
 export interface WaveProps extends TransitionProps {}
@@ -7,5 +8,5 @@ export interface WaveConf extends TransitionConf {
 	cols: number;
 	tileDuration: number;
 	tileDelay: number;
-	sideColor: string;
+	sideColor: CSSProperties['color'];
 }

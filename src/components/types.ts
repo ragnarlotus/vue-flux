@@ -3,7 +3,7 @@ import { Resource } from '../resources';
 import { Size, Position } from '../shared';
 
 export interface ComponentProps {
-	color?: string;
+	color?: CSSProperties['color'];
 	rsc?: Resource;
 	size: Size;
 	viewSize?: Size;
