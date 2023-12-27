@@ -50,13 +50,9 @@ module.exports = {
 	},
 	overrides: [
 		{
-			files: [
-				'**/__tests__/*.{j,t}s?(x)',
-				'**/tests/unit/**/*.spec.{j,t}s?(x)',
-			],
-			env: {
-				jest: true,
-			},
+			files: ['**/*.{test,spec}.?(c|m)[jt]s?(x)'],
+			plugins: ['vitest'],
+			extends: ['plugin:vitest/all'],
 		},
 		{
 			files: ['*.d.ts'],

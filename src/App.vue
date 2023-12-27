@@ -26,7 +26,7 @@
 			<!-- <PgFluxCube /> -->
 			<!-- <PgFluxGrid /> -->
 			<!-- <PgFluxTransition /> -->
-			<!-- <PgVueFlux /> -->
+			<PgVueFlux />
 			<!-- <PgFluxParallax /> -->
 			<!-- <PgFluxParallaxOp /> -->
 			<!-- <PgFluxCaption /> -->

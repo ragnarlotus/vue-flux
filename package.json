@@ -28,9 +28,10 @@
 		"dev": "vite",
 		"build": "vite build",
 		"serve": "vite preview",
-		"lint": "eslint --ext .js,.vue --ignore-path .gitignore",
+		"lint": "eslint --ext .js,.ts,.vue --ignore-path .gitignore ./",
 		"format": "prettier .  --write",
-		"test": "vitest"
+		"test": "vitest",
+		"test:coverage": "vitest run --coverage"
 	},
 	"exports": {
 		".": {
@@ -43,14 +44,18 @@
 		"vue": "^3.0.0"
 	},
 	"devDependencies": {
-		"@typescript-eslint/parser": "^6.14.0",
-		"@vitejs/plugin-vue": "^4.5.2",
-		"@vue/compiler-sfc": "^3.3.12",
+		"@types/jest": "^29.5.11",
+		"@typescript-eslint/parser": "^6.15.0",
+		"@vitejs/plugin-vue": "^5.0.0",
+		"@vue/compiler-sfc": "^3.3.13",
+		"@vue/eslint-config-typescript": "^12.0.0",
 		"@vue/test-utils": "^2.4.3",
 		"autoprefixer": "^10.4.16",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-vitest": "^0.3.20",
 		"eslint-plugin-vue": "^9.19.2",
+		"happy-dom": "^12.10.3",
 		"postcss": "^8.4.32",
 		"prettier": "^3.1.1",
 		"sass": "^1.69.5",
