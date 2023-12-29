@@ -11,8 +11,10 @@
 		Ref,
 		CSSProperties,
 	} from 'vue';
-	import { ceil, aspectRatio } from '../../shared/Maths';
+	import { Maths } from '../../shared';
 	import { FluxParallaxProps } from './types';
+
+	const { aspectRatio } = Maths;
 
 	declare const window: Window & {
 		MSStream: any;
@@ -100,7 +102,7 @@
 
 		if (/^[0-9]+%$/.test(offset)) {
 			return {
-				px: ceil((view.height * offsetValue) / 100),
+				px: Math.ceil((view.height * offsetValue) / 100),
 				pct: offsetValue,
 			};
 		}

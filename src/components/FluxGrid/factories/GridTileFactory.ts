@@ -3,10 +3,9 @@ import { Resource } from '../../../resources';
 import { Size, Position } from '../../../shared';
 import { SidesColors, SidesResources } from '../../FluxCube/types';
 import { FluxGridTileProps } from '../types';
-import { floor } from '../../../shared/Maths';
 
 export function getRowNumber(tileNumber: number, numCols: number) {
-	return floor(tileNumber / numCols);
+	return Math.floor(tileNumber / numCols);
 }
 
 export function getColNumber(tileNumber: number, numCols: number) {

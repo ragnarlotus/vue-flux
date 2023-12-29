@@ -1,6 +1,5 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import { ceil } from '../../shared/Maths';
 	import useTransition from '../useTransition';
 	import { FluxCube } from '../../components';
 	import { BookProps, BookConf } from './types';
@@ -20,7 +19,7 @@
 	useTransition(conf, props.options);
 
 	const viewSize: Size = new Size({
-		width: ceil(props.size.width.value! / 2),
+		width: Math.ceil(props.size.width.value! / 2),
 		height: props.size.height.value,
 	});
 
@@ -63,7 +62,7 @@
 		} as CSSProperties,
 	};
 
-	const halfWidth: number = ceil(props.size.width.value! / 2);
+	const halfWidth: number = Math.ceil(props.size.width.value! / 2);
 	const halfWidthPx: string = halfWidth.toString() + 'px';
 
 	// eslint-disable-next-line vue/no-mutating-props

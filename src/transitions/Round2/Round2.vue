@@ -1,6 +1,5 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import { floor } from '../../shared/Maths';
 	import useTransition from '../useTransition';
 	import { FluxGrid } from '../../components';
 	import { Round2Props, Round2Conf } from './types';
@@ -34,7 +33,7 @@
 
 	if (!props.options?.rows) {
 		const divider = props.size.width.value! / conf.cols;
-		conf.rows = floor(props.size.height.value! / divider);
+		conf.rows = Math.floor(props.size.height.value! / divider);
 	}
 
 	const totalDuration = (conf.cols / 2 + conf.rows) * (conf.tileDelay * 2);

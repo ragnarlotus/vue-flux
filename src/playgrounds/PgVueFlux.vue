@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, Ref, shallowReactive } from 'vue';
 	import { VcParagraph } from 'vue-cosk';
-	import Img from '../resources/Img';
+	import { Img } from '../resources';
 	import * as Transitions from '../transitions';
 	import * as Complements from '../complements';
 	import { VueFlux } from '../components';

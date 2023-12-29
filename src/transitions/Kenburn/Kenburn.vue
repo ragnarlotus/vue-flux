@@ -1,6 +1,5 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import { floor } from '../../shared/Maths';
 	import useTransition from '../useTransition';
 	import { KenburnProps, KenburnConf } from './types';
 
@@ -49,7 +48,7 @@
 		},
 	];
 
-	const transformNumber: number = floor(Math.random() * 4);
+	const transformNumber: number = Math.floor(Math.random() * 4);
 	const transform = transforms[transformNumber];
 
 	const css: CSSProperties = {

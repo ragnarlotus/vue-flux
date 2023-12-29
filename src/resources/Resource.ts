@@ -1,15 +1,12 @@
 import { computed, ref, Ref } from 'vue';
-import Size from '../shared/Size';
-import ResizeCalculator from '../shared/ResizeCalculator';
-import Position from '../shared/Position';
+import { Size, Position, ResizeCalculator } from '../shared';
 import {
 	DisplayParameter,
 	ResizedProps,
 	ResizeType,
 	TransitionParameter,
 } from './types';
-import { Statuses } from './';
-import ResizeTypes from './ResizeTypes';
+import { Statuses, ResizeTypes } from './';
 
 export default abstract class Resource {
 	src: string;

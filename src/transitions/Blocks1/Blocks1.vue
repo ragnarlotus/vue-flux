@@ -3,7 +3,6 @@
 	import useTransition from '../useTransition';
 	import { FluxGrid } from '../../components';
 	import { Blocks1Props, Blocks1Conf } from './types';
-	import { floor } from '../../shared/Maths';
 
 	const props = defineProps<Blocks1Props>();
 
@@ -21,12 +20,12 @@
 
 	if (!props.options?.rows) {
 		const divider = props.size.width.value! / conf.cols;
-		conf.rows = floor(props.size.height.value! / divider);
+		conf.rows = Math.floor(props.size.height.value! / divider);
 	}
 
 	const totalDuration = conf.tileDelay + conf.tileDuration;
 
-	const getDelay = () => floor(Math.random() * conf.tileDelay);
+	const getDelay = () => Math.floor(Math.random() * conf.tileDelay);
 
 	const onPlay = () => {
 		if ($grid.value === null) {

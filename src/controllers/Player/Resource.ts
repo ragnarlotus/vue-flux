@@ -1,5 +1,4 @@
-import { Resources } from '../../repositories';
-import { ResourceIndex } from '../../repositories/Resources/types';
+import { Resources, ResourceIndex } from '../../repositories';
 
 export default class PlayerResource {
 	current: ResourceIndex | null = null;

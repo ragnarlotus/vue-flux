@@ -6,10 +6,15 @@ import {
 	ResourceIndex,
 	TransitionIndex,
 } from '../../repositories';
-import { PlayerResource, PlayerTransition, Directions, Direction } from './';
-import { VueFluxConfig } from '../../components/VueFlux/types';
-import Timers from '../Timers';
-import Statuses from './Statuses';
+import {
+	PlayerResource,
+	PlayerTransition,
+	Directions,
+	Direction,
+	Statuses,
+} from './';
+import { VueFluxConfig } from '../../components';
+import { Timers } from '../';
 
 export default class Player {
 	resource: PlayerResource;

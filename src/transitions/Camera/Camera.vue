@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { ref, Ref, reactive, CSSProperties } from 'vue';
-	import { diag } from '../../shared/Maths';
+	import { Maths } from '../../shared';
 	import useTransition from '../useTransition';
 	import { FluxWrapper } from '../../components';
 	import { CameraProps, CameraConf } from './types';
@@ -25,7 +25,7 @@
 		flex: 'none',
 	};
 
-	const diagSize = diag(
+	const diagSize = Maths.diag(
 		props.size.toValue() as { width: number; height: number }
 	);
 
