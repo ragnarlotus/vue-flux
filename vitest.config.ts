@@ -6,6 +6,7 @@ export default defineConfig({
 	test: {
 		globals: true,
 		environment: 'happy-dom',
+		include: ['src/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
 		exclude: [
 			'**/node_modules/**',
 			'**/dist/**',
