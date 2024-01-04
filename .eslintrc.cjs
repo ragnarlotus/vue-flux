@@ -44,6 +44,17 @@ module.exports = {
 				},
 			},
 		],
+		'vitest/prefer-expect-assertions': [
+			'warn',
+			{ onlyFunctionsWithExpectInLoop: true },
+		],
+		'vitest/max-expects': [
+			'error',
+			{
+				max: 8,
+			},
+		],
+		'vitest/no-hooks': ['error', { allow: ['beforeEach', 'afterEach'] }],
 	},
 	globals: {
 		defineProps: true,
