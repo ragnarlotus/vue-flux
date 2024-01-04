@@ -1,5 +1,4 @@
-import { shallowReactive, nextTick, Ref, ref } from 'vue';
-import type { Component } from 'vue';
+import { shallowReactive, nextTick, Ref, ref, type Component } from 'vue';
 import {
 	Resources,
 	Transitions,
@@ -23,12 +22,18 @@ export default class Player {
 	status: Ref<keyof typeof Statuses> = ref(Statuses.stopped);
 	config: VueFluxConfig;
 	timers: Timers;
-	emit: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	emit: (name: string, ...args: any[]) => void;
 	resources: Resources;
 	transitions: Transitions;
 	$displayComponent: Ref<null | Component> = ref(null);
 
-	constructor(config: VueFluxConfig, timers: Timers, emit: Function) {
+	constructor(
+		config: VueFluxConfig,
+		timers: Timers,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		emit: (name: string, ...args: any[]) => void
+	) {
 		this.config = config;
 		this.timers = timers;
 		this.emit = emit;

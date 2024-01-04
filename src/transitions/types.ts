@@ -1,15 +1,15 @@
-import Size from '../shared/Size';
 import Resource from '../resources/Resource';
 import { CSSProperties, Component } from 'vue';
 import { Direction } from '../controllers/Player';
+import { Size } from '../shared';
 
 export interface TransitionProps {
 	size: Size;
 	from: Resource;
 	to?: Resource;
-	options?: any;
+	options?: object;
 	maskStyle: CSSProperties;
-	displayComponent: any;
+	displayComponent: unknown;
 }
 
 export interface TransitionConf {

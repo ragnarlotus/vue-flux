@@ -8,9 +8,9 @@ import ResourcesMapper from './ResourcesMapper';
 export default class Resources {
 	list: ResourceWithOptions[] = shallowReactive([]);
 	loader: Ref<ResourceLoader | null> = ref(null);
-	emit: Function;
+	emit: (name: string) => void;
 
-	constructor(emit: Function) {
+	constructor(emit: (name: string) => void) {
 		this.emit = emit;
 	}
 
@@ -98,7 +98,7 @@ export default class Resources {
 		this.emit('resourcesPreloadStart');
 	}
 
-	preloadEnd(loaded: ResourceWithOptions[], resolve: Function) {
+	preloadEnd(loaded: ResourceWithOptions[], resolve: () => void) {
 		this.list.push(...loaded);
 
 		this.emit('resourcesPreloadEnd');

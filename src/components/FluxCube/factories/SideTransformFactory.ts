@@ -2,7 +2,14 @@ import { Ref, computed } from 'vue';
 import { Size } from '../../../shared';
 import { Side, Turn } from '../types';
 
-const rotate: any = {
+const rotate: {
+	x: {
+		[key: string]: string;
+	};
+	y: {
+		[key: string]: string;
+	};
+} = {
 	x: {
 		top: '90',
 		bottom: '-90',
@@ -17,7 +24,14 @@ const rotate: any = {
 	},
 };
 
-const translate: any = {
+const translate: {
+	x: {
+		[key: string]: string;
+	};
+	y: {
+		[key: string]: string;
+	};
+} = {
 	x: {
 		left: '-50',
 		right: '50',
@@ -33,7 +47,7 @@ export default class SideTransformFactory {
 	depth: number;
 	size: Size;
 	viewSize: Size;
-	translateZ: Ref<any> = computed(() => {
+	translateZ: Ref<{ [key: string]: number }> = computed(() => {
 		const halfDepth = this.depth / 2;
 
 		const { width, height } = this.size.toValue();

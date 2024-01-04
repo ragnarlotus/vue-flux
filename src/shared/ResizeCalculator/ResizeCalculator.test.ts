@@ -2,7 +2,7 @@ import { Size } from '../';
 import { ResizeTypes } from '../../resources';
 import ResizeCalculator, { Orientations } from './ResizeCalculator';
 
-describe('Shared: ResizeCalculator', () => {
+describe('shared: ResizeCalculator', () => {
 	let calc: ResizeCalculator;
 	let realSize: Size;
 	let newSize: Size;
@@ -12,27 +12,27 @@ describe('Shared: ResizeCalculator', () => {
 		newSize = new Size();
 	});
 
-	test('if the size is invalid throws error', () => {
+	it('if the size is invalid throws error', () => {
 		vi.spyOn(realSize, 'isValid').mockImplementation(() => false);
 
 		expect(() => {
 			calc = new ResizeCalculator(realSize);
-		}).toThrowError();
+		}).toThrow('Invalid real size');
 
-		expect(realSize.isValid).toBeCalled();
+		expect(realSize.isValid).toHaveBeenCalledWith();
 	});
 
-	test('if the size is valid when creating the calculator', () => {
+	it('if the size is valid when creating the calculator', () => {
 		vi.spyOn(realSize, 'isValid').mockImplementation(() => true);
 
 		expect(() => {
 			calc = new ResizeCalculator(realSize);
-		}).not.toThrowError();
+		}).not.toThrow();
 
-		expect(realSize.isValid).toBeCalled();
+		expect(realSize.isValid).toHaveBeenCalledWith();
 	});
 
-	test('detects the orientation', () => {
+	it('detects the orientation', () => {
 		realSize.update({
 			width: 640,
 			height: 360,
@@ -52,7 +52,7 @@ describe('Shared: ResizeCalculator', () => {
 		expect(calc.realOrientation).toBe(Orientations.portrait);
 	});
 
-	test('if the new size is valid', () => {
+	it('if the new size is valid', () => {
 		vi.spyOn(newSize, 'isValid').mockImplementation(() => false);
 
 		realSize.update({
@@ -64,12 +64,12 @@ describe('Shared: ResizeCalculator', () => {
 
 		expect(() => {
 			calc.resizeTo(newSize, ResizeTypes.fill);
-		}).toThrowError();
+		}).toThrow('Invalid size to resize');
 
-		expect(newSize.isValid).toBeCalled();
+		expect(newSize.isValid).toHaveBeenCalledWith();
 	});
 
-	test('real size L new size L and type fill', () => {
+	it('real size L new size L and type fill', () => {
 		realSize.update({
 			width: 640,
 			height: 360,
@@ -87,11 +87,14 @@ describe('Shared: ResizeCalculator', () => {
 			ResizeTypes.fill
 		);
 
-		expect(adaptedSize.toValue()).toEqual({ width: 280, height: 157.5 });
-		expect(adaptedPosition.toValue()).toEqual({ top: -8.75, left: 0 });
+		expect(adaptedSize.toValue()).toStrictEqual({
+			width: 280,
+			height: 157.5,
+		});
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: -8.75, left: 0 });
 	});
 
-	test('real size L new size L and type fit', () => {
+	it('real size L new size L and type fit', () => {
 		realSize.update({
 			width: 640,
 			height: 360,
@@ -109,11 +112,11 @@ describe('Shared: ResizeCalculator', () => {
 			ResizeTypes.fit
 		);
 
-		expect(adaptedSize.toValue()).toEqual({ width: 320, height: 180 });
-		expect(adaptedPosition.toValue()).toEqual({ top: 0, left: 0 });
+		expect(adaptedSize.toValue()).toStrictEqual({ width: 320, height: 180 });
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: 0, left: 0 });
 	});
 
-	test('real size L new size P and type fill', () => {
+	it('real size L new size P and type fill', () => {
 		realSize.update({
 			width: 640,
 			height: 360,
@@ -131,11 +134,11 @@ describe('Shared: ResizeCalculator', () => {
 			ResizeTypes.fill
 		);
 
-		expect(adaptedSize.toValue()).toEqual({ width: 1280, height: 720 });
-		expect(adaptedPosition.toValue()).toEqual({ top: 0, left: -490 });
+		expect(adaptedSize.toValue()).toStrictEqual({ width: 1280, height: 720 });
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: 0, left: -490 });
 	});
 
-	test('real size L new size P and type fit', () => {
+	it('real size L new size P and type fit', () => {
 		realSize.update({
 			width: 640,
 			height: 360,
@@ -153,11 +156,17 @@ describe('Shared: ResizeCalculator', () => {
 			ResizeTypes.fit
 		);
 
-		expect(adaptedSize.toValue()).toEqual({ width: 300, height: 168.75 });
-		expect(adaptedPosition.toValue()).toEqual({ top: 275.625, left: 0 });
+		expect(adaptedSize.toValue()).toStrictEqual({
+			width: 300,
+			height: 168.75,
+		});
+		expect(adaptedPosition.toValue()).toStrictEqual({
+			top: 275.625,
+			left: 0,
+		});
 	});
 
-	test('real size P new size L and type fill', () => {
+	it('real size P new size L and type fill', () => {
 		realSize.update({
 			width: 360,
 			height: 640,
@@ -175,11 +184,11 @@ describe('Shared: ResizeCalculator', () => {
 			ResizeTypes.fill
 		);
 
-		expect(adaptedSize.toValue()).toEqual({ width: 720, height: 1280 });
-		expect(adaptedPosition.toValue()).toEqual({ top: -460, left: 0 });
+		expect(adaptedSize.toValue()).toStrictEqual({ width: 720, height: 1280 });
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: -460, left: 0 });
 	});
 
-	test('real size P new size L and type fit', () => {
+	it('real size P new size L and type fit', () => {
 		realSize.update({
 			width: 360,
 			height: 640,
@@ -197,11 +206,14 @@ describe('Shared: ResizeCalculator', () => {
 			ResizeTypes.fit
 		);
 
-		expect(adaptedSize.toValue()).toEqual({ width: 202.5, height: 360 });
-		expect(adaptedPosition.toValue()).toEqual({ top: 0, left: 258.75 });
+		expect(adaptedSize.toValue()).toStrictEqual({
+			width: 202.5,
+			height: 360,
+		});
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: 0, left: 258.75 });
 	});
 
-	test('real size P new size P and type fill', () => {
+	it('real size P new size P and type fill', () => {
 		realSize.update({
 			width: 360,
 			height: 640,
@@ -219,11 +231,14 @@ describe('Shared: ResizeCalculator', () => {
 			ResizeTypes.fill
 		);
 
-		expect(adaptedSize.toValue()).toEqual({ width: 292.5, height: 520 });
-		expect(adaptedPosition.toValue()).toEqual({ top: 0, left: -56.25 });
+		expect(adaptedSize.toValue()).toStrictEqual({
+			width: 292.5,
+			height: 520,
+		});
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: 0, left: -56.25 });
 	});
 
-	test('real size P new size P and type fit', () => {
+	it('real size P new size P and type fit', () => {
 		realSize.update({
 			width: 360,
 			height: 640,
@@ -241,7 +256,7 @@ describe('Shared: ResizeCalculator', () => {
 			ResizeTypes.fit
 		);
 
-		expect(adaptedSize.toValue()).toEqual({ width: 180, height: 320 });
-		expect(adaptedPosition.toValue()).toEqual({ top: 100, left: 0 });
+		expect(adaptedSize.toValue()).toStrictEqual({ width: 180, height: 320 });
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: 100, left: 0 });
 	});
 });

@@ -1,6 +1,6 @@
 import { Ref, ref } from 'vue';
-import Size from './Size';
-import { ResourceWithOptions } from '../resources';
+import { Size } from '../';
+import { ResourceWithOptions } from '../../resources';
 
 export default class ResourceLoader {
 	rscs: ResourceWithOptions[] = [];

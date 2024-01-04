@@ -1,17 +1,17 @@
 import Size from './Size';
 
-describe('Shared: Size', () => {
+describe('shared: Size', () => {
 	let size: Size;
 	let params: object;
 
-	test('initializes values to null without parameters', () => {
+	it('initializes values to null without parameters', () => {
 		size = new Size();
 
 		expect(size.width.value).toBeNull();
 		expect(size.height.value).toBeNull();
 	});
 
-	test('sets param values', () => {
+	it('sets param values', () => {
 		size = new Size({ width: 100 });
 		expect(size.width.value).toBe(100);
 
@@ -26,7 +26,7 @@ describe('Shared: Size', () => {
 		expect(size.height.value).toBe(200);
 	});
 
-	test('reset values', () => {
+	it('reset values', () => {
 		size = new Size({
 			width: 100,
 			height: 200,
@@ -38,24 +38,24 @@ describe('Shared: Size', () => {
 		expect(size.height.value).toBeNull();
 	});
 
-	test('is invalid if width or height is null', () => {
+	it('is invalid if width or height is null', () => {
 		size = new Size({ width: 100 });
-		expect(size.isValid()).toBe(false);
+		expect(size.isValid()).toBeFalsy();
 
 		size = new Size({ height: 100 });
-		expect(size.isValid()).toBe(false);
+		expect(size.isValid()).toBeFalsy();
 	});
 
-	test('is valid when width and height have values', () => {
+	it('is valid when width and height have values', () => {
 		size = new Size({
 			width: 100,
 			height: 200,
 		});
 
-		expect(size.isValid()).toBe(true);
+		expect(size.isValid()).toBeTruthy();
 	});
 
-	test('updates the values', () => {
+	it('updates the values', () => {
 		size = new Size({
 			width: 100,
 			height: 200,
@@ -84,28 +84,28 @@ describe('Shared: Size', () => {
 		expect(size.height.value).toBe(400);
 	});
 
-	test('returns the values as plain object', () => {
+	it('returns the values as plain object', () => {
 		params = {
 			width: 100,
 			height: 200,
 		};
 
 		size = new Size(params);
-		expect(size.toValue()).toEqual(params);
+		expect(size.toValue()).toStrictEqual(params);
 
 		size = new Size();
-		expect(size.toValue()).toEqual({
+		expect(size.toValue()).toStrictEqual({
 			width: undefined,
 			height: undefined,
 		});
 	});
 
-	test('throws exception when trying to get the values with px suffix', () => {
+	it('throws exception when trying to get the values with px suffix', () => {
 		size = new Size();
-		expect(() => size.toPx()).toThrowError();
+		expect(() => size.toPx()).toThrow('Invalid size in pixels');
 	});
 
-	test('returns the values with px suffix', () => {
+	it('returns the values with px suffix', () => {
 		params = {
 			width: 100,
 			height: 200,
@@ -113,7 +113,7 @@ describe('Shared: Size', () => {
 
 		size = new Size(params);
 
-		expect(size.toPx()).toEqual({
+		expect(size.toPx()).toStrictEqual({
 			width: params['width' as keyof object] + 'px',
 			height: params['height' as keyof object] + 'px',
 		});

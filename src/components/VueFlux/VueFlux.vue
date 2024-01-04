@@ -8,11 +8,11 @@
 		watch,
 		Ref,
 		toRaw,
+		type Component,
 	} from 'vue';
 	import * as Controllers from '../../controllers';
 	import { FluxTransition } from '../';
 	import { VueFluxProps, VueFluxEmits, VueFluxConfig } from './types';
-	import type { Component } from 'vue';
 	import { default as PlayerStatuses } from '../../controllers/Player/Statuses';
 
 	const props = withDefaults(defineProps<VueFluxProps>(), {
@@ -67,7 +67,7 @@
 			await player.stop(true);
 		}
 
-		const propsUpdater: any = {
+		const propsUpdater = {
 			rscs: async () => await updateResources(),
 			transitions: () => updateTransitions(),
 		};

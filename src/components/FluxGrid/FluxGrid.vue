@@ -1,6 +1,12 @@
 <script setup lang="ts">
-	import { ref, reactive, computed, Ref, onBeforeUpdate } from 'vue';
-	import type { Component } from 'vue';
+	import {
+		ref,
+		reactive,
+		computed,
+		Ref,
+		onBeforeUpdate,
+		type Component,
+	} from 'vue';
 	import useComponent from '../useComponent';
 	import { FluxGridProps } from './types';
 	import { FluxCube } from '../';

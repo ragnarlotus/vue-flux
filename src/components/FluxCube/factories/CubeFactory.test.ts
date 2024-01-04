@@ -5,7 +5,7 @@ import CubeFactory from './CubeFactory';
 import CubeSideFactory from './CubeSideFactory';
 import SideTransformFactory from './SideTransformFactory';
 
-describe('Factory: CubeFactory', () => {
+describe('factory: CubeFactory', () => {
 	let rsc, rscs, color, colors, offset, offsets;
 
 	const depth = 160;
@@ -21,20 +21,20 @@ describe('Factory: CubeFactory', () => {
 		() => ({}) as SideProps
 	);
 
-	afterEach(() => {
+	beforeEach(() => {
 		vi.clearAllMocks();
 	});
 
-	test('Generates a cube using a color', () => {
+	it('generates a cube using a color', () => {
 		color = '#ccc';
 
 		const cubeProps = CubeFactory.getSidesProps(sideTransformFactory, color);
 
-		expect(CubeSideFactory.getProps).toBeCalledTimes(6);
-		expect(Object.keys(cubeProps).length).toBe(6);
+		expect(CubeSideFactory.getProps).toHaveBeenCalledTimes(6);
+		expect(Object.keys(cubeProps)).toHaveLength(6);
 	});
 
-	test('Generates a cube using a colors', () => {
+	it('generates a cube using a colors', () => {
 		colors = {
 			top: '#ccc',
 			left: '#ccc',
@@ -47,11 +47,11 @@ describe('Factory: CubeFactory', () => {
 			colors
 		);
 
-		expect(CubeSideFactory.getProps).toBeCalledTimes(3);
-		expect(Object.keys(cubeProps).length).toBe(3);
+		expect(CubeSideFactory.getProps).toHaveBeenCalledTimes(3);
+		expect(Object.keys(cubeProps)).toHaveLength(3);
 	});
 
-	test('Generates a cube using a rsc', () => {
+	it('generates a cube using a rsc', () => {
 		rsc = new Img('url', 'caption');
 
 		const cubeProps = CubeFactory.getSidesProps(
@@ -61,11 +61,11 @@ describe('Factory: CubeFactory', () => {
 			rsc
 		);
 
-		expect(CubeSideFactory.getProps).toBeCalledTimes(6);
-		expect(Object.keys(cubeProps).length).toBe(6);
+		expect(CubeSideFactory.getProps).toHaveBeenCalledTimes(6);
+		expect(Object.keys(cubeProps)).toHaveLength(6);
 	});
 
-	test('Generates a cube using a rscs', () => {
+	it('generates a cube using a rscs', () => {
 		rscs = {
 			bottom: new Img('url', 'caption'),
 			right: new Img('url', 'caption'),
@@ -80,11 +80,11 @@ describe('Factory: CubeFactory', () => {
 			rscs
 		);
 
-		expect(CubeSideFactory.getProps).toBeCalledTimes(3);
-		expect(Object.keys(cubeProps).length).toBe(3);
+		expect(CubeSideFactory.getProps).toHaveBeenCalledTimes(3);
+		expect(Object.keys(cubeProps)).toHaveLength(3);
 	});
 
-	test('Generates a cube using a color with offset', () => {
+	it('generates a cube using a color with offset', () => {
 		color = '#ccc';
 		offset = new Position({ top: 160, left: 80 });
 
@@ -97,11 +97,11 @@ describe('Factory: CubeFactory', () => {
 			offset
 		);
 
-		expect(CubeSideFactory.getProps).toBeCalledTimes(6);
-		expect(Object.keys(cubeProps).length).toBe(6);
+		expect(CubeSideFactory.getProps).toHaveBeenCalledTimes(6);
+		expect(Object.keys(cubeProps)).toHaveLength(6);
 	});
 
-	test('Generates a cube using a colors with offsets', () => {
+	it('generates a cube using a colors with offsets', () => {
 		colors = {
 			top: '#ccc',
 			left: '#ccc',
@@ -124,7 +124,7 @@ describe('Factory: CubeFactory', () => {
 			offsets
 		);
 
-		expect(CubeSideFactory.getProps).toBeCalledTimes(3);
-		expect(Object.keys(cubeProps).length).toBe(3);
+		expect(CubeSideFactory.getProps).toHaveBeenCalledTimes(3);
+		expect(Object.keys(cubeProps)).toHaveLength(3);
 	});
 });

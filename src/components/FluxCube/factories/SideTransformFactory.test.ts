@@ -2,7 +2,7 @@ import { Size } from '../../../shared';
 import Turns from '../Turns';
 import SideTransformFactory from './SideTransformFactory';
 
-describe('Factory: SideTransformFactory', () => {
+describe('factory: SideTransformFactory', () => {
 	const depth = 160;
 	const size = new Size({
 		width: 640,
@@ -11,7 +11,7 @@ describe('Factory: SideTransformFactory', () => {
 	const viewSize = new Size();
 	const sideTransformFactory = new SideTransformFactory(depth, size, viewSize);
 
-	test('should get the proper rotate angles', () => {
+	it('should get the proper rotate angles', () => {
 		const expectations = {
 			front: 'rotateX(0deg) rotateY(0deg)',
 			right: 'rotateX(0deg) rotateY(90deg)',
@@ -28,7 +28,7 @@ describe('Factory: SideTransformFactory', () => {
 		});
 	});
 
-	test('should get proper translate coordinates', () => {
+	it('should get proper translate coordinates', () => {
 		const expectations = {
 			front: 'translate3d(0%, 0%, 0px)',
 			right: 'translate3d(50%, 0%, 560px)',
@@ -47,7 +47,7 @@ describe('Factory: SideTransformFactory', () => {
 		});
 	});
 
-	test('should get each side style', () => {
+	it('should get each side style', () => {
 		const expectations = {
 			front: 'rotateX(0deg) rotateY(0deg) translate3d(0%, 0%, 0px)',
 			right: 'rotateX(0deg) rotateY(90deg) translate3d(50%, 0%, 560px)',

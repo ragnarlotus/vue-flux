@@ -7,5 +7,5 @@ export interface FluxTransitionProps {
 	from: Resource;
 	to: Resource;
 	displayComponent?: null | any;
-	options?: Object;
+	options?: object;
 }

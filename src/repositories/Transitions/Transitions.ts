@@ -1,5 +1,4 @@
-import { shallowReactive } from 'vue';
-import type { Component } from 'vue';
+import { shallowReactive, type Component } from 'vue';
 import { Directions, Direction } from '../../controllers/Player';
 import { TransitionIndex } from './types';
 import { TransitionWithOptions } from '../../transitions/types';
@@ -42,7 +41,7 @@ export default class Transitions {
 		}[direction]();
 	}
 
-	update(transitions: Object[]) {
+	update(transitions: object[]) {
 		this.list.splice(0);
 
 		transitions.forEach((transition) => {

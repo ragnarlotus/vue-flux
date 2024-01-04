@@ -10,7 +10,7 @@ export default class ResourcesMapper {
 				resource = rsc.resource as Resource;
 
 				if ('options' in rsc) {
-					options = rsc.options as Object;
+					options = rsc.options as object;
 				}
 			}
 

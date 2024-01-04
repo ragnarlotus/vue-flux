@@ -1,10 +1,16 @@
 <script setup lang="ts">
-	import { ref, reactive, computed, Ref, onBeforeUpdate } from 'vue';
+	import {
+		ref,
+		reactive,
+		computed,
+		Ref,
+		onBeforeUpdate,
+		type Component,
+	} from 'vue';
 	import useComponent from '../useComponent';
 	import { ComponentStyles } from '../types';
 	import { FluxVortexProps } from './types';
 	import { VortexFactory } from './factories';
-	import type { Component } from 'vue';
 
 	const props = withDefaults(defineProps<FluxVortexProps>(), {
 		circles: 1,

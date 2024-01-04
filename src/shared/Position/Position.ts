@@ -52,7 +52,7 @@ export default class Position {
 
 	toPx() {
 		if (!this.isValid()) {
-			throw new RangeError(`Invalid position in pixels`);
+			throw new RangeError('Invalid position in pixels');
 		}
 
 		return {

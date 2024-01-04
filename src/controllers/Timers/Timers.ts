@@ -1,11 +1,9 @@
-interface TimersInterface {
-	[index: string]: number;
-}
-
 export default class Timers {
-	timers: TimersInterface = {};
+	timers: {
+		[index: string]: NodeJS.Timeout;
+	} = {};
 
-	set(index: string, time: number, cb: Function) {
+	set(index: string, time: number, cb: () => void) {
 		this.clear(index);
 		this.timers[index] = setTimeout(cb, time);
 	}

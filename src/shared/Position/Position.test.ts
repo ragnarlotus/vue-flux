@@ -1,17 +1,17 @@
 import Position from './Position';
 
-describe('Shared: Position', () => {
+describe('shared: Position', () => {
 	let pos: Position;
 	let coords: object;
 
-	test('initializes values to null without parameters', () => {
+	it('initializes values to null without parameters', () => {
 		pos = new Position();
 
 		expect(pos.top.value).toBeNull();
 		expect(pos.left.value).toBeNull();
 	});
 
-	test('sets param values', () => {
+	it('sets param values', () => {
 		pos = new Position({ top: 100 });
 		expect(pos.top.value).toBe(100);
 
@@ -26,7 +26,7 @@ describe('Shared: Position', () => {
 		expect(pos.left.value).toBe(200);
 	});
 
-	test('reset values', () => {
+	it('reset values', () => {
 		pos = new Position({
 			top: 100,
 			left: 200,
@@ -38,24 +38,24 @@ describe('Shared: Position', () => {
 		expect(pos.left.value).toBeNull();
 	});
 
-	test('is invalid if top or left is null', () => {
+	it('is invalid if top or left is null', () => {
 		pos = new Position({ top: 100 });
-		expect(pos.isValid()).toBe(false);
+		expect(pos.isValid()).toBeFalsy();
 
 		pos = new Position({ left: 100 });
-		expect(pos.isValid()).toBe(false);
+		expect(pos.isValid()).toBeFalsy();
 	});
 
-	test('is valid when top and left have values', () => {
+	it('is valid when top and left have values', () => {
 		pos = new Position({
 			top: 100,
 			left: 200,
 		});
 
-		expect(pos.isValid()).toBe(true);
+		expect(pos.isValid()).toBeTruthy();
 	});
 
-	test('updates the values', () => {
+	it('updates the values', () => {
 		pos = new Position({
 			top: 100,
 			left: 200,
@@ -84,28 +84,28 @@ describe('Shared: Position', () => {
 		expect(pos.left.value).toBe(400);
 	});
 
-	test('returns the values as plain object', () => {
+	it('returns the values as plain object', () => {
 		coords = {
 			top: 100,
 			left: 200,
 		};
 
 		pos = new Position(coords);
-		expect(pos.toValue()).toEqual(coords);
+		expect(pos.toValue()).toStrictEqual(coords);
 
 		pos = new Position();
-		expect(pos.toValue()).toEqual({
+		expect(pos.toValue()).toStrictEqual({
 			top: undefined,
 			left: undefined,
 		});
 	});
 
-	test('throws exception when trying to get the values with px suffix', () => {
+	it('throws exception when trying to get the values with px suffix', () => {
 		pos = new Position();
-		expect(() => pos.toPx()).toThrowError();
+		expect(() => pos.toPx()).toThrow('Invalid position in pixels');
 	});
 
-	test('returns the values with px suffix', () => {
+	it('returns the values with px suffix', () => {
 		coords = {
 			top: 100,
 			left: 200,
@@ -113,7 +113,7 @@ describe('Shared: Position', () => {
 
 		pos = new Position(coords);
 
-		expect(pos.toPx()).toEqual({
+		expect(pos.toPx()).toStrictEqual({
 			top: coords['top' as keyof object] + 'px',
 			left: coords['left' as keyof object] + 'px',
 		});

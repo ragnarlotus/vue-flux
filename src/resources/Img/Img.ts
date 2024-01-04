@@ -52,7 +52,7 @@ export default class Img extends Resource {
 		return this.loader;
 	}
 
-	onLoad(img: HTMLImageElement, resolve: Function) {
+	onLoad(img: HTMLImageElement, resolve: () => void) {
 		this.realSize = new Size({
 			width: img.naturalWidth || img.width,
 			height: img.naturalHeight || img.height,
@@ -63,7 +63,7 @@ export default class Img extends Resource {
 		resolve();
 	}
 
-	onError(reject: Function) {
+	onError(reject: (message: string) => void) {
 		this.status.value = Statuses.error;
 
 		reject(this.errorMessage);

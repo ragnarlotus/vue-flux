@@ -49,10 +49,10 @@ export default abstract class Resource {
 	abstract load(): Promise<void>;
 
 	// eslint-disable-next-line no-unused-vars
-	abstract onLoad(el: any, resolve: Function): void;
+	abstract onLoad(el: unknown, resolve: () => void): void;
 
 	// eslint-disable-next-line no-unused-vars
-	abstract onError(reject: Function): void;
+	abstract onError(reject: (message: string) => void): void;
 
 	calcResizeProps(displaySize: Size) {
 		if ([displaySize.isValid(), this.realSize.isValid()].includes(false)) {

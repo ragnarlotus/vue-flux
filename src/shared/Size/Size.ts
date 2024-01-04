@@ -82,7 +82,7 @@ export default class Size {
 
 	toPx() {
 		if (!this.isValid()) {
-			throw new RangeError(`Invalid size in pixels`);
+			throw new RangeError('Invalid size in pixels');
 		}
 
 		return {
