@@ -1,4 +1,4 @@
-import { shallowReactive, nextTick, Ref, ref, type Component } from 'vue';
+import { shallowReactive, nextTick, Ref, ref } from 'vue';
 import {
 	Resources,
 	Transitions,
@@ -12,7 +12,7 @@ import {
 	Direction,
 	Statuses,
 } from './';
-import { VueFluxConfig } from '../../components';
+import { FluxComponent, VueFluxConfig } from '../../components';
 import { Timers } from '../';
 
 export default class Player {
@@ -26,7 +26,7 @@ export default class Player {
 	emit: (name: string, ...args: any[]) => void;
 	resources: Resources;
 	transitions: Transitions;
-	$displayComponent: Ref<null | Component> = ref(null);
+	$displayComponent: Ref<null | FluxComponent> = ref(null);
 
 	constructor(
 		config: VueFluxConfig,
@@ -44,7 +44,7 @@ export default class Player {
 		this.transition = shallowReactive(new PlayerTransition());
 	}
 
-	setup($displayComponent: Ref<null | Component>) {
+	setup($displayComponent: Ref<null | FluxComponent>) {
 		this.$displayComponent = $displayComponent;
 	}
 

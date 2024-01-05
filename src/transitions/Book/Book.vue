@@ -1,14 +1,14 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxCube } from '../../components';
+	import { FluxComponent, FluxCube } from '../../components';
 	import { BookProps, BookConf } from './types';
 	import { Position, Size } from '../../shared';
 	import { SidesOffsets } from '../../components/FluxCube/types';
 
 	const props = defineProps<BookProps>();
 
-	const $from: Ref<null | any> = ref(null);
+	const $from: Ref<null | FluxComponent> = ref(null);
 	const $cube: Ref<null | InstanceType<typeof FluxCube>> = ref(null);
 
 	const conf: BookConf = reactive({
@@ -54,7 +54,7 @@
 				left: 0,
 			}),
 		} as SidesOffsets,
-		origin: undefined as any,
+		origin: '',
 		css: {
 			position: 'absolute',
 			top: 0,

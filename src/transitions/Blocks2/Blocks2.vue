@@ -1,14 +1,14 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxGrid } from '../../components';
-	import { Blocks2Props, Blocks2Conf } from './types';
+	import { FluxComponent, FluxGrid } from '../../components';
+	import { Blocks2Props, Blocks2Conf, BackgroundProps } from './types';
 	import { Directions } from '../../controllers/Player';
 
 	const props = defineProps<Blocks2Props>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
-	const $background: Ref<null | any> = ref(null);
+	const $background: Ref<null | FluxComponent> = ref(null);
 
 	const conf: Blocks2Conf = reactive({
 		rows: 8,
@@ -28,8 +28,8 @@
 		conf.rows = Math.floor(props.size.height.value! / divider);
 	}
 
-	const background = {
-		rsc: null as any,
+	const background: BackgroundProps = {
+		rsc: null,
 		css: {
 			position: 'absolute',
 			top: 0,
@@ -75,7 +75,7 @@
 
 	const play = {
 		prev: () => {
-			$grid.value!.transform((tile: any, index: number) => {
+			$grid.value!.transform((tile: FluxComponent, index: number) => {
 				tile.transform({
 					transition: `all ${conf.tileDuration}ms ${
 						conf.easing
@@ -87,7 +87,7 @@
 		},
 
 		next: () => {
-			$grid.value!.transform((tile: any, index: number) => {
+			$grid.value!.transform((tile: FluxComponent, index: number) => {
 				tile.transform({
 					transition: `all ${conf.tileDuration}ms ${
 						conf.easing

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxGrid, FluxCube } from '../../components';
+	import { FluxGrid, FluxComponent, FluxCube } from '../../components';
 	import { Round1Props, Round1Conf } from './types';
 	import { Directions } from '../../controllers/Player';
 	import { Turns } from '../../components';
@@ -14,8 +14,8 @@
 		rows: 0,
 		cols: 8,
 		tileDuration: 800,
-		easing: 'ease-out',
 		tileDelay: 150,
+		easing: 'ease-out',
 	});
 
 	useTransition(conf, props.options);
@@ -67,17 +67,19 @@
 			[Directions.next]: Turns.backr,
 		};
 
-		$grid.value.transform((tile: typeof FluxCube, index: number) => {
-			const transition = `all ${conf.tileDuration}ms ${
-				conf.easing
-			} ${getDelay(index)}ms`;
+		$grid.value.transform(
+			(tile: InstanceType<typeof FluxCube>, index: number) => {
+				const transition = `all ${conf.tileDuration}ms ${
+					conf.easing
+				} ${getDelay(index)}ms`;
 
-			tile.setCss({
-				transition,
-			});
+				tile.setCss({
+					transition,
+				});
 
-			tile.turn(sides[conf.direction!]);
-		});
+				tile.turn(sides[conf.direction!]);
+			}
+		);
 	};
 
 	defineExpose({

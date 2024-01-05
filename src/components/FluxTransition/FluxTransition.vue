@@ -8,14 +8,14 @@
 		nextTick,
 		Ref,
 	} from 'vue';
-	import { FluxTransitionProps } from './types';
+	import { FluxTransitionProps, TransitionComponent } from './types';
 
 	const props = withDefaults(defineProps<FluxTransitionProps>(), {
 		options: () => ({}),
 	});
 
 	const $el: Ref<null | HTMLDivElement> = ref(null);
-	const $transition: Ref<null | any> = ref(null);
+	const $transition: TransitionComponent = ref(null);
 
 	const emit = defineEmits(['ready', 'start', 'end']);
 

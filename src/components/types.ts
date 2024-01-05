@@ -1,4 +1,4 @@
-import { CSSProperties } from 'vue';
+import { CSSProperties, type Component } from 'vue';
 import { Resource } from '../resources';
 import { Size, Position } from '../shared';
 
@@ -17,3 +17,10 @@ export interface ComponentStyles {
 	rsc?: CSSProperties;
 	size?: CSSProperties;
 }
+
+export type FluxComponent = Component & {
+	setCss: (s: CSSProperties) => void;
+	transform: (s: CSSProperties) => void;
+	show: () => void;
+	hide: () => void;
+};

@@ -12,13 +12,14 @@
 		CSSProperties,
 	} from 'vue';
 	import { Maths } from '../../shared';
-	import { FluxParallaxProps } from './types';
+	import {
+		DisplayProps,
+		FluxParallaxProps,
+		FluxParallaxStyles,
+		ViewProps,
+	} from './types';
 
 	const { aspectRatio } = Maths;
-
-	declare const window: Window & {
-		MSStream: any;
-	};
 
 	const props = withDefaults(defineProps<FluxParallaxProps>(), {
 		holder: () => window,
@@ -30,33 +31,31 @@
 
 	const { holder, rsc } = props;
 
-	const style: any = {
+	const style: FluxParallaxStyles = {
 		base: {
 			position: 'relative',
 			background: `url("${rsc.src}") no-repeat`,
-		} as CSSProperties,
+		},
 
-		defined: reactive<CSSProperties>({}),
+		defined: reactive({}),
 
-		final: computed<CSSProperties>(() => ({
+		final: computed(() => ({
 			...style.base,
 			...unref(style.defined),
 		})),
 	};
 
 	const isIos =
-		(/iPad|iPhone|iPod/.test(navigator.userAgent) ||
-			(navigator.userAgent === 'MacIntel' &&
-				navigator.maxTouchPoints > 1)) &&
-		!window.MSStream;
+		/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+		(navigator.userAgent === 'MacIntel' && navigator.maxTouchPoints > 1);
 
-	const display: any = reactive({
+	const display: DisplayProps = reactive({
 		width: 0,
 		height: 0,
 		aspectRatio: computed(() => aspectRatio(display)),
 	});
 
-	const view: any = reactive({
+	const view: ViewProps = reactive({
 		top: 0,
 		width: 0,
 		height: 0,

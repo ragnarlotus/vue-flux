@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxGrid } from '../../components';
+	import { FluxComponent, FluxGrid } from '../../components';
 	import { Round2Props, Round2Conf } from './types';
 	import { Directions } from '../../controllers/Player';
 
@@ -14,8 +14,8 @@
 		cols: 9,
 		tileDuration: 800,
 		tileDelay: 100,
-		easing: 'linear',
 		rotateX: -540,
+		easing: 'linear',
 	});
 
 	useTransition(conf, props.options);
@@ -62,7 +62,7 @@
 			return;
 		}
 
-		$grid.value.transform((tile: any, index: number) => {
+		$grid.value.transform((tile: FluxComponent, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay(index)}ms`;

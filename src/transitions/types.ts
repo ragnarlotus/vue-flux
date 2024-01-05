@@ -1,7 +1,8 @@
-import Resource from '../resources/Resource';
+import { Resource } from '../resources';
 import { CSSProperties, Component } from 'vue';
 import { Direction } from '../controllers/Player';
 import { Size } from '../shared';
+import { FluxComponent } from '../components';
 
 export interface TransitionProps {
 	size: Size;
@@ -9,12 +10,12 @@ export interface TransitionProps {
 	to?: Resource;
 	options?: object;
 	maskStyle: CSSProperties;
-	displayComponent: unknown;
+	displayComponent: FluxComponent;
 }
 
 export interface TransitionConf {
 	totalDuration?: number;
-	easing: string;
+	easing: CSSProperties['animation-timing-function'];
 	direction?: Direction;
 }
 

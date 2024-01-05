@@ -32,10 +32,12 @@ class ResourceMock extends Resource {
 	onLoad = vi
 		.fn()
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		.mockImplementation((_el: unknown, _resolve: Function) => {});
+		.mockImplementation((_el: unknown, _resolve: () => void) => {});
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	onError = vi.fn().mockImplementation((_reject: Function) => {});
+	onError = vi
+		.fn()
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		.mockImplementation((_reject: (message: string) => void) => {});
 }
 
 function resourceFactory(numResources: number) {

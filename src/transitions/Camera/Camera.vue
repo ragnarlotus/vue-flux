@@ -2,20 +2,20 @@
 	import { ref, Ref, reactive, CSSProperties } from 'vue';
 	import { Maths } from '../../shared';
 	import useTransition from '../useTransition';
-	import { FluxWrapper } from '../../components';
+	import { FluxComponent, FluxWrapper } from '../../components';
 	import { CameraProps, CameraConf } from './types';
 	import { Size } from '../../shared';
 
 	const props = defineProps<CameraProps>();
 
 	const $wrapper: Ref<null | InstanceType<typeof FluxWrapper>> = ref(null);
-	const $from: Ref<null | any> = ref(null);
+	const $from: Ref<null | FluxComponent> = ref(null);
 
 	const conf: CameraConf = reactive({
 		circles: 2,
 		totalDuration: 900,
-		easing: 'cubic-bezier(0.385, 0, 0.795, 0.560)',
 		backgroundColor: '#111',
+		easing: 'cubic-bezier(0.385, 0, 0.795, 0.560)',
 	});
 
 	useTransition(conf, props.options);
@@ -55,7 +55,7 @@
 
 		setTimeout(
 			() => {
-				$from.value.hide();
+				$from.value!.hide();
 
 				$wrapper.value!.transform({
 					transition: `all ${conf.totalDuration! / 2 - 50}ms ${

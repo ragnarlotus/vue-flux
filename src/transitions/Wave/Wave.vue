@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxGrid, FluxCube } from '../../components';
+	import { FluxGrid, FluxComponent } from '../../components';
 	import { WaveProps, WaveConf } from './types';
 	import { Directions } from '../../controllers/Player';
 	import { Turns } from '../../components/FluxCube';
@@ -15,8 +15,8 @@
 		cols: 8,
 		tileDuration: 900,
 		tileDelay: 110,
-		easing: 'cubic-bezier(0.3, -0.3, 0.735, 0.285)',
 		sideColor: '#333',
+		easing: 'cubic-bezier(0.3, -0.3, 0.735, 0.285)',
 	});
 
 	useTransition(conf, props.options);
@@ -56,7 +56,7 @@
 			props.displayComponent.hide();
 		}
 
-		$grid.value.transform((tile: typeof FluxCube, index: number) => {
+		$grid.value.transform((tile: FluxComponent, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay[conf.direction!](index)}ms`;

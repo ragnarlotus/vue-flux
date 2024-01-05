@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxVortex } from '../../components';
+	import { FluxComponent, FluxVortex } from '../../components';
 	import { WarpProps, WarpConf } from './types';
 	import { Directions } from '../../controllers/Player';
 
@@ -12,8 +12,8 @@
 	const conf: WarpConf = reactive({
 		circles: 7,
 		tileDuration: 800,
-		easing: 'linear',
 		tileDelay: 150,
+		easing: 'linear',
 	});
 
 	useTransition(conf, props.options);
@@ -33,7 +33,7 @@
 			return;
 		}
 
-		$vortex.value.transform((tile: any, index: number) => {
+		$vortex.value.transform((tile: FluxComponent, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay[conf.direction!](index)}ms`;

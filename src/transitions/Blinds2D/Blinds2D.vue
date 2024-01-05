@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
-	import { FluxGrid, FluxCube } from '../../components';
+	import { FluxGrid, FluxComponent } from '../../components';
 	import useTransition from '../useTransition';
 	import { Blinds2DProps, Blinds2DConf } from './types';
 	import { Sides } from '../../components/FluxCube';
@@ -13,8 +13,8 @@
 		rows: 1,
 		cols: 10,
 		tileDuration: 800,
-		easing: 'linear',
 		tileDelay: 100,
+		easing: 'linear',
 	});
 
 	useTransition(conf, props.options);
@@ -35,7 +35,7 @@
 			return;
 		}
 
-		$grid.value.transform((tile: typeof FluxCube, index: number) => {
+		$grid.value.transform((tile: FluxComponent, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay[conf.direction!](index)}ms`;

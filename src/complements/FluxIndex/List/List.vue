@@ -2,7 +2,7 @@
 	import { Ref, computed, nextTick, ref } from 'vue';
 	import { Player } from '../../../controllers';
 	import Thumb from '../Thumb/Thumb.vue';
-	import Size from '../../../shared/Size';
+	import { Size } from '../../../shared';
 	import useThumbs from '../Thumb/useThumbs';
 
 	export interface Props {

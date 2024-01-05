@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxGrid, FluxCube } from '../../components';
+	import { FluxGrid, FluxComponent } from '../../components';
 	import { Blinds3DProps, Blinds3DConf } from './types';
 
 	const props = defineProps<Blinds3DProps>();
@@ -12,8 +12,8 @@
 		rows: 1,
 		cols: 6,
 		tileDuration: 800,
-		easing: 'ease-out',
 		tileDelay: 150,
+		easing: 'ease-out',
 	});
 
 	useTransition(conf, props.options);
@@ -51,7 +51,7 @@
 			next: 'backr',
 		};
 
-		$grid.value.transform((tile: typeof FluxCube, index: number) => {
+		$grid.value.transform((tile: FluxComponent, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay[conf.direction!](index)}ms`;

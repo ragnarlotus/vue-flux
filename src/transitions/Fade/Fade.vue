@@ -2,10 +2,11 @@
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
 	import { FadeProps, FadeConf } from './types';
+	import { FluxComponent } from '../../components';
 
 	const props = defineProps<FadeProps>();
 
-	const $from: Ref<null | any> = ref(null);
+	const $from: Ref<null | FluxComponent> = ref(null);
 
 	const conf: FadeConf = reactive({
 		totalDuration: 1200,

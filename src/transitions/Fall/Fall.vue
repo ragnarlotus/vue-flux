@@ -2,10 +2,11 @@
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
 	import { FallProps, FallConf } from './types';
+	import { FluxComponent } from '../../components';
 
 	const props = defineProps<FallProps>();
 
-	const $from: Ref<null | any> = ref(null);
+	const $from: Ref<null | FluxComponent> = ref(null);
 
 	const conf: FallConf = reactive({
 		totalDuration: 1600,

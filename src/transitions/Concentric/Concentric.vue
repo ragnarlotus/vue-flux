@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxVortex } from '../../components';
+	import { FluxComponent, FluxVortex } from '../../components';
 	import { ConcentricProps, ConcentricConf } from './types';
 
 	const props = defineProps<ConcentricProps>();
@@ -11,8 +11,8 @@
 	const conf: ConcentricConf = reactive({
 		circles: 7,
 		tileDuration: 800,
-		easing: 'linear',
 		tileDelay: 150,
+		easing: 'linear',
 	});
 
 	useTransition(conf, props.options);
@@ -31,7 +31,7 @@
 			next: '90',
 		};
 
-		$vortex.value.transform((tile: any, index: number) => {
+		$vortex.value.transform((tile: FluxComponent, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay(index)}ms`;

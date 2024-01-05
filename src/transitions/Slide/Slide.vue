@@ -1,17 +1,18 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxWrapper } from '../../components';
+	import { FluxComponent, FluxWrapper } from '../../components';
 	import { SlideProps, SlideConf } from './types';
 	import { ComponentProps } from '../../components';
 	import { Size } from '../../shared';
 	import { Directions } from '../../controllers/Player';
+	import { Resource } from '../../resources';
 
 	const props = defineProps<SlideProps>();
 
 	const $wrapper: Ref<null | InstanceType<typeof FluxWrapper>> = ref(null);
-	const $left: Ref<null | any> = ref(null);
-	const $right: Ref<null | any> = ref(null);
+	const $left: Ref<null | FluxComponent> = ref(null);
+	const $right: Ref<null | FluxComponent> = ref(null);
 
 	const conf: SlideConf = reactive({
 		totalDuration: 1400,
@@ -33,19 +34,19 @@
 		} as CSSProperties,
 	};
 
-	let left: any;
-	let right: any;
+	let left: Resource;
+	let right: Resource;
 
 	const setup = {
 		[Directions.prev]: () => {
-			left = props.to;
+			left = props.to!;
 			right = props.from;
 			wrapperProps.css!.transform = 'translateX(-50%)';
 		},
 
 		[Directions.next]: () => {
 			left = props.from;
-			right = props.to;
+			right = props.to!;
 		},
 	};
 

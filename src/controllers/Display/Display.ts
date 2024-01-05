@@ -5,13 +5,13 @@ import { VueFluxConfig } from '../../components';
 export default class Display {
 	node: Ref<null | HTMLElement | Component>;
 	config: VueFluxConfig | null;
-	emit: null | Function = null;
+	emit: null | ((name: string) => void) = null;
 	size: Size = new Size();
 
 	constructor(
 		node: Ref<null | HTMLElement | Component>,
 		config: VueFluxConfig | null = null,
-		emit: null | Function = null
+		emit: null | ((name: string) => void) = null
 	) {
 		this.node = node;
 		this.config = config;

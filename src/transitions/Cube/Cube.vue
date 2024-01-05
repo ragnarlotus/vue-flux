@@ -36,7 +36,7 @@
 			return;
 		}
 
-		if (props.displayComponent.value !== null) {
+		if (props.displayComponent !== null) {
 			props.displayComponent.hide();
 		}
 

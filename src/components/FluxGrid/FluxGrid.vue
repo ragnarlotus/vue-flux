@@ -1,16 +1,9 @@
 <script setup lang="ts">
-	import {
-		ref,
-		reactive,
-		computed,
-		Ref,
-		onBeforeUpdate,
-		type Component,
-	} from 'vue';
+	import { ref, reactive, computed, Ref, onBeforeUpdate } from 'vue';
 	import useComponent from '../useComponent';
 	import { FluxGridProps } from './types';
 	import { FluxCube } from '../';
-	import { ComponentStyles } from '../types';
+	import { ComponentStyles, FluxComponent } from '../types';
 	import { GridFactory, getRowNumber, getColNumber } from './factories';
 
 	const props = withDefaults(defineProps<FluxGridProps>(), {
@@ -39,14 +32,22 @@
 
 	const tiles = computed(() => GridFactory.getTilesProps(props));
 
-	const $tiles: Ref<Component[]> = ref([]);
+	const $tiles: Ref<FluxComponent[]> = ref([]);
 
 	onBeforeUpdate(() => {
 		$tiles.value = [];
 	});
 
-	const transform = (cb: Function) => {
-		$tiles.value.forEach((tile: Component, index: number) => cb(tile, index));
+	const transform = (
+		cb: (
+			tile: FluxComponent | InstanceType<typeof FluxCube>,
+			index: number
+		) => void
+	) => {
+		$tiles.value.forEach(
+			(tile: FluxComponent | InstanceType<typeof FluxCube>, index: number) =>
+				cb(tile, index)
+		);
 	};
 
 	defineExpose({
@@ -64,7 +65,7 @@
 		<component
 			:is="component"
 			v-for="(tile, index) in tiles"
-			:ref="(el: Component) => $tiles.push(el)"
+			:ref="(el: FluxComponent) => $tiles.push(el)"
 			:key="index"
 			v-bind="tile"
 		/>

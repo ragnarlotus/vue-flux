@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxGrid } from '../../components';
+	import { FluxComponent, FluxGrid } from '../../components';
 	import { WaterfallProps, WaterfallConf } from './types';
 	import { Directions } from '../../controllers/Player';
 
@@ -32,7 +32,7 @@
 			return;
 		}
 
-		$grid.value.transform((tile: any, index: number) => {
+		$grid.value.transform((tile: FluxComponent, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay[conf.direction!](index)}ms`;

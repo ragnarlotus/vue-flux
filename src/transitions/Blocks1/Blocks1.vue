@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxGrid } from '../../components';
+	import { FluxComponent, FluxGrid } from '../../components';
 	import { Blocks1Props, Blocks1Conf } from './types';
 
 	const props = defineProps<Blocks1Props>();
@@ -12,8 +12,8 @@
 		rows: 8,
 		cols: 8,
 		tileDuration: 300,
-		easing: 'linear',
 		tileDelay: 1000,
+		easing: 'linear',
 	});
 
 	useTransition(conf, props.options);
@@ -32,7 +32,7 @@
 			return;
 		}
 
-		$grid.value.transform((tile: any) => {
+		$grid.value.transform((tile: FluxComponent) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay()}ms`;

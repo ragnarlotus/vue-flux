@@ -2,10 +2,11 @@
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
 	import { KenburnProps, KenburnConf } from './types';
+	import { FluxComponent } from '../../components';
 
 	const props = defineProps<KenburnProps>();
 
-	const $from: Ref<null | any> = ref(null);
+	const $from: Ref<null | FluxComponent> = ref(null);
 
 	const conf: KenburnConf = reactive({
 		totalDuration: 1500,
