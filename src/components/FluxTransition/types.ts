@@ -1,4 +1,3 @@
-import { type Component, Ref } from 'vue';
 import { Resource } from '../../resources';
 import { Size } from '../../shared';
 import { FluxComponent } from '../types';
@@ -11,11 +10,3 @@ export interface FluxTransitionProps {
 	displayComponent?: null | FluxComponent;
 	options?: object;
 }
-
-export type TransitionComponent = Ref<
-	| null
-	| (Component & {
-			totalDuration: number;
-			onPlay: () => void;
-	  })
->;

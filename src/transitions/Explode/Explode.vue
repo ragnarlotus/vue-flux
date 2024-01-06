@@ -2,13 +2,13 @@
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
 	import { FluxComponent, FluxGrid } from '../../components';
-	import { ExplodeProps, ExplodeConf } from './types';
+	import { TransitionExplodeProps, TransitionExplodeConf } from './types';
 
-	const props = defineProps<ExplodeProps>();
+	const props = defineProps<TransitionExplodeProps>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
-	const conf: ExplodeConf = reactive({
+	const conf: TransitionExplodeConf = reactive({
 		rows: 9,
 		cols: 9,
 		tileDuration: 300,

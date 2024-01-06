@@ -1,14 +1,14 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxGrid, FluxComponent } from '../../components';
-	import { Blinds3DProps, Blinds3DConf } from './types';
+	import { FluxCube, FluxGrid, Turns } from '../../components';
+	import { TransitionBlinds3DProps, TransitionBlinds3DConf } from './types';
 
-	const props = defineProps<Blinds3DProps>();
+	const props = defineProps<TransitionBlinds3DProps>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
-	const conf: Blinds3DConf = reactive({
+	const conf: TransitionBlinds3DConf = reactive({
 		rows: 1,
 		cols: 6,
 		tileDuration: 800,
@@ -47,21 +47,23 @@
 		}
 
 		const sides = {
-			prev: 'backl',
-			next: 'backr',
+			prev: Turns.backl,
+			next: Turns.backr,
 		};
 
-		$grid.value.transform((tile: FluxComponent, index: number) => {
-			const transition = `all ${conf.tileDuration}ms ${
-				conf.easing
-			} ${getDelay[conf.direction!](index)}ms`;
+		$grid.value.transform(
+			(tile: InstanceType<typeof FluxCube>, index: number) => {
+				const transition = `all ${conf.tileDuration}ms ${
+					conf.easing
+				} ${getDelay[conf.direction!](index)}ms`;
 
-			tile.setCss({
-				transition,
-			});
+				tile.setCss({
+					transition,
+				});
 
-			tile.turn(sides[conf.direction!]);
-		});
+				tile.turn(sides[conf.direction!]);
+			}
+		);
 	};
 
 	defineExpose({

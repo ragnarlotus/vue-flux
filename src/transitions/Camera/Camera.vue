@@ -3,15 +3,15 @@
 	import { Maths } from '../../shared';
 	import useTransition from '../useTransition';
 	import { FluxComponent, FluxWrapper } from '../../components';
-	import { CameraProps, CameraConf } from './types';
+	import { TransitionCameraProps, TransitionCameraConf } from './types';
 	import { Size } from '../../shared';
 
-	const props = defineProps<CameraProps>();
+	const props = defineProps<TransitionCameraProps>();
 
 	const $wrapper: Ref<null | InstanceType<typeof FluxWrapper>> = ref(null);
 	const $from: Ref<null | FluxComponent> = ref(null);
 
-	const conf: CameraConf = reactive({
+	const conf: TransitionCameraConf = reactive({
 		circles: 2,
 		totalDuration: 900,
 		backgroundColor: '#111',

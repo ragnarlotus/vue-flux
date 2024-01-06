@@ -1,20 +1,19 @@
-import { CSSProperties } from 'vue';
-import { TransitionConf, TransitionProps } from '../types';
+import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
-export interface Blocks1Props extends TransitionProps {
-	options: {
-		rows?: number;
-		cols?: number;
-		tileDuration?: number;
-		tileDelay?: number;
-		easing?: CSSProperties['animation-timing-function'];
-	};
+export interface TransitionBlocks1Options extends TransitionOptions {
+	rows?: number;
+	cols?: number;
+	tileDuration?: number;
+	tileDelay?: number;
 }
 
-export interface Blocks1Conf extends TransitionConf {
+export interface TransitionBlocks1Props extends TransitionProps {
+	options: TransitionBlocks1Options;
+}
+
+export interface TransitionBlocks1Conf extends TransitionConf {
 	rows: number;
 	cols: number;
 	tileDuration: number;
 	tileDelay: number;
-	easing: CSSProperties['animation-timing-function'];
 }

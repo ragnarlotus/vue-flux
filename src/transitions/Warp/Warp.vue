@@ -2,14 +2,14 @@
 	import { ref, reactive, Ref } from 'vue';
 	import useTransition from '../useTransition';
 	import { FluxComponent, FluxVortex } from '../../components';
-	import { WarpProps, WarpConf } from './types';
+	import { TransitionWarpProps, TransitionWarpConf } from './types';
 	import { Directions } from '../../controllers/Player';
 
-	const props = defineProps<WarpProps>();
+	const props = defineProps<TransitionWarpProps>();
 
 	const $vortex: Ref<null | InstanceType<typeof FluxVortex>> = ref(null);
 
-	const conf: WarpConf = reactive({
+	const conf: TransitionWarpConf = reactive({
 		circles: 7,
 		tileDuration: 800,
 		tileDelay: 150,

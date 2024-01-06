@@ -1,15 +1,15 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
-	import { FluxGrid, FluxComponent } from '../../components';
+	import { FluxComponent, FluxGrid } from '../../components';
 	import useTransition from '../useTransition';
-	import { Blinds2DProps, Blinds2DConf } from './types';
+	import { TransitionBlinds2DProps, TransitionBlinds2DConf } from './types';
 	import { Sides } from '../../components/FluxCube';
 
-	const props = defineProps<Blinds2DProps>();
+	const props = defineProps<TransitionBlinds2DProps>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
-	const conf: Blinds2DConf = reactive({
+	const conf: TransitionBlinds2DConf = reactive({
 		rows: 1,
 		cols: 10,
 		tileDuration: 800,

@@ -2,19 +2,19 @@
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
 	import { FluxComponent, FluxWrapper } from '../../components';
-	import { SlideProps, SlideConf } from './types';
+	import { TransitionSlideProps, TransitionSlideConf } from './types';
 	import { ComponentProps } from '../../components';
 	import { Size } from '../../shared';
 	import { Directions } from '../../controllers/Player';
 	import { Resource } from '../../resources';
 
-	const props = defineProps<SlideProps>();
+	const props = defineProps<TransitionSlideProps>();
 
 	const $wrapper: Ref<null | InstanceType<typeof FluxWrapper>> = ref(null);
 	const $left: Ref<null | FluxComponent> = ref(null);
 	const $right: Ref<null | FluxComponent> = ref(null);
 
-	const conf: SlideConf = reactive({
+	const conf: TransitionSlideConf = reactive({
 		totalDuration: 1400,
 		easing: 'ease-in-out',
 	});

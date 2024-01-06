@@ -2,13 +2,13 @@
 	import { ref, reactive, Ref } from 'vue';
 	import useTransition from '../useTransition';
 	import { FluxComponent, FluxGrid } from '../../components';
-	import { Blocks1Props, Blocks1Conf } from './types';
+	import { TransitionBlocks1Props, TransitionBlocks1Conf } from './types';
 
-	const props = defineProps<Blocks1Props>();
+	const props = defineProps<TransitionBlocks1Props>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
-	const conf: Blocks1Conf = reactive({
+	const conf: TransitionBlocks1Conf = reactive({
 		rows: 8,
 		cols: 8,
 		tileDuration: 300,

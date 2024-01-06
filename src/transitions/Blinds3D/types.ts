@@ -1,20 +1,19 @@
-import { CSSProperties } from 'vue';
-import { TransitionConf, TransitionProps } from '../types';
+import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
-export interface Blinds3DProps extends TransitionProps {
-	options: {
-		rows?: number;
-		cols?: number;
-		tileDuration?: number;
-		tileDelay?: number;
-		easing?: CSSProperties['animation-timing-function'];
-	};
+export interface TransitionBlinds3DOptions extends TransitionOptions {
+	rows?: number;
+	cols?: number;
+	tileDuration?: number;
+	tileDelay?: number;
 }
 
-export interface Blinds3DConf extends TransitionConf {
+export interface TransitionBlinds3DProps extends TransitionProps {
+	options: TransitionBlinds3DOptions;
+}
+
+export interface TransitionBlinds3DConf extends TransitionConf {
 	rows: number;
 	cols: number;
 	tileDuration: number;
 	tileDelay: number;
-	easing: CSSProperties['animation-timing-function'];
 }

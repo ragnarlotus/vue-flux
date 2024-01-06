@@ -1,14 +1,13 @@
-import { CSSProperties } from 'vue';
-import { TransitionConf, TransitionProps } from '../types';
+import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
-export interface BookProps extends TransitionProps {
-	options: {
-		totalDuration?: number;
-		easing?: CSSProperties['animation-timing-function'];
-	};
+export interface TransitionBookOptions extends TransitionOptions {
+	totalDuration?: number;
 }
 
-export interface BookConf extends TransitionConf {
+export interface TransitionBookProps extends TransitionProps {
+	options: TransitionBookOptions;
+}
+
+export interface TransitionBookConf extends TransitionConf {
 	totalDuration: number;
-	easing: CSSProperties['animation-timing-function'];
 }

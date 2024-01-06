@@ -1,18 +1,18 @@
 import { CSSProperties } from 'vue';
-import { TransitionConf, TransitionProps } from '../types';
+import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
-export interface CameraProps extends TransitionProps {
-	options: {
-		circles?: number;
-		totalDuration?: number;
-		backgroundColor?: CSSProperties['color'];
-		easing?: CSSProperties['animation-timing-function'];
-	};
+export interface TransitionCameraOptions extends TransitionOptions {
+	circles?: number;
+	totalDuration?: number;
+	backgroundColor?: CSSProperties['color'];
 }
 
-export interface CameraConf extends TransitionConf {
+export interface TransitionCameraProps extends TransitionProps {
+	options: TransitionCameraOptions;
+}
+
+export interface TransitionCameraConf extends TransitionConf {
 	circles: number;
 	totalDuration: number;
 	backgroundColor: CSSProperties['color'];
-	easing: CSSProperties['animation-timing-function'];
 }

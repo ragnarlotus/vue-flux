@@ -1,18 +1,17 @@
-import { CSSProperties } from 'vue';
-import { TransitionConf, TransitionProps } from '../types';
+import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
-export interface WarpProps extends TransitionProps {
-	options: {
-		circles?: number;
-		tileDuration?: number;
-		tileDelay?: number;
-		easing?: CSSProperties['animation-timing-function'];
-	};
+export interface TransitionWarpOptions extends TransitionOptions {
+	circles?: number;
+	tileDuration?: number;
+	tileDelay?: number;
 }
 
-export interface WarpConf extends TransitionConf {
+export interface TransitionWarpProps extends TransitionProps {
+	options: TransitionWarpOptions;
+}
+
+export interface TransitionWarpConf extends TransitionConf {
 	circles: number;
 	tileDuration: number;
 	tileDelay: number;
-	easing: CSSProperties['animation-timing-function'];
 }

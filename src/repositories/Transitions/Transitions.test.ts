@@ -5,7 +5,7 @@ function transitionsFactory(numTransitions: number) {
 	return new Array(numTransitions).fill({});
 }
 
-describe('repository: Transitions', () => {
+describe('repositories: Transitions', () => {
 	let repo: TransitionsRepository;
 	let transitions: object[];
 

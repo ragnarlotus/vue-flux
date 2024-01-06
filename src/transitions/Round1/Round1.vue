@@ -1,16 +1,16 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxGrid, FluxComponent, FluxCube } from '../../components';
-	import { Round1Props, Round1Conf } from './types';
+	import { FluxCube, FluxGrid } from '../../components';
+	import { TransitionRound1Props, TransitionRound1Conf } from './types';
 	import { Directions } from '../../controllers/Player';
 	import { Turns } from '../../components';
 
-	const props = defineProps<Round1Props>();
+	const props = defineProps<TransitionRound1Props>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
-	const conf: Round1Conf = reactive({
+	const conf: TransitionRound1Conf = reactive({
 		rows: 0,
 		cols: 8,
 		tileDuration: 800,

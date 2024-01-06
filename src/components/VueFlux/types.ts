@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { Component } from 'vue';
 import { Resource, ResourceWithOptions } from '../../resources';
 import { TransitionWithOptions } from '../../transitions';
 import {
@@ -7,6 +6,7 @@ import {
 	PlayerResource,
 	PlayerTransition,
 } from '../../controllers/Player';
+import { type Component } from 'vue';
 
 export interface VueFluxOptions {
 	allowFullscreen?: boolean;

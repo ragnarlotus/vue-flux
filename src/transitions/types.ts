@@ -13,11 +13,20 @@ export interface TransitionProps {
 	displayComponent: FluxComponent;
 }
 
+export interface TransitionOptions {
+	easing?: CSSProperties['animation-timing-function'];
+}
+
 export interface TransitionConf {
 	totalDuration?: number;
-	easing: CSSProperties['animation-timing-function'];
 	direction?: Direction;
+	easing: CSSProperties['animation-timing-function'];
 }
+
+export type TransitionComponent = Component & {
+	totalDuration: number;
+	onPlay: () => void;
+};
 
 export interface TransitionWithOptions {
 	component: Component;

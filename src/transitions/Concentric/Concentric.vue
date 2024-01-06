@@ -2,13 +2,16 @@
 	import { ref, reactive, Ref } from 'vue';
 	import useTransition from '../useTransition';
 	import { FluxComponent, FluxVortex } from '../../components';
-	import { ConcentricProps, ConcentricConf } from './types';
+	import {
+		TransitionConcentricProps,
+		TransitionConcentricConf,
+	} from './types';
 
-	const props = defineProps<ConcentricProps>();
+	const props = defineProps<TransitionConcentricProps>();
 
 	const $vortex: Ref<null | InstanceType<typeof FluxVortex>> = ref(null);
 
-	const conf: ConcentricConf = reactive({
+	const conf: TransitionConcentricConf = reactive({
 		circles: 7,
 		tileDuration: 800,
 		tileDelay: 150,

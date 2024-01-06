@@ -1,22 +1,21 @@
-import { CSSProperties } from 'vue';
-import { TransitionConf, TransitionProps } from '../types';
+import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
-export interface Round2Props extends TransitionProps {
-	options: {
-		rows?: number;
-		cols?: number;
-		tileDuration?: number;
-		tileDelay?: number;
-		rotateX?: number;
-		easing?: CSSProperties['animation-timing-function'];
-	};
+export interface TransitionRound2Options extends TransitionOptions {
+	rows?: number;
+	cols?: number;
+	tileDuration?: number;
+	tileDelay?: number;
+	rotateX?: number;
 }
 
-export interface Round2Conf extends TransitionConf {
+export interface TransitionRound2Props extends TransitionProps {
+	options: TransitionRound2Options;
+}
+
+export interface TransitionRound2Conf extends TransitionConf {
 	rows: number;
 	cols: number;
 	tileDuration: number;
 	tileDelay: number;
 	rotateX: number;
-	easing: CSSProperties['animation-timing-function'];
 }

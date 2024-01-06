@@ -2,14 +2,14 @@
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
 	import { FluxComponent, FluxGrid } from '../../components';
-	import { Round2Props, Round2Conf } from './types';
+	import { TransitionRound2Props, TransitionRound2Conf } from './types';
 	import { Directions } from '../../controllers/Player';
 
-	const props = defineProps<Round2Props>();
+	const props = defineProps<TransitionRound2Props>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
-	const conf: Round2Conf = reactive({
+	const conf: TransitionRound2Conf = reactive({
 		rows: 0,
 		cols: 9,
 		tileDuration: 800,

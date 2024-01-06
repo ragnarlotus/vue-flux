@@ -2,16 +2,16 @@
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
 	import { FluxComponent, FluxCube } from '../../components';
-	import { BookProps, BookConf } from './types';
+	import { TransitionBookProps, TransitionBookConf } from './types';
 	import { Position, Size } from '../../shared';
 	import { SidesOffsets } from '../../components/FluxCube/types';
 
-	const props = defineProps<BookProps>();
+	const props = defineProps<TransitionBookProps>();
 
 	const $from: Ref<null | FluxComponent> = ref(null);
 	const $cube: Ref<null | InstanceType<typeof FluxCube>> = ref(null);
 
-	const conf: BookConf = reactive({
+	const conf: TransitionBookConf = reactive({
 		totalDuration: 1200,
 		easing: 'ease-out',
 	});

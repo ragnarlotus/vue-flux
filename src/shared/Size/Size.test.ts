@@ -94,10 +94,7 @@ describe('shared: Size', () => {
 		expect(size.toValue()).toStrictEqual(params);
 
 		size = new Size();
-		expect(size.toValue()).toStrictEqual({
-			width: undefined,
-			height: undefined,
-		});
+		expect(size.toValue()).toStrictEqual({});
 	});
 
 	it('throws exception when trying to get the values with px suffix', () => {

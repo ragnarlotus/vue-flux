@@ -2,14 +2,14 @@
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
 	import { FluxCube } from '../../components';
-	import { CubeProps, CubeConf } from './types';
+	import { TransitionCubeProps, TransitionCubeConf } from './types';
 	import { Turns } from '../../components/FluxCube';
 
-	const props = defineProps<CubeProps>();
+	const props = defineProps<TransitionCubeProps>();
 
 	const $cube: Ref<null | InstanceType<typeof FluxCube>> = ref(null);
 
-	const conf: CubeConf = reactive({
+	const conf: TransitionCubeConf = reactive({
 		totalDuration: 1400,
 		easing: 'ease-out',
 	});

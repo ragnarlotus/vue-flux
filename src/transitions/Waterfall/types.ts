@@ -1,20 +1,19 @@
-import { CSSProperties } from 'vue';
-import { TransitionConf, TransitionProps } from '../types';
+import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
-export interface WaterfallProps extends TransitionProps {
-	options: {
-		rows?: number;
-		cols?: number;
-		tileDuration?: number;
-		tileDelay?: number;
-		easing?: CSSProperties['animation-timing-function'];
-	};
+export interface TransitionWaterfallOptions extends TransitionOptions {
+	rows?: number;
+	cols?: number;
+	tileDuration?: number;
+	tileDelay?: number;
 }
 
-export interface WaterfallConf extends TransitionConf {
+export interface TransitionWaterfallProps extends TransitionProps {
+	options: TransitionWaterfallOptions;
+}
+
+export interface TransitionWaterfallConf extends TransitionConf {
 	rows: number;
 	cols: number;
 	tileDuration: number;
 	tileDelay: number;
-	easing: CSSProperties['animation-timing-function'];
 }

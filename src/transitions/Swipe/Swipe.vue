@@ -2,15 +2,15 @@
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
 	import { FluxComponent, FluxWrapper } from '../../components';
-	import { SwipeProps, SwipeConf } from './types';
+	import { TransitionSwipeProps, TransitionSwipeConf } from './types';
 	import { Directions } from '../../controllers/Player';
 
-	const props = defineProps<SwipeProps>();
+	const props = defineProps<TransitionSwipeProps>();
 
 	const $wrapper: Ref<null | InstanceType<typeof FluxWrapper>> = ref(null);
 	const $from: Ref<null | FluxComponent> = ref(null);
 
-	const conf: SwipeConf = reactive({
+	const conf: TransitionSwipeConf = reactive({
 		totalDuration: 1400,
 		easing: 'ease-in-out',
 	});

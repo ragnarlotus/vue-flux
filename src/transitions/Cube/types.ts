@@ -1,14 +1,13 @@
-import { CSSProperties } from 'vue';
-import { TransitionConf, TransitionProps } from '../types';
+import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
-export interface CubeProps extends TransitionProps {
-	options: {
-		totalDuration?: number;
-		easing?: CSSProperties['animation-timing-function'];
-	};
+export interface TransitionCubeOptions extends TransitionOptions {
+	totalDuration?: number;
 }
 
-export interface CubeConf extends TransitionConf {
+export interface TransitionCubeProps extends TransitionProps {
+	options: TransitionCubeOptions;
+}
+
+export interface TransitionCubeConf extends TransitionConf {
 	totalDuration: number;
-	easing: CSSProperties['animation-timing-function'];
 }

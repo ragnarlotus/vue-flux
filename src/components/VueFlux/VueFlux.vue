@@ -8,10 +8,9 @@
 		watch,
 		Ref,
 		toRaw,
-		type Component,
 	} from 'vue';
 	import * as Controllers from '../../controllers';
-	import { FluxTransition } from '../';
+	import { FluxComponent, FluxTransition } from '../';
 	import { VueFluxProps, VueFluxEmits, VueFluxConfig } from './types';
 	import { default as PlayerStatuses } from '../../controllers/Player/Statuses';
 
@@ -24,7 +23,7 @@
 	const $container: Ref<null | HTMLDivElement> = ref(null);
 	const $transition: Ref<null | InstanceType<typeof FluxTransition>> =
 		ref(null);
-	const $displayComponent: Ref<null | Component> = ref(null);
+	const $displayComponent: Ref<null | FluxComponent> = ref(null);
 
 	const config: VueFluxConfig = reactive({
 		allowFullscreen: false,

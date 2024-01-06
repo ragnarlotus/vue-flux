@@ -1,22 +1,22 @@
 import { CSSProperties } from 'vue';
-import { TransitionConf, TransitionProps } from '../types';
+import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
-export interface WaveProps extends TransitionProps {
-	options: {
-		rows?: number;
-		cols?: number;
-		tileDuration?: number;
-		tileDelay?: number;
-		sideColor?: CSSProperties['color'];
-		easing?: CSSProperties['animation-timing-function'];
-	};
+export interface TransitionWaveOptions extends TransitionOptions {
+	rows?: number;
+	cols?: number;
+	tileDuration?: number;
+	tileDelay?: number;
+	sideColor?: CSSProperties['color'];
 }
 
-export interface WaveConf extends TransitionConf {
+export interface TransitionWaveProps extends TransitionProps {
+	options: TransitionWaveOptions;
+}
+
+export interface TransitionWaveConf extends TransitionConf {
 	rows: number;
 	cols: number;
 	tileDuration: number;
 	tileDelay: number;
 	sideColor: CSSProperties['color'];
-	easing: CSSProperties['animation-timing-function'];
 }

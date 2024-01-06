@@ -4,13 +4,14 @@ import { Size, ResourceLoader } from '../../shared';
 import { Direction, Directions } from '../../controllers/Player';
 import { ResourceIndex } from './types';
 import ResourcesMapper from './ResourcesMapper';
+import { VueFluxEmits } from '../../components';
 
 export default class Resources {
 	list: ResourceWithOptions[] = shallowReactive([]);
 	loader: Ref<ResourceLoader | null> = ref(null);
-	emit: (name: string) => void;
+	emit: VueFluxEmits;
 
-	constructor(emit: (name: string) => void) {
+	constructor(emit: VueFluxEmits) {
 		this.emit = emit;
 	}
 

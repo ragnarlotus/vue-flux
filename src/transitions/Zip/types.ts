@@ -1,20 +1,19 @@
-import { CSSProperties } from 'vue';
-import { TransitionConf, TransitionProps } from '../types';
+import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
-export interface ZipProps extends TransitionProps {
-	options: {
-		rows?: number;
-		cols?: number;
-		tileDuration?: number;
-		tileDelay?: number;
-		easing: CSSProperties['animation-timing-function'];
-	};
+export interface TransitionZipOptions extends TransitionOptions {
+	rows?: number;
+	cols?: number;
+	tileDuration?: number;
+	tileDelay?: number;
 }
 
-export interface ZipConf extends TransitionConf {
+export interface TransitionZipProps extends TransitionProps {
+	options: TransitionZipOptions;
+}
+
+export interface TransitionZipConf extends TransitionConf {
 	rows: number;
 	cols: number;
 	tileDuration: number;
 	tileDelay: number;
-	easing: CSSProperties['animation-timing-function'];
 }

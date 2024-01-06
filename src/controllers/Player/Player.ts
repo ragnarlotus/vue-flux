@@ -12,7 +12,7 @@ import {
 	Direction,
 	Statuses,
 } from './';
-import { FluxComponent, VueFluxConfig } from '../../components';
+import { FluxComponent, VueFluxConfig, VueFluxEmits } from '../../components';
 import { Timers } from '../';
 
 export default class Player {
@@ -23,7 +23,7 @@ export default class Player {
 	config: VueFluxConfig;
 	timers: Timers;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	emit: (name: string, ...args: any[]) => void;
+	emit: VueFluxEmits;
 	resources: Resources;
 	transitions: Transitions;
 	$displayComponent: Ref<null | FluxComponent> = ref(null);
@@ -32,7 +32,7 @@ export default class Player {
 		config: VueFluxConfig,
 		timers: Timers,
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		emit: (name: string, ...args: any[]) => void
+		emit: VueFluxEmits
 	) {
 		this.config = config;
 		this.timers = timers;
@@ -189,11 +189,11 @@ export default class Player {
 
 		await nextTick();
 
-		this.emit(
-			cancel ? 'transitionCancel' : 'transitionEnd',
-			this.resource,
-			this.transition
-		);
+		if (cancel === true) {
+			this.emit('transitionCancel', this.resource, this.transition);
+		} else {
+			this.emit('transitionEnd', this.resource, this.transition);
+		}
 
 		if (
 			this.shouldStopPlaying(

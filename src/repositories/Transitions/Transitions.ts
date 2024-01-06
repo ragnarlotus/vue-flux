@@ -1,7 +1,8 @@
-import { shallowReactive, type Component } from 'vue';
+import { type Component, shallowReactive } from 'vue';
 import { Directions, Direction } from '../../controllers/Player';
 import { TransitionIndex } from './types';
 import { TransitionWithOptions } from '../../transitions/types';
+import TransitionsMapper from './TransitionsMapper';
 
 export default class Transitions {
 	list: TransitionWithOptions[] = shallowReactive([]);
@@ -41,22 +42,11 @@ export default class Transitions {
 		}[direction]();
 	}
 
-	update(transitions: object[]) {
+	update(transitions: (Component | TransitionWithOptions)[]) {
 		this.list.splice(0);
 
-		transitions.forEach((transition) => {
-			let component = transition;
-			let options = {};
+		const transitionsWithOptions = TransitionsMapper.withOptions(transitions);
 
-			if ('component' in transition) {
-				component = transition.component as Component;
-
-				if ('options' in transition) {
-					options = transition.options as object;
-				}
-			}
-
-			this.list.push({ component, options } as TransitionWithOptions);
-		});
+		this.list.push(...transitionsWithOptions);
 	}
 }

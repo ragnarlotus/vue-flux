@@ -3,7 +3,7 @@
 	import useComponent from '../useComponent';
 	import { FluxGridProps } from './types';
 	import { FluxCube } from '../';
-	import { ComponentStyles, FluxComponent } from '../types';
+	import { ComponentStyles } from '../types';
 	import { GridFactory, getRowNumber, getColNumber } from './factories';
 
 	const props = withDefaults(defineProps<FluxGridProps>(), {
@@ -32,22 +32,14 @@
 
 	const tiles = computed(() => GridFactory.getTilesProps(props));
 
-	const $tiles: Ref<FluxComponent[]> = ref([]);
+	const $tiles: Ref<any[]> = ref([]);
 
 	onBeforeUpdate(() => {
 		$tiles.value = [];
 	});
 
-	const transform = (
-		cb: (
-			tile: FluxComponent | InstanceType<typeof FluxCube>,
-			index: number
-		) => void
-	) => {
-		$tiles.value.forEach(
-			(tile: FluxComponent | InstanceType<typeof FluxCube>, index: number) =>
-				cb(tile, index)
-		);
+	const transform = (cb: (tile: any, index: number) => void) => {
+		$tiles.value.forEach((tile: any, index: number) => cb(tile, index));
 	};
 
 	defineExpose({
@@ -65,7 +57,7 @@
 		<component
 			:is="component"
 			v-for="(tile, index) in tiles"
-			:ref="(el: FluxComponent) => $tiles.push(el)"
+			:ref="(el: any) => $tiles.push(el)"
 			:key="index"
 			v-bind="tile"
 		/>
