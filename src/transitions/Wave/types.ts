@@ -2,7 +2,6 @@ import { CSSProperties } from 'vue';
 import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
 export interface TransitionWaveOptions extends TransitionOptions {
-	rows?: number;
 	cols?: number;
 	tileDuration?: number;
 	tileDelay?: number;

@@ -25,7 +25,7 @@
 	// eslint-disable-next-line vue/no-mutating-props
 	props.maskStyle.overflow = 'visible';
 
-	if (!props.options.rows) {
+	if (!props.options?.rows) {
 		const divider = props.size.width.value! / conf.cols;
 		conf.rows = Math.floor(props.size.height.value! / divider);
 	}

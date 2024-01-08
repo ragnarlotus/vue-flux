@@ -1,4 +1,4 @@
-import { TransitionConf, TransitionProps } from '../types';
+import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
 export interface TransitionExplodeOptions extends TransitionOptions {
 	rows?: number;

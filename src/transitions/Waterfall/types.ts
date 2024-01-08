@@ -1,7 +1,6 @@
 import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
 export interface TransitionWaterfallOptions extends TransitionOptions {
-	rows?: number;
 	cols?: number;
 	tileDuration?: number;
 	tileDelay?: number;

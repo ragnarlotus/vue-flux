@@ -1,7 +1,6 @@
 import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
 export interface TransitionBlinds3DOptions extends TransitionOptions {
-	rows?: number;
 	cols?: number;
 	tileDuration?: number;
 	tileDelay?: number;
