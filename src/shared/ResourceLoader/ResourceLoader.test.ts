@@ -109,7 +109,7 @@ describe('shared: ResourceLoader', () => {
 		).toBeTruthy();
 	});
 
-	it.skip('calls onPreloadEnd when preload finishes', () =>
+	/* 	it.skip('calls onPreloadEnd when preload finishes', () =>
 		new Promise((resolve) => {
 			onPreloadEnd.mockImplementation(() => {
 				expect(
@@ -122,5 +122,5 @@ describe('shared: ResourceLoader', () => {
 			});
 
 			rscLoader = rscLoaderCreator(15, 10);
-		}));
+		})); */
 });

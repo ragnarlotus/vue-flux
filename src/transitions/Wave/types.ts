@@ -10,7 +10,7 @@ export interface TransitionWaveOptions extends TransitionOptions {
 }
 
 export interface TransitionWaveProps extends TransitionProps {
-	options: TransitionWaveOptions;
+	options?: TransitionWaveOptions;
 }
 
 export interface TransitionWaveConf extends TransitionConf {

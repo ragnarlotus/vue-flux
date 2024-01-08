@@ -8,7 +8,7 @@ export interface TransitionWaterfallOptions extends TransitionOptions {
 }
 
 export interface TransitionWaterfallProps extends TransitionProps {
-	options: TransitionWaterfallOptions;
+	options?: TransitionWaterfallOptions;
 }
 
 export interface TransitionWaterfallConf extends TransitionConf {

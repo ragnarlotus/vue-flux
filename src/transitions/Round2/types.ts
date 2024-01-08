@@ -9,7 +9,7 @@ export interface TransitionRound2Options extends TransitionOptions {
 }
 
 export interface TransitionRound2Props extends TransitionProps {
-	options: TransitionRound2Options;
+	options?: TransitionRound2Options;
 }
 
 export interface TransitionRound2Conf extends TransitionConf {

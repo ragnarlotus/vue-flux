@@ -7,7 +7,7 @@ export interface TransitionWarpOptions extends TransitionOptions {
 }
 
 export interface TransitionWarpProps extends TransitionProps {
-	options: TransitionWarpOptions;
+	options?: TransitionWarpOptions;
 }
 
 export interface TransitionWarpConf extends TransitionConf {

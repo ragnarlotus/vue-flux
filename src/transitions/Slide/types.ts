@@ -5,7 +5,7 @@ export interface TransitionSlideOptions extends TransitionOptions {
 }
 
 export interface TransitionSlideProps extends TransitionProps {
-	options: TransitionSlideOptions;
+	options?: TransitionSlideOptions;
 }
 
 export interface TransitionSlideConf extends TransitionConf {

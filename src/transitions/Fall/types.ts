@@ -5,7 +5,7 @@ export interface TransitionFallOptions extends TransitionOptions {
 }
 
 export interface TransitionFallProps extends TransitionProps {
-	options: TransitionFallOptions;
+	options?: TransitionFallOptions;
 }
 
 export interface TransitionFallConf extends TransitionConf {

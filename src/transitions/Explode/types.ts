@@ -8,7 +8,7 @@ export interface TransitionExplodeOptions extends TransitionOptions {
 }
 
 export interface TransitionExplodeProps extends TransitionProps {
-	options: TransitionExplodeOptions;
+	options?: TransitionExplodeOptions;
 }
 
 export interface TransitionExplodeConf extends TransitionConf {

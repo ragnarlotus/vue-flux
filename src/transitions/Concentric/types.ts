@@ -7,7 +7,7 @@ export interface TransitionConcentricOptions extends TransitionOptions {
 }
 
 export interface TransitionConcentricProps extends TransitionProps {
-	options: TransitionConcentricOptions;
+	options?: TransitionConcentricOptions;
 }
 
 export interface TransitionConcentricConf extends TransitionConf {

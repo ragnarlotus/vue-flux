@@ -5,7 +5,7 @@ export interface TransitionSwipeOptions extends TransitionOptions {
 }
 
 export interface TransitionSwipeProps extends TransitionProps {
-	options: TransitionSwipeOptions;
+	options?: TransitionSwipeOptions;
 }
 
 export interface TransitionSwipeConf extends TransitionConf {

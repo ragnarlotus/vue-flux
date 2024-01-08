@@ -8,7 +8,7 @@ export interface TransitionBlinds3DOptions extends TransitionOptions {
 }
 
 export interface TransitionBlinds3DProps extends TransitionProps {
-	options: TransitionBlinds3DOptions;
+	options?: TransitionBlinds3DOptions;
 }
 
 export interface TransitionBlinds3DConf extends TransitionConf {

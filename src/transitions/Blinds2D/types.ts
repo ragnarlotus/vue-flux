@@ -8,7 +8,7 @@ export interface TransitionBlinds2DOptions extends TransitionOptions {
 }
 
 export interface TransitionBlinds2DProps extends TransitionProps {
-	options: TransitionBlinds2DOptions;
+	options?: TransitionBlinds2DOptions;
 }
 
 export interface TransitionBlinds2DConf extends TransitionConf {

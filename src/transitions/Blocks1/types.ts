@@ -8,7 +8,7 @@ export interface TransitionBlocks1Options extends TransitionOptions {
 }
 
 export interface TransitionBlocks1Props extends TransitionProps {
-	options: TransitionBlocks1Options;
+	options?: TransitionBlocks1Options;
 }
 
 export interface TransitionBlocks1Conf extends TransitionConf {

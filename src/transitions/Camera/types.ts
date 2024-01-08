@@ -8,7 +8,7 @@ export interface TransitionCameraOptions extends TransitionOptions {
 }
 
 export interface TransitionCameraProps extends TransitionProps {
-	options: TransitionCameraOptions;
+	options?: TransitionCameraOptions;
 }
 
 export interface TransitionCameraConf extends TransitionConf {

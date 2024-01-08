@@ -5,7 +5,7 @@ export interface TransitionCubeOptions extends TransitionOptions {
 }
 
 export interface TransitionCubeProps extends TransitionProps {
-	options: TransitionCubeOptions;
+	options?: TransitionCubeOptions;
 }
 
 export interface TransitionCubeConf extends TransitionConf {

@@ -5,7 +5,7 @@ export interface TransitionFadeOptions extends TransitionOptions {
 }
 
 export interface TransitionFadeProps extends TransitionProps {
-	options: TransitionFadeOptions;
+	options?: TransitionFadeOptions;
 }
 
 export interface TransitionFadeConf extends TransitionConf {

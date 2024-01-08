@@ -5,7 +5,7 @@ export interface TransitionKenburnOptions extends TransitionOptions {
 }
 
 export interface TransitionKenburnProps extends TransitionProps {
-	options: TransitionKenburnOptions;
+	options?: TransitionKenburnOptions;
 }
 
 export interface TransitionKenburnConf extends TransitionConf {

@@ -5,7 +5,7 @@ export interface TransitionBookOptions extends TransitionOptions {
 }
 
 export interface TransitionBookProps extends TransitionProps {
-	options: TransitionBookOptions;
+	options?: TransitionBookOptions;
 }
 
 export interface TransitionBookConf extends TransitionConf {
