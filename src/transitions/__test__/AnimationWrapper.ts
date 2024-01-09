@@ -4,10 +4,12 @@ import { FluxComponent, FluxImage } from '../../components';
 import { Img } from '../../resources';
 import { Size } from '../../shared';
 
-const size = new Size({
-	width: 640,
-	height: 360,
-});
+const size = markRaw(
+	new Size({
+		width: 640,
+		height: 360,
+	})
+);
 
 const from = new Img('from');
 const to = new Img('to');
