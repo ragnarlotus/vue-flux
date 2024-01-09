@@ -14,6 +14,7 @@ export interface TransitionProps {
 }
 
 export interface TransitionOptions {
+	direction?: Direction;
 	easing?: CSSProperties['animation-timing-function'];
 }
 

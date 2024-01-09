@@ -5,6 +5,7 @@
 	const $el: Ref<null | HTMLDivElement> = ref(null);
 
 	defineExpose({
+		turn: vi.fn(),
 		setCss: vi.fn(),
 		transform: vi.fn(),
 		show: vi.fn(),
