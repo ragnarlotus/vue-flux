@@ -3,6 +3,7 @@
 	import { vi } from 'vitest';
 	import Tile from './Tile.vue';
 	import { FluxGridProps } from '../types';
+	import { getRowNumber, getColNumber } from '../factories';
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const props = withDefaults(defineProps<FluxGridProps>(), {
@@ -31,8 +32,16 @@
 		transform,
 		show: vi.fn(),
 		hide: vi.fn(),
-		getRowNumber: vi.fn(),
-		getColNumber: vi.fn(),
+		getRowNumber: vi
+			.fn()
+			.mockImplementation((index: number, numCols: number) =>
+				getRowNumber(index, numCols)
+			),
+		getColNumber: vi
+			.fn()
+			.mockImplementation((index: number, numCols: number) =>
+				getColNumber(index, numCols)
+			),
 		$tiles,
 	});
 </script>
