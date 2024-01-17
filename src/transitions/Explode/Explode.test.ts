@@ -1,13 +1,12 @@
-import Round1 from './Round1.vue';
+import Explode from './Explode.vue';
 import AnimationWrapper from '../__test__/AnimationWrapper';
 import { Directions } from '../../controllers/Player';
-import { Turns } from '../../components/FluxCube';
 
 vi.mock('../../components/FluxGrid/FluxGrid.vue');
 
-describe('transition: Round1', () => {
+describe('transition: Explode', () => {
 	it('exposes onPlay and totalDuration', () => {
-		const wrapper = AnimationWrapper(Round1, {});
+		const wrapper = AnimationWrapper(Explode, {});
 
 		const { onPlay, totalDuration } = wrapper.vm;
 
@@ -16,7 +15,7 @@ describe('transition: Round1', () => {
 	});
 
 	it('performs the transition with default options', () => {
-		const wrapper = AnimationWrapper(Round1, {});
+		const wrapper = AnimationWrapper(Explode, {});
 
 		const $grid = wrapper.getComponent({
 			ref: '$grid',
@@ -30,7 +29,7 @@ describe('transition: Round1', () => {
 				ref: '$grid',
 			})
 			.props('css');
-		expect(gridCss.perspective).toBeDefined();
+		expect(gridCss.overflow).toBe('visible');
 
 		wrapper.vm.onPlay();
 
@@ -38,21 +37,25 @@ describe('transition: Round1', () => {
 
 		const { $tiles } = $grid.vm;
 
-		expect($tiles[0].setCss).toHaveBeenCalledWith({
-			transition: 'all 800ms ease-out 0ms',
+		expect($tiles[0].transform).toHaveBeenCalledWith({
+			borderRadius: '100%',
+			opacity: '0',
+			transform: 'scale(2)',
+			transition: 'all 300ms linear 500ms',
 		});
-		expect($tiles[0].turn).toHaveBeenCalledWith(Turns.backr);
 
-		expect($tiles[9].setCss).toHaveBeenCalledWith({
-			transition: 'all 800ms ease-out 300ms',
+		expect($tiles[21].transform).toHaveBeenCalledWith({
+			borderRadius: '100%',
+			opacity: '0',
+			transform: 'scale(2)',
+			transition: 'all 300ms linear 0ms',
 		});
-		expect($tiles[9].turn).toHaveBeenCalledWith(Turns.backr);
 
-		expect(wrapper.vm.totalDuration).toBe(2400);
+		expect(wrapper.vm.totalDuration).toBe(1400);
 	});
 
 	it('performs the transition with custom options prev', () => {
-		const wrapper = AnimationWrapper(Round1, {
+		const wrapper = AnimationWrapper(Explode, {
 			direction: Directions.prev,
 			rows: 3,
 			cols: 6,
@@ -71,27 +74,31 @@ describe('transition: Round1', () => {
 
 		const { $tiles } = $grid.vm;
 
-		expect($tiles[0].setCss).toHaveBeenCalledWith({
-			transition: 'all 400ms ease-in-out 480ms',
+		expect($tiles[0].transform).toHaveBeenCalledWith({
+			borderRadius: '100%',
+			opacity: '0',
+			transform: 'scale(2)',
+			transition: 'all 400ms ease-in-out 150ms',
 		});
-		expect($tiles[0].turn).toHaveBeenCalledWith(Turns.backl);
 
-		expect($tiles[17].setCss).toHaveBeenCalledWith({
-			transition: 'all 400ms ease-in-out 60ms',
+		expect($tiles[8].transform).toHaveBeenCalledWith({
+			borderRadius: '100%',
+			opacity: '0',
+			transform: 'scale(2)',
+			transition: 'all 400ms ease-in-out -30ms',
 		});
-		expect($tiles[17].turn).toHaveBeenCalledWith(Turns.backl);
 
-		expect(wrapper.vm.totalDuration).toBe(720);
+		expect(wrapper.vm.totalDuration).toBe(540);
 	});
 
 	it('performs the transition with custom options next', () => {
-		const wrapper = AnimationWrapper(Round1, {
+		const wrapper = AnimationWrapper(Explode, {
 			direction: Directions.next,
-			rows: 3,
-			cols: 6,
-			tileDuration: 400,
-			tileDelay: 60,
-			easing: 'ease-in-out',
+			rows: 4,
+			cols: 7,
+			tileDuration: 200,
+			tileDelay: 80,
+			easing: 'ease-in',
 		});
 
 		const $grid = wrapper.getComponent({
@@ -104,16 +111,20 @@ describe('transition: Round1', () => {
 
 		const { $tiles } = $grid.vm;
 
-		expect($tiles[0].setCss).toHaveBeenCalledWith({
-			transition: 'all 400ms ease-in-out 0ms',
+		expect($tiles[0].transform).toHaveBeenCalledWith({
+			borderRadius: '100%',
+			opacity: '0',
+			transform: 'scale(2)',
+			transition: 'all 200ms ease-in 280ms',
 		});
-		expect($tiles[0].turn).toHaveBeenCalledWith(Turns.backr);
 
-		expect($tiles[17].setCss).toHaveBeenCalledWith({
-			transition: 'all 400ms ease-in-out 420ms',
+		expect($tiles[13].transform).toHaveBeenCalledWith({
+			borderRadius: '100%',
+			opacity: '0',
+			transform: 'scale(2)',
+			transition: 'all 200ms ease-in 200ms',
 		});
-		expect($tiles[17].turn).toHaveBeenCalledWith(Turns.backr);
 
-		expect(wrapper.vm.totalDuration).toBe(720);
+		expect(wrapper.vm.totalDuration).toBe(880);
 	});
 });
