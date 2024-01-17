@@ -20,7 +20,7 @@
 
 	const emit = defineEmits<VueFluxEmits>();
 
-	const $container: Ref<null | HTMLDivElement> = ref(null);
+	const $el: Ref<null | HTMLDivElement> = ref(null);
 	const $transition: Ref<null | InstanceType<typeof FluxTransition>> =
 		ref(null);
 	const $displayComponent: Ref<null | FluxComponent> = ref(null);
@@ -43,7 +43,7 @@
 	const player = new Controllers.Player(config, timers, emit);
 	const resources = player.resources;
 	const transitions = player.transitions;
-	const display = new Controllers.Display($container, config, emit);
+	const display = new Controllers.Display($el, config, emit);
 	const keys = new Controllers.Keys(config, player);
 	const mouse = new Controllers.Mouse();
 	const touches = new Controllers.Touches();
@@ -176,7 +176,7 @@
 
 <template>
 	<div
-		ref="$container"
+		ref="$el"
 		class="vue-flux"
 		:style="style"
 		@mousemove="mouse.toggle(config, timers, true)"
