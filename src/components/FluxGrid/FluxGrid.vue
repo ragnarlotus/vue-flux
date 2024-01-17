@@ -12,7 +12,7 @@
 		depth: 0,
 	});
 
-	const $el = ref(null);
+	const $el: Ref<null | HTMLDivElement> = ref(null);
 
 	const componentStyles: ComponentStyles = reactive({
 		base: {

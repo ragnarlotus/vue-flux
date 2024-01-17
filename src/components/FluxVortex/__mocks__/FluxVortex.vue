@@ -9,7 +9,7 @@
 		circles: 1,
 	});
 
-	const $el = ref(null);
+	const $el: Ref<null | HTMLDivElement> = ref(null);
 
 	const numTiles = props.circles;
 	const $tiles: Ref<InstanceType<typeof Tile>[]> = ref([]);

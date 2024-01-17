@@ -1,9 +1,9 @@
 <script setup lang="ts">
 	import { ref, Ref } from 'vue';
 	import { vi } from 'vitest';
-	import { FluxWrapperProps } from '../types';
+	import { FluxImageProps } from '../types';
 
-	defineProps<FluxWrapperProps>();
+	defineProps<FluxImageProps>();
 
 	const $el: Ref<null | HTMLDivElement> = ref(null);
 
@@ -16,7 +16,5 @@
 </script>
 
 <template>
-	<div ref="$el" class="flux-wrapper">
-		<slot />
-	</div>
+	<div ref="$el" class="flux-image" />
 </template>

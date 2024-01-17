@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { ref, reactive, computed, CSSProperties } from 'vue';
+	import { ref, Ref, reactive, computed, CSSProperties } from 'vue';
 	import useComponent from '../useComponent';
 	import { FluxImageProps } from './types';
 	import { ComponentStyles } from '../types';
@@ -7,7 +7,7 @@
 
 	const props = defineProps<FluxImageProps>();
 
-	const $el = ref(null);
+	const $el: Ref<null | HTMLDivElement> = ref(null);
 
 	const componentStyles: ComponentStyles = reactive({
 		base: {

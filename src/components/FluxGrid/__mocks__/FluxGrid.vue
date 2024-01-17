@@ -5,14 +5,13 @@
 	import { FluxGridProps } from '../types';
 	import { getRowNumber, getColNumber } from '../factories';
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const props = withDefaults(defineProps<FluxGridProps>(), {
 		rows: 1,
 		cols: 1,
 		depth: 0,
 	});
 
-	const $el = ref(null);
+	const $el: Ref<null | HTMLDivElement> = ref(null);
 
 	const numTiles = props.rows * props.cols;
 	const $tiles: Ref<InstanceType<typeof Tile>[]> = ref([]);
