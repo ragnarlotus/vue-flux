@@ -46,7 +46,7 @@ export interface SidesOffsets {
 }
 
 export interface SideProps {
-	name: string;
+	name: Side;
 	component: Component;
 	rsc?: Resource;
 	size: Size;
@@ -63,4 +63,13 @@ export interface SidesProps {
 	[Sides.right]?: SideProps;
 	[Sides.top]?: SideProps;
 	[Sides.bottom]?: SideProps;
+}
+
+export interface SidesComponents {
+	[Sides.front]?: any;
+	[Sides.back]?: any;
+	[Sides.left]?: any;
+	[Sides.right]?: any;
+	[Sides.top]?: any;
+	[Sides.bottom]?: any;
 }
