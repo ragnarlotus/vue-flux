@@ -35,7 +35,6 @@
 	};
 
 	const gridCss: CSSProperties = {
-		overflow: 'visible',
 		perspective: '1200px',
 	};
 

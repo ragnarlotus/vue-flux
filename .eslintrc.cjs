@@ -51,7 +51,7 @@ module.exports = {
 		'vitest/max-expects': [
 			'error',
 			{
-				max: 8,
+				max: 10,
 			},
 		],
 		'vitest/no-hooks': ['error', { allow: ['beforeEach', 'afterEach'] }],

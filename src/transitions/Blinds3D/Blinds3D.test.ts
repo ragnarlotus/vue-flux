@@ -1,13 +1,13 @@
-import Wave from './Wave.vue';
+import Blinds3D from './Blinds3D.vue';
 import AnimationWrapper from '../__test__/AnimationWrapper';
 import { Directions } from '../../controllers';
 import { Turns } from '../../components/FluxCube';
 
 vi.mock('../../components/FluxGrid/FluxGrid.vue');
 
-describe('transition: Wave', () => {
+describe('transition: Blinds3D', () => {
 	it('exposes onPlay and totalDuration', () => {
-		const wrapper = AnimationWrapper(Wave, {});
+		const wrapper = AnimationWrapper(Blinds3D, {});
 
 		const { onPlay, totalDuration } = wrapper.vm;
 
@@ -16,7 +16,7 @@ describe('transition: Wave', () => {
 	});
 
 	it('expects to set proper CSS styles before animation', () => {
-		const wrapper = AnimationWrapper(Wave, {});
+		const wrapper = AnimationWrapper(Blinds3D, {});
 
 		const maskStyle = wrapper.props('maskStyle');
 		expect(maskStyle.overflow).toBe('visible');
@@ -30,7 +30,7 @@ describe('transition: Wave', () => {
 	});
 
 	it('performs the transition with default options', () => {
-		const wrapper = AnimationWrapper(Wave, {});
+		const wrapper = AnimationWrapper(Blinds3D, {});
 
 		const $grid = wrapper.getComponent({
 			ref: '$grid',
@@ -43,26 +43,25 @@ describe('transition: Wave', () => {
 		const { $tiles } = $grid.vm;
 
 		expect($tiles[0].setCss).toHaveBeenCalledWith({
-			transition: 'all 900ms cubic-bezier(0.3, -0.3, 0.735, 0.285) 0ms',
+			transition: 'all 800ms ease-out 0ms',
 		});
-		expect($tiles[0].turn).toHaveBeenCalledWith(Turns.bottom);
+		expect($tiles[0].turn).toHaveBeenCalledWith(Turns.backr);
 
-		expect($tiles[7].setCss).toHaveBeenCalledWith({
-			transition: 'all 900ms cubic-bezier(0.3, -0.3, 0.735, 0.285) 770ms',
+		expect($tiles[5].setCss).toHaveBeenCalledWith({
+			transition: 'all 800ms ease-out 750ms',
 		});
-		expect($tiles[7].turn).toHaveBeenCalledWith(Turns.bottom);
+		expect($tiles[5].turn).toHaveBeenCalledWith(Turns.backr);
 
-		expect(wrapper.vm.totalDuration).toBe(1780);
+		expect(wrapper.vm.totalDuration).toBe(1700);
 	});
 
 	it('performs the transition with custom options prev', () => {
-		const wrapper = AnimationWrapper(Wave, {
+		const wrapper = AnimationWrapper(Blinds3D, {
 			direction: Directions.prev,
-			cols: 6,
+			cols: 8,
 			tileDuration: 400,
 			tileDelay: 60,
-			sideColor: '#999',
-			easing: 'ease-out',
+			easing: 'ease-in',
 		});
 
 		const $grid = wrapper.getComponent({
@@ -76,25 +75,25 @@ describe('transition: Wave', () => {
 		const { $tiles } = $grid.vm;
 
 		expect($tiles[0].setCss).toHaveBeenCalledWith({
-			transition: 'all 400ms ease-out 300ms',
+			transition: 'all 400ms ease-in 420ms',
 		});
-		expect($tiles[0].turn).toHaveBeenCalledWith(Turns.bottom);
+		expect($tiles[0].turn).toHaveBeenCalledWith(Turns.backl);
 
-		expect($tiles[5].setCss).toHaveBeenCalledWith({
-			transition: 'all 400ms ease-out 0ms',
+		expect($tiles[7].setCss).toHaveBeenCalledWith({
+			transition: 'all 400ms ease-in 0ms',
 		});
-		expect($tiles[5].turn).toHaveBeenCalledWith(Turns.bottom);
+		expect($tiles[7].turn).toHaveBeenCalledWith(Turns.backl);
 
-		expect(wrapper.vm.totalDuration).toBe(760);
+		expect(wrapper.vm.totalDuration).toBe(880);
 	});
 
 	it('performs the transition with custom options next', () => {
-		const wrapper = AnimationWrapper(Wave, {
+		const wrapper = AnimationWrapper(Blinds3D, {
 			direction: Directions.next,
-			cols: 6,
+			cols: 10,
 			tileDuration: 400,
 			tileDelay: 60,
-			easing: 'ease-out',
+			easing: 'linear',
 		});
 
 		const $grid = wrapper.getComponent({
@@ -108,15 +107,15 @@ describe('transition: Wave', () => {
 		const { $tiles } = $grid.vm;
 
 		expect($tiles[0].setCss).toHaveBeenCalledWith({
-			transition: 'all 400ms ease-out 0ms',
+			transition: 'all 400ms linear 0ms',
 		});
-		expect($tiles[0].turn).toHaveBeenCalledWith(Turns.bottom);
+		expect($tiles[0].turn).toHaveBeenCalledWith(Turns.backr);
 
-		expect($tiles[5].setCss).toHaveBeenCalledWith({
-			transition: 'all 400ms ease-out 300ms',
+		expect($tiles[9].setCss).toHaveBeenCalledWith({
+			transition: 'all 400ms linear 540ms',
 		});
-		expect($tiles[5].turn).toHaveBeenCalledWith(Turns.bottom);
+		expect($tiles[9].turn).toHaveBeenCalledWith(Turns.backr);
 
-		expect(wrapper.vm.totalDuration).toBe(760);
+		expect(wrapper.vm.totalDuration).toBe(1000);
 	});
 });

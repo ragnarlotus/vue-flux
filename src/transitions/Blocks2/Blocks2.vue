@@ -53,7 +53,7 @@
 			background.rsc = props.from;
 
 			tileCss = {
-				opacity: 0,
+				opacity: '0',
 				transform: 'scale(0.3)',
 			};
 		},
@@ -84,7 +84,7 @@
 					transition: `all ${conf.tileDuration}ms ${
 						conf.easing
 					} ${getDelay(index)}ms`,
-					opacity: 1,
+					opacity: '1',
 					transform: 'scale(1)',
 				});
 			});
@@ -96,7 +96,7 @@
 					transition: `all ${conf.tileDuration}ms ${
 						conf.easing
 					} ${getDelay(index)}ms`,
-					opacity: 0,
+					opacity: '0',
 					transform: 'scale(0.3)',
 				});
 			});

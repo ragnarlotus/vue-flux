@@ -12,7 +12,6 @@
 	const $from: Ref<null | FluxComponent> = ref(null);
 
 	const conf: TransitionCameraConf = reactive({
-		circles: 2,
 		totalDuration: 900,
 		backgroundColor: '#111',
 		easing: 'cubic-bezier(0.385, 0, 0.795, 0.560)',
