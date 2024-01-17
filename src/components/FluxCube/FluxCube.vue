@@ -1,11 +1,12 @@
 <script setup lang="ts">
-	import { ref, reactive, computed } from 'vue';
+	import { ref, reactive, computed, onBeforeUpdate } from 'vue';
 	import useComponent from '../useComponent';
-	import { FluxCubeProps, Turn } from './types';
+	import { FluxCubeProps, SidesComponents, Turn } from './types';
 	import { Size } from '../../shared';
 	import { ComponentStyles } from '../types';
 	import SideTransformFactory from './factories/SideTransformFactory';
 	import CubeFactory from './factories/CubeFactory';
+	import Sides from './Sides';
 
 	const props = withDefaults(defineProps<FluxCubeProps>(), {
 		rscs: () => ({}),
@@ -52,6 +53,19 @@
 		)
 	);
 
+	const $sides: SidesComponents = reactive({});
+
+	onBeforeUpdate(() => {
+		Object.assign($sides, {
+			[Sides.front]: undefined,
+			[Sides.back]: undefined,
+			[Sides.left]: undefined,
+			[Sides.right]: undefined,
+			[Sides.top]: undefined,
+			[Sides.bottom]: undefined,
+		});
+	});
+
 	const turn = (turn: Turn) =>
 		transform({ transform: sideTransformFactory.value.getRotate(turn) });
 
@@ -69,6 +83,7 @@
 		<component
 			:is="side!.component"
 			v-for="side in sides"
+			:ref="(el: any) => ($sides[side!.name as keyof typeof Sides] = el)"
 			:key="side!.name"
 			v-bind="side"
 		/>
