@@ -6,6 +6,7 @@
 		TransitionConcentricProps,
 		TransitionConcentricConf,
 	} from './types';
+	import { Directions } from '../../controllers/Player';
 
 	const props = defineProps<TransitionConcentricProps>();
 
@@ -24,17 +25,13 @@
 
 	const getDelay = (index: number) => index * conf.tileDelay;
 
+	const deg = {
+		[Directions.prev]: '-90',
+		[Directions.next]: '90',
+	}[conf.direction!];
+
 	const onPlay = () => {
-		if ($vortex.value === null) {
-			return;
-		}
-
-		const deg = {
-			prev: '-90',
-			next: '90',
-		};
-
-		$vortex.value.transform((tile: FluxComponent, index: number) => {
+		$vortex.value!.transform((tile: FluxComponent, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay(index)}ms`;
@@ -42,7 +39,7 @@
 			tile.transform({
 				transition,
 				opacity: '0',
-				transform: `rotateZ(${deg[conf.direction!]}deg)`,
+				transform: `rotateZ(${deg}deg)`,
 			});
 		});
 	};

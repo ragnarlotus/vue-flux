@@ -43,10 +43,6 @@
 	};
 
 	const onPlay = () => {
-		if ([$wrapper.value, $from.value].includes(null)) {
-			return;
-		}
-
 		$wrapper.value!.transform({
 			transition: `all ${conf.totalDuration! / 2 - 50}ms ${conf.easing} 0ms`,
 			borderWidth: diagSize / 2 + 'px',

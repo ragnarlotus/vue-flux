@@ -5,6 +5,7 @@
 	import { TransitionBookProps, TransitionBookConf } from './types';
 	import { Position, Size } from '../../shared';
 	import { SidesOffsets } from '../../components/FluxCube/types';
+	import { Directions } from '../../controllers/Player';
 
 	const props = defineProps<TransitionBookProps>();
 
@@ -94,8 +95,8 @@
 	setup[conf.direction!]();
 
 	const deg = {
-		prev: '180',
-		next: '-180',
+		[Directions.prev]: '180',
+		[Directions.next]: '-180',
 	}[conf.direction!];
 
 	const onPlay = () => {

@@ -58,11 +58,7 @@
 	};
 
 	const onPlay = () => {
-		if ($grid.value === null) {
-			return;
-		}
-
-		$grid.value.transform((tile: FluxComponent, index: number) => {
+		$grid.value!.transform((tile: FluxComponent, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay(index)}ms`;

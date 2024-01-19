@@ -69,10 +69,6 @@
 	};
 
 	const onPlay = () => {
-		if ($wrapper.value === null) {
-			return;
-		}
-
 		play[conf.direction!]();
 	};
 

@@ -28,11 +28,7 @@
 	const getDelay = () => Math.floor(Math.random() * conf.tileDelay);
 
 	const onPlay = () => {
-		if ($grid.value === null) {
-			return;
-		}
-
-		$grid.value.transform((tile: FluxComponent) => {
+		$grid.value!.transform((tile: FluxComponent) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay()}ms`;

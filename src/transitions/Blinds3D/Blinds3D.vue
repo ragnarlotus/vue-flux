@@ -37,21 +37,17 @@
 		next: (index: number) => index * conf.tileDelay,
 	};
 
-	const onPlay = () => {
-		if ($grid.value === null) {
-			return;
-		}
+	const turn = {
+		prev: Turns.backl,
+		next: Turns.backr,
+	}[conf.direction!];
 
+	const onPlay = () => {
 		if (props.displayComponent) {
 			props.displayComponent.hide();
 		}
 
-		const sides = {
-			prev: Turns.backl,
-			next: Turns.backr,
-		};
-
-		$grid.value.transform(
+		$grid.value!.transform(
 			(tile: InstanceType<typeof FluxCube>, index: number) => {
 				const transition = `all ${conf.tileDuration}ms ${
 					conf.easing
@@ -61,7 +57,7 @@
 					transition,
 				});
 
-				tile.turn(sides[conf.direction!]);
+				tile.turn(turn);
 			}
 		);
 	};

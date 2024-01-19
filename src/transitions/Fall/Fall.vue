@@ -25,11 +25,7 @@
 	};
 
 	const onPlay = () => {
-		if ($from.value === null) {
-			return;
-		}
-
-		$from.value.transform({
+		$from.value!.transform({
 			transition: `transform ${conf.totalDuration}ms ${conf.easing}`,
 			transform: 'rotateX(-83.6deg)',
 		});

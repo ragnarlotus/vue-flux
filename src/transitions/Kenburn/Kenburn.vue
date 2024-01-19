@@ -57,11 +57,7 @@
 	};
 
 	const onPlay = () => {
-		if ($from.value === null) {
-			return;
-		}
-
-		$from.value.transform({
+		$from.value!.transform({
 			transition: `all ${conf.totalDuration}ms ${conf.easing}`,
 			transform: `scale(${transform.scale}) translate(${transform.translateX}, ${transform.translateY})`,
 			opacity: 0,

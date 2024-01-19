@@ -4,6 +4,7 @@
 	import { FluxCube } from '../../components';
 	import { TransitionCubeProps, TransitionCubeConf } from './types';
 	import { Turns } from '../../components/FluxCube';
+	import { Directions } from '../../controllers/Player';
 
 	const props = defineProps<TransitionCubeProps>();
 
@@ -31,21 +32,17 @@
 		transition: `all ${conf.totalDuration}ms ${conf.easing}`,
 	};
 
-	const onPlay = () => {
-		if ($cube.value === null) {
-			return;
-		}
+	const turn = {
+		[Directions.prev]: Turns.right,
+		[Directions.next]: Turns.left,
+	}[conf.direction!];
 
+	const onPlay = () => {
 		if (props.displayComponent !== null) {
 			props.displayComponent.hide();
 		}
 
-		const sides = {
-			next: Turns.left,
-			prev: Turns.right,
-		};
-
-		$cube.value.turn(sides[conf.direction!]);
+		$cube.value!.turn(turn);
 	};
 
 	defineExpose({

@@ -104,10 +104,6 @@
 	};
 
 	const onPlay = () => {
-		if ($grid.value === null) {
-			return;
-		}
-
 		play[conf.direction!]();
 	};
 

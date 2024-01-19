@@ -20,11 +20,7 @@
 	};
 
 	const onPlay = () => {
-		if ($from.value === null) {
-			return;
-		}
-
-		$from.value.transform({
+		$from.value!.transform({
 			transition: `opacity ${conf.totalDuration}ms ${conf.easing}`,
 			opacity: 0,
 		});

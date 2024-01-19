@@ -29,11 +29,7 @@
 	const getDeg = (index: number) => (index % 2 === 0 ? '-90' : '90');
 
 	const onPlay = () => {
-		if ($vortex.value === null) {
-			return;
-		}
-
-		$vortex.value.transform((tile: FluxComponent, index: number) => {
+		$vortex.value!.transform((tile: FluxComponent, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay[conf.direction!](index)}ms`;

@@ -47,11 +47,7 @@
 	setup[conf.direction!]();
 
 	const onPlay = () => {
-		if ($wrapper.value === null) {
-			return;
-		}
-
-		$wrapper.value.transform({
+		$wrapper.value!.transform({
 			transition: `width ${conf.totalDuration}ms ${conf.easing}`,
 			width: 0,
 		});

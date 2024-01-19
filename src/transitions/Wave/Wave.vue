@@ -47,15 +47,11 @@
 	};
 
 	const onPlay = () => {
-		if ($grid.value === null) {
-			return;
-		}
-
 		if (props.displayComponent) {
 			props.displayComponent.hide();
 		}
 
-		$grid.value.transform(
+		$grid.value!.transform(
 			(tile: InstanceType<typeof FluxCube>, index: number) => {
 				const transition = `all ${conf.tileDuration}ms ${
 					conf.easing
