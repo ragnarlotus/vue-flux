@@ -1,48 +1,14 @@
 import ResourceLoader from './ResourceLoader';
 import { Size } from '../';
-import {
-	ResizeTypes,
-	Resource,
-	ResourceWithOptions,
-	Statuses,
-} from '../../resources';
+import { ResourceWithOptions, Statuses } from '../../resources';
 import { vi } from 'vitest';
-import { FluxImage } from '../../components';
+import Img from '../../resources/Img/Img';
 
-class ResourceMock extends Resource {
-	constructor() {
-		super(
-			'',
-			'',
-			ResizeTypes.fill,
-			null,
-			{ component: FluxImage, props: {} },
-			{ component: FluxImage, props: {} },
-			''
-		);
-	}
-
-	load = vi.fn().mockImplementation(() => {
-		return new Promise<void>((resolve) => {
-			this.status.value = Statuses.loading;
-			setTimeout(resolve, 50);
-		});
-	});
-
-	onLoad = vi
-		.fn()
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		.mockImplementation((_el: unknown, _resolve: () => void) => {});
-
-	onError = vi
-		.fn()
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		.mockImplementation((_reject: (message: string) => void) => {});
-}
+vi.mock('../../resources/Img/Img');
 
 function resourceFactory(numResources: number) {
 	return new Array(numResources).fill({
-		resource: new ResourceMock(),
+		resource: new Img('', ''),
 		options: {},
 	} as ResourceWithOptions);
 }

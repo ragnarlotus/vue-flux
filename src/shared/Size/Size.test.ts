@@ -84,6 +84,80 @@ describe('shared: Size', () => {
 		expect(size.height.value).toBe(400);
 	});
 
+	it('throws an exception trying to calc aspect ratio when size is invalid', () => {
+		size = new Size({ width: 100 });
+
+		expect(() => size.getAspectRatio()).toThrow(
+			'Could not get aspect ratio due to invalid size'
+		);
+	});
+
+	it('gets the aspect ration when size is valid', () => {
+		size = new Size({
+			width: 100,
+			height: 200,
+		});
+
+		expect(size.getAspectRatio()).toBeTypeOf('number');
+	});
+
+	it('clones the size', () => {
+		params = {
+			width: 100,
+			height: 200,
+		};
+
+		size = new Size({
+			width: 100,
+			height: 200,
+		});
+
+		expect(size.clone().toValue()).toStrictEqual(params);
+	});
+
+	it('returns false when width does not match other size', () => {
+		size = new Size({
+			width: 100,
+			height: 200,
+		});
+
+		expect(
+			size.equals(
+				new Size({
+					width: 50,
+					height: 200,
+				})
+			)
+		).toBeFalsy();
+	});
+
+	it('returns false when height does not match other size', () => {
+		size = new Size({
+			width: 100,
+			height: 200,
+		});
+
+		expect(
+			size.equals(
+				new Size({
+					width: 100,
+					height: 50,
+				})
+			)
+		).toBeFalsy();
+	});
+
+	it('returns true when size equals another size', () => {
+		params = {
+			width: 100,
+			height: 200,
+		};
+
+		size = new Size(params);
+
+		expect(size.equals(new Size(params))).toBeTruthy();
+	});
+
 	it('returns the values as plain object', () => {
 		params = {
 			width: 100,

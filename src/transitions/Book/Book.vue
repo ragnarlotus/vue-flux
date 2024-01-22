@@ -100,10 +100,6 @@
 	}[conf.direction!];
 
 	const onPlay = () => {
-		if ([$from.value, $cube.value].includes(null)) {
-			return;
-		}
-
 		$cube.value!.transform({
 			transition: `transform ${conf.totalDuration}ms ${conf.easing}`,
 			transform: `rotateY(${deg}deg)`,

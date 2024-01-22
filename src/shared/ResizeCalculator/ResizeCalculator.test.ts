@@ -69,15 +69,15 @@ describe('shared: ResizeCalculator', () => {
 		expect(newSize.isValid).toHaveBeenCalledWith();
 	});
 
-	it('real size L new size L and type fill', () => {
-		realSize.update({
-			width: 640,
-			height: 360,
-		});
-
+	it('new size L real size L and newAspectRatio >= realAspectRatio and type fill', () => {
 		newSize.update({
 			width: 280,
 			height: 140,
+		});
+
+		realSize.update({
+			width: 640,
+			height: 360,
 		});
 
 		calc = new ResizeCalculator(realSize);
@@ -94,59 +94,15 @@ describe('shared: ResizeCalculator', () => {
 		expect(adaptedPosition.toValue()).toStrictEqual({ top: -8.75, left: 0 });
 	});
 
-	it('real size L new size L and type fit', () => {
-		realSize.update({
-			width: 640,
-			height: 360,
-		});
-
+	it('new size L real size L and newAspectRatio < realAspectRatio and type fill', () => {
 		newSize.update({
-			width: 320,
+			width: 280,
 			height: 180,
 		});
 
-		calc = new ResizeCalculator(realSize);
-
-		const { size: adaptedSize, position: adaptedPosition } = calc.resizeTo(
-			newSize,
-			ResizeTypes.fit
-		);
-
-		expect(adaptedSize.toValue()).toStrictEqual({ width: 320, height: 180 });
-		expect(adaptedPosition.toValue()).toStrictEqual({ top: 0, left: 0 });
-	});
-
-	it('real size L new size P and type fill', () => {
 		realSize.update({
-			width: 640,
-			height: 360,
-		});
-
-		newSize.update({
-			width: 300,
-			height: 720,
-		});
-
-		calc = new ResizeCalculator(realSize);
-
-		const { size: adaptedSize, position: adaptedPosition } = calc.resizeTo(
-			newSize,
-			ResizeTypes.fill
-		);
-
-		expect(adaptedSize.toValue()).toStrictEqual({ width: 1280, height: 720 });
-		expect(adaptedPosition.toValue()).toStrictEqual({ top: 0, left: -490 });
-	});
-
-	it('real size L new size P and type fit', () => {
-		realSize.update({
-			width: 640,
-			height: 360,
-		});
-
-		newSize.update({
-			width: 300,
-			height: 720,
+			width: 280,
+			height: 140,
 		});
 
 		calc = new ResizeCalculator(realSize);
@@ -157,71 +113,165 @@ describe('shared: ResizeCalculator', () => {
 		);
 
 		expect(adaptedSize.toValue()).toStrictEqual({
-			width: 300,
-			height: 168.75,
+			width: 280,
+			height: 140,
+		});
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: 20, left: 0 });
+	});
+
+	it('new size L real size L and newAspectRatio >= realAspectRatio and type fit', () => {
+		newSize.update({
+			width: 280,
+			height: 140,
+		});
+
+		realSize.update({
+			width: 280,
+			height: 200,
+		});
+
+		calc = new ResizeCalculator(realSize);
+
+		const { size: adaptedSize, position: adaptedPosition } = calc.resizeTo(
+			newSize,
+			ResizeTypes.fit
+		);
+
+		expect(adaptedSize.toValue()).toStrictEqual({ width: 196, height: 140 });
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: 0, left: 42 });
+	});
+
+	it('new size L real size L and newAspectRatio < realAspectRatio and type fit', () => {
+		newSize.update({
+			width: 280,
+			height: 180,
+		});
+
+		realSize.update({
+			width: 280,
+			height: 140,
+		});
+
+		calc = new ResizeCalculator(realSize);
+
+		const { size: adaptedSize, position: adaptedPosition } = calc.resizeTo(
+			newSize,
+			ResizeTypes.fit
+		);
+
+		expect(adaptedSize.toValue()).toStrictEqual({
+			width: 280,
+			height: 140,
+		});
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: 20, left: 0 });
+	});
+
+	it('new size L real size P and type fill', () => {
+		newSize.update({
+			width: 280,
+			height: 140,
+		});
+
+		realSize.update({
+			width: 140,
+			height: 280,
+		});
+
+		calc = new ResizeCalculator(realSize);
+
+		const { size: adaptedSize, position: adaptedPosition } = calc.resizeTo(
+			newSize,
+			ResizeTypes.fill
+		);
+
+		expect(adaptedSize.toValue()).toStrictEqual({ width: 280, height: 560 });
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: -210, left: 0 });
+	});
+
+	it('new size L real size P and type fit', () => {
+		newSize.update({
+			width: 280,
+			height: 140,
+		});
+
+		realSize.update({
+			width: 140,
+			height: 280,
+		});
+
+		calc = new ResizeCalculator(realSize);
+
+		const { size: adaptedSize, position: adaptedPosition } = calc.resizeTo(
+			newSize,
+			ResizeTypes.fit
+		);
+
+		expect(adaptedSize.toValue()).toStrictEqual({
+			width: 70,
+			height: 140,
+		});
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: 0, left: 105 });
+	});
+
+	it('new size P real size L and type fill', () => {
+		newSize.update({
+			width: 140,
+			height: 280,
+		});
+
+		realSize.update({
+			width: 280,
+			height: 140,
+		});
+
+		calc = new ResizeCalculator(realSize);
+
+		const { size: adaptedSize, position: adaptedPosition } = calc.resizeTo(
+			newSize,
+			ResizeTypes.fill
+		);
+
+		expect(adaptedSize.toValue()).toStrictEqual({ width: 560, height: 280 });
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: 0, left: -210 });
+	});
+
+	it('new size P real size L and type fit', () => {
+		newSize.update({
+			width: 140,
+			height: 280,
+		});
+
+		realSize.update({
+			width: 280,
+			height: 140,
+		});
+
+		calc = new ResizeCalculator(realSize);
+
+		const { size: adaptedSize, position: adaptedPosition } = calc.resizeTo(
+			newSize,
+			ResizeTypes.fit
+		);
+
+		expect(adaptedSize.toValue()).toStrictEqual({
+			width: 140,
+			height: 70,
 		});
 		expect(adaptedPosition.toValue()).toStrictEqual({
-			top: 275.625,
+			top: 105,
 			left: 0,
 		});
 	});
 
-	it('real size P new size L and type fill', () => {
-		realSize.update({
-			width: 360,
-			height: 640,
-		});
-
+	it('new size P real size P and newAspectRatio >= realAspectRatio and type fill', () => {
 		newSize.update({
-			width: 720,
-			height: 360,
+			width: 140,
+			height: 280,
 		});
 
-		calc = new ResizeCalculator(realSize);
-
-		const { size: adaptedSize, position: adaptedPosition } = calc.resizeTo(
-			newSize,
-			ResizeTypes.fill
-		);
-
-		expect(adaptedSize.toValue()).toStrictEqual({ width: 720, height: 1280 });
-		expect(adaptedPosition.toValue()).toStrictEqual({ top: -460, left: 0 });
-	});
-
-	it('real size P new size L and type fit', () => {
 		realSize.update({
-			width: 360,
-			height: 640,
-		});
-
-		newSize.update({
-			width: 720,
-			height: 360,
-		});
-
-		calc = new ResizeCalculator(realSize);
-
-		const { size: adaptedSize, position: adaptedPosition } = calc.resizeTo(
-			newSize,
-			ResizeTypes.fit
-		);
-
-		expect(adaptedSize.toValue()).toStrictEqual({
-			width: 202.5,
-			height: 360,
-		});
-		expect(adaptedPosition.toValue()).toStrictEqual({ top: 0, left: 258.75 });
-	});
-
-	it('real size P new size P and type fill', () => {
-		realSize.update({
-			width: 360,
-			height: 640,
-		});
-
-		newSize.update({
 			width: 180,
-			height: 520,
+			height: 280,
 		});
 
 		calc = new ResizeCalculator(realSize);
@@ -232,21 +282,46 @@ describe('shared: ResizeCalculator', () => {
 		);
 
 		expect(adaptedSize.toValue()).toStrictEqual({
-			width: 292.5,
-			height: 520,
+			width: 180,
+			height: 280,
 		});
-		expect(adaptedPosition.toValue()).toStrictEqual({ top: 0, left: -56.25 });
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: 0, left: -20 });
 	});
 
-	it('real size P new size P and type fit', () => {
-		realSize.update({
-			width: 360,
-			height: 640,
-		});
-
+	it('new size P real size P and newAspectRatio < realAspectRatio and type fill', () => {
 		newSize.update({
 			width: 180,
-			height: 520,
+			height: 280,
+		});
+
+		realSize.update({
+			width: 140,
+			height: 280,
+		});
+
+		calc = new ResizeCalculator(realSize);
+
+		const { size: adaptedSize, position: adaptedPosition } = calc.resizeTo(
+			newSize,
+			ResizeTypes.fill
+		);
+
+		expect(adaptedSize.toValue()).toStrictEqual({
+			width: 180,
+			height: 360,
+		});
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: -40, left: 0 });
+	});
+
+	it('new size P real size P and newAspectRatio >= realAspectRatio and type fit', () => {
+		newSize.update({
+			width: 140,
+			height: 280,
+		});
+
+		realSize.update({
+			width: 200,
+			height: 280,
 		});
 
 		calc = new ResizeCalculator(realSize);
@@ -256,7 +331,29 @@ describe('shared: ResizeCalculator', () => {
 			ResizeTypes.fit
 		);
 
-		expect(adaptedSize.toValue()).toStrictEqual({ width: 180, height: 320 });
-		expect(adaptedPosition.toValue()).toStrictEqual({ top: 100, left: 0 });
+		expect(adaptedSize.toValue()).toStrictEqual({ width: 140, height: 196 });
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: 42, left: 0 });
+	});
+
+	it('new size P real size P and newAspectRatio < realAspectRatio and type fit', () => {
+		newSize.update({
+			width: 180,
+			height: 280,
+		});
+
+		realSize.update({
+			width: 140,
+			height: 280,
+		});
+
+		calc = new ResizeCalculator(realSize);
+
+		const { size: adaptedSize, position: adaptedPosition } = calc.resizeTo(
+			newSize,
+			ResizeTypes.fit
+		);
+
+		expect(adaptedSize.toValue()).toStrictEqual({ width: 140, height: 280 });
+		expect(adaptedPosition.toValue()).toStrictEqual({ top: 0, left: 20 });
 	});
 });

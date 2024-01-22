@@ -39,7 +39,7 @@ export default class Size {
 
 	getAspectRatio() {
 		if (!this.isValid()) {
-			throw new RangeError(`Could not get aspect ratio due to invalid size`);
+			throw new RangeError('Could not get aspect ratio due to invalid size');
 		}
 
 		return Maths.aspectRatio(

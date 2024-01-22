@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
-import { ResizeTypes, Statuses, Resource } from '..';
-import { FluxImage } from '../../components';
+import { ResizeTypes, Statuses, Resource } from '../../';
+import { FluxImage } from '../../../components';
 
 export default class Img extends Resource {
 	constructor() {
