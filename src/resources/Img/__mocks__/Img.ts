@@ -18,14 +18,17 @@ export default class Img extends Resource {
 	load = vi.fn().mockImplementation(() => {
 		return new Promise<void>((resolve) => {
 			this.status.value = Statuses.loading;
-			setTimeout(resolve, 50);
+			this.onLoad(null, resolve);
 		});
 	});
 
 	onLoad = vi
 		.fn()
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		.mockImplementation((_el: unknown, _resolve: () => void) => {});
+		.mockImplementation((_el: unknown, resolve: () => void) => {
+			this.status.value = Statuses.loaded;
+			resolve();
+		});
 
 	onError = vi
 		.fn()
