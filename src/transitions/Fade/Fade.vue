@@ -1,13 +1,14 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FadeProps, FadeConf } from './types';
+	import { TransitionFadeProps, TransitionFadeConf } from './types';
+	import { FluxComponent } from '../../components';
 
-	const props = defineProps<FadeProps>();
+	const props = defineProps<TransitionFadeProps>();
 
-	const $from: Ref<null | any> = ref(null);
+	const $from: Ref<null | FluxComponent> = ref(null);
 
-	const conf: FadeConf = reactive({
+	const conf: TransitionFadeConf = reactive({
 		totalDuration: 1200,
 		easing: 'ease-in',
 	});
@@ -19,11 +20,7 @@
 	};
 
 	const onPlay = () => {
-		if ($from.value === null) {
-			return;
-		}
-
-		$from.value.transform({
+		$from.value!.transform({
 			transition: `opacity ${conf.totalDuration}ms ${conf.easing}`,
 			opacity: 0,
 		});

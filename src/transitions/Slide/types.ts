@@ -1,5 +1,13 @@
-import { TransitionConf, TransitionProps } from '../types';
+import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
-export interface SlideProps extends TransitionProps {}
+export interface TransitionSlideOptions extends TransitionOptions {
+	totalDuration?: number;
+}
 
-export interface SlideConf extends TransitionConf {}
+export interface TransitionSlideProps extends TransitionProps {
+	options?: TransitionSlideOptions;
+}
+
+export interface TransitionSlideConf extends TransitionConf {
+	totalDuration: number;
+}

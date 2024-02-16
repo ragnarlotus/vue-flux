@@ -1,5 +1,13 @@
-import { TransitionConf, TransitionProps } from '../types';
+import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
-export interface FallProps extends TransitionProps {}
+export interface TransitionFallOptions extends TransitionOptions {
+	totalDuration?: number;
+}
 
-export interface FallConf extends TransitionConf {}
+export interface TransitionFallProps extends TransitionProps {
+	options?: TransitionFallOptions;
+}
+
+export interface TransitionFallConf extends TransitionConf {
+	totalDuration: number;
+}

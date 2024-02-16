@@ -1,20 +1,19 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import { floor } from '../../shared/Maths';
 	import useTransition from '../useTransition';
-	import { FluxGrid } from '../../components';
-	import { ExplodeProps, ExplodeConf } from './types';
+	import { FluxComponent, FluxGrid } from '../../components';
+	import { TransitionExplodeProps, TransitionExplodeConf } from './types';
 
-	const props = defineProps<ExplodeProps>();
+	const props = defineProps<TransitionExplodeProps>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
-	const conf: ExplodeConf = reactive({
+	const conf: TransitionExplodeConf = reactive({
 		rows: 9,
 		cols: 9,
 		tileDuration: 300,
-		easing: 'linear',
 		tileDelay: 100,
+		easing: 'linear',
 	});
 
 	useTransition(conf, props.options);
@@ -26,9 +25,9 @@
 	// eslint-disable-next-line vue/no-mutating-props
 	props.maskStyle.overflow = 'visible';
 
-	if (!props.options.rows) {
+	if (!props.options?.rows) {
 		const divider = props.size.width.value! / conf.cols;
-		conf.rows = floor(props.size.height.value! / divider);
+		conf.rows = Math.floor(props.size.height.value! / divider);
 	}
 
 	const totalDuration = (conf.cols / 2 + conf.rows / 2) * (conf.tileDelay * 2);
@@ -45,11 +44,7 @@
 	};
 
 	const onPlay = () => {
-		if ($grid.value === null) {
-			return;
-		}
-
-		$grid.value.transform((tile: any, index: number) => {
+		$grid.value!.transform((tile: FluxComponent, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay(index)}ms`;

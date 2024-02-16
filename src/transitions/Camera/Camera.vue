@@ -1,21 +1,20 @@
 <script setup lang="ts">
 	import { ref, Ref, reactive, CSSProperties } from 'vue';
-	import { diag } from '../../shared/Maths';
+	import { Maths } from '../../shared';
 	import useTransition from '../useTransition';
-	import { FluxWrapper } from '../../components';
-	import { CameraProps, CameraConf } from './types';
+	import { FluxComponent, FluxWrapper } from '../../components';
+	import { TransitionCameraProps, TransitionCameraConf } from './types';
 	import { Size } from '../../shared';
 
-	const props = defineProps<CameraProps>();
+	const props = defineProps<TransitionCameraProps>();
 
 	const $wrapper: Ref<null | InstanceType<typeof FluxWrapper>> = ref(null);
-	const $from: Ref<null | any> = ref(null);
+	const $from: Ref<null | FluxComponent> = ref(null);
 
-	const conf: CameraConf = reactive({
-		circles: 2,
+	const conf: TransitionCameraConf = reactive({
 		totalDuration: 900,
-		easing: 'cubic-bezier(0.385, 0, 0.795, 0.560)',
 		backgroundColor: '#111',
+		easing: 'cubic-bezier(0.385, 0, 0.795, 0.560)',
 	});
 
 	useTransition(conf, props.options);
@@ -25,7 +24,7 @@
 		flex: 'none',
 	};
 
-	const diagSize = diag(
+	const diagSize = Maths.diag(
 		props.size.toValue() as { width: number; height: number }
 	);
 
@@ -44,10 +43,6 @@
 	};
 
 	const onPlay = () => {
-		if ([$wrapper.value, $from.value].includes(null)) {
-			return;
-		}
-
 		$wrapper.value!.transform({
 			transition: `all ${conf.totalDuration! / 2 - 50}ms ${conf.easing} 0ms`,
 			borderWidth: diagSize / 2 + 'px',
@@ -55,7 +50,7 @@
 
 		setTimeout(
 			() => {
-				$from.value.hide();
+				$from.value!.hide();
 
 				$wrapper.value!.transform({
 					transition: `all ${conf.totalDuration! / 2 - 50}ms ${

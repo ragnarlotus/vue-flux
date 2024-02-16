@@ -4,13 +4,12 @@
 	import { ComponentStyles } from '../types';
 	import { FluxVortexProps } from './types';
 	import { VortexFactory } from './factories';
-	import type { Component } from 'vue';
 
 	const props = withDefaults(defineProps<FluxVortexProps>(), {
 		circles: 1,
 	});
 
-	const $el = ref(null);
+	const $el: Ref<null | HTMLDivElement> = ref(null);
 
 	const componentStyles: ComponentStyles = reactive({
 		base: {
@@ -27,14 +26,14 @@
 
 	const tiles = computed(() => VortexFactory.getCirclesProps(props));
 
-	const $tiles: Ref<Component[]> = ref([]);
+	const $tiles: Ref<any[]> = ref([]);
 
 	onBeforeUpdate(() => {
 		$tiles.value = [];
 	});
 
-	const transform = (cb: Function) => {
-		$tiles.value.forEach((tile: Component, index: number) => cb(tile, index));
+	const transform = (cb: (tile: any, index: number) => void) => {
+		$tiles.value.forEach((tile: any, index: number) => cb(tile, index));
 	};
 
 	defineExpose({
@@ -50,7 +49,7 @@
 		<component
 			:is="rsc.transition.component"
 			v-for="(tile, index) in tiles"
-			:ref="(el: Component) => $tiles.push(el)"
+			:ref="(el: any) => $tiles.push(el)"
 			:key="index"
 			:size="size"
 			:rsc="rsc"

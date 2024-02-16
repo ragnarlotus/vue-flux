@@ -1,9 +1,7 @@
-import FluxImage from '../components/FluxImage/FluxImage.vue';
-import Resource from './Resource';
-import Size from '../shared/Size';
-import { DisplayParameter, ResizeType, TransitionParameter } from './types';
-import Statuses from './Statuses';
-import ResizeTypes from './ResizeTypes';
+import { FluxImage } from '../../components';
+import { Resource, Statuses, ResizeTypes } from '../';
+import { Size } from '../../shared';
+import { DisplayParameter, ResizeType, TransitionParameter } from '../types';
 
 export default class Img extends Resource {
 	constructor(
@@ -54,7 +52,7 @@ export default class Img extends Resource {
 		return this.loader;
 	}
 
-	onLoad(img: HTMLImageElement, resolve: Function) {
+	onLoad(img: HTMLImageElement, resolve: () => void) {
 		this.realSize = new Size({
 			width: img.naturalWidth || img.width,
 			height: img.naturalHeight || img.height,
@@ -65,7 +63,7 @@ export default class Img extends Resource {
 		resolve();
 	}
 
-	onError(reject: Function) {
+	onError(reject: (message: string) => void) {
 		this.status.value = Statuses.error;
 
 		reject(this.errorMessage);

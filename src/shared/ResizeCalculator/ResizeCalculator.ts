@@ -1,6 +1,5 @@
-import { ResizeType, ResizeTypes } from '../resources';
-import Position from './Position';
-import Size from './Size';
+import { ResizeType, ResizeTypes } from '../../resources';
+import { Size, Position } from '../';
 
 /* eslint-disable no-unused-vars */
 export enum Orientations {
@@ -21,7 +20,7 @@ export default class ResizeCalculator {
 
 	constructor(realSize: Size) {
 		if (realSize.isValid() === false) {
-			throw new RangeError(`Invalid real size`);
+			throw new RangeError('Invalid real size');
 		}
 
 		this.realSize = realSize;
@@ -31,7 +30,7 @@ export default class ResizeCalculator {
 
 	public resizeTo(resizeSize: Size, resizeType: ResizeType) {
 		if (resizeSize.isValid() === false) {
-			throw new RangeError(`Invalid size to resize`);
+			throw new RangeError('Invalid size to resize');
 		}
 
 		const resizeAspectRatio = resizeSize.getAspectRatio();

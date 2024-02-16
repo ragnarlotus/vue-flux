@@ -1,15 +1,19 @@
 import { shallowReactive, nextTick, Ref, ref } from 'vue';
-import type { Component } from 'vue';
 import {
 	Resources,
 	Transitions,
 	ResourceIndex,
 	TransitionIndex,
 } from '../../repositories';
-import { PlayerResource, PlayerTransition, Directions, Direction } from './';
-import { VueFluxConfig } from '../../components/VueFlux/types';
-import Timers from '../Timers';
-import Statuses from './Statuses';
+import {
+	PlayerResource,
+	PlayerTransition,
+	Directions,
+	Direction,
+	Statuses,
+} from './';
+import { FluxComponent, VueFluxConfig, VueFluxEmits } from '../../components';
+import { Timers } from '../';
 
 export default class Player {
 	resource: PlayerResource;
@@ -18,12 +22,18 @@ export default class Player {
 	status: Ref<keyof typeof Statuses> = ref(Statuses.stopped);
 	config: VueFluxConfig;
 	timers: Timers;
-	emit: Function;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	emit: VueFluxEmits;
 	resources: Resources;
 	transitions: Transitions;
-	$displayComponent: Ref<null | Component> = ref(null);
+	$displayComponent: Ref<null | FluxComponent> = ref(null);
 
-	constructor(config: VueFluxConfig, timers: Timers, emit: Function) {
+	constructor(
+		config: VueFluxConfig,
+		timers: Timers,
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		emit: VueFluxEmits
+	) {
 		this.config = config;
 		this.timers = timers;
 		this.emit = emit;
@@ -34,7 +44,7 @@ export default class Player {
 		this.transition = shallowReactive(new PlayerTransition());
 	}
 
-	setup($displayComponent: Ref<null | Component>) {
+	setup($displayComponent: Ref<null | FluxComponent>) {
 		this.$displayComponent = $displayComponent;
 	}
 
@@ -179,11 +189,11 @@ export default class Player {
 
 		await nextTick();
 
-		this.emit(
-			cancel ? 'transitionCancel' : 'transitionEnd',
-			this.resource,
-			this.transition
-		);
+		if (cancel === true) {
+			this.emit('transitionCancel', this.resource, this.transition);
+		} else {
+			this.emit('transitionEnd', this.resource, this.transition);
+		}
 
 		if (
 			this.shouldStopPlaying(

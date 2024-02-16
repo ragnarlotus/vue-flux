@@ -7,15 +7,17 @@
 		onUnmounted,
 		nextTick,
 		Ref,
+		type Component,
 	} from 'vue';
 	import { FluxTransitionProps } from './types';
+	import { TransitionComponent } from '../../transitions';
 
 	const props = withDefaults(defineProps<FluxTransitionProps>(), {
 		options: () => ({}),
 	});
 
 	const $el: Ref<null | HTMLDivElement> = ref(null);
-	const $transition: Ref<null | any> = ref(null);
+	const $transition: Ref<null | Component> = ref(null);
 
 	const emit = defineEmits(['ready', 'start', 'end']);
 
@@ -43,7 +45,9 @@
 		await nextTick();
 
 		if ($transition.value !== null) {
-			duration.value = $transition.value.totalDuration;
+			duration.value = (
+				$transition.value as TransitionComponent
+			).totalDuration;
 		}
 
 		emit('ready', {
@@ -67,9 +71,9 @@
 		await nextTick();
 
 		if ($transition.value === null) {
-			console.error('Transition component available', props.transition);
+			console.error('Transition component not available', props.transition);
 		} else {
-			$transition.value.onPlay();
+			($transition.value as TransitionComponent).onPlay();
 		}
 
 		setTimeout(() => end(), duration.value);

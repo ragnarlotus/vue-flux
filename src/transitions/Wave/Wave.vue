@@ -1,22 +1,22 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxGrid, FluxCube } from '../../components';
-	import { WaveProps, WaveConf } from './types';
+	import { FluxGrid } from '../../components';
+	import { TransitionWaveProps, TransitionWaveConf } from './types';
 	import { Directions } from '../../controllers/Player';
-	import { Turns } from '../../components/FluxCube';
+	import { FluxCube, Turns } from '../../components/FluxCube';
 
-	const props = defineProps<WaveProps>();
+	const props = defineProps<TransitionWaveProps>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
-	const conf: WaveConf = reactive({
+	const conf: TransitionWaveConf = reactive({
 		rows: 1,
 		cols: 8,
 		tileDuration: 900,
 		tileDelay: 110,
-		easing: 'cubic-bezier(0.3, -0.3, 0.735, 0.285)',
 		sideColor: '#333',
+		easing: 'cubic-bezier(0.3, -0.3, 0.735, 0.285)',
 	});
 
 	useTransition(conf, props.options);
@@ -35,7 +35,6 @@
 	};
 
 	const gridCss: CSSProperties = {
-		overflow: 'visible',
 		perspective: '1200px',
 	};
 
@@ -48,25 +47,23 @@
 	};
 
 	const onPlay = () => {
-		if ($grid.value === null) {
-			return;
-		}
-
 		if (props.displayComponent) {
 			props.displayComponent.hide();
 		}
 
-		$grid.value.transform((tile: typeof FluxCube, index: number) => {
-			const transition = `all ${conf.tileDuration}ms ${
-				conf.easing
-			} ${getDelay[conf.direction!](index)}ms`;
+		$grid.value!.transform(
+			(tile: InstanceType<typeof FluxCube>, index: number) => {
+				const transition = `all ${conf.tileDuration}ms ${
+					conf.easing
+				} ${getDelay[conf.direction!](index)}ms`;
 
-			tile.setCss({
-				transition,
-			});
+				tile.setCss({
+					transition,
+				});
 
-			tile.turn(Turns.bottom);
-		});
+				tile.turn(Turns.bottom);
+			}
+		);
 	};
 
 	defineExpose({

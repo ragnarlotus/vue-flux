@@ -1,6 +1,5 @@
 <script setup lang="ts">
 	import { ref, reactive, computed, Ref, onBeforeUpdate } from 'vue';
-	import type { Component } from 'vue';
 	import useComponent from '../useComponent';
 	import { FluxGridProps } from './types';
 	import { FluxCube } from '../';
@@ -13,7 +12,7 @@
 		depth: 0,
 	});
 
-	const $el = ref(null);
+	const $el: Ref<null | HTMLDivElement> = ref(null);
 
 	const componentStyles: ComponentStyles = reactive({
 		base: {
@@ -33,14 +32,14 @@
 
 	const tiles = computed(() => GridFactory.getTilesProps(props));
 
-	const $tiles: Ref<Component[]> = ref([]);
+	const $tiles: Ref<any[]> = ref([]);
 
 	onBeforeUpdate(() => {
 		$tiles.value = [];
 	});
 
-	const transform = (cb: Function) => {
-		$tiles.value.forEach((tile: Component, index: number) => cb(tile, index));
+	const transform = (cb: (tile: any, index: number) => void) => {
+		$tiles.value.forEach((tile: any, index: number) => cb(tile, index));
 	};
 
 	defineExpose({
@@ -58,7 +57,7 @@
 		<component
 			:is="component"
 			v-for="(tile, index) in tiles"
-			:ref="(el: Component) => $tiles.push(el)"
+			:ref="(el: any) => $tiles.push(el)"
 			:key="index"
 			v-bind="tile"
 		/>

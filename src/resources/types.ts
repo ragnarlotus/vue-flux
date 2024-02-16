@@ -14,12 +14,12 @@ export interface ResizedProps {
 
 export interface DisplayParameter {
 	component: Component;
-	props: {};
+	props: object;
 }
 
 export interface TransitionParameter {
 	component: Component;
-	props: {};
+	props: object;
 }
 
 export interface ResourceWithOptions {

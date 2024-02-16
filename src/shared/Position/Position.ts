@@ -34,7 +34,10 @@ export default class Position {
 		const rawPosition: {
 			top?: number;
 			left?: number;
-		} = {};
+		} = {
+			top: undefined,
+			left: undefined,
+		};
 
 		if (this.top.value !== null) {
 			rawPosition.top = this.top.value;
@@ -49,7 +52,7 @@ export default class Position {
 
 	toPx() {
 		if (!this.isValid()) {
-			throw new RangeError(`Invalid position in pixels`);
+			throw new RangeError('Invalid position in pixels');
 		}
 
 		return {

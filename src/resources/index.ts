@@ -1,5 +1,5 @@
 export { default as Resource } from './Resource';
-export { default as Img } from './Img';
+export { default as Img } from './Img/Img';
 export { default as Statuses } from './Statuses';
 export { default as ResizeTypes } from './ResizeTypes';
 

@@ -1,6 +1,5 @@
-import { VueFluxConfig } from '../components/VueFlux/types';
-import { Directions } from '../controllers/Player';
-import Player from './Player/Player';
+import { VueFluxConfig } from '../../components';
+import { Directions, Player } from '../';
 
 export default class Keys {
 	config: VueFluxConfig;

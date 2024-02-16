@@ -2,14 +2,15 @@
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
 	import { FluxCube } from '../../components';
-	import { CubeProps, CubeConf } from './types';
+	import { TransitionCubeProps, TransitionCubeConf } from './types';
 	import { Turns } from '../../components/FluxCube';
+	import { Directions } from '../../controllers/Player';
 
-	const props = defineProps<CubeProps>();
+	const props = defineProps<TransitionCubeProps>();
 
 	const $cube: Ref<null | InstanceType<typeof FluxCube>> = ref(null);
 
-	const conf: CubeConf = reactive({
+	const conf: TransitionCubeConf = reactive({
 		totalDuration: 1400,
 		easing: 'ease-out',
 	});
@@ -31,21 +32,17 @@
 		transition: `all ${conf.totalDuration}ms ${conf.easing}`,
 	};
 
-	const onPlay = () => {
-		if ($cube.value === null) {
-			return;
-		}
+	const turn = {
+		[Directions.prev]: Turns.right,
+		[Directions.next]: Turns.left,
+	}[conf.direction!];
 
-		if (props.displayComponent.value !== null) {
+	const onPlay = () => {
+		if (props.displayComponent !== null) {
 			props.displayComponent.hide();
 		}
 
-		const sides = {
-			next: Turns.left,
-			prev: Turns.right,
-		};
-
-		$cube.value.turn(sides[conf.direction!]);
+		$cube.value!.turn(turn);
 	};
 
 	defineExpose({

@@ -1,7 +1,6 @@
 import { Ref, ref } from 'vue';
-import { ceil } from './Maths';
-import Size from './Size';
-import { ResourceWithOptions } from '../resources';
+import { Size } from '../';
+import { ResourceWithOptions } from '../../resources';
 
 export default class ResourceLoader {
 	rscs: ResourceWithOptions[] = [];
@@ -15,22 +14,22 @@ export default class ResourceLoader {
 	lazyLoading: ResourceWithOptions[] = [];
 	progress: Ref<number> = ref(0);
 	displaySize: Size;
-	onPreloadStart: Function;
-	onPreloadEnd: Function;
-	onLazyLoadStart: Function;
-	onLazyLoadEnd: Function;
+	onPreloadStart: () => void;
+	onPreloadEnd: (loaded: ResourceWithOptions[]) => void;
+	onLazyLoadStart: () => void;
+	onLazyLoadEnd: (loaded: ResourceWithOptions[]) => void;
 	isCancelled: boolean = false;
-	reject: Function;
+	reject: (message: string, rscs: ResourceWithOptions[]) => void;
 
 	constructor(
 		rscs: ResourceWithOptions[],
 		toPreload: number,
 		displaySize: Size,
-		onPreloadStart: Function,
-		onPreloadEnd: Function,
-		onLazyLoadStart: Function,
-		onLazyLoadEnd: Function,
-		reject: Function
+		onPreloadStart: () => void,
+		onPreloadEnd: (loaded: ResourceWithOptions[]) => void,
+		onLazyLoadStart: () => void,
+		onLazyLoadEnd: (loaded: ResourceWithOptions[]) => void,
+		reject: (message: string, rscs: ResourceWithOptions[]) => void
 	) {
 		this.rscs = rscs;
 		this.toPreload = toPreload > rscs.length ? rscs.length : toPreload;
@@ -149,7 +148,7 @@ export default class ResourceLoader {
 
 	updateProgress() {
 		this.progress.value =
-			ceil((this.counter.success * 100) / this.toPreload) || 0;
+			Math.ceil((this.counter.success * 100) / this.toPreload) || 0;
 	}
 
 	hasFinished() {

@@ -1,15 +1,12 @@
 import { computed, ref, Ref } from 'vue';
-import Size from '../shared/Size';
-import ResizeCalculator from '../shared/ResizeCalculator';
-import Position from '../shared/Position';
+import { Size, Position, ResizeCalculator } from '../shared';
 import {
 	DisplayParameter,
 	ResizedProps,
 	ResizeType,
 	TransitionParameter,
 } from './types';
-import { Statuses } from './';
-import ResizeTypes from './ResizeTypes';
+import { Statuses, ResizeTypes } from './';
 
 export default abstract class Resource {
 	src: string;
@@ -52,10 +49,10 @@ export default abstract class Resource {
 	abstract load(): Promise<void>;
 
 	// eslint-disable-next-line no-unused-vars
-	abstract onLoad(el: any, resolve: Function): void;
+	abstract onLoad(el: unknown, resolve: () => void): void;
 
 	// eslint-disable-next-line no-unused-vars
-	abstract onError(reject: Function): void;
+	abstract onError(reject: (message: string) => void): void;
 
 	calcResizeProps(displaySize: Size) {
 		if ([displaySize.isValid(), this.realSize.isValid()].includes(false)) {

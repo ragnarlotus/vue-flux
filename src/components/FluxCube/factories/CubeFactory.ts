@@ -10,6 +10,7 @@ import SideTransformFactory from './SideTransformFactory';
 import { Position } from '../../../shared';
 import Sides from '../Sides';
 import { Resource } from '../../../resources';
+import { CSSProperties } from 'vue';
 
 function isSideDefined(
 	side: Side,
@@ -28,7 +29,7 @@ function isSideDefined(
 }
 
 function getDefinedSides(
-	color?: string,
+	color?: CSSProperties['color'],
 	colors?: SidesColors,
 	rsc?: Resource,
 	rscs?: SidesResources
@@ -47,7 +48,7 @@ function getDefinedSides(
 export default class CubeFactory {
 	static getSidesProps(
 		sideTransformFactory: SideTransformFactory,
-		color?: string,
+		color?: CSSProperties['color'],
 		colors?: SidesColors,
 		rsc?: Resource,
 		rscs?: SidesResources,

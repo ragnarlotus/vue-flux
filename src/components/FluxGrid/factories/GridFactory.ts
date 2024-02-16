@@ -1,5 +1,4 @@
 import { Size } from '../../../shared';
-import { ceil, floor } from '../../../shared/Maths';
 import GridTileFactory from './GridTileFactory';
 import { FluxGridProps, FluxGridTileProps } from '../types';
 
@@ -7,8 +6,8 @@ export default class GridFactory {
 	static getTilesProps(props: FluxGridProps) {
 		const { rows, cols, size, color, colors, rsc, rscs, depth } = props;
 
-		const numRows = ceil(rows!);
-		const numCols = ceil(cols!);
+		const numRows = Math.ceil(rows!);
+		const numCols = Math.ceil(cols!);
 
 		const grid = {
 			numRows,
@@ -25,8 +24,8 @@ export default class GridFactory {
 		const tile = {
 			number: 0,
 			size: new Size({
-				width: floor(size.width.value! / numCols),
-				height: floor(size.height.value! / numRows),
+				width: Math.floor(size.width.value! / numCols),
+				height: Math.floor(size.height.value! / numRows),
 			}),
 			css: props.tileCss,
 		};

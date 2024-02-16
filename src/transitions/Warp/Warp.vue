@@ -1,19 +1,19 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxVortex } from '../../components';
-	import { WarpProps, WarpConf } from './types';
+	import { FluxComponent, FluxVortex } from '../../components';
+	import { TransitionWarpProps, TransitionWarpConf } from './types';
 	import { Directions } from '../../controllers/Player';
 
-	const props = defineProps<WarpProps>();
+	const props = defineProps<TransitionWarpProps>();
 
 	const $vortex: Ref<null | InstanceType<typeof FluxVortex>> = ref(null);
 
-	const conf: WarpConf = reactive({
+	const conf: TransitionWarpConf = reactive({
 		circles: 7,
 		tileDuration: 800,
-		easing: 'linear',
 		tileDelay: 150,
+		easing: 'linear',
 	});
 
 	useTransition(conf, props.options);
@@ -29,11 +29,7 @@
 	const getDeg = (index: number) => (index % 2 === 0 ? '-90' : '90');
 
 	const onPlay = () => {
-		if ($vortex.value === null) {
-			return;
-		}
-
-		$vortex.value.transform((tile: any, index: number) => {
+		$vortex.value!.transform((tile: FluxComponent, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay[conf.direction!](index)}ms`;

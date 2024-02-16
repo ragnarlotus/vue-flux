@@ -1,20 +1,20 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxGrid } from '../../components';
-	import { ZipProps, ZipConf } from './types';
+	import { FluxComponent, FluxGrid } from '../../components';
+	import { TransitionZipProps, TransitionZipConf } from './types';
 	import { Directions } from '../../controllers/Player';
 
-	const props = defineProps<ZipProps>();
+	const props = defineProps<TransitionZipProps>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
-	const conf: ZipConf = reactive({
+	const conf: TransitionZipConf = reactive({
 		rows: 1,
 		cols: 10,
 		tileDuration: 600,
-		easing: 'ease-in',
 		tileDelay: 80,
+		easing: 'ease-in',
 	});
 
 	useTransition(conf, props.options);
@@ -28,11 +28,7 @@
 	};
 
 	const onPlay = () => {
-		if ($grid.value === null) {
-			return;
-		}
-
-		$grid.value.transform((tile: any, index: number) => {
+		$grid.value!.transform((tile: FluxComponent, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay[conf.direction!](index)}ms`;

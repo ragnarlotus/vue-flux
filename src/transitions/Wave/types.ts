@@ -1,11 +1,21 @@
-import { TransitionConf, TransitionProps } from '../types';
+import { CSSProperties } from 'vue';
+import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
-export interface WaveProps extends TransitionProps {}
+export interface TransitionWaveOptions extends TransitionOptions {
+	cols?: number;
+	tileDuration?: number;
+	tileDelay?: number;
+	sideColor?: CSSProperties['color'];
+}
 
-export interface WaveConf extends TransitionConf {
+export interface TransitionWaveProps extends TransitionProps {
+	options?: TransitionWaveOptions;
+}
+
+export interface TransitionWaveConf extends TransitionConf {
 	rows: number;
 	cols: number;
 	tileDuration: number;
 	tileDelay: number;
-	sideColor: string;
+	sideColor: CSSProperties['color'];
 }

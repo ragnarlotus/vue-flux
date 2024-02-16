@@ -44,6 +44,17 @@ module.exports = {
 				},
 			},
 		],
+		'vitest/prefer-expect-assertions': [
+			'warn',
+			{ onlyFunctionsWithExpectInLoop: true },
+		],
+		'vitest/max-expects': [
+			'error',
+			{
+				max: 10,
+			},
+		],
+		'vitest/no-hooks': ['error', { allow: ['beforeEach', 'afterEach'] }],
 	},
 	globals: {
 		defineProps: true,
@@ -52,13 +63,9 @@ module.exports = {
 	},
 	overrides: [
 		{
-			files: [
-				'**/__tests__/*.{j,t}s?(x)',
-				'**/tests/unit/**/*.spec.{j,t}s?(x)',
-			],
-			env: {
-				jest: true,
-			},
+			files: ['**/*.{test,spec}.?(c|m)[jt]s?(x)'],
+			plugins: ['vitest'],
+			extends: ['plugin:vitest/all'],
 		},
 		{
 			files: ['*.d.ts'],

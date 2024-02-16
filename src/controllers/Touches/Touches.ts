@@ -1,11 +1,5 @@
-import { VueFluxConfig } from '../components/VueFlux/types';
-import { Directions } from '../controllers/Player';
-import Display from './Display';
-import Mouse from './Mouse';
-import Player from './Player/Player';
-import Timers from './Timers';
-
-const abs = Math.abs;
+import { VueFluxConfig } from '../../components';
+import { Directions, Display, Mouse, Player, Timers } from '../';
 
 export default class Touches {
 	startX = 0;
@@ -64,7 +58,8 @@ export default class Touches {
 	}
 
 	tap = (offsetX: number, offsetY: number) =>
-		abs(offsetX) < this.tapThreshold && abs(offsetY) < this.tapThreshold;
+		Math.abs(offsetX) < this.tapThreshold &&
+		Math.abs(offsetY) < this.tapThreshold;
 
 	doubleTap = () =>
 		this.endTime - this.prevTouchTime < this.doubleTapThreshold;

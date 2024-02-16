@@ -1,16 +1,16 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxWrapper } from '../../components';
-	import { SwipeProps, SwipeConf } from './types';
+	import { FluxComponent, FluxWrapper } from '../../components';
+	import { TransitionSwipeProps, TransitionSwipeConf } from './types';
 	import { Directions } from '../../controllers/Player';
 
-	const props = defineProps<SwipeProps>();
+	const props = defineProps<TransitionSwipeProps>();
 
 	const $wrapper: Ref<null | InstanceType<typeof FluxWrapper>> = ref(null);
-	const $from: Ref<null | any> = ref(null);
+	const $from: Ref<null | FluxComponent> = ref(null);
 
-	const conf: SwipeConf = reactive({
+	const conf: TransitionSwipeConf = reactive({
 		totalDuration: 1400,
 		easing: 'ease-in-out',
 	});
@@ -47,11 +47,7 @@
 	setup[conf.direction!]();
 
 	const onPlay = () => {
-		if ($wrapper.value === null) {
-			return;
-		}
-
-		$wrapper.value.transform({
+		$wrapper.value!.transform({
 			transition: `width ${conf.totalDuration}ms ${conf.easing}`,
 			width: 0,
 		});

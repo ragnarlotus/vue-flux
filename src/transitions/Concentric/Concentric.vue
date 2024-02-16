@@ -1,18 +1,22 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxVortex } from '../../components';
-	import { ConcentricProps, ConcentricConf } from './types';
+	import { FluxComponent, FluxVortex } from '../../components';
+	import {
+		TransitionConcentricProps,
+		TransitionConcentricConf,
+	} from './types';
+	import { Directions } from '../../controllers/Player';
 
-	const props = defineProps<ConcentricProps>();
+	const props = defineProps<TransitionConcentricProps>();
 
 	const $vortex: Ref<null | InstanceType<typeof FluxVortex>> = ref(null);
 
-	const conf: ConcentricConf = reactive({
+	const conf: TransitionConcentricConf = reactive({
 		circles: 7,
 		tileDuration: 800,
-		easing: 'linear',
 		tileDelay: 150,
+		easing: 'linear',
 	});
 
 	useTransition(conf, props.options);
@@ -21,17 +25,13 @@
 
 	const getDelay = (index: number) => index * conf.tileDelay;
 
+	const deg = {
+		[Directions.prev]: '-90',
+		[Directions.next]: '90',
+	}[conf.direction!];
+
 	const onPlay = () => {
-		if ($vortex.value === null) {
-			return;
-		}
-
-		const deg = {
-			prev: '-90',
-			next: '90',
-		};
-
-		$vortex.value.transform((tile: any, index: number) => {
+		$vortex.value!.transform((tile: FluxComponent, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay(index)}ms`;
@@ -39,7 +39,7 @@
 			tile.transform({
 				transition,
 				opacity: '0',
-				transform: `rotateZ(${deg[conf.direction!]}deg)`,
+				transform: `rotateZ(${deg}deg)`,
 			});
 		});
 	};

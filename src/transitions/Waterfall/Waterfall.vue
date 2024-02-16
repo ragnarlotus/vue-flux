@@ -1,15 +1,15 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxGrid } from '../../components';
-	import { WaterfallProps, WaterfallConf } from './types';
+	import { FluxComponent, FluxGrid } from '../../components';
+	import { TransitionWaterfallProps, TransitionWaterfallConf } from './types';
 	import { Directions } from '../../controllers/Player';
 
-	const props = defineProps<WaterfallProps>();
+	const props = defineProps<TransitionWaterfallProps>();
 
 	const $grid: Ref<null | InstanceType<typeof FluxGrid>> = ref(null);
 
-	const conf: WaterfallConf = reactive({
+	const conf: TransitionWaterfallConf = reactive({
 		rows: 1,
 		cols: 10,
 		tileDuration: 600,
@@ -28,11 +28,7 @@
 	};
 
 	const onPlay = () => {
-		if ($grid.value === null) {
-			return;
-		}
-
-		$grid.value.transform((tile: any, index: number) => {
+		$grid.value!.transform((tile: FluxComponent, index: number) => {
 			const transition = `all ${conf.tileDuration}ms ${
 				conf.easing
 			} ${getDelay[conf.direction!](index)}ms`;

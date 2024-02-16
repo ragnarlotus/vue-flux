@@ -1,18 +1,17 @@
-import { nextTick, Ref } from 'vue';
-import type { Component } from 'vue';
-import Size from '../shared/Size';
-import { VueFluxConfig } from '../components/VueFlux/types';
+import { nextTick, Ref, type Component } from 'vue';
+import { Size } from '../../shared';
+import { VueFluxConfig, VueFluxEmits } from '../../components';
 
 export default class Display {
 	node: Ref<null | HTMLElement | Component>;
 	config: VueFluxConfig | null;
-	emit: null | Function = null;
+	emit: null | VueFluxEmits = null;
 	size: Size = new Size();
 
 	constructor(
 		node: Ref<null | HTMLElement | Component>,
 		config: VueFluxConfig | null = null,
-		emit: null | Function = null
+		emit: null | VueFluxEmits = null
 	) {
 		this.node = node;
 		this.config = config;

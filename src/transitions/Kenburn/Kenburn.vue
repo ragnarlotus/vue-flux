@@ -1,14 +1,14 @@
 <script setup lang="ts">
 	import { ref, reactive, Ref, CSSProperties } from 'vue';
-	import { floor } from '../../shared/Maths';
 	import useTransition from '../useTransition';
-	import { KenburnProps, KenburnConf } from './types';
+	import { TransitionKenburnProps, TransitionKenburnConf } from './types';
+	import { FluxComponent } from '../../components';
 
-	const props = defineProps<KenburnProps>();
+	const props = defineProps<TransitionKenburnProps>();
 
-	const $from: Ref<null | any> = ref(null);
+	const $from: Ref<null | FluxComponent> = ref(null);
 
-	const conf: KenburnConf = reactive({
+	const conf: TransitionKenburnConf = reactive({
 		totalDuration: 1500,
 		easing: 'linear',
 	});
@@ -49,7 +49,7 @@
 		},
 	];
 
-	const transformNumber: number = floor(Math.random() * 4);
+	const transformNumber: number = Math.floor(Math.random() * 4);
 	const transform = transforms[transformNumber];
 
 	const css: CSSProperties = {
@@ -57,11 +57,7 @@
 	};
 
 	const onPlay = () => {
-		if ($from.value === null) {
-			return;
-		}
-
-		$from.value.transform({
+		$from.value!.transform({
 			transition: `all ${conf.totalDuration}ms ${conf.easing}`,
 			transform: `scale(${transform.scale}) translate(${transform.translateX}, ${transform.translateY})`,
 			opacity: 0,

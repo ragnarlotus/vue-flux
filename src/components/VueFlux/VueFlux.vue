@@ -10,9 +10,8 @@
 		toRaw,
 	} from 'vue';
 	import * as Controllers from '../../controllers';
-	import { FluxTransition } from '../';
+	import { FluxComponent, FluxTransition } from '../';
 	import { VueFluxProps, VueFluxEmits, VueFluxConfig } from './types';
-	import type { Component } from 'vue';
 	import { default as PlayerStatuses } from '../../controllers/Player/Statuses';
 
 	const props = withDefaults(defineProps<VueFluxProps>(), {
@@ -21,10 +20,10 @@
 
 	const emit = defineEmits<VueFluxEmits>();
 
-	const $container: Ref<null | HTMLDivElement> = ref(null);
+	const $el: Ref<null | HTMLDivElement> = ref(null);
 	const $transition: Ref<null | InstanceType<typeof FluxTransition>> =
 		ref(null);
-	const $displayComponent: Ref<null | Component> = ref(null);
+	const $displayComponent: Ref<null | FluxComponent> = ref(null);
 
 	const config: VueFluxConfig = reactive({
 		allowFullscreen: false,
@@ -44,7 +43,7 @@
 	const player = new Controllers.Player(config, timers, emit);
 	const resources = player.resources;
 	const transitions = player.transitions;
-	const display = new Controllers.Display($container, config, emit);
+	const display = new Controllers.Display($el, config, emit);
 	const keys = new Controllers.Keys(config, player);
 	const mouse = new Controllers.Mouse();
 	const touches = new Controllers.Touches();
@@ -67,7 +66,7 @@
 			await player.stop(true);
 		}
 
-		const propsUpdater: any = {
+		const propsUpdater = {
 			rscs: async () => await updateResources(),
 			transitions: () => updateTransitions(),
 		};
@@ -177,7 +176,7 @@
 
 <template>
 	<div
-		ref="$container"
+		ref="$el"
 		class="vue-flux"
 		:style="style"
 		@mousemove="mouse.toggle(config, timers, true)"

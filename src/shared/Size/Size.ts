@@ -1,5 +1,5 @@
 import { ref, Ref } from 'vue';
-import { aspectRatio } from './Maths';
+import { Maths } from '../';
 
 export default class Size {
 	width: Ref<null | number> = ref(null);
@@ -39,10 +39,12 @@ export default class Size {
 
 	getAspectRatio() {
 		if (!this.isValid()) {
-			throw new RangeError(`Could not get aspect ratio due to invalid size`);
+			throw new RangeError('Could not get aspect ratio due to invalid size');
 		}
 
-		return aspectRatio(this.toValue() as { width: number; height: number });
+		return Maths.aspectRatio(
+			this.toValue() as { width: number; height: number }
+		);
 	}
 
 	clone() {
@@ -80,7 +82,7 @@ export default class Size {
 
 	toPx() {
 		if (!this.isValid()) {
-			throw new RangeError(`Invalid size in pixels`);
+			throw new RangeError('Invalid size in pixels');
 		}
 
 		return {
