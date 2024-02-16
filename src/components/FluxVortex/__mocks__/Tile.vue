@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { ref, Ref, defineExpose } from 'vue';
+	import { ref, Ref } from 'vue';
 	import { vi } from 'vitest';
 
 	const $el: Ref<null | HTMLDivElement> = ref(null);
