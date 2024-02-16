@@ -63,11 +63,29 @@ describe('repositories: Transitions', () => {
 		);
 	});
 
+	it('gets fist the transition by order next', () => {
+		transitions = transitionsFactory(5);
+		repo.update(transitions);
+
+		expect(repo.getByOrder(Directions.next, 4).component).toBe(
+			transitions[3]
+		);
+	});
+
 	it('gets the transition by order previous', () => {
 		transitions = transitionsFactory(5);
 		repo.update(transitions);
 
 		expect(repo.getByOrder(Directions.prev, 2).component).toBe(
+			transitions[1]
+		);
+	});
+
+	it('gets the last transition by order previous', () => {
+		transitions = transitionsFactory(5);
+		repo.update(transitions);
+
+		expect(repo.getByOrder(Directions.prev, 0).component).toBe(
 			transitions[1]
 		);
 	});
