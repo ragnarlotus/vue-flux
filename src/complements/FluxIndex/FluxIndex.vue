@@ -6,7 +6,7 @@
 	import List from './List/List.vue';
 
 	export interface Props {
-		mouseOver?: boolean | Ref<boolean>;
+		mouseOver?: Ref<boolean>;
 		displaySize: Size;
 		player: Player;
 	}

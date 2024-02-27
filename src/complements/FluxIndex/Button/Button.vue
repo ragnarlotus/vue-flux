@@ -3,7 +3,7 @@
 	import { FluxButton } from '../../../components';
 
 	interface Props {
-		mouseOver?: boolean | Ref<boolean>;
+		mouseOver?: Ref<boolean>;
 	}
 
 	const props = withDefaults(defineProps<Props>(), {

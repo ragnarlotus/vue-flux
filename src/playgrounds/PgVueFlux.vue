@@ -77,7 +77,7 @@
 		Zip,
 	};
 
-	const transitionComponents = Object.values(transitions);
+	const transitionComponents = shallowReactive(Object.values(transitions));
 
 	const transitionNames = Object.keys(transitions);
 </script>

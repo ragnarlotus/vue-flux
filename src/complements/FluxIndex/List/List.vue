@@ -8,7 +8,7 @@
 	export interface Props {
 		displaySize: Size;
 		player: Player;
-		mouseOver?: boolean | Ref<boolean>;
+		mouseOver?: Ref<boolean>;
 	}
 
 	const props = withDefaults(defineProps<Props>(), {
