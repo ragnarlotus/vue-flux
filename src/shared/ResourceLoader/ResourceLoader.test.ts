@@ -1,92 +1,105 @@
-import ResourceLoader from './ResourceLoader';
-import { Size } from '../';
-import { ResourceWithOptions, Statuses } from '../../resources';
 import { vi } from 'vitest';
-import Img from '../../resources/Img/Img';
+import ResourceLoader from './ResourceLoader';
+import ResourceLoaderFactory from './__test__/ResourceLoaderFactory';
+import { Statuses } from '../../resources';
 
 vi.mock('../../resources/Img/Img');
-
-function resourceFactory(numResources: number) {
-	return new Array(numResources).fill({
-		resource: new Img('', ''),
-		options: {},
-	} as ResourceWithOptions);
-}
 
 describe('shared: ResourceLoader', () => {
 	let rscLoader: ResourceLoader;
 
-	const displaySize = new Size({
-		width: 640,
-		height: 360,
-	});
-
-	const onPreloadStart = vi.fn();
-	const onPreloadEnd = vi.fn();
-	const onLazyLoadStart = vi.fn();
-	const onLazyLoadEnd = vi.fn();
-	const reject = vi.fn();
-
-	function rscLoaderCreator(numResources: number, numToPreload: number) {
-		return new ResourceLoader(
-			resourceFactory(numResources),
-			numToPreload,
-			displaySize,
-			onPreloadStart,
-			onPreloadEnd,
-			onLazyLoadStart,
-			onLazyLoadEnd,
-			reject
-		);
-	}
-
 	beforeEach(() => {
-		onPreloadStart.mockReset();
-		onPreloadEnd.mockReset();
-		onLazyLoadStart.mockReset();
-		onLazyLoadEnd.mockReset();
-		reject.mockReset();
+		vi.clearAllMocks();
 	});
 
 	it('calls onPreloadStart when preload starts', () => {
-		rscLoader = rscLoaderCreator(10, 15);
+		rscLoader = ResourceLoaderFactory.create(10, 5);
 
-		expect(rscLoader.onPreloadStart).toHaveBeenCalledWith();
+		expect(rscLoader.onPreloadStart).toHaveBeenCalledOnce();
 	});
 
 	it('preloads all resources if num resources less than num to preload', () => {
-		rscLoader = rscLoaderCreator(10, 15);
+		rscLoader = ResourceLoaderFactory.create(10, 15);
 
 		expect(rscLoader.toPreload).toBe(10);
 	});
 
 	it('start preloading when created', () => {
-		rscLoader = rscLoaderCreator(10, 10);
-		expect(rscLoader.onPreloadStart).toHaveBeenCalledWith();
+		rscLoader = ResourceLoaderFactory.create(10, 10);
+
+		expect(rscLoader.onPreloadStart).toHaveBeenCalledOnce();
 	});
 
 	it('start preloading the resources', () => {
-		rscLoader = rscLoaderCreator(15, 10);
+		rscLoader = ResourceLoaderFactory.create(15, 10);
 
 		expect(
-			rscLoader.rscs.every(
-				(rsc) => rsc.resource.status.value === Statuses.loading
+			rscLoader.rscs.every((rsc) =>
+				[Statuses.loading, Statuses.loaded].includes(
+					rsc.resource.status.value
+				)
 			)
 		).toBeTruthy();
 	});
 
-	/* 	it.skip('calls onPreloadEnd when preload finishes', () =>
-		new Promise((resolve) => {
-			onPreloadEnd.mockImplementation(() => {
-				expect(
-					rscLoader.rscs.every(
-						(rsc) => rsc.resource.status.value === Statuses.loaded
-					)
-				).toBeTruthy();
+	it('checks if resources preloaded are less than to preload and preloads the remaining', () => {
+		rscLoader = ResourceLoaderFactory.create(15, 6);
 
-				resolve({});
+		rscLoader.counter.success = 4;
+		rscLoader.counter.error = 2;
+		rscLoader.counter.total = 6;
+
+		rscLoader.preloadEnd();
+
+		expect(rscLoader.preLoading).toHaveLength(8);
+	});
+
+	it('calls onPreloadEnd when all preloaded', () =>
+		new Promise<void>((done) => {
+			rscLoader = ResourceLoaderFactory.create(5, 5, undefined, () => {
+				expect(rscLoader.onPreloadStart).toHaveBeenCalledOnce();
+				expect(rscLoader.onPreloadEnd).toHaveBeenCalledWith(
+					expect.any(Array)
+				);
+				done();
 			});
+		}));
 
-			rscLoader = rscLoaderCreator(15, 10);
-		})); */
+	it('starts lazy loading when preloading finish', () =>
+		new Promise<void>((done) => {
+			rscLoader = ResourceLoaderFactory.create(
+				20,
+				5,
+				undefined,
+				undefined,
+				() => {
+					expect(rscLoader.onPreloadStart).toHaveBeenCalledOnce();
+					expect(rscLoader.onPreloadEnd).toHaveBeenCalledOnce();
+					expect(rscLoader.counter.total).toBe(5);
+					expect(rscLoader.onLazyLoadStart).toHaveBeenCalledOnce();
+					done();
+				}
+			);
+		}));
+
+	it('calls onLazyLoadEnd when lazy loading finish', () =>
+		new Promise<void>((done) => {
+			rscLoader = ResourceLoaderFactory.create(
+				20,
+				5,
+				undefined,
+				undefined,
+				undefined,
+				() => {
+					expect(rscLoader.onPreloadStart).toHaveBeenCalledOnce();
+					expect(rscLoader.onPreloadEnd).toHaveBeenCalledOnce();
+					expect(rscLoader.onLazyLoadStart).toHaveBeenCalledOnce();
+					expect(rscLoader.onLazyLoadEnd).toHaveBeenCalledWith(
+						expect.any(Array)
+					);
+					expect(rscLoader.counter.total).toBe(20);
+					done();
+				}
+			);
+		}));
 });

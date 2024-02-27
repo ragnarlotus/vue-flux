@@ -5,7 +5,7 @@
 	import { default as PlayerStatuses } from '../../controllers/Player/Statuses';
 
 	export interface Props {
-		mouseOver?: boolean | Ref<boolean>;
+		mouseOver?: Ref<boolean>;
 		player: Player;
 	}
 
@@ -31,11 +31,15 @@
 		<div v-if="visible" class="flux-controls">
 			<Buttons.Prev @click="player.show(Directions.prev)" />
 			<Buttons.Play
-				v-if="player.status.value === PlayerStatuses.stopped"
+				v-if="
+					(player.status.value || player.status) === PlayerStatuses.stopped
+				"
 				@click="player.play(Directions.next, 1)"
 			/>
 			<Buttons.Stop
-				v-if="player.status.value === PlayerStatuses.playing"
+				v-if="
+					(player.status.value || player.status) === PlayerStatuses.playing
+				"
 				@click="player.stop()"
 			/>
 			<Buttons.Next @click="player.show(Directions.next)" />

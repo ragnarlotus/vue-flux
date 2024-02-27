@@ -58,6 +58,7 @@ export default abstract class Resource {
 		if ([displaySize.isValid(), this.realSize.isValid()].includes(false)) {
 			return {};
 		}
+
 		const resCalc = new ResizeCalculator(this.realSize);
 		const { size, position } = resCalc.resizeTo(displaySize, this.resizeType);
 

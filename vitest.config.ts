@@ -2,7 +2,7 @@ import { defineConfig, configDefaults } from 'vitest/config';
 import vue from '@vitejs/plugin-vue';
 
 const exclude = [
-	...configDefaults.exclude,
+	//	...configDefaults.exclude,
 	'**/index.ts',
 	'**/types.ts',
 	'**/__test__/',
