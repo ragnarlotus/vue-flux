@@ -1,31 +1,79 @@
-import { VueFluxConfig, VueFluxEmits } from '../../components';
 import { Player, Timers } from '../../controllers';
 import FluxCaption from './FluxCaption.vue';
 import { mount } from '@vue/test-utils';
+import emit from '../../components/VueFlux/__test__/emit';
+import {
+	vueFluxConfig,
+	setCurrentResource,
+	setCurrentTransition,
+} from '../__test__/PlayerHelper';
 
-vi.mock('../../controllers/Player/Player.ts');
+vi.mock('../../controllers/Player/Player');
+
+const defaultCaption = 'the caption';
 
 describe('complements: FluxCaption', () => {
-	const config = {
-		allowFullscreen: false,
-		allowToSkipTransition: true,
-		aspectRatio: '16:9',
-		autohideTime: 2500,
-		autoplay: false,
-		bindKeys: false,
-		delay: 5000,
-		enableGestures: false,
-		infinite: true,
-		lazyLoad: true,
-		lazyLoadAfter: 5,
-	} as VueFluxConfig;
-
 	const timers = new Timers();
 
-	const emit = {} as VueFluxEmits;
+	it('should mount properly without slot', () => {
+		const player = new Player(vueFluxConfig, timers, emit);
 
-	it.skip('should mount properly without slot', () => {
-		const player = new Player(config, timers, emit);
+		expect(() => {
+			mount(FluxCaption, {
+				props: {
+					player,
+				},
+			});
+		}).not.toThrow();
+	});
+
+	it('should not be visible if no caption', () => {
+		const player = new Player(vueFluxConfig, timers, emit);
+
+		setCurrentResource(player);
+
+		const wrapper = mount(FluxCaption, {
+			props: {
+				player,
+			},
+		});
+
+		expect(wrapper.html().includes('class="flux-caption"')).toBeTruthy();
+	});
+
+	it('should not be visible if caption has no length', () => {
+		const player = new Player(vueFluxConfig, timers, emit);
+
+		setCurrentResource(player, '');
+
+		const wrapper = mount(FluxCaption, {
+			props: {
+				player,
+			},
+		});
+
+		expect(wrapper.html().includes('class="flux-caption"')).toBeTruthy();
+	});
+
+	it('should not be visible if transition running', () => {
+		const player = new Player(vueFluxConfig, timers, emit);
+
+		setCurrentResource(player, defaultCaption);
+		setCurrentTransition(player);
+
+		const wrapper = mount(FluxCaption, {
+			props: {
+				player,
+			},
+		});
+
+		expect(wrapper.html().includes('class="flux-caption"')).toBeTruthy();
+	});
+
+	it('should display the caption', () => {
+		const player = new Player(vueFluxConfig, timers, emit);
+
+		setCurrentResource(player, defaultCaption);
 
 		const wrapper = mount(FluxCaption, {
 			props: {
@@ -34,7 +82,26 @@ describe('complements: FluxCaption', () => {
 		});
 
 		expect(
-			wrapper.html().includes('<polyline points="36,18 78,50 36,82"')
+			wrapper.html().includes('class="flux-caption visible"')
+		).toBeTruthy();
+	});
+
+	it('should mount properly with slot', () => {
+		const player = new Player(vueFluxConfig, timers, emit);
+
+		setCurrentResource(player, defaultCaption);
+
+		const wrapper = mount(FluxCaption, {
+			props: {
+				player,
+			},
+			slots: {
+				default: `<h1>{{ params.caption }}</h1>`,
+			},
+		});
+
+		expect(
+			wrapper.html().includes(`<h1>${defaultCaption}</h1>`)
 		).toBeTruthy();
 	});
 });
