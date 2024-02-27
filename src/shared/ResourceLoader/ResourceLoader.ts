@@ -61,7 +61,7 @@ export default class ResourceLoader {
 	preloadEnd() {
 		const { counter, toPreload } = this;
 
-		if (counter.success < toPreload && counter.total < toPreload) {
+		if (counter.success < toPreload && counter.total < this.rscs.length) {
 			this.preloadStart();
 			return;
 		}
