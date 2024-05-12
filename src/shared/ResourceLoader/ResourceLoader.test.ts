@@ -5,7 +5,7 @@ import { Statuses } from '../../resources';
 
 vi.mock('../../resources/Img/Img');
 
-describe('shared: ResourceLoader', () => {
+describe.only('shared: ResourceLoader', () => {
 	let rscLoader: ResourceLoader;
 
 	beforeEach(() => {
@@ -102,4 +102,16 @@ describe('shared: ResourceLoader', () => {
 				}
 			);
 		}));
+
+	it('calculates the progress properly', () => {
+		rscLoader = ResourceLoaderFactory.create(15, 6);
+
+		rscLoader.counter.success = 4;
+		rscLoader.counter.error = 2;
+		rscLoader.counter.total = 6;
+
+		rscLoader.updateProgress();
+
+		expect(rscLoader.progress.value).toBe(67);
+	});
 });

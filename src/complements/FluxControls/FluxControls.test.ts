@@ -1,6 +1,6 @@
 import { ref, Ref } from 'vue';
 import { Player, Timers } from '../../controllers';
-import { Statuses } from '../../controllers/Player';
+import { Directions, Statuses } from '../../controllers/Player';
 import * as Buttons from './buttons';
 import FluxControls from './FluxControls.vue';
 import { mount } from '@vue/test-utils';
@@ -101,6 +101,28 @@ describe('complements: FluxControls', () => {
 		}).not.toThrow();
 	});
 
+	it('should play when button pressed', async () => {
+		const player = new Player(vueFluxConfig, timers, emit);
+		player.status.value = Statuses.stopped;
+
+		setCurrentResource(player);
+		mouseOver.value = true;
+
+		const wrapper = mount(FluxControls, {
+			props: {
+				mouseOver,
+				player,
+			},
+		});
+
+		await wrapper.getComponent(Buttons.Play).trigger('click');
+
+		expect(player.play).toHaveBeenCalledWith(
+			Directions.next,
+			expect.any(Number)
+		);
+	});
+
 	it('should display stop button', () => {
 		const player = new Player(vueFluxConfig, timers, emit);
 		player.status.value = Statuses.playing;
@@ -118,5 +140,62 @@ describe('complements: FluxControls', () => {
 		expect(() => {
 			wrapper.getComponent(Buttons.Stop);
 		}).not.toThrow();
+	});
+
+	it('should stop when button pressed', async () => {
+		const player = new Player(vueFluxConfig, timers, emit);
+		player.status.value = Statuses.playing;
+
+		setCurrentResource(player);
+		mouseOver.value = true;
+
+		const wrapper = mount(FluxControls, {
+			props: {
+				mouseOver,
+				player,
+			},
+		});
+
+		await wrapper.getComponent(Buttons.Stop).trigger('click');
+
+		expect(player.stop).toHaveBeenCalledOnce();
+	});
+
+	it('should display previous resource when button pressed', async () => {
+		const player = new Player(vueFluxConfig, timers, emit);
+		player.status.value = Statuses.playing;
+
+		setCurrentResource(player);
+		mouseOver.value = true;
+
+		const wrapper = mount(FluxControls, {
+			props: {
+				mouseOver,
+				player,
+			},
+		});
+
+		await wrapper.getComponent(Buttons.Prev).trigger('click');
+
+		expect(player.show).toHaveBeenCalledWith(Directions.prev);
+	});
+
+	it('should display next resource when button pressed', async () => {
+		const player = new Player(vueFluxConfig, timers, emit);
+		player.status.value = Statuses.playing;
+
+		setCurrentResource(player);
+		mouseOver.value = true;
+
+		const wrapper = mount(FluxControls, {
+			props: {
+				mouseOver,
+				player,
+			},
+		});
+
+		await wrapper.getComponent(Buttons.Next).trigger('click');
+
+		expect(player.show).toHaveBeenCalledWith(Directions.next);
 	});
 });

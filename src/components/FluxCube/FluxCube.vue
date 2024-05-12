@@ -3,7 +3,7 @@
 	import useComponent from '../useComponent';
 	import { FluxCubeProps, SidesComponents, Turn } from './types';
 	import { Size } from '../../shared';
-	import { ComponentStyles } from '../types';
+	import { ComponentStyles, FluxComponent } from '../types';
 	import SideTransformFactory from './factories/SideTransformFactory';
 	import CubeFactory from './factories/CubeFactory';
 	import Sides from './Sides';
@@ -83,7 +83,10 @@
 		<component
 			:is="side!.component"
 			v-for="side in sides"
-			:ref="(el: any) => ($sides[side!.name as keyof typeof Sides] = el)"
+			:ref="
+				(el: FluxComponent) =>
+					($sides[side!.name as keyof typeof Sides] = el)
+			"
 			:key="side!.name"
 			v-bind="side"
 		/>

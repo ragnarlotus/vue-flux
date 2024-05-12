@@ -12,18 +12,12 @@ export default class Player {
 	status: Ref<keyof typeof Statuses> = ref(Statuses.stopped);
 	config: VueFluxConfig;
 	timers: Timers;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	emit: VueFluxEmits;
 	resources: Resources;
 	transitions: Transitions;
 	$displayComponent: Ref<null | FluxComponent> = ref(null);
 
-	constructor(
-		config: VueFluxConfig,
-		timers: Timers,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		emit: VueFluxEmits
-	) {
+	constructor(config: VueFluxConfig, timers: Timers, emit: VueFluxEmits) {
 		this.config = config;
 		this.timers = timers;
 		this.emit = emit;

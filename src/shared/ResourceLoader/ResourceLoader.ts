@@ -147,8 +147,9 @@ export default class ResourceLoader {
 	}
 
 	updateProgress() {
-		this.progress.value =
-			Math.ceil((this.counter.success * 100) / this.toPreload) || 0;
+		this.progress.value = Math.ceil(
+			(this.counter.success * 100) / this.toPreload
+		);
 	}
 
 	hasFinished() {

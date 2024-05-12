@@ -4,7 +4,7 @@
 	import { FluxGrid } from '../../components';
 	import { TransitionWaveProps, TransitionWaveConf } from './types';
 	import { Directions } from '../../controllers/Player';
-	import { FluxCube, Turns } from '../../components/FluxCube';
+	import { Turns } from '../../components/FluxCube';
 
 	const props = defineProps<TransitionWaveProps>();
 
@@ -51,19 +51,17 @@
 			props.displayComponent.hide();
 		}
 
-		$grid.value!.transform(
-			(tile: InstanceType<typeof FluxCube>, index: number) => {
-				const transition = `all ${conf.tileDuration}ms ${
-					conf.easing
-				} ${getDelay[conf.direction!](index)}ms`;
+		$grid.value!.transform((tile: any, index: number) => {
+			const transition = `all ${conf.tileDuration}ms ${
+				conf.easing
+			} ${getDelay[conf.direction!](index)}ms`;
 
-				tile.setCss({
-					transition,
-				});
+			tile.setCss({
+				transition,
+			});
 
-				tile.turn(Turns.bottom);
-			}
-		);
+			tile.turn(Turns.bottom);
+		});
 	};
 
 	defineExpose({

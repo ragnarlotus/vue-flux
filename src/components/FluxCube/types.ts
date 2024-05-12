@@ -2,7 +2,7 @@
 import { CSSProperties, Component } from 'vue';
 import { Resource } from '../../resources';
 import { Position, Size } from '../../shared';
-import { ComponentProps } from '../types';
+import { ComponentProps, FluxComponent } from '../types';
 import Sides from './Sides';
 import Turns from './Turns';
 
@@ -66,10 +66,10 @@ export interface SidesProps {
 }
 
 export interface SidesComponents {
-	[Sides.front]?: any;
-	[Sides.back]?: any;
-	[Sides.left]?: any;
-	[Sides.right]?: any;
-	[Sides.top]?: any;
-	[Sides.bottom]?: any;
+	[Sides.front]?: FluxComponent;
+	[Sides.back]?: FluxComponent;
+	[Sides.left]?: FluxComponent;
+	[Sides.right]?: FluxComponent;
+	[Sides.top]?: FluxComponent;
+	[Sides.bottom]?: FluxComponent;
 }
