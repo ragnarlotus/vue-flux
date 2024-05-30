@@ -28,7 +28,7 @@
 		"dev": "vite",
 		"build": "vite build",
 		"serve": "vite preview",
-		"lint": "eslint --ext .js,.ts,.vue --ignore-path .gitignore ./",
+		"lint": "eslint ./src",
 		"format": "prettier .  --write",
 		"test": "vitest",
 		"test:coverage": "vitest --coverage"
@@ -44,17 +44,17 @@
 		"vue": "^3.0.0"
 	},
 	"devDependencies": {
+		"@eslint/js": "^9.3.0",
 		"@types/jest": "^29.5.11",
 		"@typescript-eslint/eslint-plugin": "^7.10.0",
-		"@typescript-eslint/parser": "^7.10.0",
 		"@vitejs/plugin-vue": "^5.0.3",
 		"@vitest/coverage-v8": "^1.6.0",
 		"@vue/compiler-sfc": "^3.4.27",
-		"@vue/eslint-config-typescript": "^13.0.0",
 		"@vue/test-utils": "^2.4.6",
 		"autoprefixer": "^10.4.19",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-prettier-vue": "^5.0.0",
 		"eslint-plugin-vitest": "^0.5.4",
 		"eslint-plugin-vue": "^9.26.0",
 		"happy-dom": "^14.11.0",
@@ -67,6 +67,7 @@
 		"vite-plugin-dts": "^3.9.1",
 		"vitest": "^1.6.0",
 		"vue-cosk": "^1.0.0",
+		"vue-eslint-parser": "^9.4.2",
 		"vue-tsc": "^2.0.19"
 	},
 	"peerDependencies": {

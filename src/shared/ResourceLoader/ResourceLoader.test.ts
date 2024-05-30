@@ -5,7 +5,7 @@ import { Statuses } from '../../resources';
 
 vi.mock('../../resources/Img/Img');
 
-describe.only('shared: ResourceLoader', () => {
+describe('shared: ResourceLoader', () => {
 	let rscLoader: ResourceLoader;
 
 	beforeEach(() => {
