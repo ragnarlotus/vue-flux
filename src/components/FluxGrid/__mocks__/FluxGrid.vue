@@ -22,7 +22,9 @@
 
 	const transform = vi
 		.fn()
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		.mockImplementation((cb: (tile: any, index: number) => void) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			$tiles.value.forEach((tile: any, index: number) => cb(tile, index));
 		});
 

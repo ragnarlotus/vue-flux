@@ -142,9 +142,9 @@
 	});
 
 	const resize = () => {
-		// @ts-ignore:next-line
+		// @ts-expect-error:next-line
 		display.width = holder.scrollWidth || holder.innerWidth;
-		// @ts-ignore:next-line
+		// @ts-expect-error:next-line
 		display.height = holder.scrollHeight || holder.innerHeight;
 
 		view.width = $el.value!.clientWidth;
@@ -178,7 +178,7 @@
 			return;
 		}
 
-		// @ts-ignore:next-line
+		// @ts-expect-error:next-line
 		const scrollTop = holder.scrollY || holder.scrollTop || 0;
 
 		if (holder !== window) {
@@ -221,7 +221,7 @@
 			if (holder === window) {
 				pct = (positionY * 100) / (display.height + view.height);
 			} else {
-				// @ts-ignore:next-line
+				// @ts-expect-error:next-line
 				pct = (positionY * 100) / (display.height - holder.clientHeight);
 			}
 

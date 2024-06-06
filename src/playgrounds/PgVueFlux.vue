@@ -80,6 +80,16 @@
 	const transitionComponents = shallowReactive(Object.values(transitions));
 
 	const transitionNames = Object.keys(transitions);
+
+	const currentTransitionName = ref(null);
+
+	function updateCurrentTransition(_rsc?, transition?) {
+		if (transition.current !== null) {
+			currentTransitionName.value = transition.current.component.__name;
+		} else {
+			currentTransitionName.value = null;
+		}
+	}
 </script>
 
 <template>
@@ -93,6 +103,8 @@
 					:transitions="transitionComponents"
 					:rscs="rscs"
 					:options="options"
+					@transition-start="updateCurrentTransition"
+					@transition-end="updateCurrentTransition"
 				>
 					<template #preloader="preloaderProps">
 						<Complements.FluxPreloader v-bind="preloaderProps" />
@@ -128,6 +140,9 @@
 					>
 						<PgButton
 							class="w-100"
+							:class="
+								currentTransitionName === name ? 'bg-amber-500' : ''
+							"
 							@click="$vueFlux.show(Directions.next, index)"
 						>
 							{{ name }}

@@ -38,9 +38,9 @@
 		$tiles.value = [];
 	});
 
-	const transform = (cb: (tile: FluxComponent, index: number) => void) => {
-		$tiles.value.forEach((tile: FluxComponent, index: number) =>
-			cb(tile, index)
+	const transform = <T,>(cb: (tile: T, index: number) => void) => {
+		$tiles.value.forEach((tile: unknown, index: number) =>
+			cb(tile as T, index)
 		);
 	};
 

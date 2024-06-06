@@ -66,12 +66,10 @@
 			await player.stop(true);
 		}
 
-		const propsUpdater = {
+		await {
 			rscs: async () => await updateResources(),
 			transitions: () => updateTransitions(),
-		};
-
-		await propsUpdater[propName]();
+		}[propName]();
 
 		if (wasPlaying) {
 			player.play();

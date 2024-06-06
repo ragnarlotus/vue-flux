@@ -103,6 +103,18 @@ describe('shared: ResourceLoader', () => {
 			);
 		}));
 
+	it('does not update display size if cancelled', () => {
+		rscLoader = ResourceLoaderFactory.create(10, 5);
+		rscLoader.cancel();
+
+		const rsc = rscLoader.rscs[0];
+		vi.spyOn(rsc.resource.displaySize, 'update');
+
+		rscLoader.loadSuccess(rsc);
+
+		expect(rsc.resource.displaySize.update).not.toHaveBeenCalled();
+	});
+
 	it('calculates the progress properly', () => {
 		rscLoader = ResourceLoaderFactory.create(15, 6);
 
