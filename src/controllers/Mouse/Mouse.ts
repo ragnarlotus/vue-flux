@@ -1,6 +1,6 @@
-import { Ref, ref } from 'vue';
+import { type Ref, ref } from 'vue';
 import Timers from '../Timers/Timers';
-import { VueFluxConfig } from '../../components';
+import type { VueFluxConfig } from '../../components';
 
 export default class Mouse {
 	isOver: Ref<boolean> = ref(false);
@@ -28,10 +28,6 @@ export default class Mouse {
 	}
 
 	over(config: VueFluxConfig, timers: Timers) {
-		timers.set(
-			'mouseOver',
-			config.autohideTime,
-			() => (this.isOver.value = false)
-		);
+		timers.set('mouseOver', config.autohideTime, () => (this.isOver.value = false));
 	}
 }

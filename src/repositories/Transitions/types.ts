@@ -1,5 +1,5 @@
-import { Component } from 'vue';
-import { Direction } from '../../controllers/Player';
+import type { Component } from 'vue';
+import type { Direction } from '../../controllers/Player';
 
 export interface TransitionIndex {
 	index: number;

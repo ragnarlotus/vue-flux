@@ -1,4 +1,4 @@
-import { VueFluxConfig } from '../../components';
+import type { VueFluxConfig } from '../../components';
 import { Directions, Display, Mouse, Player, Timers } from '../';
 
 export default class Touches {
@@ -33,7 +33,7 @@ export default class Touches {
 		player: Player,
 		display: Display,
 		timers: Timers,
-		mouse: Mouse
+		mouse: Mouse,
 	) {
 		this.prevTouchTime = this.endTime;
 		this.endTime = Date.now();
@@ -58,11 +58,9 @@ export default class Touches {
 	}
 
 	tap = (offsetX: number, offsetY: number) =>
-		Math.abs(offsetX) < this.tapThreshold &&
-		Math.abs(offsetY) < this.tapThreshold;
+		Math.abs(offsetX) < this.tapThreshold && Math.abs(offsetY) < this.tapThreshold;
 
-	doubleTap = () =>
-		this.endTime - this.prevTouchTime < this.doubleTapThreshold;
+	doubleTap = () => this.endTime - this.prevTouchTime < this.doubleTapThreshold;
 
 	slideLeft = (offsetX: number, display: Display) =>
 		display.size.isValid() &&

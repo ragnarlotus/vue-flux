@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { ref, Ref, reactive, computed, CSSProperties } from 'vue';
+	import { ref, type Ref, reactive, computed, type CSSProperties } from 'vue';
 	import useComponent from '../useComponent';
-	import { FluxImageProps } from './types';
-	import { ComponentStyles } from '../types';
+	import type { FluxImageProps } from './types';
+	import type { ComponentStyles } from '../types';
 	import { Statuses } from '../../resources';
 
 	const props = defineProps<FluxImageProps>();
@@ -55,11 +55,7 @@
 		}),
 	});
 
-	const { style, setCss, transform, show, hide } = useComponent(
-		$el,
-		props,
-		componentStyles
-	);
+	const { style, setCss, transform, show, hide } = useComponent($el, props, componentStyles);
 
 	defineExpose({
 		setCss,

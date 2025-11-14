@@ -1,6 +1,6 @@
 import { Player, Timers } from '../../controllers';
-import FluxCaption from './FluxCaption.vue';
 import { mount } from '@vue/test-utils';
+import FluxCaption from './FluxCaption.vue';
 import emit from '../../components/VueFlux/__test__/emit';
 import {
 	vueFluxConfig,

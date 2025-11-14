@@ -1,6 +1,6 @@
 export default class Timers {
 	timers: {
-		[index: string]: NodeJS.Timeout;
+		[index: string]: ReturnType<typeof setTimeout>;
 	} = {};
 
 	set(index: string, time: number, cb: () => void) {

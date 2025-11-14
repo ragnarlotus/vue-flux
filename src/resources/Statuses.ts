@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 export enum Statuses {
 	notLoaded = 'notLoaded',
 	loading = 'loading',

@@ -1,8 +1,8 @@
-import { CSSProperties } from 'vue';
+import type { CSSProperties } from 'vue';
 import { Position, Size } from '../../shared';
 import { Resource } from '../../resources';
-import { SidesColors, SidesResources } from '../FluxCube/types';
-import { ComponentProps } from '../types';
+import type { SidesColors, SidesResources } from '../FluxCube/types';
+import type { ComponentProps } from '../types';
 
 export interface FluxGridProps extends ComponentProps {
 	colors?: SidesColors;

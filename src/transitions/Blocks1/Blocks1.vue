@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref } from 'vue';
+	import { ref, reactive, type Ref } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxComponent, FluxGrid } from '../../components';
-	import { TransitionBlocks1Props, TransitionBlocks1Conf } from './types';
+	import { type FluxComponent, FluxGrid } from '../../components';
+	import type { TransitionBlocks1Props, TransitionBlocks1Conf } from './types';
 
 	const props = defineProps<TransitionBlocks1Props>();
 
@@ -29,9 +29,7 @@
 
 	const onPlay = () => {
 		$grid.value!.transform((tile: FluxComponent) => {
-			const transition = `all ${conf.tileDuration}ms ${
-				conf.easing
-			} ${getDelay()}ms`;
+			const transition = `all ${conf.tileDuration}ms ${conf.easing} ${getDelay()}ms`;
 
 			tile.transform({
 				transition,
@@ -48,11 +46,5 @@
 </script>
 
 <template>
-	<FluxGrid
-		ref="$grid"
-		:rows="conf.rows"
-		:cols="conf.cols"
-		:size="size"
-		:rsc="from"
-	/>
+	<FluxGrid ref="$grid" :rows="conf.rows" :cols="conf.cols" :size="size" :rsc="from" />
 </template>

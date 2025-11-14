@@ -1,8 +1,8 @@
-import { CSSProperties } from 'vue';
+import type { CSSProperties } from 'vue';
 import { Resource } from '../../../resources';
 import { Size, Position } from '../../../shared';
-import { SidesColors, SidesResources } from '../../FluxCube/types';
-import { FluxGridTileProps } from '../types';
+import type { SidesColors, SidesResources } from '../../FluxCube/types';
+import type { FluxGridTileProps } from '../types';
 
 export function getRowNumber(tileNumber: number, numCols: number) {
 	return Math.floor(tileNumber / numCols);
@@ -29,7 +29,7 @@ export default class GridTileFactory {
 			number: number;
 			size: Size;
 			css?: CSSProperties;
-		}
+		},
 	) {
 		let { width, height } = tile.size.toValue();
 
@@ -67,9 +67,7 @@ export default class GridTileFactory {
 			position: 'absolute',
 			...props.offset.toPx(),
 			zIndex:
-				tile.number + 1 < grid.numTiles / 2
-					? tile.number + 1
-					: grid.numTiles - tile.number,
+				tile.number + 1 < grid.numTiles / 2 ? tile.number + 1 : grid.numTiles - tile.number,
 		};
 
 		return props;

@@ -1,6 +1,6 @@
 import { Size } from '../../../shared';
 import GridTileFactory from './GridTileFactory';
-import { FluxGridProps, FluxGridTileProps } from '../types';
+import type { FluxGridProps, FluxGridTileProps } from '../types';
 
 export default class GridFactory {
 	static getTilesProps(props: FluxGridProps) {

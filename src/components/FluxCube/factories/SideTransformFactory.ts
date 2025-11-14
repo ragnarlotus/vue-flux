@@ -1,6 +1,6 @@
-import { Ref, computed } from 'vue';
+import { type Ref, computed } from 'vue';
 import { Size } from '../../../shared';
-import { Side, Turn } from '../types';
+import type { Side, Turn } from '../types';
 
 const rotate: {
 	x: {

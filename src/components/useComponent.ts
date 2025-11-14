@@ -1,11 +1,11 @@
-import { computed, CSSProperties, Ref, unref } from 'vue';
+import { computed, type CSSProperties, type Ref, unref } from 'vue';
 import { Size } from '../shared';
-import { ComponentProps, ComponentStyles } from './types';
+import type { ComponentProps, ComponentStyles } from './types';
 
 export default function useComponent(
 	$el: Ref<null | HTMLElement>,
 	props: ComponentProps,
-	css: ComponentStyles
+	css: ComponentStyles,
 ) {
 	if (css.base === undefined) {
 		css.base = {} as CSSProperties;
@@ -14,8 +14,7 @@ export default function useComponent(
 	const size = computed<CSSProperties>(() => {
 		const { size, viewSize = new Size() } = props;
 
-		const { width = size.width.value, height = size.height.value } =
-			viewSize.toValue();
+		const { width = size.width.value, height = size.height.value } = viewSize.toValue();
 
 		const finalSize = new Size({ width, height });
 
@@ -43,6 +42,7 @@ export default function useComponent(
 			return;
 		}
 
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 		$el.value.clientHeight;
 		setCss(s);
 	};

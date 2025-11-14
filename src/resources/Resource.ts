@@ -1,11 +1,6 @@
-import { computed, ref, Ref } from 'vue';
+import { computed, ref, type Ref } from 'vue';
 import { Size, Position, ResizeCalculator } from '../shared';
-import {
-	DisplayParameter,
-	ResizedProps,
-	ResizeType,
-	TransitionParameter,
-} from './types';
+import type { DisplayParameter, ResizedProps, ResizeType, TransitionParameter } from './types';
 import { Statuses, ResizeTypes } from './';
 
 export default abstract class Resource {
@@ -29,7 +24,7 @@ export default abstract class Resource {
 		backgroundColor: null | string = null,
 		display: DisplayParameter,
 		transition: TransitionParameter,
-		errorMessage: string
+		errorMessage: string,
 	) {
 		this.src = src;
 		this.caption = caption;
@@ -48,10 +43,8 @@ export default abstract class Resource {
 
 	abstract load(): Promise<void>;
 
-	// eslint-disable-next-line no-unused-vars
 	abstract onLoad(el: unknown, resolve: () => void): void;
 
-	// eslint-disable-next-line no-unused-vars
 	abstract onError(reject: (message: string) => void): void;
 
 	calcResizeProps(displaySize: Size) {
@@ -89,9 +82,7 @@ export default abstract class Resource {
 
 		Object.assign(
 			resizedProps,
-			size.equals(this.displaySize)
-				? this.resizeProps.value
-				: this.calcResizeProps(size)
+			size.equals(this.displaySize) ? this.resizeProps.value : this.calcResizeProps(size),
 		);
 
 		if (offset !== undefined) {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { ref, shallowReactive, onMounted, Ref } from 'vue';
+	import { ref, shallowReactive, onMounted, type Ref } from 'vue';
 	import { VcParagraph } from 'vue-cosk';
 	import { VueFlux } from '../components';
 	import { FluxIndex } from '../complements';
@@ -43,12 +43,7 @@
 
 		<VcParagraph mode="fill" style="margin: 24px 0" />
 
-		<VueFlux
-			ref="$vueFlux"
-			:options="options"
-			:rscs="rscs"
-			:transitions="transitions"
-		/>
+		<VueFlux ref="$vueFlux" :options="options" :rscs="rscs" :transitions="transitions" />
 
 		<FluxIndex v-if="player" :display-size="$vueFlux.size" :player="player" />
 

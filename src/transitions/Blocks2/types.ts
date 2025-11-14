@@ -1,6 +1,6 @@
-import { CSSProperties } from 'vue';
+import type { CSSProperties } from 'vue';
 import { Resource } from '../../resources';
-import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
+import type { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
 export interface TransitionBlocks2Options extends TransitionOptions {
 	rows?: number;

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref, CSSProperties } from 'vue';
+	import { ref, reactive, type Ref, type CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxCube, FluxGrid, Turns } from '../../components';
-	import { TransitionBlinds3DProps, TransitionBlinds3DConf } from './types';
+	import { FluxGrid, Turns, FluxCube } from '../../components';
+	import type { TransitionBlinds3DProps, TransitionBlinds3DConf } from './types';
 
 	const props = defineProps<TransitionBlinds3DProps>();
 
@@ -47,19 +47,19 @@
 			props.displayComponent.hide();
 		}
 
-		$grid.value!.transform(
-			(tile: InstanceType<typeof FluxCube>, index: number) => {
-				const transition = `all ${conf.tileDuration}ms ${
-					conf.easing
-				} ${getDelay[conf.direction!](index)}ms`;
+		type FluxCubeType = InstanceType<typeof FluxCube>;
 
-				tile.setCss({
-					transition,
-				});
+		$grid.value!.transform<FluxCubeType>((tile: FluxCubeType, index: number) => {
+			const transition = `all ${conf.tileDuration}ms ${
+				conf.easing
+			} ${getDelay[conf.direction!](index)}ms`;
 
-				tile.turn(turn);
-			}
-		);
+			tile.setCss({
+				transition,
+			});
+
+			tile.turn(turn);
+		});
 	};
 
 	defineExpose({

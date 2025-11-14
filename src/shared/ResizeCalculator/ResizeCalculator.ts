@@ -1,12 +1,10 @@
-import { ResizeType, ResizeTypes } from '../../resources';
+import { type ResizeType, ResizeTypes } from '../../resources';
 import { Size, Position } from '../';
 
-/* eslint-disable no-unused-vars */
 export enum Orientations {
 	landscape = 'landscape',
 	portrait = 'portrait',
 }
-/* eslint-enable no-unused-vars */
 
 const getOrientation = (aspectRatio: number) =>
 	aspectRatio >= 1 ? Orientations.landscape : Orientations.portrait;
@@ -40,14 +38,14 @@ export default class ResizeCalculator {
 			resizeSize,
 			resizeAspectRatio,
 			resizeOrientation,
-			resizeType
+			resizeType,
 		);
 
 		const adaptedPosition: Position = this.getAdaptedPosition(
 			resizeSize,
 			resizeAspectRatio,
 			adaptedSize,
-			resizeType
+			resizeType,
 		);
 
 		return {
@@ -60,7 +58,7 @@ export default class ResizeCalculator {
 		resizeSize: Size,
 		resizeAspectRatio: number,
 		resizeOrientation: Orientation,
-		resizeType: ResizeType
+		resizeType: ResizeType,
 	) {
 		if (
 			resizeOrientation === Orientations.landscape &&
@@ -135,19 +133,13 @@ export default class ResizeCalculator {
 		resizeSize: Size,
 		resizeAspectRatio: number,
 		adaptedSize: Size,
-		resizeType: ResizeType
+		resizeType: ResizeType,
 	) {
-		if (
-			this.realAspectRatio <= resizeAspectRatio &&
-			resizeType === ResizeTypes.fill
-		) {
+		if (this.realAspectRatio <= resizeAspectRatio && resizeType === ResizeTypes.fill) {
 			return this.getAdaptedPositionVertically(resizeSize, adaptedSize);
 		}
 
-		if (
-			this.realAspectRatio > resizeAspectRatio &&
-			resizeType === ResizeTypes.fit
-		) {
+		if (this.realAspectRatio > resizeAspectRatio && resizeType === ResizeTypes.fit) {
 			return this.getAdaptedPositionVertically(resizeSize, adaptedSize);
 		}
 

@@ -8,16 +8,11 @@
 		unref,
 		onMounted,
 		onUnmounted,
-		Ref,
-		CSSProperties,
+		type Ref,
+		type CSSProperties,
 	} from 'vue';
 	import { Maths } from '../../shared';
-	import {
-		DisplayProps,
-		FluxParallaxProps,
-		FluxParallaxStyles,
-		ViewProps,
-	} from './types';
+	import type { DisplayProps, FluxParallaxProps, FluxParallaxStyles, ViewProps } from './types';
 
 	const { aspectRatio } = Maths;
 
@@ -113,9 +108,7 @@
 	});
 
 	const remainderHeight = computed(() => {
-		const effectHeight = isIos
-			? display.height
-			: view.height + offsetHeight.value.px;
+		const effectHeight = isIos ? display.height : view.height + offsetHeight.value.px;
 
 		return background.height - effectHeight;
 	});
@@ -142,7 +135,9 @@
 	});
 
 	const resize = () => {
+		// @ts-expect-error:next-line
 		display.width = holder.scrollWidth || holder.innerWidth;
+		// @ts-expect-error:next-line
 		display.height = holder.scrollHeight || holder.innerHeight;
 
 		view.width = $el.value!.clientWidth;
@@ -163,10 +158,7 @@
 
 	const moveBackgroundByPct = (pct: number) => {
 		if (remainderHeight.value > 0)
-			pct =
-				(pct * offsetHeight.value.pct) / 100 +
-				50 -
-				offsetHeight.value.pct / 2;
+			pct = (pct * offsetHeight.value.pct) / 100 + 50 - offsetHeight.value.pct / 2;
 
 		style.defined.backgroundPositionY = pct.toFixed(2) + '%';
 	};
@@ -176,6 +168,7 @@
 			return;
 		}
 
+		// @ts-expect-error:next-line
 		const scrollTop = holder.scrollY || holder.scrollTop || 0;
 
 		if (holder !== window) {
@@ -204,9 +197,7 @@
 			} else if (positionY > display.height) {
 				pct = 100;
 			} else {
-				pct =
-					((positionY - view.height) * 100) /
-					(display.height - view.height);
+				pct = ((positionY - view.height) * 100) / (display.height - view.height);
 			}
 
 			moveBackgroundByPct(pct);
@@ -218,6 +209,7 @@
 			if (holder === window) {
 				pct = (positionY * 100) / (display.height + view.height);
 			} else {
+				// @ts-expect-error:next-line
 				pct = (positionY * 100) / (display.height - holder.clientHeight);
 			}
 

@@ -1,5 +1,5 @@
-import { CSSProperties } from 'vue';
-import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
+import type { CSSProperties } from 'vue';
+import type { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
 export interface TransitionWaveOptions extends TransitionOptions {
 	cols?: number;

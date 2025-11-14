@@ -1,4 +1,4 @@
-import { Transitions, TransitionIndex } from '../../repositories';
+import { Transitions, type TransitionIndex } from '../../repositories';
 
 export default class PlayerTransition {
 	current: TransitionIndex | null = null;

@@ -1,17 +1,8 @@
 <script setup lang="ts">
-	import {
-		onMounted,
-		onUnmounted,
-		ref,
-		reactive,
-		computed,
-		watch,
-		Ref,
-		toRaw,
-	} from 'vue';
+	import { onMounted, onUnmounted, ref, reactive, computed, watch, type Ref, toRaw } from 'vue';
 	import * as Controllers from '../../controllers';
-	import { FluxComponent, FluxTransition } from '../';
-	import { VueFluxProps, VueFluxEmits, VueFluxConfig } from './types';
+	import { type FluxComponent, FluxTransition } from '../';
+	import type { VueFluxProps, VueFluxEmits, VueFluxConfig } from './types';
 	import { default as PlayerStatuses } from '../../controllers/Player/Statuses';
 
 	const props = withDefaults(defineProps<VueFluxProps>(), {
@@ -21,8 +12,7 @@
 	const emit = defineEmits<VueFluxEmits>();
 
 	const $el: Ref<null | HTMLDivElement> = ref(null);
-	const $transition: Ref<null | InstanceType<typeof FluxTransition>> =
-		ref(null);
+	const $transition: Ref<null | InstanceType<typeof FluxTransition>> = ref(null);
 	const $displayComponent: Ref<null | FluxComponent> = ref(null);
 
 	const config: VueFluxConfig = reactive({
@@ -66,12 +56,10 @@
 			await player.stop(true);
 		}
 
-		const propsUpdater = {
+		await {
 			rscs: async () => await updateResources(),
 			transitions: () => updateTransitions(),
-		};
-
-		await propsUpdater[propName]();
+		}[propName]();
 
 		if (wasPlaying) {
 			player.play();
@@ -81,9 +69,7 @@
 	async function updateResources() {
 		player.resource.reset();
 
-		const numToPreload = config.lazyLoad
-			? config.lazyLoadAfter
-			: props.rscs.length;
+		const numToPreload = config.lazyLoad ? config.lazyLoadAfter : props.rscs.length;
 
 		try {
 			await resources.update(toRaw(props.rscs), numToPreload, display.size);
@@ -101,7 +87,7 @@
 		async () => {
 			await updateProp('rscs');
 		},
-		{ deep: false }
+		{ deep: false },
 	);
 
 	function updateTransitions() {
@@ -118,7 +104,7 @@
 			await updateProp('transitions');
 			emit('transitionsUpdated');
 		},
-		{ deep: false }
+		{ deep: false },
 	);
 
 	onMounted(async () => {

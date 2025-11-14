@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { nextTick, ref, Ref, shallowRef } from 'vue';
+	import { nextTick, ref, type Ref, shallowRef } from 'vue';
 	import { VcParagraph } from 'vue-cosk';
 	import Img from '../resources/Img';
 	import Size from '../shared/Size';
@@ -28,8 +28,7 @@
 	} from '../transitions';
 	import PgButton from './components/PgButton.vue';
 
-	const $fluxTransition: Ref<null | InstanceType<typeof FluxTransition>> =
-		ref(null);
+	const $fluxTransition: Ref<null | InstanceType<typeof FluxTransition>> = ref(null);
 
 	const transitions = {
 		Fade,
@@ -94,11 +93,7 @@
 			<span>Transition</span>
 
 			<select v-model="transition">
-				<option
-					v-for="(component, name) in transitions"
-					:key="name"
-					:value="component"
-				>
+				<option v-for="(component, name) in transitions" :key="name" :value="component">
 					{{ name }}
 				</option>
 			</select>

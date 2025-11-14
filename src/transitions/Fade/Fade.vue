@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref, CSSProperties } from 'vue';
+	import { ref, reactive, type Ref, type CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { TransitionFadeProps, TransitionFadeConf } from './types';
-	import { FluxComponent } from '../../components';
+	import type { TransitionFadeProps, TransitionFadeConf } from './types';
+	import type { FluxComponent } from '../../components';
 
 	const props = defineProps<TransitionFadeProps>();
 
@@ -33,11 +33,5 @@
 </script>
 
 <template>
-	<component
-		:is="from.transition.component"
-		ref="$from"
-		:rsc="from"
-		:size="size"
-		:css="fromCss"
-	/>
+	<component :is="from.transition.component" ref="$from" :rsc="from" :size="size" :css="fromCss" />
 </template>

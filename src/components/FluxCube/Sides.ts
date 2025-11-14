@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 enum Sides {
 	front = 'front',
 	back = 'back',

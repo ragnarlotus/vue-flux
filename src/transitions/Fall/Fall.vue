@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref, CSSProperties } from 'vue';
+	import { ref, reactive, type Ref, type CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { TransitionFallProps, TransitionFallConf } from './types';
-	import { FluxComponent } from '../../components';
+	import type { TransitionFallProps, TransitionFallConf } from './types';
+	import type { FluxComponent } from '../../components';
 
 	const props = defineProps<TransitionFallProps>();
 
@@ -15,6 +15,7 @@
 
 	useTransition(conf, props.options);
 
+	// eslint-disable-next-line vue/no-mutating-props
 	Object.assign(props.maskStyle, {
 		perspective: '1600px',
 		overflow: 'visible',
@@ -38,11 +39,5 @@
 </script>
 
 <template>
-	<component
-		:is="from.transition.component"
-		ref="$from"
-		:rsc="from"
-		:size="size"
-		:style="style"
-	/>
+	<component :is="from.transition.component" ref="$from" :rsc="from" :size="size" :style="style" />
 </template>

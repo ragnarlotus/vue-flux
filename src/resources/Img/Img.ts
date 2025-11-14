@@ -1,14 +1,14 @@
 import { FluxImage } from '../../components';
 import { Resource, Statuses, ResizeTypes } from '../';
 import { Size } from '../../shared';
-import { DisplayParameter, ResizeType, TransitionParameter } from '../types';
+import type { DisplayParameter, ResizeType, TransitionParameter } from '../types';
 
 export default class Img extends Resource {
 	constructor(
 		src: string,
 		caption: string = '',
 		resizeType: ResizeType = ResizeTypes.fill,
-		backgroundColor: null | string = null
+		backgroundColor: null | string = null,
 	) {
 		const display: DisplayParameter = {
 			component: FluxImage,
@@ -22,15 +22,7 @@ export default class Img extends Resource {
 
 		const errorMessage = `Image ${src} could not be loaded`;
 
-		super(
-			src,
-			caption,
-			resizeType,
-			backgroundColor,
-			display,
-			transition,
-			errorMessage
-		);
+		super(src, caption, resizeType, backgroundColor, display, transition, errorMessage);
 	}
 
 	load() {

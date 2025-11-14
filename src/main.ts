@@ -1,6 +1,6 @@
-import { createApp } from 'vue';
-import '../node_modules/vue-cosk/dist/style.css';
-import App from './App.vue';
-import './assets/css/tailwind.css';
+import './assets/css/main.scss'
 
-createApp(App).mount('#app');
+import { createApp } from 'vue'
+import App from './App.vue'
+
+createApp(App).mount('#app')

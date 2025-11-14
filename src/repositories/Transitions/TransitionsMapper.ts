@@ -1,5 +1,5 @@
-import { Component } from 'vue';
-import { TransitionComponent, TransitionWithOptions } from '../../transitions';
+import type { Component } from 'vue';
+import type { TransitionComponent, TransitionWithOptions } from '../../transitions';
 
 export default class TransitionsMapper {
 	static withOptions(transitions: (Component | TransitionWithOptions)[]) {

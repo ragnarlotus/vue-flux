@@ -1,4 +1,4 @@
-import { VueFluxConfig } from '../../components';
+import type { VueFluxConfig } from '../../components';
 import { Directions, Player } from '../';
 
 export default class Keys {
@@ -19,13 +19,13 @@ export default class Keys {
 	}
 
 	addKeyListener() {
-		window.addEventListener('keydown', (event) => this.keydown(event), {
+		window.addEventListener('keydown', this.keydown, {
 			passive: true,
 		});
 	}
 
 	removeKeyListener() {
-		window.removeEventListener('keydown', () => this.keydown);
+		window.removeEventListener('keydown', this.keydown);
 	}
 
 	keydown(event: KeyboardEvent) {

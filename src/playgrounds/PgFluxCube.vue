@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { ref, Ref } from 'vue';
+	import { ref, type Ref } from 'vue';
 	import { VcParagraph } from 'vue-cosk';
 	import Img from '../resources/Img';
 	import Size from '../shared/Size';

@@ -1,4 +1,4 @@
-import { ref, Ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import { Maths } from '../';
 
 export default class Size {
@@ -12,7 +12,7 @@ export default class Size {
 		}: {
 			width?: null | number;
 			height?: null | number;
-		} = { width: null, height: null }
+		} = { width: null, height: null },
 	) {
 		this.update({ width, height });
 	}
@@ -26,13 +26,7 @@ export default class Size {
 		return ![this.width.value, this.height.value].includes(null);
 	}
 
-	update({
-		width,
-		height,
-	}: {
-		width?: null | number;
-		height?: null | number;
-	}) {
+	update({ width, height }: { width?: null | number; height?: null | number }) {
 		this.width.value = width ?? null;
 		this.height.value = height ?? null;
 	}
@@ -42,9 +36,7 @@ export default class Size {
 			throw new RangeError('Could not get aspect ratio due to invalid size');
 		}
 
-		return Maths.aspectRatio(
-			this.toValue() as { width: number; height: number }
-		);
+		return Maths.aspectRatio(this.toValue() as { width: number; height: number });
 	}
 
 	clone() {

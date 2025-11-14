@@ -1,11 +1,6 @@
-/* eslint-disable no-unused-vars */
-import { Resource, ResourceWithOptions } from '../../resources';
-import { TransitionWithOptions } from '../../transitions';
-import {
-	Direction,
-	PlayerResource,
-	PlayerTransition,
-} from '../../controllers/Player';
+import { Resource, type ResourceWithOptions } from '../../resources';
+import type { TransitionWithOptions } from '../../transitions';
+import { type Direction, PlayerResource, PlayerTransition } from '../../controllers/Player';
 import { type Component } from 'vue';
 
 export interface VueFluxOptions {
@@ -43,21 +38,9 @@ export interface VueFluxEmits {
 	(e: 'resourcesLazyloadEnd'): void;
 	(e: 'fullscreenEnter'): void;
 	(e: 'fullscreenExit'): void;
-	(
-		e: 'transitionStart',
-		resource: PlayerResource,
-		transition: PlayerTransition
-	): void;
-	(
-		e: 'transitionCancel',
-		resource: PlayerResource,
-		transition: PlayerTransition
-	): void;
-	(
-		e: 'transitionEnd',
-		resource: PlayerResource,
-		transition: PlayerTransition
-	): void;
+	(e: 'transitionStart', resource: PlayerResource, transition: PlayerTransition): void;
+	(e: 'transitionCancel', resource: PlayerResource, transition: PlayerTransition): void;
+	(e: 'transitionEnd', resource: PlayerResource, transition: PlayerTransition): void;
 }
 
 export interface VueFluxConfig {

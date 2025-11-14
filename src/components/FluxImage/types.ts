@@ -1,3 +1,3 @@
-import { ComponentProps } from '../types';
+import type { ComponentProps } from '../types';
 
 export interface FluxImageProps extends ComponentProps {}

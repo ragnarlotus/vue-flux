@@ -1,17 +1,14 @@
-import { ref, Ref } from 'vue';
+import { ref, type Ref } from 'vue';
 
 export default class Position {
 	top: Ref<null | number> = ref(null);
 	left: Ref<null | number> = ref(null);
 
 	constructor(
-		{
-			top = null,
-			left = null,
-		}: { top?: null | number; left?: null | number } = {
+		{ top = null, left = null }: { top?: null | number; left?: null | number } = {
 			top: null,
 			left: null,
-		}
+		},
 	) {
 		this.update({ top, left });
 	}

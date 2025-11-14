@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { ref, Ref, shallowReactive } from 'vue';
+	import { ref, type Ref, shallowReactive } from 'vue';
 	import { VcParagraph } from 'vue-cosk';
 	import { Img } from '../resources';
 	import {
@@ -47,7 +47,7 @@
 		const image = new Img(
 			`/images/${fileName}.jpg`,
 			'img ' + i,
-			ResizeTypes.fill //i % 2 === 0 ? ResizeTypes.fit : ResizeTypes.fill
+			ResizeTypes.fill, //i % 2 === 0 ? ResizeTypes.fit : ResizeTypes.fill
 		);
 		images.push(image);
 	}
@@ -80,6 +80,16 @@
 	const transitionComponents = shallowReactive(Object.values(transitions));
 
 	const transitionNames = Object.keys(transitions);
+
+	const currentTransitionName = ref(null);
+
+	function updateCurrentTransition(_rsc?, transition?) {
+		if (transition.current !== null) {
+			currentTransitionName.value = transition.current.component.__name;
+		} else {
+			currentTransitionName.value = null;
+		}
+	}
 </script>
 
 <template>
@@ -93,6 +103,8 @@
 					:transitions="transitionComponents"
 					:rscs="rscs"
 					:options="options"
+					@transition-start="updateCurrentTransition"
+					@transition-end="updateCurrentTransition"
 				>
 					<template #preloader="preloaderProps">
 						<Complements.FluxPreloader v-bind="preloaderProps" />
@@ -117,10 +129,7 @@
 			</div>
 
 			<div class="lg:w-1/4 lg:ml-4 lg:mt-0 mt-6">
-				<ul
-					v-if="$vueFlux && $vueFlux.size.isValid()"
-					class="flex flex-wrap"
-				>
+				<ul v-if="$vueFlux && $vueFlux.size.isValid()" class="flex flex-wrap">
 					<li
 						v-for="(name, index) in transitionNames"
 						:key="name"
@@ -128,6 +137,7 @@
 					>
 						<PgButton
 							class="w-100"
+							:class="currentTransitionName === name ? 'bg-amber-500' : ''"
 							@click="$vueFlux.show(Directions.next, index)"
 						>
 							{{ name }}

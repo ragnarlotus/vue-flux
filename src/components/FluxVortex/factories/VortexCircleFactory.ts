@@ -1,6 +1,6 @@
-import { CSSProperties } from 'vue';
+import type { CSSProperties } from 'vue';
 import { Position } from '../../../shared';
-import { FluxVortexCirclesProps } from '../types';
+import type { FluxVortexCirclesProps } from '../types';
 
 export default class VortexCircleFactory {
 	static getProps(
@@ -12,7 +12,7 @@ export default class VortexCircleFactory {
 			leftGap: number;
 		},
 		circleNumber: number,
-		circleCss?: CSSProperties
+		circleCss?: CSSProperties,
 	) {
 		const size = (vortex.numCircles - circleNumber) * vortex.radius * 2;
 

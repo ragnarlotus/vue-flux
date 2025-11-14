@@ -1,18 +1,12 @@
-import { shallowReactive, nextTick, Ref, ref } from 'vue';
+import { shallowReactive, nextTick, type Ref, ref } from 'vue';
 import {
 	Resources,
 	Transitions,
-	ResourceIndex,
-	TransitionIndex,
+	type ResourceIndex,
+	type TransitionIndex,
 } from '../../repositories';
-import {
-	PlayerResource,
-	PlayerTransition,
-	Directions,
-	Direction,
-	Statuses,
-} from './';
-import { FluxComponent, VueFluxConfig, VueFluxEmits } from '../../components';
+import { PlayerResource, PlayerTransition, Directions, type Direction, Statuses } from './';
+import type { FluxComponent, VueFluxConfig, VueFluxEmits } from '../../components';
 import { Timers } from '../';
 
 export default class Player {
@@ -22,7 +16,7 @@ export default class Player {
 	status: Ref<keyof typeof Statuses> = ref(Statuses.stopped);
 	config: VueFluxConfig;
 	timers: Timers;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 	emit: VueFluxEmits;
 	resources: Resources;
 	transitions: Transitions;
@@ -31,8 +25,8 @@ export default class Player {
 	constructor(
 		config: VueFluxConfig,
 		timers: Timers,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		emit: VueFluxEmits
+
+		emit: VueFluxEmits,
 	) {
 		this.config = config;
 		this.timers = timers;
@@ -59,13 +53,9 @@ export default class Player {
 
 		const rsc = this.resources?.find(resourceIndex, resource.current?.index);
 
-		timers.set(
-			'transition',
-			delay || rsc?.options.delay || config.delay,
-			() => {
-				this.show(resourceIndex);
-			}
-		);
+		timers.set('transition', delay || rsc?.options.delay || config.delay, () => {
+			this.show(resourceIndex);
+		});
 
 		this.emit('play', resourceIndex, delay);
 	}
@@ -118,7 +108,7 @@ export default class Player {
 
 	async show(
 		resourceIndex: number | Direction = Directions.next,
-		transitionIndex: number | Direction = Directions.next
+		transitionIndex: number | Direction = Directions.next,
 	) {
 		if (!this.isReadyToShow()) {
 			return;
@@ -136,10 +126,7 @@ export default class Player {
 			return;
 		}
 
-		const resourceTo: ResourceIndex = resources!.find(
-			resourceIndex,
-			resource.current!.index
-		);
+		const resourceTo: ResourceIndex = resources!.find(resourceIndex, resource.current!.index);
 
 		if (resource.currentSameAs(resourceTo)) {
 			return;
@@ -152,10 +139,7 @@ export default class Player {
 		const transition: TransitionIndex =
 			typeof transitionIndex === 'number'
 				? transitions!.getByIndex(transitionIndex)
-				: transitions!.getByOrder(
-						transitionIndex,
-						this.transition.last!.index
-					);
+				: transitions!.getByOrder(transitionIndex, this.transition.last!.index);
 
 		if (transition.options.direction === undefined) {
 			if (typeof resourceIndex !== 'number') {
@@ -195,32 +179,22 @@ export default class Player {
 			this.emit('transitionEnd', this.resource, this.transition);
 		}
 
-		if (
-			this.shouldStopPlaying(
-				config.infinite,
-				resource.current,
-				resources.list.length - 1
-			)
-		) {
+		if (this.shouldStopPlaying(config.infinite, resource.current, resources.list.length - 1)) {
 			this.stop();
 			return;
 		}
 
 		if (this.shouldPlayNext()) {
-			timers.set(
-				'transition',
-				resource.current.options.delay || config.delay,
-				() => {
-					this.show();
-				}
-			);
+			timers.set('transition', resource.current.options.delay || config.delay, () => {
+				this.show();
+			});
 		}
 	}
 
 	private shouldStopPlaying(
 		infinite: boolean,
 		currentResource: ResourceIndex,
-		totalResources: number
+		totalResources: number,
 	) {
 		if (
 			infinite === false &&

@@ -1,6 +1,6 @@
-import { CSSProperties } from 'vue';
+import type { CSSProperties } from 'vue';
 import { Resource } from '../../resources';
-import { ComponentProps } from '../types';
+import type { ComponentProps } from '../types';
 import { Position } from '../../shared';
 
 export interface FluxVortexProps extends ComponentProps {
