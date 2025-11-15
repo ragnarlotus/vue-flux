@@ -110,7 +110,6 @@
 	onMounted(async () => {
 		setup();
 
-		await display.updateSize();
 		display.addResizeListener();
 
 		player.setup($displayComponent);
