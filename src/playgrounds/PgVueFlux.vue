@@ -94,7 +94,7 @@
 
 <template>
 	<div>
-		<VcParagraph mode="fill" style="margin: 24px 0" />
+		<VcParagraph mode="fill" style="margin: 24px 0; padding: 0" />
 
 		<div class="block sm:block md:block lg:flex">
 			<div class="lg:w-3/4">
@@ -133,7 +133,7 @@
 					<li
 						v-for="(name, index) in transitionNames"
 						:key="name"
-						class="mb-4 lg:w-1/2 lg:mr-0 mr-4"
+						class="odd:pr-4 mb-4 lg:w-1/2 lg:mr-0 mr-4"
 					>
 						<PgButton
 							class="w-100"
@@ -147,12 +147,12 @@
 			</div>
 		</div>
 
-		<div v-if="$vueFlux" class="mt-6">
-			<PgButton class="mr-4" @click="$vueFlux.show()">Next</PgButton>
-			<PgButton class="mr-4" @click="$vueFlux.play()">Play</PgButton>
-			<PgButton class="mr-4" @click="$vueFlux.stop()">Stop</PgButton>
+		<div v-if="$vueFlux" class="mt-6 lg:flex">
+			<PgButton class="mr-4 w-1/3" @click="$vueFlux.show()">Next</PgButton>
+			<PgButton class="mr-4 w-1/3" @click="$vueFlux.play()">Play</PgButton>
+			<PgButton class="w-1/3 mr-0" @click="$vueFlux.stop()">Stop</PgButton>
 		</div>
 
-		<VcParagraph mode="fill" style="margin: 24px 0" />
+		<VcParagraph mode="fill" style="margin: 24px 0; padding: 0" />
 	</div>
 </template>

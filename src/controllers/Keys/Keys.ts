@@ -14,21 +14,15 @@ export default class Keys {
 		this.removeKeyListener();
 
 		if (this.config.bindKeys) {
-			this.addKeyListener();
+			window.addEventListener('keydown', this.keydown);
 		}
-	}
-
-	addKeyListener() {
-		window.addEventListener('keydown', this.keydown, {
-			passive: true,
-		});
 	}
 
 	removeKeyListener() {
 		window.removeEventListener('keydown', this.keydown);
 	}
 
-	keydown(event: KeyboardEvent) {
+	keydown = (event: KeyboardEvent) => {
 		if (['ArrowLeft', 'Left'].includes(event.key)) {
 			this.player.show(Directions.prev);
 			return;
@@ -38,5 +32,5 @@ export default class Keys {
 			this.player.show(Directions.next);
 			return;
 		}
-	}
+	};
 }
