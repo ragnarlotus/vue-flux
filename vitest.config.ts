@@ -1,31 +1,15 @@
-import { defineConfig, configDefaults } from 'vitest/config';
-import vue from '@vitejs/plugin-vue';
+import { fileURLToPath } from 'node:url';
+import { mergeConfig, defineConfig, configDefaults } from 'vitest/config';
+import viteConfig from './vite.config';
 
-const exclude = [
-	//	...configDefaults.exclude,
-	'**/index.ts',
-	'**/types.ts',
-	'**/__test__/',
-	'**/__mocks__/',
-	'src/playgrounds/',
-	'src/App.vue',
-	'src/lib.ts',
-	'src/main.ts',
-	'src/module.d.ts',
-	'src/vite-env.d.ts',
-];
-
-export default defineConfig({
-	plugins: [vue()],
-	test: {
-		globals: true,
-		environment: 'happy-dom',
-		include: ['src/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
-		exclude: exclude,
-		coverage: {
-			provider: 'v8',
-			include: ['src/**'],
-			exclude: exclude,
+export default mergeConfig(
+	viteConfig,
+	defineConfig({
+		test: {
+			globals: true,
+			environment: 'jsdom',
+			exclude: [...configDefaults.exclude, 'e2e/**'],
+			root: fileURLToPath(new URL('./', import.meta.url)),
 		},
-	},
-});
+	}),
+);

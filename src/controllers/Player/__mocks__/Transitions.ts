@@ -1,4 +1,5 @@
-import { TransitionIndex } from '../../../repositories';
+import type { TransitionIndex } from '../../../repositories';
+import { vi } from 'vitest';
 
 export default class PlayerTransition {
 	current: TransitionIndex | null = null;

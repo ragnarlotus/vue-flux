@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { computed } from 'vue';
-	import { ResourceWithOptions } from '../../resources';
+	import type { ResourceWithOptions } from '../../resources';
 	import { Player } from '../../controllers';
 
 	export interface Props {

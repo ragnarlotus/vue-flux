@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { Ref } from 'vue';
+	import type { Ref } from 'vue';
 	import { ResourceLoader } from '../../shared';
 
 	export interface Props {

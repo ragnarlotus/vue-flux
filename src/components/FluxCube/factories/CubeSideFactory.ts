@@ -1,9 +1,9 @@
 import { Position } from '../../../shared';
 import { Resource } from '../../../resources';
-import { Side, SideProps } from '../types';
+import type { Side, SideProps } from '../types';
 import SideTransformFactory from './SideTransformFactory';
 import { FluxImage } from '../../';
-import { CSSProperties } from 'vue';
+import type { CSSProperties } from 'vue';
 
 export default class CubeSideFactory {
 	static getProps(
@@ -11,7 +11,7 @@ export default class CubeSideFactory {
 		side: Side,
 		color?: CSSProperties['color'],
 		rsc?: Resource,
-		offset?: Position
+		offset?: Position,
 	) {
 		const { depth, size, viewSize } = sideTransformFactory;
 

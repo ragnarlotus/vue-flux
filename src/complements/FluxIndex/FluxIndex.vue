@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { ref, computed, Ref } from 'vue';
+	import { ref, computed, type Ref } from 'vue';
 	import { Size } from '../../shared';
 	import { Player } from '../../controllers';
 	import Button from './Button/Button.vue';
@@ -17,18 +17,12 @@
 
 	const $fluxIndexList: Ref<null | InstanceType<typeof List>> = ref(null);
 
-	const visible = computed<boolean>(
-		() => props.player.resources.list.length > 0
-	);
+	const visible = computed<boolean>(() => props.player.resources.list.length > 0);
 </script>
 
 <template>
 	<div v-if="visible" class="flux-index">
-		<Button
-			v-if="mouseOver"
-			:mouse-over="mouseOver"
-			@click="$fluxIndexList?.show()"
-		/>
+		<Button v-if="mouseOver" :mouse-over="mouseOver" @click="$fluxIndexList?.show()" />
 
 		<List
 			ref="$fluxIndexList"

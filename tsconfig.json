@@ -1,26 +1,27 @@
 {
+	"files": [],
+	"references": [
+		{
+			"path": "./tsconfig.node.json"
+		},
+		{
+			"path": "./tsconfig.app.json"
+		},
+		{
+			"path": "./tsconfig.vitest.json"
+		}
+	],
 	"compilerOptions": {
-		"target": "ESNext",
-		"useDefineForClassFields": true,
-		"module": "ESNext",
-		"lib": ["ESNext", "DOM"],
-		"skipLibCheck": true,
-		"types": ["vitest/globals"],
-
-		/* Bundler mode */
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"noEmit": true,
-		"jsx": "preserve",
-
-		/* Linting */
-		"strict": true,
-		"noUnusedLocals": true,
-		"esModuleInterop": true,
-		"noUnusedParameters": true
+		"types": ["vitest/globals"]
 	},
-	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
-	"exclude": ["src/App.vue", "src/main.ts"],
-	"references": [{ "path": "./tsconfig.node.json" }]
+	"exclude": [
+		"src/App.vue",
+		"src/main.ts",
+		"node_modules",
+		"dist",
+		"src/**/*.test.ts",
+		"src/**/*.test.tsx",
+		"src/**/*.spec.ts",
+		"src/**/*.spec.tsx"
+	]
 }

@@ -102,4 +102,28 @@ describe('shared: ResourceLoader', () => {
 				}
 			);
 		}));
+
+	it('does not update display size if cancelled', () => {
+		rscLoader = ResourceLoaderFactory.create(10, 5);
+		rscLoader.cancel();
+
+		const rsc = rscLoader.rscs[0];
+		vi.spyOn(rsc.resource.displaySize, 'update');
+
+		rscLoader.loadSuccess(rsc);
+
+		expect(rsc.resource.displaySize.update).not.toHaveBeenCalled();
+	});
+
+	it('calculates the progress properly', () => {
+		rscLoader = ResourceLoaderFactory.create(15, 6);
+
+		rscLoader.counter.success = 4;
+		rscLoader.counter.error = 2;
+		rscLoader.counter.total = 6;
+
+		rscLoader.updateProgress();
+
+		expect(rscLoader.progress.value).toBe(67);
+	});
 });

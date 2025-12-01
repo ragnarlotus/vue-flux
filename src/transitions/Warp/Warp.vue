@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref } from 'vue';
+	import { ref, reactive, type Ref } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxComponent, FluxVortex } from '../../components';
-	import { TransitionWarpProps, TransitionWarpConf } from './types';
+	import { type FluxComponent, FluxVortex } from '../../components';
+	import type { TransitionWarpProps, TransitionWarpConf } from './types';
 	import { Directions } from '../../controllers/Player';
 
 	const props = defineProps<TransitionWarpProps>();
@@ -21,8 +21,7 @@
 	const totalDuration = conf.tileDelay * conf.circles + conf.tileDuration;
 
 	const getDelay = {
-		[Directions.prev]: (index: number) =>
-			(conf.circles - index - 1) * conf.tileDelay,
+		[Directions.prev]: (index: number) => (conf.circles - index - 1) * conf.tileDelay,
 		[Directions.next]: (index: number) => index * conf.tileDelay,
 	};
 

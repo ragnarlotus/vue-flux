@@ -1,4 +1,4 @@
-import { CSSProperties, type Component } from 'vue';
+import type { CSSProperties, Component } from 'vue';
 import { Resource } from '../resources';
 import { Size, Position } from '../shared';
 

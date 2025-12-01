@@ -1,4 +1,5 @@
-import { ResourceIndex } from '../../../repositories';
+import type { ResourceIndex } from '../../../repositories';
+import { vi } from 'vitest';
 
 export default class PlayerResource {
 	current: ResourceIndex | null = null;

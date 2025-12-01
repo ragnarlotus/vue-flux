@@ -1,11 +1,8 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref } from 'vue';
+	import { ref, reactive, type Ref } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxComponent, FluxVortex } from '../../components';
-	import {
-		TransitionConcentricProps,
-		TransitionConcentricConf,
-	} from './types';
+	import { type FluxComponent, FluxVortex } from '../../components';
+	import type { TransitionConcentricProps, TransitionConcentricConf } from './types';
 	import { Directions } from '../../controllers/Player';
 
 	const props = defineProps<TransitionConcentricProps>();
@@ -32,9 +29,7 @@
 
 	const onPlay = () => {
 		$vortex.value!.transform((tile: FluxComponent, index: number) => {
-			const transition = `all ${conf.tileDuration}ms ${
-				conf.easing
-			} ${getDelay(index)}ms`;
+			const transition = `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(index)}ms`;
 
 			tile.transform({
 				transition,

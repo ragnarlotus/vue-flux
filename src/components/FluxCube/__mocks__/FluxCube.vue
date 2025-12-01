@@ -2,7 +2,7 @@
 	import { ref, computed } from 'vue';
 	import { vi } from 'vitest';
 	import Side from './Side.vue';
-	import { FluxCubeProps, Turn } from '../types';
+	import type { FluxCubeProps, Turn } from '../types';
 	import { Size } from '../../../shared';
 	import CubeFactory from '../factories/CubeFactory';
 	import SideTransformFactory from '../factories/SideTransformFactory';
@@ -18,7 +18,7 @@
 	const $el = ref(null);
 
 	const sideTransformFactory = computed(
-		() => new SideTransformFactory(props.depth, props.size, props.viewSize)
+		() => new SideTransformFactory(props.depth, props.size, props.viewSize),
 	);
 
 	const sides = computed(() =>
@@ -29,8 +29,8 @@
 			props.rsc,
 			props.rscs,
 			props.offset,
-			props.offsets
-		)
+			props.offsets,
+		),
 	);
 
 	const turn = vi
@@ -49,11 +49,6 @@
 
 <template>
 	<div ref="$el" class="flux-cube">
-		<Side
-			:is="side!.component"
-			v-for="side in sides"
-			:key="side!.name"
-			v-bind="side"
-		/>
+		<Side :is="side!.component" v-for="side in sides" :key="side!.name" v-bind="side" />
 	</div>
 </template>

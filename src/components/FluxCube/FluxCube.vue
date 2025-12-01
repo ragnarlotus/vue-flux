@@ -1,9 +1,9 @@
 <script setup lang="ts">
 	import { ref, reactive, computed, onBeforeUpdate } from 'vue';
 	import useComponent from '../useComponent';
-	import { FluxCubeProps, SidesComponents, Turn } from './types';
+	import type { FluxCubeProps, SidesComponents, Turn } from './types';
 	import { Size } from '../../shared';
-	import { ComponentStyles } from '../types';
+	import type { ComponentStyles, FluxComponent } from '../types';
 	import SideTransformFactory from './factories/SideTransformFactory';
 	import CubeFactory from './factories/CubeFactory';
 	import Sides from './Sides';
@@ -19,9 +19,7 @@
 	const $el = ref(null);
 
 	const transformOrigin = computed(() =>
-		props.origin !== undefined
-			? props.origin
-			: `center center -${props.depth / 2}px`
+		props.origin !== undefined ? props.origin : `center center -${props.depth / 2}px`,
 	);
 
 	const componentStyles: ComponentStyles = reactive({
@@ -31,14 +29,10 @@
 		},
 	});
 
-	const { style, setCss, transform, show, hide } = useComponent(
-		$el,
-		props,
-		componentStyles
-	);
+	const { style, setCss, transform, show, hide } = useComponent($el, props, componentStyles);
 
 	const sideTransformFactory = computed(
-		() => new SideTransformFactory(props.depth, props.size, props.viewSize)
+		() => new SideTransformFactory(props.depth, props.size, props.viewSize),
 	);
 
 	const sides = computed(() =>
@@ -49,8 +43,8 @@
 			props.rsc,
 			props.rscs,
 			props.offset,
-			props.offsets
-		)
+			props.offsets,
+		),
 	);
 
 	const $sides: SidesComponents = reactive({});
@@ -83,7 +77,7 @@
 		<component
 			:is="side!.component"
 			v-for="side in sides"
-			:ref="(el: any) => ($sides[side!.name as keyof typeof Sides] = el)"
+			:ref="(el: FluxComponent) => ($sides[side!.name as keyof typeof Sides] = el)"
 			:key="side!.name"
 			v-bind="side"
 		/>

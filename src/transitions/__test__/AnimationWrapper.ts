@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import { type Component, markRaw } from 'vue';
-import { FluxComponent, FluxImage } from '../../components';
+import { type FluxComponent, FluxImage } from '../../components';
 import { Img } from '../../resources';
 import { Size } from '../../shared';
 
@@ -8,7 +8,7 @@ const size = markRaw(
 	new Size({
 		width: 640,
 		height: 360,
-	})
+	}),
 );
 
 const from = new Img('from');

@@ -1,4 +1,4 @@
-import { TransitionConf, TransitionOptions, TransitionProps } from '../types';
+import type { TransitionConf, TransitionOptions, TransitionProps } from '../types';
 
 export interface TransitionCubeOptions extends TransitionOptions {
 	totalDuration?: number;

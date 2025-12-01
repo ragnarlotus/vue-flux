@@ -1,6 +1,6 @@
 <!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
-	import { ref, Ref } from 'vue';
+	import { ref, type Ref } from 'vue';
 
 	// Playgrounds
 	import PgFluxImage from './playgrounds/PgFluxImage.vue';

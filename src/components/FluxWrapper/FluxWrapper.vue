@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref } from 'vue';
+	import { ref, reactive, type Ref } from 'vue';
 	import useComponent from '../useComponent';
-	import { ComponentStyles } from '../types';
-	import { FluxWrapperProps } from './types';
+	import type { ComponentStyles } from '../types';
+	import type { FluxWrapperProps } from './types';
 
 	const props = defineProps<FluxWrapperProps>();
 
@@ -14,11 +14,7 @@
 		},
 	});
 
-	const { style, setCss, transform, show, hide } = useComponent(
-		$el,
-		props,
-		componentStyles
-	);
+	const { style, setCss, transform, show, hide } = useComponent($el, props, componentStyles);
 
 	defineExpose({
 		setCss,

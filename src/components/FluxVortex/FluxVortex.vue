@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { ref, reactive, computed, Ref, onBeforeUpdate } from 'vue';
+	import { ref, reactive, computed, type Ref, onBeforeUpdate } from 'vue';
 	import useComponent from '../useComponent';
-	import { ComponentStyles } from '../types';
-	import { FluxVortexProps } from './types';
+	import type { ComponentStyles, FluxComponent } from '../types';
+	import type { FluxVortexProps } from './types';
 	import { VortexFactory } from './factories';
 
 	const props = withDefaults(defineProps<FluxVortexProps>(), {
@@ -18,22 +18,18 @@
 		},
 	});
 
-	const { style, setCss, show, hide } = useComponent(
-		$el,
-		props,
-		componentStyles
-	);
+	const { style, setCss, show, hide } = useComponent($el, props, componentStyles);
 
 	const tiles = computed(() => VortexFactory.getCirclesProps(props));
 
-	const $tiles: Ref<any[]> = ref([]);
+	const $tiles: Ref<FluxComponent[]> = ref([]);
 
 	onBeforeUpdate(() => {
 		$tiles.value = [];
 	});
 
-	const transform = (cb: (tile: any, index: number) => void) => {
-		$tiles.value.forEach((tile: any, index: number) => cb(tile, index));
+	const transform = <T,>(cb: (tile: T, index: number) => void) => {
+		$tiles.value.forEach((tile: unknown, index: number) => cb(tile as T, index));
 	};
 
 	defineExpose({

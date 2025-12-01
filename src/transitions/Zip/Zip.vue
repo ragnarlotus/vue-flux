@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref } from 'vue';
+	import { ref, reactive, type Ref } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxComponent, FluxGrid } from '../../components';
-	import { TransitionZipProps, TransitionZipConf } from './types';
+	import { type FluxComponent, FluxGrid } from '../../components';
+	import type { TransitionZipProps, TransitionZipConf } from './types';
 	import { Directions } from '../../controllers/Player';
 
 	const props = defineProps<TransitionZipProps>();
@@ -22,8 +22,7 @@
 	const totalDuration = conf.tileDelay * conf.cols + conf.tileDuration;
 
 	const getDelay = {
-		[Directions.prev]: (index: number) =>
-			(conf.cols - index - 1) * conf.tileDelay,
+		[Directions.prev]: (index: number) => (conf.cols - index - 1) * conf.tileDelay,
 		[Directions.next]: (index: number) => index * conf.tileDelay,
 	};
 
@@ -48,11 +47,5 @@
 </script>
 
 <template>
-	<FluxGrid
-		ref="$grid"
-		:rows="conf.rows"
-		:cols="conf.cols"
-		:size="size"
-		:rsc="from"
-	/>
+	<FluxGrid ref="$grid" :rows="conf.rows" :cols="conf.cols" :size="size" :rsc="from" />
 </template>

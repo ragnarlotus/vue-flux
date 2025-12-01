@@ -1,10 +1,10 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref, CSSProperties } from 'vue';
+	import { ref, reactive, type Ref, type CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxGrid } from '../../components';
-	import { TransitionWaveProps, TransitionWaveConf } from './types';
+	import { FluxGrid, FluxCube } from '../../components';
+	import type { TransitionWaveProps, TransitionWaveConf } from './types';
 	import { Directions } from '../../controllers/Player';
-	import { FluxCube, Turns } from '../../components/FluxCube';
+	import { Turns } from '../../components/FluxCube';
 
 	const props = defineProps<TransitionWaveProps>();
 
@@ -41,8 +41,7 @@
 	const totalDuration = conf.tileDelay * conf.cols + conf.tileDuration;
 
 	const getDelay = {
-		[Directions.prev]: (index: number) =>
-			(conf.cols - index - 1) * conf.tileDelay,
+		[Directions.prev]: (index: number) => (conf.cols - index - 1) * conf.tileDelay,
 		[Directions.next]: (index: number) => index * conf.tileDelay,
 	};
 
@@ -51,19 +50,19 @@
 			props.displayComponent.hide();
 		}
 
-		$grid.value!.transform(
-			(tile: InstanceType<typeof FluxCube>, index: number) => {
-				const transition = `all ${conf.tileDuration}ms ${
-					conf.easing
-				} ${getDelay[conf.direction!](index)}ms`;
+		type FluxCubeType = InstanceType<typeof FluxCube>;
 
-				tile.setCss({
-					transition,
-				});
+		$grid.value!.transform<FluxCubeType>((tile: FluxCubeType, index: number) => {
+			const transition = `all ${conf.tileDuration}ms ${
+				conf.easing
+			} ${getDelay[conf.direction!](index)}ms`;
 
-				tile.turn(Turns.bottom);
-			}
-		);
+			tile.setCss({
+				transition,
+			});
+
+			tile.turn(Turns.bottom);
+		});
 	};
 
 	defineExpose({

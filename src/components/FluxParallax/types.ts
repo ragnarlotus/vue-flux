@@ -1,4 +1,4 @@
-import { CSSProperties, type ComputedRef } from 'vue';
+import type { CSSProperties, ComputedRef } from 'vue';
 import { Resource } from '../../resources';
 
 export interface FluxParallaxProps {

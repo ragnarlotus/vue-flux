@@ -1,5 +1,5 @@
 import { Maths } from '../../../shared';
-import { FluxVortexProps, FluxVortexCirclesProps } from '../types';
+import type { FluxVortexProps, FluxVortexCirclesProps } from '../types';
 import VortexCircleFactory from './VortexCircleFactory';
 
 export default class VortexFactory {
@@ -23,9 +23,7 @@ export default class VortexFactory {
 		const circlesProps: FluxVortexCirclesProps[] = [];
 
 		for (let circleNumber = 0; circleNumber < numCircles; circleNumber++) {
-			circlesProps.push(
-				VortexCircleFactory.getProps(vortex, circleNumber, props.tileCss)
-			);
+			circlesProps.push(VortexCircleFactory.getProps(vortex, circleNumber, props.tileCss));
 		}
 
 		return circlesProps;

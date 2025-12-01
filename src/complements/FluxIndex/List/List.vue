@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { Ref, computed, nextTick, ref } from 'vue';
+	import { type Ref, computed, nextTick, ref } from 'vue';
 	import { Player } from '../../../controllers';
 	import Thumb from '../Thumb/Thumb.vue';
 	import { Size } from '../../../shared';
@@ -40,6 +40,7 @@
 
 		await nextTick();
 
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 		$list.value.clientHeight;
 		$list.value.style.marginTop = '0';
 	}
@@ -54,6 +55,7 @@
 		}
 
 		if (props.mouseOver !== undefined) {
+			// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 			$list.value.clientHeight;
 			$list.value.style.marginTop = '100%';
 		}

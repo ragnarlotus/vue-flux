@@ -6,11 +6,11 @@
 		onMounted,
 		onUnmounted,
 		nextTick,
-		Ref,
+		type Ref,
 		type Component,
 	} from 'vue';
-	import { FluxTransitionProps } from './types';
-	import { TransitionComponent } from '../../transitions';
+	import type { FluxTransitionProps } from './types';
+	import type { TransitionComponent } from '../../transitions';
 
 	const props = withDefaults(defineProps<FluxTransitionProps>(), {
 		options: () => ({}),
@@ -45,9 +45,7 @@
 		await nextTick();
 
 		if ($transition.value !== null) {
-			duration.value = (
-				$transition.value as TransitionComponent
-			).totalDuration;
+			duration.value = ($transition.value as TransitionComponent).totalDuration;
 		}
 
 		emit('ready', {

@@ -1,22 +1,12 @@
-import {
-	Side,
-	SidesColors,
-	SidesResources,
-	SidesOffsets,
-	SidesProps,
-} from '../types';
+import type { Side, SidesColors, SidesResources, SidesOffsets, SidesProps } from '../types';
 import CubeSideFactory from './CubeSideFactory';
 import SideTransformFactory from './SideTransformFactory';
 import { Position } from '../../../shared';
 import Sides from '../Sides';
 import { Resource } from '../../../resources';
-import { CSSProperties } from 'vue';
+import type { CSSProperties } from 'vue';
 
-function isSideDefined(
-	side: Side,
-	colors?: SidesColors,
-	rscs?: SidesResources
-) {
+function isSideDefined(side: Side, colors?: SidesColors, rscs?: SidesResources) {
 	if (colors && colors[side]) {
 		return true;
 	}
@@ -32,7 +22,7 @@ function getDefinedSides(
 	color?: CSSProperties['color'],
 	colors?: SidesColors,
 	rsc?: Resource,
-	rscs?: SidesResources
+	rscs?: SidesResources,
 ) {
 	const sides = Object.values(Sides);
 
@@ -40,9 +30,7 @@ function getDefinedSides(
 		return sides;
 	}
 
-	return Object.values(Sides).filter((side) =>
-		isSideDefined(side, colors, rscs)
-	);
+	return Object.values(Sides).filter((side) => isSideDefined(side, colors, rscs));
 }
 
 export default class CubeFactory {
@@ -53,7 +41,7 @@ export default class CubeFactory {
 		rsc?: Resource,
 		rscs?: SidesResources,
 		offset?: Position,
-		offsets?: SidesOffsets
+		offsets?: SidesOffsets,
 	) {
 		const sides = getDefinedSides(color, colors, rsc, rscs);
 		const props: SidesProps = {};
@@ -64,7 +52,7 @@ export default class CubeFactory {
 				side,
 				colors && colors[side] ? colors[side] : color,
 				rscs && rscs[side] ? rscs[side] : rsc,
-				offsets && offsets[side] ? offsets[side] : offset
+				offsets && offsets[side] ? offsets[side] : offset,
 			);
 		});
 

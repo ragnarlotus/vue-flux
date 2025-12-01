@@ -1,8 +1,8 @@
 import { Resource } from '../resources';
-import { CSSProperties, Component } from 'vue';
-import { Direction } from '../controllers/Player';
+import type { CSSProperties, Component } from 'vue';
+import type { Direction } from '../controllers/Player';
 import { Size } from '../shared';
-import { FluxComponent } from '../components';
+import type { FluxComponent } from '../components';
 
 export interface TransitionProps {
 	size: Size;

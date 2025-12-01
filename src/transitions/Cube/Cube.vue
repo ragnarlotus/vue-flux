@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref, CSSProperties } from 'vue';
+	import { ref, reactive, type Ref, type CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
 	import { FluxCube } from '../../components';
-	import { TransitionCubeProps, TransitionCubeConf } from './types';
+	import type { TransitionCubeProps, TransitionCubeConf } from './types';
 	import { Turns } from '../../components/FluxCube';
 	import { Directions } from '../../controllers/Player';
 
@@ -17,6 +17,7 @@
 
 	useTransition(conf, props.options);
 
+	// eslint-disable-next-line vue/no-mutating-props
 	Object.assign(props.maskStyle, {
 		perspective: '1600px',
 		overflow: 'visible',
@@ -52,11 +53,5 @@
 </script>
 
 <template>
-	<FluxCube
-		ref="$cube"
-		:rscs="rscs"
-		:size="size"
-		:depth="size.width.value!"
-		:css="cubeCss"
-	/>
+	<FluxCube ref="$cube" :rscs="rscs" :size="size" :depth="size.width.value!" :css="cubeCss" />
 </template>

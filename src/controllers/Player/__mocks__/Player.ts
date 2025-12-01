@@ -1,9 +1,9 @@
 import { vi } from 'vitest';
-import { Ref, ref, shallowReactive } from 'vue';
-import { VueFluxConfig, VueFluxEmits } from '../../../components/VueFlux/types';
+import { type Ref, ref, shallowReactive } from 'vue';
+import type { VueFluxConfig, VueFluxEmits } from '../../../components/VueFlux/types';
 import { PlayerResource, PlayerTransition, Statuses, Timers } from '../..';
 import { Resources, Transitions } from '../../../repositories';
-import { FluxComponent } from '../../../components/types';
+import type { FluxComponent } from '../../../components/types';
 
 export default class Player {
 	resource: PlayerResource;
@@ -12,18 +12,12 @@ export default class Player {
 	status: Ref<keyof typeof Statuses> = ref(Statuses.stopped);
 	config: VueFluxConfig;
 	timers: Timers;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	emit: VueFluxEmits;
 	resources: Resources;
 	transitions: Transitions;
 	$displayComponent: Ref<null | FluxComponent> = ref(null);
 
-	constructor(
-		config: VueFluxConfig,
-		timers: Timers,
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		emit: VueFluxEmits
-	) {
+	constructor(config: VueFluxConfig, timers: Timers, emit: VueFluxEmits) {
 		this.config = config;
 		this.timers = timers;
 		this.emit = emit;

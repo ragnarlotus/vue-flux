@@ -1,10 +1,10 @@
-import { Ref, ref, shallowReactive } from 'vue';
-import { Resource, ResourceWithOptions } from '../../resources';
+import { type Ref, ref, shallowReactive } from 'vue';
+import { Resource, type ResourceWithOptions } from '../../resources';
 import { Size, ResourceLoader } from '../../shared';
-import { Direction, Directions } from '../../controllers/Player';
-import { ResourceIndex } from './types';
+import { type Direction, Directions } from '../../controllers/Player';
+import type { ResourceIndex } from './types';
 import ResourcesMapper from './ResourcesMapper';
-import { VueFluxEmits } from '../../components';
+import type { VueFluxEmits } from '../../components';
 
 export default class Resources {
 	list: ResourceWithOptions[] = shallowReactive([]);
@@ -16,15 +16,11 @@ export default class Resources {
 	}
 
 	private getPrev(currentIndex: number) {
-		return this.getByIndex(
-			currentIndex > 0 ? currentIndex - 1 : this.list.length - 1
-		);
+		return this.getByIndex(currentIndex > 0 ? currentIndex - 1 : this.list.length - 1);
 	}
 
 	private getNext(currentIndex: number) {
-		return this.getByIndex(
-			currentIndex === this.list.length - 1 ? 0 : currentIndex + 1
-		);
+		return this.getByIndex(currentIndex === this.list.length - 1 ? 0 : currentIndex + 1);
 	}
 
 	getFirst() {
@@ -66,11 +62,7 @@ export default class Resources {
 		return this.getByOrder(by, currentIndex);
 	}
 
-	update(
-		rscs: (Resource | ResourceWithOptions)[],
-		numToPreload: number,
-		displaySize: Size
-	) {
+	update(rscs: (Resource | ResourceWithOptions)[], numToPreload: number, displaySize: Size) {
 		if (this.loader.value?.hasFinished() === false) {
 			this.loader.value?.cancel();
 		}
@@ -88,7 +80,7 @@ export default class Resources {
 				(loaded: ResourceWithOptions[]) => this.preloadEnd(loaded, resolve),
 				() => this.lazyLoadStart(),
 				(loaded: ResourceWithOptions[]) => this.lazyLoadEnd(loaded),
-				reject
+				reject,
 			);
 		});
 

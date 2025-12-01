@@ -1,6 +1,6 @@
 import { Resource } from '../../resources';
 import { Size } from '../../shared';
-import { FluxComponent } from '../types';
+import type { FluxComponent } from '../types';
 
 export interface FluxTransitionProps {
 	size: Size;

@@ -1,6 +1,6 @@
-import { Ref, computed } from 'vue';
+import { type Ref, computed } from 'vue';
 import { Size } from '../../../shared';
-import { Side, Turn } from '../types';
+import type { Side, Turn } from '../types';
 
 const rotate: {
 	x: {
@@ -81,7 +81,7 @@ export default class SideTransformFactory {
 	public getTranslate(side: Side | Turn) {
 		const tx = translate.x[side] ?? '0';
 		const ty = translate.y[side] ?? '0';
-		const tz = this.translateZ.value[side].toString();
+		const tz = this.translateZ.value[side]!.toString();
 
 		return `translate3d(${tx}%, ${ty}%, ${tz}px)`;
 	}

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref, CSSProperties } from 'vue';
+	import { ref, reactive, type Ref, type CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxComponent, FluxWrapper } from '../../components';
-	import { TransitionSlideProps, TransitionSlideConf } from './types';
-	import { ComponentProps } from '../../components';
+	import { type FluxComponent, FluxWrapper } from '../../components';
+	import type { TransitionSlideProps, TransitionSlideConf } from './types';
+	import type { ComponentProps } from '../../components';
 	import { Size } from '../../shared';
 	import { Directions } from '../../controllers/Player';
 	import { Resource } from '../../resources';
@@ -80,17 +80,7 @@
 
 <template>
 	<FluxWrapper ref="$wrapper" v-bind="wrapperProps">
-		<component
-			:is="left.transition.component"
-			ref="$left"
-			:rsc="left"
-			:size="size"
-		/>
-		<component
-			:is="right.transition.component"
-			ref="$right"
-			:rsc="right"
-			:size="size"
-		/>
+		<component :is="left.transition.component" ref="$left" :rsc="left" :size="size" />
+		<component :is="right.transition.component" ref="$right" :rsc="right" :size="size" />
 	</FluxWrapper>
 </template>

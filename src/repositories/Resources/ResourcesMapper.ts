@@ -1,4 +1,4 @@
-import { Resource, ResourceWithOptions } from '../../resources';
+import { Resource, type ResourceWithOptions } from '../../resources';
 
 export default class ResourcesMapper {
 	static withOptions(rscs: (Resource | ResourceWithOptions)[]) {

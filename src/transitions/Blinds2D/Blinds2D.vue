@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref } from 'vue';
-	import { FluxComponent, FluxGrid } from '../../components';
+	import { ref, reactive, type Ref } from 'vue';
+	import { type FluxComponent, FluxGrid } from '../../components';
 	import useTransition from '../useTransition';
-	import { TransitionBlinds2DProps, TransitionBlinds2DConf } from './types';
+	import type { TransitionBlinds2DProps, TransitionBlinds2DConf } from './types';
 	import { Sides } from '../../components/FluxCube';
 
 	const props = defineProps<TransitionBlinds2DProps>();
@@ -51,11 +51,5 @@
 </script>
 
 <template>
-	<FluxGrid
-		ref="$grid"
-		:rows="conf.rows"
-		:cols="conf.cols"
-		:size="size"
-		:rscs="rscs"
-	/>
+	<FluxGrid ref="$grid" :rows="conf.rows" :cols="conf.cols" :size="size" :rscs="rscs" />
 </template>

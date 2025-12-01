@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { ref, Ref, shallowReactive } from 'vue';
+	import { ref, type Ref, shallowReactive } from 'vue';
 	import { VcParagraph } from 'vue-cosk';
 	import { Img } from '../resources';
 	import {
@@ -47,7 +47,7 @@
 		const image = new Img(
 			`/images/${fileName}.jpg`,
 			'img ' + i,
-			ResizeTypes.fill //i % 2 === 0 ? ResizeTypes.fit : ResizeTypes.fill
+			ResizeTypes.fill, //i % 2 === 0 ? ResizeTypes.fit : ResizeTypes.fill
 		);
 		images.push(image);
 	}
@@ -80,11 +80,22 @@
 	const transitionComponents = shallowReactive(Object.values(transitions));
 
 	const transitionNames = Object.keys(transitions);
+
+	const currentTransitionName = ref(null);
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	function updateCurrentTransition(_rsc?: any, transition?: any) {
+		if (transition.current !== null) {
+			currentTransitionName.value = transition.current.component.__name;
+		} else {
+			currentTransitionName.value = null;
+		}
+	}
 </script>
 
 <template>
 	<div>
-		<VcParagraph mode="fill" style="margin: 24px 0" />
+		<VcParagraph mode="fill" style="margin: 24px 0; padding: 0" />
 
 		<div class="block sm:block md:block lg:flex">
 			<div class="lg:w-3/4">
@@ -93,6 +104,8 @@
 					:transitions="transitionComponents"
 					:rscs="rscs"
 					:options="options"
+					@transitionStart="updateCurrentTransition"
+					@transitionEnd="updateCurrentTransition"
 				>
 					<template #preloader="preloaderProps">
 						<Complements.FluxPreloader v-bind="preloaderProps" />
@@ -117,17 +130,15 @@
 			</div>
 
 			<div class="lg:w-1/4 lg:ml-4 lg:mt-0 mt-6">
-				<ul
-					v-if="$vueFlux && $vueFlux.size.isValid()"
-					class="flex flex-wrap"
-				>
+				<ul v-if="$vueFlux && $vueFlux.size.isValid()" class="flex flex-wrap">
 					<li
 						v-for="(name, index) in transitionNames"
 						:key="name"
-						class="mb-4 lg:w-1/2 lg:mr-0 mr-4"
+						class="odd:pr-4 mb-4 lg:w-1/2 lg:mr-0 mr-4"
 					>
 						<PgButton
 							class="w-100"
+							:active="currentTransitionName === name"
 							@click="$vueFlux.show(Directions.next, index)"
 						>
 							{{ name }}
@@ -137,12 +148,12 @@
 			</div>
 		</div>
 
-		<div v-if="$vueFlux" class="mt-6">
-			<PgButton class="mr-4" @click="$vueFlux.show()">Next</PgButton>
-			<PgButton class="mr-4" @click="$vueFlux.play()">Play</PgButton>
-			<PgButton class="mr-4" @click="$vueFlux.stop()">Stop</PgButton>
+		<div v-if="$vueFlux" class="mt-6 lg:flex">
+			<PgButton class="mr-4 w-1/3" @click="$vueFlux.show()">Next</PgButton>
+			<PgButton class="mr-4 w-1/3" @click="$vueFlux.play()">Play</PgButton>
+			<PgButton class="w-1/3 mr-0" @click="$vueFlux.stop()">Stop</PgButton>
 		</div>
 
-		<VcParagraph mode="fill" style="margin: 24px 0" />
+		<VcParagraph mode="fill" style="margin: 24px 0; padding: 0" />
 	</div>
 </template>

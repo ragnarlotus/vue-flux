@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 enum Turns {
 	front = 'front',
 	back = 'back',

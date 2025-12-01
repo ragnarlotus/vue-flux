@@ -1,12 +1,8 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref } from 'vue';
+	import { ref, reactive, type Ref } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxComponent, FluxGrid } from '../../components';
-	import {
-		TransitionBlocks2Props,
-		TransitionBlocks2Conf,
-		BackgroundProps,
-	} from './types';
+	import { type FluxComponent, FluxGrid } from '../../components';
+	import type { TransitionBlocks2Props, TransitionBlocks2Conf, BackgroundProps } from './types';
 	import { Directions } from '../../controllers/Player';
 
 	const props = defineProps<TransitionBlocks2Props>();
@@ -24,8 +20,7 @@
 
 	useTransition(conf, props.options);
 
-	const totalDuration =
-		conf.tileDelay * (conf.rows + conf.cols) + conf.tileDuration;
+	const totalDuration = conf.tileDelay * (conf.rows + conf.cols) + conf.tileDuration;
 
 	if (!props.options?.rows) {
 		const divider = props.size.width.value! / conf.cols;
@@ -81,9 +76,7 @@
 		prev: () => {
 			$grid.value!.transform((tile: FluxComponent, index: number) => {
 				tile.transform({
-					transition: `all ${conf.tileDuration}ms ${
-						conf.easing
-					} ${getDelay(index)}ms`,
+					transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(index)}ms`,
 					opacity: '1',
 					transform: 'scale(1)',
 				});
@@ -93,9 +86,7 @@
 		next: () => {
 			$grid.value!.transform((tile: FluxComponent, index: number) => {
 				tile.transform({
-					transition: `all ${conf.tileDuration}ms ${
-						conf.easing
-					} ${getDelay(index)}ms`,
+					transition: `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(index)}ms`,
 					opacity: '0',
 					transform: 'scale(0.3)',
 				});

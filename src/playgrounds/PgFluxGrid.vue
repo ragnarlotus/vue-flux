@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { ref, Ref } from 'vue';
+	import { ref, type Ref } from 'vue';
 	import { VcParagraph } from 'vue-cosk';
-	import Img from '../resources/Img';
-	import Size from '../shared/Size';
+	import Img from '../resources/Img/Img';
+	import Size from '../shared/Size/Size';
 	import { FluxGrid } from '../components';
 	import { ResizeTypes } from '../resources';
 
@@ -41,14 +41,7 @@
 	<div>
 		<VcParagraph mode="fill" style="margin: 24px 0" />
 
-		<FluxGrid
-			ref="$fluxGridImage"
-			:rsc="rsc"
-			:size="size"
-			:rows="10"
-			:cols="5"
-			color="#ccc"
-		/>
+		<FluxGrid ref="$fluxGridImage" :rsc="rsc" :size="size" :rows="10" :cols="5" color="#ccc" />
 
 		<VcParagraph mode="fill" style="margin: 24px 0" />
 

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref, CSSProperties } from 'vue';
+	import { ref, reactive, type Ref, type CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxComponent, FluxCube } from '../../components';
-	import { TransitionBookProps, TransitionBookConf } from './types';
+	import { type FluxComponent, FluxCube } from '../../components';
+	import type { TransitionBookProps, TransitionBookConf } from './types';
 	import { Position, Size } from '../../shared';
-	import { SidesOffsets } from '../../components/FluxCube/types';
+	import type { SidesOffsets } from '../../components/FluxCube/types';
 	import { Directions } from '../../controllers/Player';
 
 	const props = defineProps<TransitionBookProps>();

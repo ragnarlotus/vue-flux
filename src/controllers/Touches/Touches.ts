@@ -1,4 +1,4 @@
-import { VueFluxConfig } from '../../components';
+import type { VueFluxConfig } from '../../components';
 import { Directions, Display, Mouse, Player, Timers } from '../';
 
 export default class Touches {
@@ -22,9 +22,15 @@ export default class Touches {
 			return;
 		}
 
+		const touch = event.changedTouches[0];
+
+		if (!touch) {
+			return;
+		}
+
 		this.startTime = Date.now();
-		this.startX = event.touches[0].clientX;
-		this.startY = event.touches[0].clientY;
+		this.startX = touch.clientX;
+		this.startY = touch.clientY;
 	}
 
 	end(
@@ -33,13 +39,19 @@ export default class Touches {
 		player: Player,
 		display: Display,
 		timers: Timers,
-		mouse: Mouse
+		mouse: Mouse,
 	) {
 		this.prevTouchTime = this.endTime;
 		this.endTime = Date.now();
 
-		const offsetX = event.changedTouches[0].clientX - this.startX;
-		const offsetY = event.changedTouches[0].clientY - this.startY;
+		const touch = event.changedTouches[0];
+
+		if (!touch) {
+			return;
+		}
+
+		const offsetX = touch.clientX - this.startX;
+		const offsetY = touch.clientY - this.startY;
 
 		if (this.tap(offsetX, offsetY)) {
 			mouse.toggle(config, timers, true);
@@ -58,11 +70,9 @@ export default class Touches {
 	}
 
 	tap = (offsetX: number, offsetY: number) =>
-		Math.abs(offsetX) < this.tapThreshold &&
-		Math.abs(offsetY) < this.tapThreshold;
+		Math.abs(offsetX) < this.tapThreshold && Math.abs(offsetY) < this.tapThreshold;
 
-	doubleTap = () =>
-		this.endTime - this.prevTouchTime < this.doubleTapThreshold;
+	doubleTap = () => this.endTime - this.prevTouchTime < this.doubleTapThreshold;
 
 	slideLeft = (offsetX: number, display: Display) =>
 		display.size.isValid() &&

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { onBeforeUpdate, ref, Ref } from 'vue';
+	import { onBeforeUpdate, ref, type Ref } from 'vue';
 	import { vi } from 'vitest';
 	import Tile from './Tile.vue';
-	import { FluxGridProps } from '../types';
+	import type { FluxGridProps } from '../types';
 	import { getRowNumber, getColNumber } from '../factories';
 
 	const props = withDefaults(defineProps<FluxGridProps>(), {
@@ -22,7 +22,9 @@
 
 	const transform = vi
 		.fn()
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		.mockImplementation((cb: (tile: any, index: number) => void) => {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			$tiles.value.forEach((tile: any, index: number) => cb(tile, index));
 		});
 
@@ -33,24 +35,16 @@
 		hide: vi.fn(),
 		getRowNumber: vi
 			.fn()
-			.mockImplementation((index: number, numCols: number) =>
-				getRowNumber(index, numCols)
-			),
+			.mockImplementation((index: number, numCols: number) => getRowNumber(index, numCols)),
 		getColNumber: vi
 			.fn()
-			.mockImplementation((index: number, numCols: number) =>
-				getColNumber(index, numCols)
-			),
+			.mockImplementation((index: number, numCols: number) => getColNumber(index, numCols)),
 		$tiles,
 	});
 </script>
 
 <template>
 	<div ref="$el" class="flux-grid">
-		<Tile
-			v-for="index in numTiles"
-			:ref="(el: any) => $tiles.push(el)"
-			:key="index"
-		/>
+		<Tile v-for="index in numTiles" :ref="(el: any) => $tiles.push(el)" :key="index" />
 	</div>
 </template>

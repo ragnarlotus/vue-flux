@@ -1,30 +1,16 @@
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import { resolve } from 'path';
-import dts from 'vite-plugin-dts';
+import { fileURLToPath, URL } from 'node:url';
 
-// https://vitejs.dev/config/
+import { defineConfig } from 'vite';
+import tailwindcss from '@tailwindcss/vite';
+import vue from '@vitejs/plugin-vue';
+import vueDevTools from 'vite-plugin-vue-devtools';
+
+// https://vite.dev/config/
 export default defineConfig({
-	build: {
-		copyPublicDir: false,
-		lib: {
-			entry: resolve(__dirname, 'src/lib.ts'),
-			name: 'VueFlux',
-			fileName: 'vue-flux',
-		},
-		rollupOptions: {
-			external: ['vue'],
-			output: {
-				globals: {
-					vue: 'Vue',
-				},
-			},
-		},
-	},
-	plugins: [vue(), dts({ rollupTypes: true })],
+	plugins: [vue(), vueDevTools(), tailwindcss()],
 	resolve: {
 		alias: {
-			'@': resolve(__dirname, 'src'),
+			'@': fileURLToPath(new URL('./src', import.meta.url)),
 		},
 	},
 });

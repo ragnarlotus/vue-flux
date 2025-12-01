@@ -1,22 +1,18 @@
 import { type Component, shallowReactive } from 'vue';
-import { Directions, Direction } from '../../controllers/Player';
-import { TransitionIndex } from './types';
-import { TransitionWithOptions } from '../../transitions/types';
+import { Directions, type Direction } from '../../controllers/Player';
+import type { TransitionIndex } from './types';
+import type { TransitionWithOptions } from '../../transitions/types';
 import TransitionsMapper from './TransitionsMapper';
 
 export default class Transitions {
 	list: TransitionWithOptions[] = shallowReactive([]);
 
 	private getPrev(lastIndex: number) {
-		return this.getByIndex(
-			lastIndex > 0 ? lastIndex - 1 : this.list.length - 1
-		);
+		return this.getByIndex(lastIndex > 0 ? lastIndex - 1 : this.list.length - 1);
 	}
 
 	private getNext(lastIndex: number) {
-		return this.getByIndex(
-			lastIndex === this.list.length - 1 ? 0 : lastIndex + 1
-		);
+		return this.getByIndex(lastIndex === this.list.length - 1 ? 0 : lastIndex + 1);
 	}
 
 	getFirst() {
@@ -28,10 +24,16 @@ export default class Transitions {
 	}
 
 	getByIndex(index: number) {
+		const item = this.list[index];
+
+		if (!item) {
+			throw new Error(`Transition index ${index} out of range`);
+		}
+
 		return {
 			index,
-			component: this.list[index].component,
-			options: JSON.parse(JSON.stringify(this.list[index].options)),
+			component: item.component,
+			options: JSON.parse(JSON.stringify(item.options)),
 		} as TransitionIndex;
 	}
 

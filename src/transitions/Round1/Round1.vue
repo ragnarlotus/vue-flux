@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref, CSSProperties } from 'vue';
+	import { ref, reactive, type Ref, type CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxCube, FluxGrid } from '../../components';
-	import { TransitionRound1Props, TransitionRound1Conf } from './types';
+	import { FluxGrid, FluxCube } from '../../components';
+	import type { TransitionRound1Props, TransitionRound1Conf } from './types';
 	import { Directions } from '../../controllers/Player';
 	import { Turns } from '../../components';
 
@@ -63,19 +63,17 @@
 			props.displayComponent.hide();
 		}
 
-		$grid.value!.transform(
-			(tile: InstanceType<typeof FluxCube>, index: number) => {
-				const transition = `all ${conf.tileDuration}ms ${
-					conf.easing
-				} ${getDelay(index)}ms`;
+		type FluxCubeType = InstanceType<typeof FluxCube>;
 
-				tile.setCss({
-					transition,
-				});
+		$grid.value!.transform<FluxCubeType>((tile: FluxCubeType, index: number) => {
+			const transition = `all ${conf.tileDuration}ms ${conf.easing} ${getDelay(index)}ms`;
 
-				tile.turn(turn);
-			}
-		);
+			tile.setCss({
+				transition,
+			});
+
+			tile.turn(turn);
+		});
 	};
 
 	defineExpose({

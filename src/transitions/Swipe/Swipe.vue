@@ -1,8 +1,8 @@
 <script setup lang="ts">
-	import { ref, reactive, Ref, CSSProperties } from 'vue';
+	import { ref, reactive, type Ref, type CSSProperties } from 'vue';
 	import useTransition from '../useTransition';
-	import { FluxComponent, FluxWrapper } from '../../components';
-	import { TransitionSwipeProps, TransitionSwipeConf } from './types';
+	import { type FluxComponent, FluxWrapper } from '../../components';
+	import type { TransitionSwipeProps, TransitionSwipeConf } from './types';
 	import { Directions } from '../../controllers/Player';
 
 	const props = defineProps<TransitionSwipeProps>();

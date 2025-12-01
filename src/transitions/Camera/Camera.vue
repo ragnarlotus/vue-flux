@@ -1,9 +1,9 @@
 <script setup lang="ts">
-	import { ref, Ref, reactive, CSSProperties } from 'vue';
+	import { ref, type Ref, reactive, type CSSProperties } from 'vue';
 	import { Maths } from '../../shared';
 	import useTransition from '../useTransition';
-	import { FluxComponent, FluxWrapper } from '../../components';
-	import { TransitionCameraProps, TransitionCameraConf } from './types';
+	import { type FluxComponent, FluxWrapper } from '../../components';
+	import type { TransitionCameraProps, TransitionCameraConf } from './types';
 	import { Size } from '../../shared';
 
 	const props = defineProps<TransitionCameraProps>();
@@ -24,9 +24,7 @@
 		flex: 'none',
 	};
 
-	const diagSize = Maths.diag(
-		props.size.toValue() as { width: number; height: number }
-	);
+	const diagSize = Maths.diag(props.size.toValue() as { width: number; height: number });
 
 	const wrapperSize: Size = new Size({ width: diagSize, height: diagSize });
 
@@ -53,13 +51,11 @@
 				$from.value!.hide();
 
 				$wrapper.value!.transform({
-					transition: `all ${conf.totalDuration! / 2 - 50}ms ${
-						conf.easing
-					} 0ms`,
+					transition: `all ${conf.totalDuration! / 2 - 50}ms ${conf.easing} 0ms`,
 					borderWidth: 0,
 				});
 			},
-			conf.totalDuration! / 2 + 50
+			conf.totalDuration! / 2 + 50,
 		);
 	};
 
