@@ -81,7 +81,7 @@ export default class SideTransformFactory {
 	public getTranslate(side: Side | Turn) {
 		const tx = translate.x[side] ?? '0';
 		const ty = translate.y[side] ?? '0';
-		const tz = this.translateZ.value[side].toString();
+		const tz = this.translateZ.value[side]!.toString();
 
 		return `translate3d(${tx}%, ${ty}%, ${tz}px)`;
 	}

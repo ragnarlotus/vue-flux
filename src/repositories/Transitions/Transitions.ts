@@ -24,10 +24,16 @@ export default class Transitions {
 	}
 
 	getByIndex(index: number) {
+		const item = this.list[index];
+
+		if (!item) {
+			throw new Error(`Transition index ${index} out of range`);
+		}
+
 		return {
 			index,
-			component: this.list[index].component,
-			options: JSON.parse(JSON.stringify(this.list[index].options)),
+			component: item.component,
+			options: JSON.parse(JSON.stringify(item.options)),
 		} as TransitionIndex;
 	}
 

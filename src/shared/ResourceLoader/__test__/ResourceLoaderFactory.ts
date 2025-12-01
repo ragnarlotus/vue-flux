@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 import ResourceFactory from '../../../resources/__test__/ResourceFactory';
 import ResourceLoader from '../ResourceLoader';
 import Size from '../../Size/Size';
-import { ResourceWithOptions } from '../../../resources/types';
+import type { ResourceWithOptions } from '../../../resources/types';
 
 export default class ResourceLoaderFactory {
 	static create(
@@ -11,7 +11,7 @@ export default class ResourceLoaderFactory {
 		preloadStartMock?: () => void,
 		preloadEndMock?: () => void,
 		lazyLoadStartMock?: () => void,
-		lazyLoadEndMock?: () => void
+		lazyLoadEndMock?: () => void,
 	) {
 		const displaySize = new Size({
 			width: 640,
@@ -59,7 +59,7 @@ export default class ResourceLoaderFactory {
 			onPreloadEnd,
 			onLazyLoadStart,
 			onLazyLoadEnd,
-			reject
+			reject,
 		);
 	}
 }

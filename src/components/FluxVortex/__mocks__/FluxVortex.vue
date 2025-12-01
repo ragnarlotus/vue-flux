@@ -1,10 +1,9 @@
 <script setup lang="ts">
-	import { ref, Ref, onBeforeUpdate } from 'vue';
+	import { ref, type Ref, onBeforeUpdate } from 'vue';
 	import { vi } from 'vitest';
 	import Tile from './Tile.vue';
-	import { FluxVortexProps } from '../types';
+	import type { FluxVortexProps } from '../types';
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const props = withDefaults(defineProps<FluxVortexProps>(), {
 		circles: 1,
 	});
@@ -39,10 +38,6 @@
 
 <template>
 	<div ref="$el" class="flux-vortex">
-		<Tile
-			v-for="index in numTiles"
-			:ref="(el: any) => $tiles.push(el)"
-			:key="index"
-		/>
+		<Tile v-for="index in numTiles" :ref="(el: any) => $tiles.push(el)" :key="index" />
 	</div>
 </template>

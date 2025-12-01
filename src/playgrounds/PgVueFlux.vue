@@ -83,7 +83,8 @@
 
 	const currentTransitionName = ref(null);
 
-	function updateCurrentTransition(_rsc?, transition?) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	function updateCurrentTransition(_rsc?: any, transition?: any) {
 		if (transition.current !== null) {
 			currentTransitionName.value = transition.current.component.__name;
 		} else {
@@ -103,8 +104,8 @@
 					:transitions="transitionComponents"
 					:rscs="rscs"
 					:options="options"
-					@transition-start="updateCurrentTransition"
-					@transition-end="updateCurrentTransition"
+					@transitionStart="updateCurrentTransition"
+					@transitionEnd="updateCurrentTransition"
 				>
 					<template #preloader="preloaderProps">
 						<Complements.FluxPreloader v-bind="preloaderProps" />
@@ -137,7 +138,7 @@
 					>
 						<PgButton
 							class="w-100"
-							:class="currentTransitionName === name ? 'bg-amber-500' : ''"
+							:active="currentTransitionName === name"
 							@click="$vueFlux.show(Directions.next, index)"
 						>
 							{{ name }}

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 	import { ref, type Ref } from 'vue';
 	import { VcParagraph } from 'vue-cosk';
-	import Img from '../resources/Img';
-	import Size from '../shared/Size';
+	import Img from '../resources/Img/Img';
+	import Size from '../shared/Size/Size';
 	import { ResizeTypes } from '../resources';
 	import { FluxCube, Turns } from '../components';
 	import PgButton from './components/PgButton.vue';

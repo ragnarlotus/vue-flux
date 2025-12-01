@@ -1,5 +1,5 @@
 import { Size } from '../../';
-import { ResourceWithOptions } from '../../../resources';
+import type { ResourceWithOptions } from '../../../resources';
 
 export default class ResourceLoader {
 	rscs: ResourceWithOptions[] = [];
@@ -26,7 +26,7 @@ export default class ResourceLoader {
 		onPreloadEnd: (loaded: ResourceWithOptions[]) => void,
 		onLazyLoadStart: () => void,
 		onLazyLoadEnd: (loaded: ResourceWithOptions[]) => void,
-		reject: (message: string, rscs: ResourceWithOptions[]) => void
+		reject: (message: string, rscs: ResourceWithOptions[]) => void,
 	) {
 		this.rscs = rscs;
 		this.toPreload = toPreload > rscs.length ? rscs.length : toPreload;
@@ -47,7 +47,7 @@ export default class ResourceLoader {
 
 		const toLoad = this.rscs.slice(
 			counter.total,
-			counter.total + this.toPreload - counter.success
+			counter.total + this.toPreload - counter.success,
 		);
 
 		this.preLoading = this.preLoading.concat(toLoad);
@@ -63,9 +63,7 @@ export default class ResourceLoader {
 			return;
 		}
 
-		const preloadedSuccessfully = this.preLoading.filter((rsc) =>
-			rsc.resource.isLoaded()
-		);
+		const preloadedSuccessfully = this.preLoading.filter((rsc) => rsc.resource.isLoaded());
 
 		this.onPreloadEnd(preloadedSuccessfully);
 
@@ -85,9 +83,7 @@ export default class ResourceLoader {
 	}
 
 	lazyLoadEnd() {
-		const lazyLoadedSuccessfully = this.lazyLoading.filter((rsc) =>
-			rsc.resource.isLoaded()
-		);
+		const lazyLoadedSuccessfully = this.lazyLoading.filter((rsc) => rsc.resource.isLoaded());
 
 		this.onLazyLoadEnd(lazyLoadedSuccessfully);
 

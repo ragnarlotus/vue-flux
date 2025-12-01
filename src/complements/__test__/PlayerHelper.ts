@@ -1,7 +1,7 @@
-import { VueFluxConfig } from '../../components/VueFlux/types';
+import type { VueFluxConfig } from '../../components/VueFlux/types';
 import { Player } from '../../controllers/Player';
-import { ResourceIndex } from '../../repositories/Resources/types';
-import { TransitionIndex } from '../../repositories/Transitions/types';
+import type { ResourceIndex } from '../../repositories/Resources/types';
+import type { TransitionIndex } from '../../repositories/Transitions/types';
 import { Img } from '../../resources';
 import { Blinds2D } from '../../transitions';
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 	import { nextTick, ref, type Ref, shallowRef } from 'vue';
 	import { VcParagraph } from 'vue-cosk';
-	import Img from '../resources/Img';
-	import Size from '../shared/Size';
+	import Img from '../resources/Img/Img';
+	import Size from '../shared/Size/Size';
 	import { FluxTransition } from '../components';
 	import {
 		Fade,

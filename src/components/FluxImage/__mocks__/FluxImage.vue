@@ -1,7 +1,7 @@
 <script setup lang="ts">
-	import { ref, Ref } from 'vue';
+	import { ref, type Ref } from 'vue';
 	import { vi } from 'vitest';
-	import { FluxImageProps } from '../types';
+	import type { FluxImageProps } from '../types';
 
 	defineProps<FluxImageProps>();
 

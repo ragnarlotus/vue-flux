@@ -9,7 +9,7 @@ export default class Display {
 	size: Size = new Size();
 
 	private readonly onResize = () => {
-		void this.updateSize();
+		this.updateSize();
 	};
 
 	constructor(
@@ -45,7 +45,7 @@ export default class Display {
 		if (this.config !== null) {
 			const [width, height] = this.config.aspectRatio.split(':');
 
-			return [parseFloat(width), parseFloat(height)];
+			return [parseFloat(width ?? ''), parseFloat(height ?? '')];
 		}
 
 		return [16, 9];
@@ -67,6 +67,11 @@ export default class Display {
 
 		if (['0px', 'auto', null].includes(computedStyle.height)) {
 			const [arWidth, arHeight] = this.getAspectRatio();
+
+			if (arWidth === undefined || arHeight === undefined) {
+				return;
+			}
+
 			height = (width / arWidth) * arHeight;
 		}
 

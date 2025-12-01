@@ -1,9 +1,9 @@
 import { vi } from 'vitest';
-import { Ref, ref, shallowReactive } from 'vue';
-import { VueFluxConfig, VueFluxEmits } from '../../../components/VueFlux/types';
+import { type Ref, ref, shallowReactive } from 'vue';
+import type { VueFluxConfig, VueFluxEmits } from '../../../components/VueFlux/types';
 import { PlayerResource, PlayerTransition, Statuses, Timers } from '../..';
 import { Resources, Transitions } from '../../../repositories';
-import { FluxComponent } from '../../../components/types';
+import type { FluxComponent } from '../../../components/types';
 
 export default class Player {
 	resource: PlayerResource;
