@@ -1,4 +1,4 @@
-import { Ref, ref } from 'vue';
+import { type Ref, ref } from 'vue';
 import { mount } from '@vue/test-utils';
 import Button from './Button.vue';
 

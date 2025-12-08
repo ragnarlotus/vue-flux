@@ -35,10 +35,8 @@ describe('shared: ResourceLoader', () => {
 
 		expect(
 			rscLoader.rscs.every((rsc) =>
-				[Statuses.loading, Statuses.loaded].includes(
-					rsc.resource.status.value
-				)
-			)
+				[Statuses.loading, Statuses.loaded].includes(rsc.resource.status.value),
+			),
 		).toBeTruthy();
 	});
 
@@ -58,49 +56,32 @@ describe('shared: ResourceLoader', () => {
 		new Promise<void>((done) => {
 			rscLoader = ResourceLoaderFactory.create(5, 5, undefined, () => {
 				expect(rscLoader.onPreloadStart).toHaveBeenCalledOnce();
-				expect(rscLoader.onPreloadEnd).toHaveBeenCalledWith(
-					expect.any(Array)
-				);
+				expect(rscLoader.onPreloadEnd).toHaveBeenCalledWith(expect.any(Array));
 				done();
 			});
 		}));
 
 	it('starts lazy loading when preloading finish', () =>
 		new Promise<void>((done) => {
-			rscLoader = ResourceLoaderFactory.create(
-				20,
-				5,
-				undefined,
-				undefined,
-				() => {
-					expect(rscLoader.onPreloadStart).toHaveBeenCalledOnce();
-					expect(rscLoader.onPreloadEnd).toHaveBeenCalledOnce();
-					expect(rscLoader.counter.total).toBe(5);
-					expect(rscLoader.onLazyLoadStart).toHaveBeenCalledOnce();
-					done();
-				}
-			);
+			rscLoader = ResourceLoaderFactory.create(20, 5, undefined, undefined, () => {
+				expect(rscLoader.onPreloadStart).toHaveBeenCalledOnce();
+				expect(rscLoader.onPreloadEnd).toHaveBeenCalledOnce();
+				expect(rscLoader.counter.total).toBe(5);
+				expect(rscLoader.onLazyLoadStart).toHaveBeenCalledOnce();
+				done();
+			});
 		}));
 
 	it('calls onLazyLoadEnd when lazy loading finish', () =>
 		new Promise<void>((done) => {
-			rscLoader = ResourceLoaderFactory.create(
-				20,
-				5,
-				undefined,
-				undefined,
-				undefined,
-				() => {
-					expect(rscLoader.onPreloadStart).toHaveBeenCalledOnce();
-					expect(rscLoader.onPreloadEnd).toHaveBeenCalledOnce();
-					expect(rscLoader.onLazyLoadStart).toHaveBeenCalledOnce();
-					expect(rscLoader.onLazyLoadEnd).toHaveBeenCalledWith(
-						expect.any(Array)
-					);
-					expect(rscLoader.counter.total).toBe(20);
-					done();
-				}
-			);
+			rscLoader = ResourceLoaderFactory.create(20, 5, undefined, undefined, undefined, () => {
+				expect(rscLoader.onPreloadStart).toHaveBeenCalledOnce();
+				expect(rscLoader.onPreloadEnd).toHaveBeenCalledOnce();
+				expect(rscLoader.onLazyLoadStart).toHaveBeenCalledOnce();
+				expect(rscLoader.onLazyLoadEnd).toHaveBeenCalledWith(expect.any(Array));
+				expect(rscLoader.counter.total).toBe(20);
+				done();
+			});
 		}));
 
 	it('does not update display size if cancelled', () => {
@@ -108,11 +89,11 @@ describe('shared: ResourceLoader', () => {
 		rscLoader.cancel();
 
 		const rsc = rscLoader.rscs[0];
-		vi.spyOn(rsc.resource.displaySize, 'update');
+		vi.spyOn(rsc!.resource.displaySize, 'update');
 
-		rscLoader.loadSuccess(rsc);
+		rscLoader.loadSuccess(rsc!);
 
-		expect(rsc.resource.displaySize.update).not.toHaveBeenCalled();
+		expect(rsc!.resource.displaySize.update).not.toHaveBeenCalled();
 	});
 
 	it('calculates the progress properly', () => {

@@ -1,4 +1,4 @@
-import { Ref, ref } from 'vue';
+import { type Ref, ref } from 'vue';
 import { mount } from '@vue/test-utils';
 import { Player, Timers } from '../../../controllers';
 import List from './List.vue';
@@ -83,10 +83,7 @@ describe('complements: FluxIndex List', () => {
 			},
 		});
 
-		await wrapper
-			.find({ ref: '$list' })
-			.findAllComponents(Thumb)[0]
-			.trigger('click');
+		await wrapper.find({ ref: '$list' }).findAllComponents(Thumb)[0].trigger('click');
 
 		expect(player.show).not.toHaveBeenCalled();
 	});

@@ -16,11 +16,11 @@ describe('repositories: ResourcesMapper', () => {
 
 		const resourcesWithOptions = ResourcesMapper.withOptions(resources);
 
-		expect(resourcesWithOptions[0].resource).toBe(resources[0]);
+		expect(resourcesWithOptions[0]!.resource).toBe(resources[0]);
 		// @ts-expect-error:next-line
-		expect(resourcesWithOptions[1].resource).toBe(resources[1].resource);
-		expect(resourcesWithOptions[1].options.delay).toBe(8000);
-		expect(resourcesWithOptions[2].resource).toBe(resources[2]);
-		expect(resourcesWithOptions[2].options).toStrictEqual({});
+		expect(resourcesWithOptions[1]!.resource).toBe(resources[1].resource);
+		expect(resourcesWithOptions[1]!.options.delay).toBe(8000);
+		expect(resourcesWithOptions[2]!.resource).toBe(resources[2]);
+		expect(resourcesWithOptions[2]!.options).toStrictEqual({});
 	});
 });

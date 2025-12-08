@@ -1,15 +1,11 @@
-import { ref, Ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import { Player, Timers } from '../../controllers';
 import { Directions, Statuses } from '../../controllers/Player';
 import * as Buttons from './buttons';
 import FluxControls from './FluxControls.vue';
 import { mount } from '@vue/test-utils';
 import emit from '../../components/VueFlux/__test__/emit';
-import {
-	vueFluxConfig,
-	setCurrentResource,
-	setCurrentTransition,
-} from '../__test__/PlayerHelper';
+import { vueFluxConfig, setCurrentResource, setCurrentTransition } from '../__test__/PlayerHelper';
 
 vi.mock('../../controllers/Player/Player');
 
@@ -117,10 +113,7 @@ describe('complements: FluxControls', () => {
 
 		await wrapper.getComponent(Buttons.Play).trigger('click');
 
-		expect(player.play).toHaveBeenCalledWith(
-			Directions.next,
-			expect.any(Number)
-		);
+		expect(player.play).toHaveBeenCalledWith(Directions.next, expect.any(Number));
 	});
 
 	it('should display stop button', () => {
