@@ -1,8 +1,7 @@
-/* eslint-disable vitest/no-hooks */
 import { FluxImage } from '../../components';
 import ResizeTypes from '../ResizeTypes';
 import Statuses from '../Statuses';
-import { DisplayParameter, ResizeType, TransitionParameter } from '../types';
+import type { DisplayParameter, ResizeType, TransitionParameter } from '../types';
 import Img from './Img';
 
 describe('resources: Img', () => {

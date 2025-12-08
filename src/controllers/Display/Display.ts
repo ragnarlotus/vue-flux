@@ -84,6 +84,7 @@ export default class Display {
 	inFullScreen = () => !!document.fullscreenElement;
 
 	toggleFullScreen() {
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 		this.inFullScreen() ? this.exitFullScreen() : this.enterFullScreen();
 	}
 

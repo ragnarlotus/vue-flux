@@ -1,6 +1,6 @@
 import { Img } from '../../../resources';
 import { Position, Size } from '../../../shared';
-import { SideProps } from '../types';
+import { type SideProps } from '../types';
 import CubeFactory from './CubeFactory';
 import CubeSideFactory from './CubeSideFactory';
 import SideTransformFactory from './SideTransformFactory';
@@ -17,9 +17,7 @@ describe('factory: CubeFactory', () => {
 
 	const sideTransformFactory = new SideTransformFactory(depth, size, viewSize);
 
-	vi.spyOn(CubeSideFactory, 'getProps').mockImplementation(
-		() => ({}) as SideProps
-	);
+	vi.spyOn(CubeSideFactory, 'getProps').mockImplementation(() => ({}) as SideProps);
 
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -41,11 +39,7 @@ describe('factory: CubeFactory', () => {
 			back: '#ccc',
 		};
 
-		const cubeProps = CubeFactory.getSidesProps(
-			sideTransformFactory,
-			undefined,
-			colors
-		);
+		const cubeProps = CubeFactory.getSidesProps(sideTransformFactory, undefined, colors);
 
 		expect(CubeSideFactory.getProps).toHaveBeenCalledTimes(3);
 		expect(Object.keys(cubeProps)).toHaveLength(3);
@@ -54,12 +48,7 @@ describe('factory: CubeFactory', () => {
 	it('generates a cube using a rsc', () => {
 		rsc = new Img('url', 'caption');
 
-		const cubeProps = CubeFactory.getSidesProps(
-			sideTransformFactory,
-			undefined,
-			undefined,
-			rsc
-		);
+		const cubeProps = CubeFactory.getSidesProps(sideTransformFactory, undefined, undefined, rsc);
 
 		expect(CubeSideFactory.getProps).toHaveBeenCalledTimes(6);
 		expect(Object.keys(cubeProps)).toHaveLength(6);
@@ -77,7 +66,7 @@ describe('factory: CubeFactory', () => {
 			undefined,
 			undefined,
 			undefined,
-			rscs
+			rscs,
 		);
 
 		expect(CubeSideFactory.getProps).toHaveBeenCalledTimes(3);
@@ -94,7 +83,7 @@ describe('factory: CubeFactory', () => {
 			undefined,
 			undefined,
 			undefined,
-			offset
+			offset,
 		);
 
 		expect(CubeSideFactory.getProps).toHaveBeenCalledTimes(6);
@@ -121,7 +110,7 @@ describe('factory: CubeFactory', () => {
 			undefined,
 			undefined,
 			undefined,
-			offsets
+			offsets,
 		);
 
 		expect(CubeSideFactory.getProps).toHaveBeenCalledTimes(3);
