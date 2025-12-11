@@ -1,6 +1,6 @@
 {
 	"name": "vue-flux",
-	"version": "7.1.1",
+	"version": "7.1.2",
 	"type": "module",
 	"description": "Vue image and other resources slider",
 	"author": "ragnar lotus",
@@ -31,7 +31,7 @@
 		"dev": "vite",
 		"build": "run-p type-check \"build-only {@}\" --",
 		"preview": "vite preview",
-		"test:coverage": "vitest run --coverage",
+		"test:coverage": "vitest run --coverage --watch",
 		"test:unit": "vitest",
 		"build-only": "vite build",
 		"type-check": "vue-tsc --build",
