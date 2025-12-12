@@ -1,6 +1,6 @@
 {
 	"name": "vue-flux",
-	"version": "7.1.2",
+	"version": "7.1.3",
 	"type": "module",
 	"description": "Vue image and other resources slider",
 	"author": "ragnar lotus",
@@ -40,11 +40,23 @@
 	},
 	"exports": {
 		".": {
+			"types": "./dist/vue-flux.d.ts",
 			"import": "./dist/vue-flux.js",
 			"require": "./dist/vue-flux.umd.cjs"
 		},
-		"./style.css": "./dist/vue-flux.css"
+		"./style.css": "./dist/vue-flux.css",
+		"./complements": {
+			"types": "./dist/complements/index.d.ts",
+			"import": "./dist/complements/index.js"
+		},
+		"./transitions": {
+			"types": "./dist/transitions/index.d.ts",
+			"import": "./dist/transitions/index.js"
+		}
 	},
+	"sideEffects": [
+		"*.css"
+	],
 	"peerDependencies": {
 		"vue": "^3.5.0"
 	},
