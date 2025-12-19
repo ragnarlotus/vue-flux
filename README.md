@@ -64,9 +64,9 @@ Add component. This one has all the complements, so you can remove the ones you 
    });
 
    const vfRscs = shallowReactive([
-      new Img('URL1' 'img 1'),
-      new Img('URL2' 'img 2'),
-      new Img('URL3' 'img 3'),
+      new Img('URL1', 'img 1'),
+      new Img('URL2', 'img 2'),
+      new Img('URL3', 'img 3'),
    ]);
 
    const vfTransitions = shallowReactive([Book, Zip]);
@@ -144,7 +144,7 @@ As simple as this.
 <script setup>
    import { FluxParallax, Img } from 'vue-flux';
 
-   const rsc = new Img('URL1' 'img 1');
+   const rsc = new Img('URL1', 'img 1');
 </script>
 
 <template>
