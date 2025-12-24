@@ -142,7 +142,16 @@
 
 		view.width = $el.value!.clientWidth;
 		view.height = $el.value!.clientHeight;
-		view.top = $el.value!.getBoundingClientRect().top + window.scrollY;
+
+		const elementRect = $el.value!.getBoundingClientRect();
+
+		if (holder === window) {
+			view.top = elementRect.top + window.scrollY;
+		} else {
+			const holderRect = holder.getBoundingClientRect();
+
+			view.top = elementRect.top - holderRect.top + holder.scrollTop;
+		}
 
 		rsc.displaySize.update(display);
 		const fillProps = rsc.resizeProps.value;
