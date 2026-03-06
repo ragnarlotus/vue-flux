@@ -42,9 +42,12 @@ export default function useComponent(
 			return;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		$el.value.clientHeight;
-		setCss(s);
+		requestAnimationFrame(() => {
+			// Force a layout read so the browser flushes pending styles
+			// before we apply the transform on the next frame.
+			void $el.value!.clientHeight;
+			requestAnimationFrame(() => setCss(s));
+		});
 	};
 
 	const show = () => {

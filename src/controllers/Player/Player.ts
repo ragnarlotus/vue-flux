@@ -14,8 +14,8 @@ export default class Player {
 	transition: PlayerTransition;
 
 	status: Ref<keyof typeof Statuses> = ref(Statuses.stopped);
-	config: VueFluxConfig;
-	timers: Timers;
+	readonly config: VueFluxConfig;
+	readonly timers: Timers;
 
 	emit: VueFluxEmits;
 	resources: Resources;
