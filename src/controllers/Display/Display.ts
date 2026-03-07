@@ -1,24 +1,27 @@
 import { nextTick, type Ref, type Component } from 'vue';
 import { Size } from '../../shared';
 import type { VueFluxConfig, VueFluxEmits } from '../../components';
+import Timers from '../Timers/Timers';
 
 export default class Display {
 	node: Ref<null | HTMLElement | Component>;
 	config: VueFluxConfig | null;
 	emit: null | VueFluxEmits = null;
 	size: Size = new Size();
+	readonly timers: Timers;
 
-	private readonly onResize = () => {
-		this.updateSize();
-	};
+	private resizeTimer: ReturnType<typeof setTimeout> | null = null;
+	private readonly resizeDebounceDelay = 150;
 
 	constructor(
 		node: Ref<null | HTMLElement | Component>,
 		config: VueFluxConfig | null = null,
+		timers: Timers = new Timers(),
 		emit: null | VueFluxEmits = null,
 	) {
 		this.node = node;
 		this.config = config;
+		this.timers = timers;
 		this.emit = emit;
 	}
 
@@ -28,6 +31,14 @@ export default class Display {
 
 		return display.size;
 	}
+
+	private readonly onResize = () => {
+		this.timers.clear('displayResize');
+
+		this.timers.set('displayResize', this.resizeDebounceDelay, () => {
+			this.updateSize();
+		});
+	};
 
 	addResizeListener() {
 		window.addEventListener('resize', this.onResize, {
@@ -39,6 +50,11 @@ export default class Display {
 
 	removeResizeListener() {
 		window.removeEventListener('resize', this.onResize);
+
+		if (this.resizeTimer !== null) {
+			clearTimeout(this.resizeTimer);
+			this.resizeTimer = null;
+		}
 	}
 
 	getAspectRatio() {

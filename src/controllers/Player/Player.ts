@@ -22,12 +22,7 @@ export default class Player {
 	transitions: Transitions;
 	$displayComponent: Ref<null | FluxComponent> = ref(null);
 
-	constructor(
-		config: VueFluxConfig,
-		timers: Timers,
-
-		emit: VueFluxEmits,
-	) {
+	constructor(config: VueFluxConfig, timers: Timers, emit: VueFluxEmits) {
 		this.config = config;
 		this.timers = timers;
 		this.emit = emit;

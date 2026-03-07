@@ -33,7 +33,7 @@
 	const player = new Controllers.Player(config, timers, emit);
 	const resources = player.resources;
 	const transitions = player.transitions;
-	const display = new Controllers.Display($el, config, emit);
+	const display = new Controllers.Display($el, config, timers, emit);
 	const keys = new Controllers.Keys(config, player);
 	const mouse = new Controllers.Mouse();
 	const touches = new Controllers.Touches();
