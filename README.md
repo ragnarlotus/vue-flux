@@ -46,15 +46,19 @@ Add component. This one has all the complements, so you can remove the ones you 
    import { ref, shallowReactive } from 'vue';
    import {
       VueFlux,
+      Img,
+   } from 'vue-flux';
+   import {
       FluxCaption,
       FluxControls,
       FluxIndex,
       FluxPagination,
       FluxPreloader,
-      Img,
+   } from 'vue-flux/complements';
+   import {
       Book,
       Zip,
-   } from 'vue-flux';
+   } from 'vue-flux/transitions';
    import 'vue-flux/style.css';
 
    const $vueFlux = ref();
