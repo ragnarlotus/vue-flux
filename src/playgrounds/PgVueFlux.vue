@@ -1,6 +1,5 @@
 <script setup lang="ts">
-	import { ref, type Ref, shallowReactive } from 'vue';
-	import { VcParagraph } from 'vue-cosk';
+	import { computed, reactive, ref, type Ref, shallowReactive, watchEffect } from 'vue';
 	import { Img } from '../resources';
 	import {
 		Fade,
@@ -77,9 +76,38 @@
 		Zip,
 	};
 
+	type TransitionName = keyof typeof transitions;
+
+	const enabledTransitions = reactive(
+		Object.fromEntries(Object.keys(transitions).map((name) => [name, true])) as Record<
+			TransitionName,
+			boolean
+		>,
+	);
+
+	const transitionEntries = computed(() =>
+		(Object.entries(transitions) as [TransitionName, (typeof transitions)[TransitionName]][]).filter(
+			([name]) => enabledTransitions[name],
+		),
+	);
+
 	const transitionComponents = shallowReactive(Object.values(transitions));
 
-	const transitionNames = Object.keys(transitions);
+	watchEffect(() => {
+		transitionComponents.splice(
+			0,
+			transitionComponents.length,
+			...transitionEntries.value.map(([, component]) => component),
+		);
+	});
+
+	const complements = reactive({
+		preloader: true,
+		caption: true,
+		controls: true,
+		index: true,
+		pagination: true,
+	});
 
 	const currentTransitionName = ref(null);
 
@@ -95,10 +123,34 @@
 
 <template>
 	<div>
-		<VcParagraph mode="fill" style="margin: 24px 0; padding: 0" />
+		<div class="mb-6 grid gap-4 text-white lg:grid-cols-2">
+			<fieldset class="rounded border border-sky-700 px-4 pb-4">
+				<legend class="px-2 font-semibold">Complements</legend>
+				<div class="flex flex-wrap gap-x-6 gap-y-2">
+					<label v-for="(_, name) in complements" :key="name" class="m-0 flex gap-2 capitalize">
+						<input v-model="complements[name]" type="checkbox" />
+						{{ name }}
+					</label>
+				</div>
+			</fieldset>
+
+			<fieldset class="rounded border border-sky-700 px-4 pb-4">
+				<legend class="px-2 font-semibold">Transitions</legend>
+				<div class="grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-3">
+					<label
+						v-for="(_, name) in transitions"
+						:key="name"
+						class="m-0 flex gap-2"
+					>
+						<input v-model="enabledTransitions[name]" type="checkbox" />
+						{{ name }}
+					</label>
+				</div>
+			</fieldset>
+		</div>
 
 		<div class="block sm:block md:block lg:flex">
-			<div class="lg:w-3/4">
+			<div class="overflow-hidden lg:w-3/4">
 				<VueFlux
 					ref="$vueFlux"
 					:transitions="transitionComponents"
@@ -108,23 +160,29 @@
 					@transitionEnd="updateCurrentTransition"
 				>
 					<template #preloader="preloaderProps">
-						<Complements.FluxPreloader v-bind="preloaderProps" />
+						<Complements.FluxPreloader
+							v-if="complements.preloader"
+							v-bind="preloaderProps"
+						/>
 					</template>
 
 					<template #caption="captionProps">
-						<Complements.FluxCaption v-bind="captionProps" />
+						<Complements.FluxCaption v-if="complements.caption" v-bind="captionProps" />
 					</template>
 
 					<template #controls="controlsProps">
-						<Complements.FluxControls v-bind="controlsProps" />
+						<Complements.FluxControls v-if="complements.controls" v-bind="controlsProps" />
 					</template>
 
 					<template #index="indexProps">
-						<Complements.FluxIndex v-bind="indexProps" />
+						<Complements.FluxIndex v-if="complements.index" v-bind="indexProps" />
 					</template>
 
 					<template #pagination="paginationProps">
-						<Complements.FluxPagination v-bind="paginationProps" />
+						<Complements.FluxPagination
+							v-if="complements.pagination"
+							v-bind="paginationProps"
+						/>
 					</template>
 				</VueFlux>
 			</div>
@@ -132,7 +190,7 @@
 			<div class="lg:w-1/4 lg:ml-4 lg:mt-0 mt-6">
 				<ul v-if="$vueFlux && $vueFlux.size.isValid()" class="flex flex-wrap">
 					<li
-						v-for="(name, index) in transitionNames"
+						v-for="([name], index) in transitionEntries"
 						:key="name"
 						class="odd:pr-4 mb-4 lg:w-1/2 lg:mr-0 mr-4"
 					>
@@ -153,7 +211,5 @@
 			<PgButton class="mr-4 w-1/3" @click="$vueFlux.play()">Play</PgButton>
 			<PgButton class="w-1/3 mr-0" @click="$vueFlux.stop()">Stop</PgButton>
 		</div>
-
-		<VcParagraph mode="fill" style="margin: 24px 0; padding: 0" />
 	</div>
 </template>
