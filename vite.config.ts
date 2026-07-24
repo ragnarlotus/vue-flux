@@ -26,9 +26,16 @@ export default defineConfig({
 	build: {
 		copyPublicDir: false,
 		lib: {
-			entry: resolve(__dirname, 'src/lib.ts'),
+			entry: {
+				'vue-flux': resolve(__dirname, 'src/lib.ts'),
+				'complements/index': resolve(__dirname, 'src/complements/index.ts'),
+				'transitions/index': resolve(__dirname, 'src/transitions/index.ts'),
+			},
 			name: 'VueFlux',
-			fileName: 'vue-flux',
+			formats: ['es', 'cjs'],
+			fileName: (format, entryName) =>
+				`${entryName}.${format === 'es' ? 'js' : 'cjs'}`,
+			cssFileName: 'vue-flux',
 		},
 		rollupOptions: {
 			external: ['vue'],
