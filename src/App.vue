@@ -1,6 +1,6 @@
-<!-- eslint-disable @typescript-eslint/no-unused-vars -->
 <script setup lang="ts">
-	import { ref, type Ref } from 'vue';
+	import { computed, ref } from 'vue';
+	import { VcParagraph } from 'vue-cosk';
 
 	// Playgrounds
 	import PgFluxImage from './playgrounds/PgFluxImage.vue';
@@ -16,24 +16,49 @@
 	import PgFluxPagination from './playgrounds/PgFluxPagination.vue';
 	import PgFluxPreloader from './playgrounds/PgFluxPreloader.vue';
 
-	const $wrapper: Ref<null | HTMLDivElement> = ref(null);
+	const playgrounds = {
+		VueFlux: PgVueFlux,
+		Transition: PgFluxTransition,
+		Image: PgFluxImage,
+		Cube: PgFluxCube,
+		Grid: PgFluxGrid,
+		Parallax: PgFluxParallax,
+		'Parallax options': PgFluxParallaxOp,
+		Caption: PgFluxCaption,
+		Controls: PgFluxControls,
+		Index: PgFluxIndex,
+		Pagination: PgFluxPagination,
+		Preloader: PgFluxPreloader,
+	} as const;
+
+	type PlaygroundName = keyof typeof playgrounds;
+
+	const selected = ref<PlaygroundName>('VueFlux');
+	const activePlayground = computed(() => playgrounds[selected.value]);
 </script>
 
 <template>
 	<main class="container mx-auto mb-4">
-		<div ref="$wrapper" class="relative mx-auto">
-			<!-- <PgFluxImage /> -->
-			<!-- <PgFluxCube /> -->
-			<!-- <PgFluxGrid /> -->
-			<!-- <PgFluxTransition /> -->
-			<PgVueFlux />
-			<!-- <PgFluxParallax /> -->
-			<!-- <PgFluxParallaxOp /> -->
-			<!-- <PgFluxCaption /> -->
-			<!-- <PgFluxControls /> -->
-			<!-- <PgFluxIndex /> -->
-			<!-- <PgFluxPagination /> -->
-			<!-- <PgFluxPreloader /> -->
+		<VcParagraph mode="fill" style="margin: 24px 0; margin-bottom: 0; padding: 0" />
+
+		<nav class="flex items-center gap-3 py-4 text-white mt-0">
+			<label for="playground" class="m-0 font-semibold">Sample</label>
+			<select
+				id="playground"
+				v-model="selected"
+				class="rounded bg-zinc-900 px-3 py-2"
+				style="margin-bottom: -8px"
+			>
+				<option v-for="(_, name) in playgrounds" :key="name" :value="name">
+					{{ name }}
+				</option>
+			</select>
+		</nav>
+
+		<div class="relative mx-auto">
+			<component :is="activePlayground" />
 		</div>
+
+		<VcParagraph mode="fill" style="margin: 24px 0; padding: 0" />
 	</main>
 </template>
