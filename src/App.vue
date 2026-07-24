@@ -39,11 +39,16 @@
 
 <template>
 	<main class="container mx-auto mb-4">
-		<VcParagraph mode="fill" style="margin: 24px 0; padding: 0" />
+		<VcParagraph mode="fill" style="margin: 24px 0; margin-bottom: 0; padding: 0" />
 
-		<nav class="flex items-center gap-3 py-4 text-white">
+		<nav class="flex items-center gap-3 py-4 text-white mt-0">
 			<label for="playground" class="m-0 font-semibold">Sample</label>
-			<select id="playground" v-model="selected" class="rounded bg-zinc-900 px-3 py-2">
+			<select
+				id="playground"
+				v-model="selected"
+				class="rounded bg-zinc-900 px-3 py-2"
+				style="margin-bottom: -8px"
+			>
 				<option v-for="(_, name) in playgrounds" :key="name" :value="name">
 					{{ name }}
 				</option>
