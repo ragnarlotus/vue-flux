@@ -86,9 +86,9 @@
 	);
 
 	const transitionEntries = computed(() =>
-		(Object.entries(transitions) as [TransitionName, (typeof transitions)[TransitionName]][]).filter(
-			([name]) => enabledTransitions[name],
-		),
+		(
+			Object.entries(transitions) as [TransitionName, (typeof transitions)[TransitionName]][]
+		).filter(([name]) => enabledTransitions[name]),
 	);
 
 	const transitionComponents = shallowReactive(Object.values(transitions));
@@ -123,26 +123,36 @@
 
 <template>
 	<div>
-		<div class="mb-6 grid gap-4 text-white lg:grid-cols-2">
+		<div class="mb-6 grid items-stretch gap-4 text-white lg:grid-cols-[max-content_1fr]">
 			<fieldset class="rounded border border-sky-700 px-4 pb-4">
 				<legend class="px-2 font-semibold">Complements</legend>
-				<div class="flex flex-wrap gap-x-6 gap-y-2">
-					<label v-for="(_, name) in complements" :key="name" class="m-0 flex gap-2 capitalize">
+
+				<div class="flex flex-wrap gap-x-6 gap-y-2 lg:flex-col lg:flex-nowrap">
+					<label
+						v-for="(_, name) in complements"
+						:key="name"
+						class="m-0 flex gap-2 whitespace-nowrap capitalize"
+					>
 						<input v-model="complements[name]" type="checkbox" />
+
 						{{ name }}
 					</label>
 				</div>
 			</fieldset>
 
-			<fieldset class="rounded border border-sky-700 px-4 pb-4">
+			<fieldset class="min-w-0 rounded border border-sky-700 px-4 pb-4">
 				<legend class="px-2 font-semibold">Transitions</legend>
-				<div class="grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-3">
+
+				<div
+					class="grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6"
+				>
 					<label
 						v-for="(_, name) in transitions"
 						:key="name"
-						class="m-0 flex gap-2"
+						class="m-0 flex gap-2 whitespace-nowrap"
 					>
 						<input v-model="enabledTransitions[name]" type="checkbox" />
+
 						{{ name }}
 					</label>
 				</div>
@@ -160,10 +170,7 @@
 					@transitionEnd="updateCurrentTransition"
 				>
 					<template #preloader="preloaderProps">
-						<Complements.FluxPreloader
-							v-if="complements.preloader"
-							v-bind="preloaderProps"
-						/>
+						<Complements.FluxPreloader v-if="complements.preloader" v-bind="preloaderProps" />
 					</template>
 
 					<template #caption="captionProps">
