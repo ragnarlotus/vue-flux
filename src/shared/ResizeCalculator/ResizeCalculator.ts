@@ -65,7 +65,7 @@ export default class ResizeCalculator {
 			this.realOrientation === Orientations.portrait &&
 			resizeType === ResizeTypes.fill
 		) {
-			return this.getAdaptedSizeByWith(resizeSize);
+			return this.getAdaptedSizeByWidth(resizeSize);
 		}
 
 		if (
@@ -74,7 +74,7 @@ export default class ResizeCalculator {
 			resizeAspectRatio >= this.realAspectRatio &&
 			resizeType === ResizeTypes.fill
 		) {
-			return this.getAdaptedSizeByWith(resizeSize);
+			return this.getAdaptedSizeByWidth(resizeSize);
 		}
 
 		if (
@@ -83,7 +83,7 @@ export default class ResizeCalculator {
 			resizeAspectRatio < this.realAspectRatio &&
 			resizeType === ResizeTypes.fit
 		) {
-			return this.getAdaptedSizeByWith(resizeSize);
+			return this.getAdaptedSizeByWidth(resizeSize);
 		}
 
 		if (
@@ -91,7 +91,7 @@ export default class ResizeCalculator {
 			this.realOrientation === Orientations.landscape &&
 			resizeType === ResizeTypes.fit
 		) {
-			return this.getAdaptedSizeByWith(resizeSize);
+			return this.getAdaptedSizeByWidth(resizeSize);
 		}
 
 		if (
@@ -100,7 +100,7 @@ export default class ResizeCalculator {
 			resizeAspectRatio > this.realAspectRatio &&
 			resizeType === ResizeTypes.fill
 		) {
-			return this.getAdaptedSizeByWith(resizeSize);
+			return this.getAdaptedSizeByWidth(resizeSize);
 		}
 
 		if (
@@ -109,13 +109,13 @@ export default class ResizeCalculator {
 			resizeAspectRatio <= this.realAspectRatio &&
 			resizeType === ResizeTypes.fit
 		) {
-			return this.getAdaptedSizeByWith(resizeSize);
+			return this.getAdaptedSizeByWidth(resizeSize);
 		}
 
 		return this.getAdaptedSizeByHeight(resizeSize);
 	}
 
-	private getAdaptedSizeByWith(resizeSize: Size) {
+	private getAdaptedSizeByWidth(resizeSize: Size) {
 		return new Size({
 			width: resizeSize.width.value,
 			height: resizeSize.width.value! / this.realAspectRatio,

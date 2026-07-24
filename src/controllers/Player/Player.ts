@@ -14,20 +14,15 @@ export default class Player {
 	transition: PlayerTransition;
 
 	status: Ref<keyof typeof Statuses> = ref(Statuses.stopped);
-	config: VueFluxConfig;
-	timers: Timers;
+	readonly config: VueFluxConfig;
+	readonly timers: Timers;
 
 	emit: VueFluxEmits;
 	resources: Resources;
 	transitions: Transitions;
 	$displayComponent: Ref<null | FluxComponent> = ref(null);
 
-	constructor(
-		config: VueFluxConfig,
-		timers: Timers,
-
-		emit: VueFluxEmits,
-	) {
+	constructor(config: VueFluxConfig, timers: Timers, emit: VueFluxEmits) {
 		this.config = config;
 		this.timers = timers;
 		this.emit = emit;

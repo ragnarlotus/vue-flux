@@ -24,7 +24,7 @@ export default class Img extends Resource {
 
 	onLoad = vi
 		.fn()
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		 
 		.mockImplementation((_el: unknown, resolve: () => void) => {
 			this.status.value = Statuses.loaded;
 			resolve();
