@@ -44,10 +44,14 @@
 		keys.setup();
 	};
 
-	watch(props.options, () => {
-		setup();
-		emit('optionsUpdated');
-	});
+	watch(
+		() => props.options,
+		() => {
+			setup();
+			emit('optionsUpdated');
+		},
+		{ deep: true },
+	);
 
 	async function updateProp(propName: 'rscs' | 'transitions') {
 		const wasPlaying = player.status.value === PlayerStatuses.playing;
@@ -99,7 +103,7 @@
 	}
 
 	watch(
-		props.transitions,
+		() => [...props.transitions],
 		async () => {
 			await updateProp('transitions');
 			emit('transitionsUpdated');
