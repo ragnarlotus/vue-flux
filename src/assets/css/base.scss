@@ -1,5 +1,6 @@
 body {
 	background-color: black;
+	font-size: 14px;
 }
 
 label {
@@ -9,4 +10,9 @@ label {
 	span {
 		margin-right: 6px;
 	}
+}
+
+input[type='text'],
+input[type='number'] {
+	background-color: white;
 }

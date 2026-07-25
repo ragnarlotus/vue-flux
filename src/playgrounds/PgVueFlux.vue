@@ -33,12 +33,33 @@
 
 	const options = shallowReactive({
 		allowFullscreen: true,
+		allowToSkipTransition: true,
+		aspectRatio: '16:9',
+		autohideTime: 2500,
 		autoplay: false,
 		bindKeys: true,
+		enableGestures: false,
 		infinite: true,
 		delay: 5000,
+		lazyLoad: true,
 		lazyLoadAfter: 10,
 	});
+
+	const booleanOptions = {
+		allowFullscreen: 'Fullscreen',
+		allowToSkipTransition: 'Skip transition',
+		autoplay: 'Autoplay',
+		bindKeys: 'Bind keys',
+		enableGestures: 'Gestures',
+		infinite: 'Infinite',
+		lazyLoad: 'Lazy load',
+	} as const;
+
+	const numberOptions = {
+		autohideTime: 'Autohide time',
+		delay: 'Delay',
+		lazyLoadAfter: 'Lazy load after',
+	} as const;
 
 	const images = [];
 	for (let i = 1; i <= 20; i++) {
@@ -123,8 +144,53 @@
 
 <template>
 	<div>
-		<div class="mb-6 grid items-stretch gap-4 text-white lg:grid-cols-[max-content_1fr]">
-			<fieldset class="rounded border border-sky-700 px-4 pb-4">
+		<div class="mb-6 flex flex-col gap-4 text-white lg:flex-row">
+			<fieldset class="w-full min-w-0 rounded border border-sky-700 px-4 pb-4 lg:flex-[2_1_0%]">
+				<legend class="px-2 font-semibold">Options</legend>
+
+				<div class="-mx-2 flex flex-wrap gap-y-2">
+					<label
+						v-for="(label, name) in booleanOptions"
+						:key="name"
+						class="m-0 flex w-full gap-2 px-2 whitespace-nowrap xs:w-1/2 sm:w-1/3 lg:w-1/2"
+					>
+						<input v-model="options[name]" type="checkbox" />
+
+						{{ label }}
+					</label>
+
+					<label
+						class="m-0 flex w-full items-center gap-2 px-2 whitespace-nowrap xs:w-1/2 sm:w-1/3 lg:w-1/2"
+					>
+						<span>Aspect ratio</span>
+
+						<input
+							v-model="options.aspectRatio"
+							class="w-16 text-black"
+							type="text"
+							style="width: 50px"
+						/>
+					</label>
+
+					<label
+						v-for="(label, name) in numberOptions"
+						:key="name"
+						class="m-0 flex w-full items-center gap-2 px-2 whitespace-nowrap xs:w-1/2 sm:w-1/3 lg:w-1/2"
+					>
+						<span>{{ label }}</span>
+
+						<input
+							v-model.number="options[name]"
+							class="w-20 text-black"
+							min="0"
+							type="number"
+							style="width: 50px"
+						/>
+					</label>
+				</div>
+			</fieldset>
+
+			<fieldset class="w-full min-w-0 rounded border border-sky-700 px-4 pb-4 lg:flex-[1_1_0%]">
 				<legend class="px-2 font-semibold">Complements</legend>
 
 				<div class="flex flex-wrap gap-x-6 gap-y-2 lg:flex-col lg:flex-nowrap">
@@ -140,7 +206,7 @@
 				</div>
 			</fieldset>
 
-			<fieldset class="min-w-0 rounded border border-sky-700 px-4 pb-4">
+			<fieldset class="w-full min-w-0 rounded border border-sky-700 px-4 pb-4 lg:flex-[3_1_0%]">
 				<legend class="px-2 font-semibold">Transitions</legend>
 
 				<div class="grid grid-cols-3 gap-x-6 gap-y-2 lg:grid-cols-6">
@@ -192,15 +258,15 @@
 				</VueFlux>
 			</div>
 
-			<div class="lg:w-1/4 lg:ml-4 lg:mt-0 mt-6">
-				<ul v-if="$vueFlux && $vueFlux.size.isValid()" class="flex flex-wrap">
+			<div class="mt-6 lg:mt-0 lg:ml-4 lg:w-1/4">
+				<ul v-if="$vueFlux && $vueFlux.size.isValid()" class="-mx-2 flex flex-wrap">
 					<li
 						v-for="([name], index) in transitionEntries"
 						:key="name"
-						class="odd:pr-4 mb-4 lg:w-1/2 lg:mr-0 mr-4"
+						class="mb-4 w-1/2 px-2 xs:w-1/3 lg:w-1/2"
 					>
 						<PgButton
-							class="w-100"
+							class="w-full"
 							:active="currentTransitionName === name"
 							@click="$vueFlux.show(Directions.next, index)"
 						>
@@ -211,10 +277,10 @@
 			</div>
 		</div>
 
-		<div v-if="$vueFlux" class="mt-6 lg:flex">
-			<PgButton class="mr-4 w-1/3" @click="$vueFlux.show()">Next</PgButton>
-			<PgButton class="mr-4 w-1/3" @click="$vueFlux.play()">Play</PgButton>
-			<PgButton class="w-1/3 mr-0" @click="$vueFlux.stop()">Stop</PgButton>
+		<div v-if="$vueFlux" class="mt-6 flex">
+			<PgButton class="mr-4 p-1 w-1/3" @click="$vueFlux.show()">Next</PgButton>
+			<PgButton class="mr-4 p-1 w-1/3" @click="$vueFlux.play()">Play</PgButton>
+			<PgButton class="p-1 w-1/3 mr-0" @click="$vueFlux.stop()">Stop</PgButton>
 		</div>
 	</div>
 </template>
