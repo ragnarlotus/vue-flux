@@ -15,7 +15,7 @@ export default defineConfig({
 		tailwindcss(),
 		dts({
 			tsconfigPath: './tsconfig.build.json',
-			rollupTypes: true,
+			bundleTypes: true,
 		}),
 	],
 	resolve: {
