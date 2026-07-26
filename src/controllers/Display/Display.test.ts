@@ -1,10 +1,9 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
-import type { Ref, Component } from 'vue';
+import { ref, type Ref, type Component } from 'vue';
 import Display from './Display';
 
-const createNodeRef = (): Ref<HTMLElement | Component | null> => ({
-        value: document.createElement('div'),
-}) as Ref<HTMLElement | Component | null>;
+const createNodeRef = (): Ref<HTMLElement | Component | null> =>
+	ref(document.createElement('div'));
 
 describe('Display.updateSize', () => {
         let getComputedStyleMock: ReturnType<typeof vi.spyOn>;
@@ -23,7 +22,7 @@ describe('Display.updateSize', () => {
                         height: 'auto',
                 } as CSSStyleDeclaration);
 
-                const display = new Display(createNodeRef(), { aspectRatio: '2:1' } as never, null);
+                const display = new Display(createNodeRef(), { aspectRatio: '2:1' } as never);
 
                 await display.updateSize();
 
@@ -36,7 +35,7 @@ describe('Display.updateSize', () => {
                         height: '150px',
                 } as CSSStyleDeclaration);
 
-                const display = new Display(createNodeRef(), { aspectRatio: '2:1' } as never, null);
+                const display = new Display(createNodeRef(), { aspectRatio: '2:1' } as never);
 
                 await display.updateSize();
 
